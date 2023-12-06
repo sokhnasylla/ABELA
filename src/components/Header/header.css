@@ -1,0 +1,25 @@
+.myhead{
+    background-color: #148C8A;
+    color: white;
+    height: 12%;
+    width: 100%;
+    border-radius: 0 0px 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.myhead p{
+    font-size: larger;
+    padding: 5px;
+}
+/* .nav.nav-tabs{
+    color: white;
+    
+} */
+.myhead .nav-item{
+    margin: 5px;
+}
+.myhead .nav-link{
+    color: white !important;
+    font-size: larger !important;
+}

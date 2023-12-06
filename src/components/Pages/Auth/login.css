@@ -1,0 +1,45 @@
+/* .App{
+    
+    
+} */
+#login{
+    background-image: url("../../../assets/background.jpeg");
+    background-attachment: fixed;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+#login .card-header{
+    border-radius: 10px 10px 0px 0px;
+    height: 15%;
+    background-color: #dff0d8;
+    color: #718F47;
+    text-align: center;
+    font-size: 1.5rem;
+}
+#login .myform{
+    border-radius: 10px;
+    margin-left: 10px;
+    width: 40%;
+    height: 60%;
+    background-color: white;
+}
+
+#buttons{
+    display: flex;
+   justify-content: center;
+}
+#buttons .button{
+    width: 30%;
+    margin: 5px;
+    border-radius: 5px;
+}
+.AuthAD{
+    width: 80%;
+    border-radius: 5px;
+    margin-left: 10%;
+
+}

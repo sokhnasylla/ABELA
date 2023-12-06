@@ -1,0 +1,26 @@
+.menu{
+    margin-bottom: 10px;
+}
+ .Ad .text{
+    display: flex;
+    justify-content: center;
+    font-size: small;
+    color: white;
+    margin-top: 5px;
+    background-color: #148C8A;
+    width: 8rem;
+    height: 1.5rem;
+    border-radius: 5px;
+
+} 
+
+.Ad .iconsub{
+    width: 90%;
+    font-size: 3rem;
+    color: #0766AD;
+  
+}
+.fawindows{
+    font-size:"4rem";
+    color:"#65CEEF";
+}

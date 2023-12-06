@@ -1,0 +1,32 @@
+#home .container{
+   
+}
+#home{
+    height: 100vh;
+    margin: 0;
+
+}
+#home .body .menu{
+    padding: 2px;
+    /* background-color: red; */
+}
+
+.content{
+    margin: 0;
+}
+#home .titre{
+    /* margin: 0;
+    border-radius: 5px;
+    margin-top: 5px;
+    text-align: center;
+    height: 9%;
+    background-color:#148C8A;
+    color: white; */
+    
+}
+/* #home .titre p{
+    padding: 0px 10px 0 10px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+} */

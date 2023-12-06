@@ -1,0 +1,12 @@
+
+#homsmc{
+    margin-top: 20px;
+    width: 90%;
+    margin-left: 40px;
+}
+#homsmc fieldset legend{
+    border-bottom: 1px solid gray;
+}
+#homsmc .card{
+    border-radius: 0px;
+}
