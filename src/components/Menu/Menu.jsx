@@ -31,8 +31,11 @@ function Menu() {
       <Navbar.Brand href="#interco" className='Ad'>
        <SubMenu text='KIBARU' icon={FaStreetView}/>
       </Navbar.Brand>
-      <Navbar.Brand href="#interco" className='Ad'>
+      <Navbar.Brand href="/maxit" className='Ad'>
        <SubMenu text='MAXIT' icon={FaMobile}/>
+      </Navbar.Brand>
+      <Navbar.Brand href="/network" className='Ad'>
+       <SubMenu text='NETWORK' icon={FaMobile}/>
       </Navbar.Brand>
       <Navbar.Brand href="/mysmc" className='Ad'>
        <SubMenu text='MYSMC' icon={GrSystem}/>
