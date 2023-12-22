@@ -16,7 +16,6 @@ function Support() {
        <MenuPerso/>
        <Card id="support">
           <Title text="SUPPORT TECHNIQUE"/>
-          <Card.Img src={support} height={484}></Card.Img>
        </Card>
     </div>
   )

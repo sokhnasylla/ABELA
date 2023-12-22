@@ -46,7 +46,7 @@ function HomeSmc() {
                             </b>
                         </h5>
 						<h6 className="float-right; colororange">2023-05-10 19:11:47, TMP_CISSE58568</h6>			
-                        <p class="label-sucess"><i>https://observability.seetlu.orange-sonatel.com/spaces/space_selector</i></p>
+                        <p className="label-sucess"><i>https://observability.seetlu.orange-sonatel.com/spaces/space_selector</i></p>
 					</li>	
 				</ul>
                 </Card>

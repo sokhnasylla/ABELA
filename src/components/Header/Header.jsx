@@ -6,7 +6,7 @@ function Header() {
   return (
     <div className='myhead'>
        <div>
-        <p>Dalal ak Jamm Paterne</p>
+        <p>Dalal ak Jamm</p>
        </div>
        <Nav variant='tabs'>
           <Nav.Item>

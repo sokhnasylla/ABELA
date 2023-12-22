@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 
-function Get({ url, columns, token }) {
+function Get({ url, columns, token, showTable = true }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -18,10 +18,9 @@ function Get({ url, columns, token }) {
           },
         };
 
-        const response = await  axios.get(url, config);
+        const response = await axios.get(url, config);
 
         setData(response.data);
-        console.log(data.length);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       } finally {
@@ -36,15 +35,19 @@ function Get({ url, columns, token }) {
     <div>
       {loading && <p>Chargement...</p>}
       {error && <p>{error}</p>}
-      {data.length > 0 && (
-        <DataTable
-          columns={columns}
-          data={data}
-          pagination
-          highlightOnHover
-          striped
-          dense
-        />
+      {showTable ? (
+        data.length > 0 && (
+          <DataTable
+            columns={columns}
+            data={data}
+            pagination
+            highlightOnHover
+            striped
+            dense
+          />
+        )
+      ) : (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
       )}
     </div>
   );

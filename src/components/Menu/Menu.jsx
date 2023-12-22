@@ -4,6 +4,8 @@ import {FaWindows,FaPhoneAlt,FaStreetView ,FaMobile } from "react-icons/fa"
 import { GrSystem } from "react-icons/gr";
 import { BsBuildingGear ,BsBrowserEdge} from "react-icons/bs";
 import { MdOutlineManageHistory } from "react-icons/md";
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
+import Dashboard from '@mui/icons-material/Dashboard';
 import "./menu.css"
 import SubMenu from '../Card/Submenu/SubMenu'
 
@@ -13,15 +15,15 @@ function Menu() {
    
     <Navbar className='menu'>
     <Container>
-      <Navbar.Brand href="#home" className='Ad'>
+      {/* <Navbar.Brand href="#home" className='Ad'>
        <SubMenu text='Active Directory' icon={FaWindows}/>
-      </Navbar.Brand>
+      </Navbar.Brand> */}
       <Navbar.Brand href="#gaia" className='Ad'>
        <SubMenu text='GAIA' icon={BsBuildingGear}/>
       </Navbar.Brand>
-      <Navbar.Brand href="#infotel" className='Ad'>
+      {/* <Navbar.Brand href="#infotel" className='Ad'>
        <SubMenu text='INFOTEL' icon={FaPhoneAlt}/>
-      </Navbar.Brand>
+      </Navbar.Brand> */}
       <Navbar.Brand href="/support" className='Ad'>
        <SubMenu text='Support Technique' icon={MdOutlineManageHistory}/>
       </Navbar.Brand>
@@ -36,6 +38,9 @@ function Menu() {
       </Navbar.Brand>
       <Navbar.Brand href="/mysmc" className='Ad'>
        <SubMenu text='MYSMC' icon={GrSystem}/>
+      </Navbar.Brand>
+      <Navbar.Brand href="/admin" className='Ad'>
+       <SubMenu text='Dashboard Admin' icon={Dashboard}/>
       </Navbar.Brand>
     </Container>
   </Navbar>
