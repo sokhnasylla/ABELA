@@ -1,19 +1,23 @@
 import React from 'react'
 import Header from '../../Header/Header'
-import MenuPerso from '../../Card/MenuPerso/MenuPerso'
-import RecoHlrIn from '../Reco_hlr_in/RecoHlrIn'
 import { Card } from 'react-bootstrap'
 import support from '../../../assets/support.jpg'
 import Title from '../../Card/Title/Title'
 import "./support.css"
+import MenuPerso from '../../Card/MenuPerso/MenuPerso'
 
 
+const Support = () =>{
+  const menuItems = [
+    {label: "Reconciliation HLR vs IN", link:"/support/reco_hlr_in"},
+    {label: "Reconciliation HLR vs NESSICO", link:"#"},
+    {label: "Reconciliation IN vs NESSICO", link:"#"}
+  ];
 
-function Support() {
   return (
     <div>
        <Header/>
-       <MenuPerso/>
+        <MenuPerso propsMenuItems={ menuItems  }/>
        <Card id="support">
           <Title text="SUPPORT TECHNIQUE"/>
        </Card>

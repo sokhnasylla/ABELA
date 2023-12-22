@@ -11,6 +11,7 @@
 .myhead p{
     font-size: larger;
     padding: 5px;
+    align-items: center;
 }
 /* .nav.nav-tabs{
     color: white;
