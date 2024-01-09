@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar,Container } from 'react-bootstrap'
-import {FaWindows,FaPhoneAlt,FaStreetView ,FaMobile } from "react-icons/fa"
+import {FaWindows,FaPhoneAlt,FaStreetView ,FaMobile,FaNetworkWired } from "react-icons/fa"
 import { GrSystem } from "react-icons/gr";
 import { BsBuildingGear ,BsBrowserEdge} from "react-icons/bs";
 import { MdOutlineManageHistory } from "react-icons/md";
@@ -18,9 +18,9 @@ function Menu() {
       {/* <Navbar.Brand href="#home" className='Ad'>
        <SubMenu text='Active Directory' icon={FaWindows}/>
       </Navbar.Brand> */}
-      <Navbar.Brand href="#gaia" className='Ad'>
+      {/* <Navbar.Brand href="#gaia" className='Ad'>
        <SubMenu text='GAIA' icon={BsBuildingGear}/>
-      </Navbar.Brand>
+      </Navbar.Brand> */}
       {/* <Navbar.Brand href="#infotel" className='Ad'>
        <SubMenu text='INFOTEL' icon={FaPhoneAlt}/>
       </Navbar.Brand> */}
@@ -37,7 +37,7 @@ function Menu() {
        <SubMenu text='MAXIT' icon={FaMobile}/>
       </Navbar.Brand>
       <Navbar.Brand href="/network" className='Ad'>
-       <SubMenu text='NETWORK' icon={FaMobile}/>
+       <SubMenu text='NETWORK' icon={FaNetworkWired}/>
       </Navbar.Brand>
       <Navbar.Brand href="/mysmc" className='Ad'>
        <SubMenu text='MYSMC' icon={GrSystem}/>

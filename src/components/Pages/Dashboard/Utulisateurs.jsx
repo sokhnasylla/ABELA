@@ -14,7 +14,7 @@ function Utulisateurs() {
 
   const handleFormSubmit = () => {
     setShowForm(false);
-    setEditUserData(null);;
+    setEditUserData(null);
   };
 
   const handleEditUser = (userData) => {

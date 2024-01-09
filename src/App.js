@@ -8,13 +8,14 @@ import Mysmc from './components/Pages/MySMC/Mysmc';
 import Dashboard from './components/Pages/Dashboard/Dashboard'
 import SignUp from './components/Pages/Auth/SignUp';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import Maxit from './components/Pages/Home/Maxit/Maxit';
+import Network from './components/Pages/Home/Network/Network';
 import User from './components/Pages/Dashboard/User';
+import FormHistTrans from './components/Pages/Home/Maxit/FormHistTrans';
+
 
 
 const queryClient= new QueryClient();
-import Maxit from './components/Pages/Home/Maxit/Maxit';
-import Network from './components/Pages/Home/Network/Network';
-
 function App() {
   return (
     <div className="App">
@@ -30,6 +31,7 @@ function App() {
             <Route path="/admin/user" element={<User/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />
+            {/* <Route path="/exportTrans" element={<FormHistTrans/>} /> */}
             <Route path="/network" element={<Network/>} />
           </Routes>
         </BrowserRouter>
