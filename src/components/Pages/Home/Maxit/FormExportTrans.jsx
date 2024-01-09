@@ -28,7 +28,7 @@ function FormExportTrans() {
     fullWidth
     value={type} // Remplacez selectedTransactionType par la valeur de l'option par défaut
 >
-    <MenuItem value="B2W">B2W</MenuItem>
+    <MenuItem value="B2W">{type}</MenuItem>
     <MenuItem value="B2W_BALANCE">B2W_BALANCE</MenuItem>
     <MenuItem value="B2W_STATEMENT">B2W_STATEMENT</MenuItem>
 </Select>

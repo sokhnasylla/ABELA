@@ -36,7 +36,7 @@ function HomeSmc() {
             </Col>
             <Col xs={9}>
             <Container className='blockinf'>
-                <Button variant='success'> + Partager une information</Button>
+                <Button  variant='success'> + Partager une information</Button>
                 <Card>
                 <ul className="timeline" style={{overflowY:"scroll",height:"280px"}}>
 					<li>
