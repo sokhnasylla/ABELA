@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import "./home.css"
 import Header from '../../Header/Header';
 import Menu from '../../Menu/Menu';
@@ -10,6 +10,8 @@ import Title from '../../Card/Title/Title';
 import { FaHistory } from 'react-icons/fa';
 import { GrCatalogOption } from 'react-icons/gr';
 import { AiFillDashboard } from 'react-icons/ai'
+import { getTokenFromLocalStorage } from '../Auth/authUtils';
+import {jwtDecode} from 'jwt-decode'
 
 const submenu=[
   {'text':"Audit Perso","icon":FaHistory
@@ -20,7 +22,14 @@ const submenu=[
 ]
 
 
+// const token= getTokenFromLocalStorage();
+// console.log(token);
+
+
 function Home() {
+
+
+  
   return (
     <div id='home'>
         <Header/>

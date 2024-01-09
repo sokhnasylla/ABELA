@@ -9,11 +9,12 @@ import Dashboard from './components/Pages/Dashboard/Dashboard'
 import SignUp from './components/Pages/Auth/SignUp';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import User from './components/Pages/Dashboard/User';
+import Maxit from './components/Pages/Maxit/Maxit';
+import Network from './components/Pages/Network/Network'
+import Auth from './components/Pages/Auth/Auth';
 
 
 const queryClient= new QueryClient();
-import Maxit from './components/Pages/Home/Maxit/Maxit';
-import Network from './components/Pages/Home/Network/Network';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/mysmc" element={<Mysmc/>} />
             <Route path="/admin" element={<Dashboard/>} />
             <Route path="/admin/user" element={<User/>} />
+            <Route path="/admin/group" element={<Auth/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />
             <Route path="/network" element={<Network/>} />

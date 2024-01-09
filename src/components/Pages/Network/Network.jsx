@@ -1,9 +1,9 @@
 import React from "react";
-import Support from "../../Support Technique/Support";
-import Header from "../../../Header/Header";
+import Support from "../Support Technique/Support";
+import Header from "../../Header/Header";
 import { Card, Nav } from "react-bootstrap";
-import Title from "../../../Card/Title/Title";
-import MenuPerso from "../../../Card/MenuPerso/MenuPerso";
+import Title from "../../Card/Title/Title";
+import MenuPerso from "../../Card/MenuPerso/MenuPerso";
 import FormExtractInfos from "./FormExtractInfos";
 
 const Network = ()=> {
