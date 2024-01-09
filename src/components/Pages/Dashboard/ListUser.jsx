@@ -110,7 +110,7 @@ function ListUsers({onEditUser}) {
               <TableCell>Nom</TableCell>
               <TableCell>Login</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Roles</TableCell>
+              {/* <TableCell>Roles</TableCell> */}
               <TableCell>Structure</TableCell>
               <TableCell>Créé le</TableCell>
               <TableCell>Action</TableCell>
@@ -123,7 +123,7 @@ function ListUsers({onEditUser}) {
                 <TableCell>{user?.nom}</TableCell>
                 <TableCell>{user?.loginWindows}</TableCell>
                 <TableCell>{user?.email}</TableCell>
-                <TableCell>{user?.roles}</TableCell>
+                {/* <TableCell>{user?.roles}</TableCell> */}
                 <TableCell>{user?.structure}</TableCell>
                 <TableCell>{formatDate(user?.dateCreation)}</TableCell>
                 <TableCell sx={{display:'flex',flexDirection:"row"}}>

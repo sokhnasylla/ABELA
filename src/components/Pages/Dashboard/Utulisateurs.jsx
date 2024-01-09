@@ -3,6 +3,7 @@ import { Container, Grid, Paper, Fab } from '@mui/material';
 import { FilterAlt, AddCircle as AddCircleIcon } from '@mui/icons-material';
 import ListUsers from './ListUser';
 import SignUp from '../Auth/SignUp';
+import Auth from '../Auth/Auth';
 
 function Utulisateurs() {
   const [showForm, setShowForm] = useState(false);
@@ -26,8 +27,9 @@ function Utulisateurs() {
     <Container maxWidth="lg" sx={{ mt: 2, mb: 2, mr: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
+          {/* <Auth/> */}
           {showForm ? (
-            <SignUp  userData={editUserData} onFormSubmit={handleFormSubmit} />
+            <Auth  userData={editUserData} onFormSubmit={handleFormSubmit} />
           ) : (
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
               <Grid sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>

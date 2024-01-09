@@ -3,6 +3,9 @@ import {Nav,Card} from 'react-bootstrap'
 import "./menuPerso.css"
 import { FaBars ,FaArrowCircleDown,FaPaperclip} from "react-icons/fa";
 
+const handleClick =()=>{
+ alert("Cliqué");
+}
 
 function MenuPerso({propsMenuItems, onItemClick}) {
   console.log("VOILA LES PROPS ", {propsMenuItems, onItemClick});
@@ -12,7 +15,7 @@ function MenuPerso({propsMenuItems, onItemClick}) {
         <Nav defaultActiveKey="/home" className="flex-column justify-content-beetween navigation">
           {/* SUPPORT TECHNIQUE */}
           {propsMenuItems.map((item, index) =>(
-           <Card className='success' key={index}> <Nav.Link className='text-white' onClick={()=>onItemClick(item.link)} ><FaPaperclip/>{item.label} </Nav.Link></Card>
+           <Card className='success' key={index}> <Nav.Link className='text-white' href= {item.link} ><FaPaperclip/>{item.label}</Nav.Link></Card>
           ))}
         </Nav>
     </div>

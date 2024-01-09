@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import Header from "../../../Header/Header";
-import MenuPerso from "../../../Card/MenuPerso/MenuPerso";
-import Form from "../../../Form/Form";
+import React,{useState} from "react";
+import Header from "../../Header/Header";
+import MenuPerso from "../../Card/MenuPerso/MenuPerso";
+import Form from "../../Form/Form";
 import { Card } from "@mui/material";
-import Title from "../../../Card/Title/Title";
+import Title from "../../Card/Title/Title";
 import FormExportTrans from "./FormExportTrans";
 import FormExportUser from "./FormExportUser";
 import FormHistTrans from "./FormHistTrans";
