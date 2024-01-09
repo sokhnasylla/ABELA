@@ -1,15 +1,30 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import { Navbar,Container } from 'react-bootstrap'
 import {FaWindows,FaPhoneAlt,FaStreetView ,FaMobile } from "react-icons/fa"
 import { GrSystem } from "react-icons/gr";
-import { BsBuildingGear ,BsBrowserEdge} from "react-icons/bs";
+import { BsBrowserEdge} from "react-icons/bs";
 import { MdOutlineManageHistory } from "react-icons/md";
-import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import Dashboard from '@mui/icons-material/Dashboard';
 import "./menu.css"
 import SubMenu from '../Card/Submenu/SubMenu'
+import { getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
+import { jwtDecode } from 'jwt-decode';
 
 function Menu() {
+
+  const [roles,setRoles]=useState([])
+
+  useEffect(() => {
+    const token = getTokenFromLocalStorage();
+    if (token) {
+
+      const decode = jwtDecode(token)
+      console.log();
+      setRoles(decode.roles);
+      
+      
+    }
+  }, []);
 
   return (
    
@@ -18,9 +33,9 @@ function Menu() {
       {/* <Navbar.Brand href="#home" className='Ad'>
        <SubMenu text='Active Directory' icon={FaWindows}/>
       </Navbar.Brand> */}
-      <Navbar.Brand href="#gaia" className='Ad'>
+      {/* <Navbar.Brand href="#gaia" className='Ad'>
        <SubMenu text='GAIA' icon={BsBuildingGear}/>
-      </Navbar.Brand>
+      </Navbar.Brand> */}
       {/* <Navbar.Brand href="#infotel" className='Ad'>
        <SubMenu text='INFOTEL' icon={FaPhoneAlt}/>
       </Navbar.Brand> */}

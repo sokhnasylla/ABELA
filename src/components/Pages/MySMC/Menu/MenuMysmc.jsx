@@ -3,7 +3,7 @@ import { Container, Navbar } from 'react-bootstrap'
 import "./menumysmc.css"
 import SubMenu from '../../../Card/Submenu/SubMenu'
 import status from "../../../../assets/status.png"
-import problem from "../../../../assets/problem.png"
+import problem from "../../../../assets/problem.jpg"
 import analytic from "../../../../assets/analytics.png"
 import diagram from "../../../../assets/diagram.png"
 import gear from "../../../../assets/gear.png"
@@ -13,7 +13,7 @@ function MenuMysmc() {
     <Navbar className='menusmc'>
         <Container>
           <Navbar.Brand href="#home" className='Ad'>
-              <SubMenu text="Gestion Incidents" image={status}/>
+              <SubMenu text="Gestion Incidents" image={status} className/>
           </Navbar.Brand>
           <Navbar.Brand href="#home" className='Ad'>
               <SubMenu text="Gestion Probléme" image={problem}/>

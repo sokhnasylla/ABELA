@@ -22,7 +22,7 @@ import NestedList from './MyList';
 
 
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -138,7 +138,6 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100vh',
          
           }}
         >

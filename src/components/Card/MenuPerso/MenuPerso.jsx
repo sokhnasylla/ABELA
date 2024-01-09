@@ -3,6 +3,9 @@ import {Nav,Card} from 'react-bootstrap'
 import "./menuPerso.css"
 import { FaBars ,FaArrowCircleDown,FaPaperclip} from "react-icons/fa";
 
+const handleClick =()=>{
+ alert("Cliqué");
+}
 
 function MenuPerso({propsMenuItems, onItemClick}) {
   console.log("VOILA LES PROPS ", {propsMenuItems, onItemClick});

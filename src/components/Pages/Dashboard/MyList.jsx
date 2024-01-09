@@ -13,15 +13,13 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import PeopleIcon from '@mui/icons-material/People';
 // import { Link } from 'react-router-dom';
 import { Link } from '@mui/material';
+import { FaChartLine } from "react-icons/fa";
 
 
 export default function NestedList( ) {
-  const [open, setOpen] = React.useState(true);
+ 
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
+ 
 
 
   return (
@@ -29,15 +27,27 @@ export default function NestedList( ) {
     >
       <ListItemButton>
         <ListItemIcon>
-          <SettingsApplicationsIcon />
+          <FaChartLine size={25}/>
         </ListItemIcon>
-        <ListItemText primary="Parametrage" />
+        <ListItemText primary="Audit" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText primary="Incident Management" />
+        <ListItemText primary="Gestion de mon équipe" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="Gestion des acitivités" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="Gestion des application" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
@@ -53,12 +63,6 @@ export default function NestedList( ) {
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Integrations" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="Supervision Metier" />
@@ -69,32 +73,15 @@ export default function NestedList( ) {
         </ListItemIcon>
         <ListItemText primary="Supervision Technique" />
       </ListItemButton>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <PeopleIcon/>
-        </ListItemIcon>
-        <ListItemText primary="Utilisateurs" />
-        {open ? <ExpandLess /> : <ExpandMore
-        />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <Link href="/admin/user" color="initial" underline='none'>
-              <ListItemButton sx={{ pl: 4 }}  >
+      <Link href="/admin/user" color="initial" underline='none'>
+         <ListItemButton >
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="Utilisateurs"  />
-              </ListItemButton>
-          </Link>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-             <FileCopyIcon />
-            </ListItemIcon>
-            <ListItemText primary="Groupes" />
           </ListItemButton>
-        </List>
-      </Collapse>
+      </Link>
+     
     </React.Fragment>
   );
 }

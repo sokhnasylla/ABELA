@@ -44,4 +44,11 @@
 }
 #menuleft .card .nav-link p{
     color: black;
+font-size: 14px;
+}
+
+.iconsub
+{
+
+    margin-left: 20px;
 }
