@@ -17,6 +17,7 @@ import { redirect,useNavigate } from 'react-router-dom';
   import post from '../../API/post';
   import { useMutation, QueryClient, QueryClientProvider } from 'react-query';
   import CustomizedSteppers from "./MyStep"
+import useAuth from './useAuth';
 
 
   const defaultTheme = createTheme();
@@ -25,7 +26,7 @@ import { redirect,useNavigate } from 'react-router-dom';
  
 
   export default function SignUp({ onFormSubmit, userData }) {
-   
+   useAuth()
 
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState(userData?.prenom || '');

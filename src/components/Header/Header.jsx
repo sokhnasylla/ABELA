@@ -1,8 +1,22 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Nav } from 'react-bootstrap'
 import './header.css'
-import {FaUser}from "react-icons/fa"
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { clearTokenFromLocalStorage } from '../Pages/Auth/authUtils';
+
 function Header() {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Supprime le token du local storage
+    clearTokenFromLocalStorage();
+    
+    // Redirige vers la page de connexion
+    navigate('/');
+  };
+
   return (
     <div className='myhead'>
        <div>
@@ -13,7 +27,9 @@ function Header() {
             <Nav.Link href='/home'>Home</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link><FaUser/> Paterne</Nav.Link>
+            <Nav.Link onClick={handleLogout}> 
+              <LockOutlinedIcon sx={{marginBottom:'8px'}}/>
+             Deconnexion</Nav.Link>
           </Nav.Item>
        </Nav>
 

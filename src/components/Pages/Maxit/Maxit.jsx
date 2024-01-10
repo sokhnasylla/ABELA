@@ -9,6 +9,7 @@ import FormExportUser from "./FormExportUser";
 import FormHistTrans from "./FormHistTrans";
 import FormSupCompte from "./FormSupCompte";
 import FormVerifCompte from "./FormVerifCompte";
+import useAuth from "../Auth/useAuth";
 
 const maxitItemsMenus = [
   { label: " Export Transaction MaxIT", link: "exportTrans" },
@@ -20,6 +21,7 @@ const maxitItemsMenus = [
 
 function Maxit() {
 
+  useAuth()
   const [currentForm, setCurrentForm] = useState("")
 
   const handleMenuClick = (link)=>{

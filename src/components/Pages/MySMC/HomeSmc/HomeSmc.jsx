@@ -12,6 +12,7 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 
 import "./homesmc.css"
+import useAuth from '../../Auth/useAuth';
 
 const submenu=[
     {'text':"Informations","icon":TfiBlackboard
@@ -22,6 +23,7 @@ const submenu=[
   ]
 
 function HomeSmc() {
+  useAuth()
   return (
    <div id='homsmc'>
         <Row>

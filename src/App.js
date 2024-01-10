@@ -1,6 +1,5 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './components/Pages/Auth/Login';
 import Home from './components/Pages/Home/Home';
 import Support from './components/Pages/Support Technique/Support';
 import RecoHlrIn from './components/Pages/Reco_hlr_in/RecoHlrIn';
@@ -12,6 +11,7 @@ import Maxit from './components/Pages/Maxit/Maxit';
 import Network from './components/Pages/Network/Network';
 import User from './components/Pages/Dashboard/User';
 import Auth from './components/Pages/Auth/Auth';
+import SignInSide from './components/Pages/Auth/SignIn';
 
 
 const queryClient= new QueryClient();
@@ -21,7 +21,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login/>}/>
+            <Route path="/" element={<SignInSide/>}/>
             <Route path="/support" element={<Support/>}/>
             <Route path="/support/reco_hlr_in" element={<RecoHlrIn/>}/>
             <Route path="/home" element={<Home/>} />

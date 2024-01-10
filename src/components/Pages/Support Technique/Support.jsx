@@ -5,9 +5,11 @@ import support from '../../../assets/support.jpg'
 import Title from '../../Card/Title/Title'
 import "./support.css"
 import MenuPerso from '../../Card/MenuPerso/MenuPerso'
+import useAuth from '../Auth/useAuth'
 
 
 const Support = () =>{
+  useAuth()
   const menuItems = [
     {label: "Reconciliation HLR vs IN", link:"/support/reco_hlr_in"},
     {label: "Reconciliation HLR vs NESSICO", link:"#"},

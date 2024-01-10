@@ -11,7 +11,7 @@ import { Box, FormControlLabel } from '@mui/material';
 import { getTokenFromLocalStorage } from '../authUtils';
 import axios from 'axios';
 
-export default function FormRoles() {
+export default function FormRoles({ onRolesAndTbRolesReady, formData }) {
   const [checked, setChecked] = useState([]);
   const [isChecked, setIsChecked] = useState({});
   const [childChecked, setChildChecked] = useState({});
@@ -30,25 +30,38 @@ export default function FormRoles() {
 
         const rolesWithDetails = await Promise.all(
           response.data.map(async (index) => {
-            const roleDetailsResponse = await axios.get(index);
+            const apiUrl = "http://localhost:8000";
+            const roles = await Promise.all(
+              index.roles.map(async (roleLink) => {
+                const roleDetailsResponse = await axios.get(`${apiUrl}${roleLink}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`
+                    }
+                  });
+                return {
+                  id: roleDetailsResponse.data.id,
+                  label: roleDetailsResponse.data.description,
+                };
+              })
+            );
+
             return {
-              id: roleDetailsResponse.data.id,
-              label: roleDetailsResponse.data.nomApp,
-              childrenLabels: roleDetailsResponse.data.roles
+              id: index.id,
+              label: index.nomApp,
+              childrenLabels: roles,
             };
           })
         );
-  
+
         setData(rolesWithDetails);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-  
+
     fetchData();
   }, []);
-
-  console.log(data);
 
   const handleChange = (itemId) => (event) => {
     setIsChecked((prev) => ({ ...prev, [itemId]: event.target.checked }));
@@ -59,7 +72,6 @@ export default function FormRoles() {
       ...prev,
       [itemId]: { ...(prev[itemId] || {}), [childIndex]: event.target.checked },
     }));
-    // console.log(childChecked);
   };
 
   const handleToggle = (value) => () => {
@@ -74,16 +86,46 @@ export default function FormRoles() {
 
     setChecked(newChecked);
   };
+    useEffect(() => {
+      if (onRolesAndTbRolesReady) {
+        const renderRoles = () => {
+          const roles = [];
+          checked.forEach((elementId) => {
+            let foundElement = data.find((element) => element.id === elementId);
+            if (foundElement) {
+              if (foundElement.label === "Support Technique") {
+                foundElement.label = "Support";
+              }
+              roles.push(`ROLE_${foundElement.label.toUpperCase()}`);
+            }
+          });
+          return roles;
+        };
+    
+        const rendertbroles = () => {
+          const tbRole = [];
+          for (const key in childChecked) {
+            const object = childChecked[key];
+            for (const value in object) {
+              if (object[value] === true) {
+                tbRole.push(value);
+              }
+            }
+          }
+          return tbRole;
+        };
+    
+        onRolesAndTbRolesReady(renderRoles(), rendertbroles());
+      }
+    }, [checked, childChecked, data, onRolesAndTbRolesReady]);
 
   const renderChildren = (itemId) => {
     const childrenLabels = data.find((item) => item.id === itemId)?.childrenLabels || [];
-    
+
     return childrenLabels.map((roles) => (
-      
-     
       <FormControlLabel
         key={roles.id}
-        label={roles.description}
+        label={roles.label}
         control={<Checkbox checked={childChecked[itemId]?.[roles.id] || false} onChange={handleChildChange(itemId, roles.id)} />}
       />
     ));
