@@ -1,18 +1,37 @@
 import React from 'react'
+import { InputLabel ,TextField,Select,MenuItem} from '@mui/material'
 import { Button, Card, Col, Container,Row } from 'react-bootstrap'
 import menupng from "../../../../assets/menu.png"
 import MenuLeft from '../../../Card/MenuLeft/MenuLeft'
 import { TfiBlackboard } from "react-icons/tfi";
-import { FaLink ,FaSignal,FaPlusCircle } from "react-icons/fa";
+import { FaLink ,FaSignal,FaPlusCircle} from "react-icons/fa";
+import InfoIcon from '@mui/icons-material/Info';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem , { timelineItemClasses } from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import "./homesmc.css"
 import useAuth from '../../Auth/useAuth';
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width:' 55%',
+  height:'70%',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+ 
+};
 
 const submenu=[
     {'text':"Informations","icon":TfiBlackboard
@@ -21,9 +40,22 @@ const submenu=[
   },
     {'text':"Automatique reporting", 'icon':FaSignal}
   ]
-
+  
 function HomeSmc() {
   useAuth()
+  const [mode, setMode] = React.useState('ATP');
+    const [type, setType] = React.useState('Faible');
+
+    const handleChange = (event) => {
+      setMode(event.target.value);
+    };
+    const handleChanges = (event) => {
+       setType(event.target.value);
+      };
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  
   return (
    <div id='homsmc'>
         <Row>
@@ -45,7 +77,60 @@ function HomeSmc() {
             </Col>
             <Col xs={10}>
             <Container className='blockinf' style={{borderBottom: "1px solid #e5e5e5"}}>
-                <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif"}} > <FaPlusCircle/>   Partager une information</Button>
+                <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif"}} onClick={handleOpen}> <FaPlusCircle/>   Partager une information</Button>
+                <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+<CancelIcon sx={{ color: "#C9302C",cursor:"pointer",marginLeft:"91%",position:'fixed',top:'2px'}} onClick={handleClose}/>
+          <Typography id="modal-modal-title" variant="h6" component="h6">
+          <InfoIcon sx={{ color: "#148C8A" }}/> Vous souhaitez partager une information avec vos collaborateurs ?        
+
+          </Typography>
+          <hr />
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+           <InputLabel sx={{}}>Titre</InputLabel>
+           <TextField  variant='outlined' size='small' fullWidth  placeholder='minimum 3 caratéres' required/>
+           <InputLabel>Type</InputLabel>
+           <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        onChange={handleChange}
+                        fullWidth
+                        value={mode}
+                        size='small'
+                        required >
+                        <MenuItem value="ATP">ATP</MenuItem>
+                        <MenuItem value="Supervision">Supervision</MenuItem>
+                        <MenuItem value="Maintenance">Maintenance</MenuItem>
+                        <MenuItem value="Nouveautés">Nouveautés</MenuItem>
+                        
+                      </Select>
+           <InputLabel>Message</InputLabel>
+           <TextField  variant='outlined'size='small'  fullWidth  placeholder='minimum 3 caratéres' required/>
+           <InputLabel>Criticité</InputLabel>
+           <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        onChange={handleChanges}
+                        fullWidth
+                        value={type}
+                        size='small'
+                        required>
+                        <MenuItem value="Faible">Faible</MenuItem>
+                        <MenuItem value="Moyen">Moyen</MenuItem>
+                        <MenuItem value="Haute">Haute</MenuItem> 
+                      </Select>
+          </Typography>
+          <br />
+          <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",marginLeft:"77%"}}>valider</Button>
+          &nbsp;<Button style={{backgroundColor:"#C9302C",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif"}}>annuler</Button>
+        </Box>
+      </Modal>
+                  
                   <hr />
                
     <Timeline   sx={{

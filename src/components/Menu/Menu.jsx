@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import { Navbar,Container } from 'react-bootstrap'
-import {FaWindows,FaPhoneAlt,FaStreetView ,FaMobile } from "react-icons/fa"
+import {FaWindows,FaPhoneAlt,FaStreetView ,FaMobile,FaNetworkWired } from "react-icons/fa"
 import { GrSystem } from "react-icons/gr";
 import { BsBrowserEdge} from "react-icons/bs";
 import { MdOutlineManageHistory } from "react-icons/md";
@@ -52,7 +52,7 @@ function Menu() {
        <SubMenu text='MAXIT' icon={FaMobile}/>
       </Navbar.Brand>
       <Navbar.Brand href="/network" className='Ad'>
-       <SubMenu text='NETWORK' icon={FaMobile}/>
+       <SubMenu text='NETWORK' icon={FaNetworkWired}/>
       </Navbar.Brand>
       <Navbar.Brand href="/mysmc" className='Ad'>
        <SubMenu text='MYSMC' icon={GrSystem}/>
