@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Container, Grid, Paper, Fab } from '@mui/material';
 import { FilterAlt, AddCircle as AddCircleIcon } from '@mui/icons-material';
 import ListUsers from './ListUser';
-import SignUp from '../Auth/SignUp';
-import Auth from '../Auth/Auth';
+import SignUp from '../../Auth/SignUp';
+import Auth from '../../Auth/Auth';
 
 function Utulisateurs() {
   const [showForm, setShowForm] = useState(false);

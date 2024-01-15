@@ -9,7 +9,7 @@ import SignUp from './components/Pages/Auth/SignUp';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Maxit from './components/Pages/Maxit/Maxit';
 import Network from './components/Pages/Network/Network';
-import User from './components/Pages/Dashboard/User';
+import User from './components/Pages/Dashboard/Utilisateurs/User';
 import Auth from './components/Pages/Auth/Auth';
 import SignInSide from './components/Pages/Auth/SignIn';
 

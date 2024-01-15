@@ -1,7 +1,7 @@
 import React from 'react'
-import Base from './Base'
+import Base from '../Base'
 import Utulisateurs from './Utulisateurs'
-import useAuth from '../Auth/useAuth'
+import useAuth from '../../Auth/useAuth'
 
 
 function User() {
