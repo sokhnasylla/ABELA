@@ -8,7 +8,7 @@ const handleClick =()=>{
 }
 
 function MenuPerso({propsMenuItems, onItemClick}) {
-  console.log("VOILA LES PROPS ", {propsMenuItems, onItemClick});
+  // console.log("VOILA LES PROPS ", {propsMenuItems, onItemClick});
   return (
     <div className='menuPerso float-end'>
       <Card className='entete'><p><FaBars/>Menu Personnalisé<FaArrowCircleDown/></p></Card>
