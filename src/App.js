@@ -12,6 +12,8 @@ import Network from './components/Pages/Network/Network';
 import User from './components/Pages/Dashboard/User';
 import Auth from './components/Pages/Auth/Auth';
 import SignInSide from './components/Pages/Auth/SignIn';
+import GestionIncident from './components/Pages/MySMC/GestionIncident/GestionIncident';
+
 
 
 const queryClient= new QueryClient();
@@ -33,6 +35,8 @@ function App() {
             <Route path="/maxit" element={<Maxit/>} />
             {/* <Route path="/exportTrans" element={<FormHistTrans/>} /> */}
             <Route path="/network" element={<Network/>} />
+            < Route path="/mysmc/gestionincident" element={<GestionIncident/>} />
+
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

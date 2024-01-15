@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Nav } from 'react-bootstrap';
+import '../../Header/header.css'
 import {
   styled,
   createTheme,
@@ -105,12 +107,21 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
               component="h1"
               variant="h6"
               color="inherit"
-              noWrap
+              width="50%"
+              //noWrap
               sx={{ flexGrow: 1 }}
             >
               Back Office ABELA
             </Typography>
-          </Toolbar>
+            <div className='myhead'>
+          <Nav variant='tabs'style={{marginLeft:'89%'}}>
+          <Nav.Item >
+            <Nav.Link href='/home'>Home</Nav.Link>
+          </Nav.Item>
+       </Nav>
+       </div>
+       </Toolbar>
+       
         </AppBar>
         <Drawer variant="permanent" open={open}>
           <Toolbar

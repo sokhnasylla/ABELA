@@ -12,7 +12,7 @@ function MenuMysmc() {
   return (
     <Navbar className='menusmc'>
         <Container>
-          <Navbar.Brand href="#home" className='Ad'>
+          <Navbar.Brand href="/mysmc/gestionincident" className='Ad'>
               <SubMenu text="Gestion Incidents" image={status} className/>
           </Navbar.Brand>
           <Navbar.Brand href="#home" className='Ad'>
