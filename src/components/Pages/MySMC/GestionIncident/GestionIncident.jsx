@@ -7,14 +7,29 @@ import { Grid,Select,MenuItem, InputLabel,TextField } from '@mui/material';
 import "../../MySMC/Menu/menumysmc.css"
 import MenuPerso from '../../../Card/MenuPerso/MenuPerso';
 import TableGesIncident from './TableGesIncident/TableGesIncident'
-
-
+import NavigatePerso from './NavigatePerso';
+import { FaPlusCircle, FaSearch, FaHome,FaChartLine } from 'react-icons/fa';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import { RiDashboard3Line } from "react-icons/ri";
+import { IoStatsChart } from "react-icons/io5";
+import AjoutAvis from './AjoutAvis';
+import  MenuPersoGesIncident from '../GestionIncident/MenuPersoGesIncident'
 
 
 const gestionIncidentItemsMenu =[
-{label: " Ajouter un nouvel avis", link: "#"},
-{ label: " Rechercher avis", link: "#"},
-{ label: " Statistique avis d'incidents", link: "#"}
+  {label: " Ajouter un nouvel avis", link: "/gestionincident/ajoutavis",icon:FaPlusCircle},
+  { label: " Rechercher avis", link: "/gestionincident/rechercheavis",icon:FaSearch},
+  { label: " Statistique avis d'incidents", link: "/gestionincident/statistique",icon:FaChartLine}
+  ];
+
+
+const gestionIncidentItemsNavigate =[
+{label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
+{ label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
+{ label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
+{ label: " Consignes Orchestrées", link: "#"},
+{ label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
+{ label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
 ];
 
 function GestionIncident() {
@@ -26,6 +41,7 @@ function GestionIncident() {
       setCurrentForm(link);
       console.log(link);
     }
+    
   
     const handleChange = (event) => {
       setNombre(event.target.value);
@@ -34,12 +50,13 @@ function GestionIncident() {
     <div id='home'>
     <Header/>
     <div>
-    <MenuPerso propsMenuItems={gestionIncidentItemsMenu} onItemClick={handleMenuClick} />
+    <MenuPersoGesIncident propsMenuItems={gestionIncidentItemsMenu} onItemClick={handleMenuClick}  />
     </div>
+    <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
     <br />
     <Container className='body'style={{marginLeft:"5px"}}>
         <Row>
-         <Col xs={12} className='content'>
+         <Col xs={10} className='content'>
           <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024"/>
          </Col> 
          </Row>
@@ -71,11 +88,12 @@ function GestionIncident() {
         <br /> <br /> <br /> <br />
         <div>
         <Row>
-         <Col xs={12} className='content'>
+         <Col xs={10} className='content'>
           <Title text="Liste des avis d'incidents / d'information en cours"/>
          </Col> 
          </Row>
          </div>
+        
          <br />
          <div style={{marginLeft:"2%"}}>
           <label className='=label'> Afficher</label>
@@ -96,10 +114,44 @@ function GestionIncident() {
        <TextField  variant='outlined' size='small'/>
        </div>
        <br />
+       
        <TableGesIncident/>
+     
+       <br />
+       <div>
+        <Row>
+         <Col xs={10} className='content'>
+          <Title text="Les avis fermés, Clotûrés ou annulés récemment"/>
+         </Col> 
+         </Row>
+         </div>
+         <br />
+         <div style={{marginLeft:"2%"}}>
+          <label className='=label'> Afficher</label>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            onChange={handleChange}
+            size='small'
+            value={nombre} >
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="25">25</MenuItem>
+                <MenuItem value="50">50</MenuItem>
+                <MenuItem value="100">100</MenuItem>         
+          </Select><label>elements</label>
+        </div>
+        <div style={{marginLeft:"46%",position:"absolute",top:"114%"}}>
+       <label >Rechercher: </label> &nbsp;
+       <TextField  variant='outlined' size='small'/>
+       </div>
+       <br />
+       
+       <TableGesIncident/>
+      
        </Container>
       
     </div>
+  
   )
 }
 

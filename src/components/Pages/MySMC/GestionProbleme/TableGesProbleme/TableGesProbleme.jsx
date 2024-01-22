@@ -9,37 +9,32 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 const columns = [
-  { id: 'date', label: 'Date création', minWidth: 100 },
-  { id: 'avis', label: 'N°Avis', minWidth: 50 },
-  {id: 'titre',
-    label: 'Titre',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
+  { id: 'probleme', label: 'N°Probleme', minWidth: 100 },
+  { id: 'application', label: 'Application', minWidth: 100 },
+  {id: 'date',label: 'Date Création',  minWidth: 100, 
+    
   },
   {
     id: 'etat',
     label: 'Etat',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
+    minWidth: 100,
+   
   },
   {
     id: 'action',
     label: 'Action',
-    minWidth: 170,
-    align: 'right',
+    minWidth: 100,
     format: (value) => value.toFixed(2),
   },
 ];
 
-function createData(date,avis, titre, etat, action) {
+function createData(probleme,application, date, etat, action) {
  
-  return { date,avis, titre, etat, action};
+  return { probleme,application, date, etat, action};
 }
 
 const rows = [
-  createData('2023-08-10 20:25:20', '230810_202520', "[Regularisation] AVIS D'INCIDENT S.I : LENTEURS KIBARU", 'Fermé'	), 
+  createData( "Aucune donnée disponible dans le tableau"	), 
 ];
 
 export default function StickyHeadTable() {
@@ -56,7 +51,7 @@ export default function StickyHeadTable() {
   };
 
   return (
-    <Paper sx={{ width: '75%', overflow: 'hidden',marginLeft:'3%' }}>
+    <Paper sx={{ width: '75%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight:250 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

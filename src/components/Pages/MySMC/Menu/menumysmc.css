@@ -6,8 +6,6 @@
 .panel{
     width: 190px;
     display: flex;
-    background-color:#F2DEDE;
-    color:#A94451;
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
     border-top-left-radius: 3px;
