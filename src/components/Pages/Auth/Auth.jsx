@@ -17,8 +17,8 @@ const steps = ['User', 'Sécurité'];
 function Auth({ onFormSubmit }) {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    prenom: '',
+    nom: '',
     email: '',
     loginWindows: '',
     structure: '',
@@ -36,6 +36,8 @@ function Auth({ onFormSubmit }) {
   };
 
   const handleRolesAndTbRolesReady = (roles, tbRoles) => {
+    console.log('Role',roles)
+    console.log("TbRole",tbRoles);
     setFormData((prevData) => ({
       ...prevData,
       roles,
@@ -46,8 +48,8 @@ function Auth({ onFormSubmit }) {
   const handleNext = async () => {
     if (
       (activeStep === 0 &&
-        formData.firstName &&
-        formData.lastName &&
+        formData.prenome &&
+        formData.nom &&
         formData.email &&
         formData.structure &&
         formData.password) ||

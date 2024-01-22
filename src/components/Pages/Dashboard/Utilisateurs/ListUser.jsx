@@ -12,7 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { format } from 'date-fns';
 import { IconButton } from '@mui/material';
-import SignUp from '../../Auth/SignUp';
 import { useNavigate } from 'react-router-dom';
 
 const formatDate = (dateString) => {
@@ -48,6 +47,7 @@ function ListUsers({onEditUser}) {
         const response = await axios.get("http://127.0.0.1:8000/api/getAllUsers", config);
 
         setData(response.data[0]);
+        console.log(data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       } finally {
@@ -90,9 +90,11 @@ function ListUsers({onEditUser}) {
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`http://127.0.0.1:8000/api/users/${id}`, config);
+      const response = await axios.get(`http://127.0.0.1:8000/api/users/${id}`, config)
+
       console.log(response.data);
       onEditUser(response.data);
+
     } catch (error) {
       // Gérez les erreurs ici
       console.error('Une erreur s\'est produite lors de la récupération des données de l\'utilisateur : ', error);
@@ -110,7 +112,6 @@ function ListUsers({onEditUser}) {
               <TableCell>Nom</TableCell>
               <TableCell>Login</TableCell>
               <TableCell>Email</TableCell>
-              {/* <TableCell>Roles</TableCell> */}
               <TableCell>Structure</TableCell>
               <TableCell>Créé le</TableCell>
               <TableCell>Action</TableCell>
@@ -123,7 +124,6 @@ function ListUsers({onEditUser}) {
                 <TableCell>{user?.nom}</TableCell>
                 <TableCell>{user?.loginWindows}</TableCell>
                 <TableCell>{user?.email}</TableCell>
-                {/* <TableCell>{user?.roles}</TableCell> */}
                 <TableCell>{user?.structure}</TableCell>
                 <TableCell>{formatDate(user?.dateCreation)}</TableCell>
                 <TableCell sx={{display:'flex',flexDirection:"row"}}>
