@@ -31,6 +31,7 @@ function SuivisActivites() {
     const handleMenuClick = (link)=>{
       setCurrentForm(link);
       console.log(link);
+      
     }
    
     const [checked, setChecked] = React.useState(true);
