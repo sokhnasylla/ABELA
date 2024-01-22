@@ -7,39 +7,24 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import {FaBan} from 'react-icons/fa'
+import { GoAlertFill } from "react-icons/go";
 
 const columns = [
-  { id: 'date', label: 'Date création', minWidth: 100 },
-  { id: 'avis', label: 'N°Avis', minWidth: 50 },
-  {id: 'titre',
-    label: 'Titre',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'etat',
-    label: 'Etat',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'action',
-    label: 'Action',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
+  { id: 'date', label: 'Date Création', minWidth: 100,},
+  { id: 'nom', label: 'Nom', minWidth: 100 },
+  {id: 'etat',label: 'Etat',  minWidth: 100},
+  {id: 'commentaire',label: 'Commentaire',minWidth: 170,},
+  {id: 'action',label: 'Action',minWidth: 100,format: (value) => value.toFixed(2)},
 ];
 
-function createData(date,avis, titre, etat, action) {
+function createData(date,nom, etat, commentaire,action) {
  
-  return { date,avis, titre, etat, action};
+  return {date,nom, etat, commentaire,action};
 }
 
 const rows = [
-  createData('2023-08-10 20:25:20', '230810_202520', "[Regularisation] AVIS D'INCIDENT S.I : LENTEURS KIBARU", 'Fermé'	), 
+  createData("2022-08-27 20:20:18","alerte_27082022_202018","Diffusé","-*-audiocode4kruf.orange-sonatel.com"), 
 ];
 
 export default function StickyHeadTable() {
@@ -56,7 +41,7 @@ export default function StickyHeadTable() {
   };
 
   return (
-    <Paper sx={{ width: '75%', overflow: 'hidden',marginLeft:'3%' }}>
+    <Paper sx={{ width: '83%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight:250 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

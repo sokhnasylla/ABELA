@@ -7,39 +7,24 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import {FaBan} from 'react-icons/fa'
+import { GoAlertFill } from "react-icons/go";
 
 const columns = [
-  { id: 'date', label: 'Date création', minWidth: 100 },
-  { id: 'avis', label: 'N°Avis', minWidth: 50 },
-  {id: 'titre',
-    label: 'Titre',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'etat',
-    label: 'Etat',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'action',
-    label: 'Action',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
+  { id: 'HoteService', label: 'Hôte/Service', minWidth: 100 },
+  {id: 'details',label: 'Details',  minWidth: 100},
+  {id: 'duree',label: 'Durée',minWidth: 100,},
+  {id: 'dateVerif',label: 'Date Verification',minWidth: 100},
 ];
 
-function createData(date,avis, titre, etat, action) {
+function createData(HoteService, details, duree, dateVerif) {
  
-  return { date,avis, titre, etat, action};
+  return {HoteService, details, duree, dateVerif};
 }
 
 const rows = [
-  createData('2023-08-10 20:25:20', '230810_202520', "[Regularisation] AVIS D'INCIDENT S.I : LENTEURS KIBARU", 'Fermé'	), 
+  createData("ZIGUINCHOR_AGENCE_W_SW02 ---Ping_LAN","CRITICAL - 10.91.2.253 rta 451.615ms > 400.000ms","2024-01-16 13:37:52","2023-07-18 16:35:30"), 
+  createData("ZIGUINCHOR_AGENCE_REGIONAL_RT01---Ping_LAN","CRITICAL - 10.91.2.1: Time to live exceeded in transit @ 192.168.114.105. rta nan, lost 100%","2023-12-27 21:21:23","2023-08-29 11:54:03"),
 ];
 
 export default function StickyHeadTable() {
@@ -56,7 +41,7 @@ export default function StickyHeadTable() {
   };
 
   return (
-    <Paper sx={{ width: '75%', overflow: 'hidden',marginLeft:'3%' }}>
+    <Paper sx={{ width: '81%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight:250 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
