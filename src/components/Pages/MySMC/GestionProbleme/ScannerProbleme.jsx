@@ -23,7 +23,7 @@ const ScannerProblemeItemsMenu =[
   { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
   { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
   { label: " Consignes Orchestrées", link: "#"},
-  { label: " Suivi Activités ", link: "#", icon:IoStatsChart},
+  { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
   { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
   ];
   

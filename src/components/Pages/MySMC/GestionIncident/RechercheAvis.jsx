@@ -15,14 +15,14 @@ import { InputLabel,TextField,Grid } from '@mui/material'
 const ajoutAvisItemsMenu =[
     {label: " Lister les avis d'incidents", link: "/mysmc/gestionincident",icon:FaList},
     { label: " Rechercher avis", link: "/gestionincident/rechercheavis",icon:FaSearch},
-    { label: " Statistique avis d'incidents", link: "/gestionincident/statistique",icon:FaChartLine}
+    { label: " Statistique avis d'incidents", link: "/gestionincident/statistique",icon:FaChartLine, }
     ];
     const gestionIncidentItemsNavigate =[
       {label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
       { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
       { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
       { label: " Consignes Orchestrées", link: "#"},
-      { label: " Suivi Activités ", link: "#", icon:IoStatsChart},
+      { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
       { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
       ];
 

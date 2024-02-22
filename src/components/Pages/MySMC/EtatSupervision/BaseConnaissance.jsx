@@ -3,7 +3,7 @@ import Header from '../../../Header/Header'
 import MenuPersoEtatSup from './MenuPersoEtatSup';
 import NavigatePersoEtatSup from './NavigatePersoEtatSup';
 import useAuth from '../../Auth/useAuth';
-import {  FaHome, FaList, FaBook,FaCheckCircle,FaPlusCircle} from 'react-icons/fa';
+import {  FaHome, FaList, FaBook} from 'react-icons/fa';
 import { IoIosAlert } from "react-icons/io";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";

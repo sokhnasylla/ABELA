@@ -58,7 +58,7 @@ function SuivisActivites() {
         <br />
     <Navbar className='menusmc'>
         <Container>
-          <Navbar.Brand href="" className='Ad'>
+          <Navbar.Brand href="/suivisactivites/anatest" className='Ad'>
               <SubMenu text="Ana Test" image={analytic} className/>
           </Navbar.Brand>
           <Navbar.Brand href="" className='Ad'>

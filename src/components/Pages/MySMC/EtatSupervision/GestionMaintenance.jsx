@@ -1,19 +1,19 @@
 import React,{useState} from 'react'
+import {Container,Col,Row,Button} from 'react-bootstrap'
+import {MenuItem,Select,TextField} from '@mui/material'
 import Header from '../../../Header/Header'
+import MenuPersoEtatSup from './MenuPersoEtatSup'
+import NavigatePersoEtatSup from './NavigatePersoEtatSup'
+import Title from '../../../Card/Title/Title'
 import useAuth from '../../Auth/useAuth'
-import {  FaHome, FaList, FaShare, FaBook, 
- FaDownload,FaCheckCircle,FaChartLine, FaBan} from 'react-icons/fa';
+import {  FaHome, FaList, FaShare, FaBook,FaPlusCircle,
+FaDownload,FaCheckCircle,FaChartLine, FaBan,FaSearch} from 'react-icons/fa';
 import { IoIosAlert } from "react-icons/io";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
-import Title from '../../../Card/Title/Title';
-import {Row,Col,Container,Button} from 'react-bootstrap'
 import { GoAlertFill } from "react-icons/go";
-import MenuPersoEtatSup from './MenuPersoEtatSup';
-import NavigatePersoEtatSup from './NavigatePersoEtatSup';
-import {Grid,MenuItem,InputLabel,Select,Card,TextField} from '@mui/material'
-import TableEtatSup from './TableEtatSup/TableEtatSup'
+import TableGesMaintenance from './TableEtatSup/TableGesMaintenance'
 
 
 const etatSupervisionItemsMenu =[
@@ -33,9 +33,9 @@ const etatSupervisionItemsMenu =[
   { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
   { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
   ];
-  
 
-function EtatSupervision() {
+
+function GestionMaintenance() {
     useAuth()
     const [nombre, setNombre] = React.useState('10');
     const [currentForm, setCurrentForm] = useState("")
@@ -44,15 +44,14 @@ function EtatSupervision() {
       setCurrentForm(link);
       console.log(link);
     }
-    
-  
     const handleChange = (event) => {
-      setNombre(event.target.value);
-    };
+        setNombre(event.target.value);
+      };
+
   return (
     <div id='home'>
         <div>
-        <Header/>
+            <Header/>
         </div>
         <div>
         <MenuPersoEtatSup  propsMenuItems={etatSupervisionItemsMenu} onItemClick={handleMenuClick}  />
@@ -61,36 +60,40 @@ function EtatSupervision() {
         <NavigatePersoEtatSup propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
         </div>
         <Container>
-          <div id='title'>
+        <div id='title'>
               <Row>
               <Col xs={10} className='content'>
-              <Title text="Journal de la supervision technique et applicative"/>
+              <Title text="Gestion des alarmes en maintenance" />
               </Col> 
               </Row>
           </div>
-              <br />
+          <br />
           <div style={{display:"flex"}}>
              <div  className='mb-4'>
-              <Button href='/etatsupervision/alarmesok' style={{ backgroundColor:"#5CB85C", borderColor: " #5CB85C",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><FaCheckCircle /> Alarmes Ok</Button>
+              <Button href='/mysmc/etatsupervision' style={{ backgroundColor:" #d9534f", borderColor: " #d9534f",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><GoAlertFill /> Alarmes Critiques</Button>
              </div>
              <div  className='mb-4'>
-              <Button href='/etatsupervision/vr04service' style={{ backgroundColor:" #337ab7", borderColor: " #337ab7",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><FaChartLine/> VR04H Service</Button>
+              <Button href='/etatsupervision/alarmesok' style={{ backgroundColor:"#5CB85C", borderColor: " #5CB85C",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><FaCheckCircle/> Alarmes ok</Button>
              </div>
              <div  className='mb-4'>
-              <Button href='/etatsupervision/vr24service' style={{ backgroundColor:" #337ab7", borderColor: " #337ab7",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><FaChartLine/> VR24H Service</Button>
+              <Button href='/etatsupervision/vr04service'  style={{ backgroundColor:" #337ab7", borderColor: " #337ab7",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><FaChartLine/> VR04H Service</Button>
+             </div>
+             <div  className='mb-4'>
+              <Button href='/etatsupervision/vr24service' style={{ backgroundColor:"#337ab7", borderColor: "#337ab7",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><FaChartLine/> VR24 Service</Button>
              </div>
              <div  className='mb-4'>
               <Button href='/etatsupervision/vr04application' style={{ backgroundColor:"#337ab7", borderColor: "#337ab7",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><FaChartLine/> VR04 Application</Button>
-             </div>
-             <div  className='mb-4'>
-              <Button href='/etatsupervision/gestionmaintenance' style={{ backgroundColor:"#f0ad4e", borderColor: "#f0ad4e",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><GoAlertFill/> Gestion Maintenance</Button>
-             </div>
+             </div>     
              <div  className='mb-4'>
               <Button href='/etatsupervision/historiquedesactivation' style={{ backgroundColor:" #d9534f", borderColor: " #d9534f",fontSize:"14px",fontWeight:"400"}}><FaBan/> Historique Désactivation</Button>
              </div>
           </div>
-       
-          <div style={{marginLeft:"2%"}}>
+          <br />
+             <div  className='mb-4'>
+              <Button href='/etatsupervision/gesmaintenance/recherchemaintenance' style={{ backgroundColor:"#f0ad4e", borderColor: "#f0ad4e",marginRight:"5px",fontSize:"14px",fontWeight:"400"}}><GoAlertFill/>Rechercher alarme(s) sortie(s) maintenance</Button>
+             </div>
+           
+             <div style={{marginLeft:"2%"}}>
           <label className='=label'> Afficher</label>
           <Select
             labelId="demo-simple-select-label"
@@ -104,16 +107,15 @@ function EtatSupervision() {
                 <MenuItem value="100">100</MenuItem>         
           </Select><label>elements</label>
         </div>
-        <div style={{marginLeft:"49%",position:"absolute",top:"35%"}}>
+        <div style={{marginLeft:"49%",position:"absolute",top:"49%"}}>
        <label >Rechercher: </label> &nbsp;
        <TextField  variant='outlined' size='small'/>
-       </div>
-       <br />
-        <TableEtatSup/>
+       </div><br />
+       <TableGesMaintenance/>
         </Container>
-    </div>
 
+    </div>
   )
 }
 
-export default EtatSupervision
+export default GestionMaintenance
