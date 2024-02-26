@@ -15,7 +15,7 @@ import '../GestionIncident/ajoutavis.css'
 import TableGroupeAlarme from './TableEtatSup/TableGroupeAlarme'
 
 const etatSupervisionItemsMenu =[
-    {label: " Creer groupe d'alarmes", link: "",icon:FaPlusCircle},
+    {label: " Creer groupe d'alarmes", link: "/etatsupervision/creeralarme",icon:FaPlusCircle},
     { label: " Alarme Centreon temps", link: "/etatsupervision/creeralarme",icon:IoIosAlert},
     { label: " Groupe d'alarmes", link: "/etatsupervision/groupealarme",icon:FaList},
     { label: " Base Connaissane", link: "/etatsupervision/baseconnaissance",icon:FaBook},
@@ -26,7 +26,7 @@ const etatSupervisionItemsMenu =[
   { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
   { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
   { label: " Consignes Orchestrées", link: "#"},
-  { label: " Suivi Activités ", link: "#", icon:IoStatsChart},
+  { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
   { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
   ];
 

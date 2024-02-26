@@ -39,7 +39,6 @@ function Maxit() {
         <Title text={"MAXIT"}/>
       </Card>
       <div>
-        {/* <FormExportTrans /> */}
         {currentForm === "exportTrans" ? <FormExportTrans /> : null}
         {currentForm === "exportUser" ? <FormExportUser /> : null}
         {currentForm === "histTrans" ? <FormHistTrans /> : null}

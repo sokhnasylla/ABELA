@@ -26,9 +26,9 @@ const ajoutAvisItemsMenu =[
   const gestionIncidentItemsNavigate =[
     {label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
     { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
-    { label: " Etat Supervision", link: "/mysmc/etatsupervison", icon:RiDashboard3Line},
+    { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
     { label: " Consignes Orchestrées", link: "#"},
-    { label: " Suivi Activités ", link: "#", icon:IoStatsChart},
+    { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
     { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
     ];
    
@@ -101,8 +101,8 @@ function AjoutAvis() {
                   </tr>
                     
                   <tr>
-                     <td>Delai de diffusion</td>
-                     <td  colSpan={2}>45 minutes après détection même si les TMC ne valident pas.</td>
+                     <td>Delai de traitement</td>
+                     <td  colSpan={2}>4 heures après détection - Envoyez un état d'avancement chaque 4h.</td>
                   </tr>
 
                 

@@ -48,9 +48,9 @@ function Menu() {
          <SubMenu text='IRIS' icon={BsBrowserEdge}/>
         </Navbar.Brand>
         )}
-      {roles.includes('ROLE_KIBARU') && (
-        <Navbar.Brand href="#interco" className='Ad'>
-        <SubMenu text='KIBARU' icon={FaStreetView}/>
+      {roles.includes('ROLE_KAABU') && (
+        <Navbar.Brand href="/kaabu" className='Ad'>
+        <SubMenu text='KAABU' icon={FaStreetView}/>
         </Navbar.Brand>
         )}
         {roles.includes('ROLE_MAXIT') && (

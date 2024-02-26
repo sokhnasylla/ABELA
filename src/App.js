@@ -23,6 +23,15 @@ import CreerAlarme from './components/Pages/MySMC/EtatSupervision/CreerAlarme';
 import GroupeAlarme from './components/Pages/MySMC/EtatSupervision/GroupeAlarme';
 import BaseConnaissance from './components/Pages/MySMC/EtatSupervision/BaseConnaissance';
 import SuivisActivites from './components/Pages/MySMC/SuivisActivites/SuivisActivites';
+import AlarmeOk from './components/Pages/MySMC/EtatSupervision/AlarmeOk';
+import VR04Service from './components/Pages/MySMC/EtatSupervision/VR04Service';
+import VR24Service from './components/Pages/MySMC/EtatSupervision/VR24Service';
+import VR04Application from './components/Pages/MySMC/EtatSupervision/VR04Application';
+import GestionMaintenance from './components/Pages/MySMC/EtatSupervision/GestionMaintenance';
+import RechercheMaintenance from './components/Pages/MySMC/EtatSupervision/RechercheMaintenance';
+import HistoriqueDesactivation from './components/Pages/MySMC/EtatSupervision/HistoriqueDesactivation';
+import AnaTest from './components/Pages/MySMC/SuivisActivites/AnaTest';
+import Kaabu from './components/Pages/Kaabu/Kaabu';
 
 
 
@@ -43,7 +52,7 @@ function App() {
             <Route path="/admin/group" element={<Auth/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />
-            {/* <Route path="/exportTrans" element={<FormHistTrans/>} /> */}
+             <Route path="/kaabu" element={<Kaabu/>} /> 
             <Route path="/network" element={<Network/>} />
             < Route path="/mysmc/gestionincident" element={<GestionIncident/>} />
             < Route path="/gestionincident/ajoutavis" element={<AjoutAvis/>} />
@@ -52,11 +61,18 @@ function App() {
             < Route path="/mysmc/gestionprobleme" element={<GestionProbleme/>} />
             < Route path="/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
             < Route path="/mysmc/etatsupervision" element={<EtatSupervision/>} />
+            < Route path="/etatsupervision/alarmesok" element={<AlarmeOk/>} />
+            < Route path="/etatsupervision/vr04service" element={<VR04Service/>} />
+            < Route path="/etatsupervision/vr24service" element={<VR24Service/>} />
+            <Route path='/etatsupervision/vr04application' element={<VR04Application/>} />
+            <Route path='/etatsupervision/gestionmaintenance' element={<GestionMaintenance/>} />
+            <Route path='/etatsupervision/gesmaintenance/recherchemaintenance' element={<RechercheMaintenance/>} />
+            < Route path="/etatsupervision/historiquedesactivation" element={<HistoriqueDesactivation/>} />
             < Route path="/etatsupervision/creeralarme" element={<CreerAlarme/>} />
             < Route path="/etatsupervision/groupealarme" element={<GroupeAlarme/>} />
             < Route path="/etatsupervision/baseconnaissance" element={<BaseConnaissance/>} />
             < Route path="/mysmc/suivisactivites" element={<SuivisActivites/>} />
-            
+            < Route path="/suivisactivites/anatest" element={<AnaTest/>} />
             
             
 
