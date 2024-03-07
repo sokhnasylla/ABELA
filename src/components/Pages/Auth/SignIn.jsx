@@ -24,13 +24,15 @@ function SignInSide() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login", {
+      const response = await axios.post("http://localhost:8083/api/v1/auth/authenticate", {
         email,
         password
       });
+      console.log(response);
+
 
       setLoggedSuccess(true);
-      storeTokenInLocalStorage(response.data.token);
+      storeTokenInLocalStorage(response.data.data.token);
 
     } catch (error) {
       console.error('Erreur lors de la connexion', error);

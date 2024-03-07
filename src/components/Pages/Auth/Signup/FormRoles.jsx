@@ -74,8 +74,8 @@ export default function FormRoles({ onRolesAndTbRolesReady, formData }) {
 
   const handleChildChange = (itemId, childIndex) => (event) => {
     setChildChecked((prev)=>({...prev,[childIndex]:event.target.checked}))
-    console.log(isChecked);
-  };
+  
+    };
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -88,6 +88,15 @@ export default function FormRoles({ onRolesAndTbRolesReady, formData }) {
     }
 
     setChecked(newChecked);
+
+    const updatedChildChecked = { ...childChecked };
+    const item = data.find((item) => item.id === value);
+    if (item) {
+      item.childrenLabels.forEach((child) => {
+        updatedChildChecked[child.id] = newChecked.includes(value);
+      });
+    }
+    setChildChecked(updatedChildChecked);
   };
 
   useEffect(() => {
