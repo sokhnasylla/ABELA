@@ -9,11 +9,11 @@ import Dashboard from './components/Pages/Dashboard/Dashboard'
 import SignUp from './components/Pages/Auth/SignUp';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import User from './components/Pages/Dashboard/User';
-
-
-const queryClient= new QueryClient();
 import Maxit from './components/Pages/Home/Maxit/Maxit';
 import Network from './components/Pages/Home/Network/Network';
+
+const queryClient= new QueryClient
+
 
 function App() {
   return (
