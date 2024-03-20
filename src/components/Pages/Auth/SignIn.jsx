@@ -3,7 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -16,7 +15,7 @@ import { storeTokenInLocalStorage } from './authUtils';
 import axios from 'axios';
 
 function SignInSide() {
-  const [email, setEmail] = React.useState('');
+  const [login, setLogin] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isLoggedSuccess, setLoggedSuccess] = React.useState(false);
 
@@ -24,13 +23,15 @@ function SignInSide() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login", {
-        email,
+      const response = await axios.post("http://localhost:8083/api/v1/auth/authenticate", {
+        login,
         password
       });
+      console.log(response.data.data.token);
+
 
       setLoggedSuccess(true);
-      storeTokenInLocalStorage(response.data.token);
+      storeTokenInLocalStorage(response.data.data.token);
 
     } catch (error) {
       console.error('Erreur lors de la connexion', error);
@@ -83,13 +84,13 @@ function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="login"
+                label="Login Windows"
+                name="login"
+                autoComplete="login"
                 autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
               />
               <TextField
                 margin="normal"

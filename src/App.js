@@ -52,7 +52,7 @@ function App() {
             <Route path="/admin/group" element={<Auth/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />
-             <Route path="/kaabu" element={<Kaabu/>} /> 
+            <Route path="/kaabu" element={<Kaabu/>} /> 
             <Route path="/network" element={<Network/>} />
             < Route path="/mysmc/gestionincident" element={<GestionIncident/>} />
             < Route path="/gestionincident/ajoutavis" element={<AjoutAvis/>} />
