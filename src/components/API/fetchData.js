@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-const fetchData = async (url, token) => {
+const fetchData = async (url) => {
   const result = {
     data: [],
     loading: false,
@@ -11,13 +11,15 @@ const fetchData = async (url, token) => {
   try {
     result.loading = true;
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+  
 
-    const response = await axios.get(url, config);
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // };
+
+    const response = await axios.get(url);
 
     result.data = response.data;
   } catch (error) {

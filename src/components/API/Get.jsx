@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 
-function Get({ url, columns, token, showTable = true }) {
+
+
+function Get({ url, columns, showTable = true }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -12,13 +14,15 @@ function Get({ url, columns, token, showTable = true }) {
       try {
         setLoading(true);
 
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
+        // const config = {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // };
 
-        const response = await axios.get(url, config);
+
+        const response = await axios.get(url);
+        console.log(response);
 
         setData(response.data);
       } catch (error) {
@@ -29,12 +33,12 @@ function Get({ url, columns, token, showTable = true }) {
     };
 
     fetchData();
-  }, [url, token]);
+  }, [url]);
 
   return (
     <div>
       {loading && <p>Chargement...</p>}
-      {error && <p>{error}</p>}
+      {/* {error && <p>{error}</p>} */}
       {showTable ? (
         data.length > 0 && (
           <DataTable
