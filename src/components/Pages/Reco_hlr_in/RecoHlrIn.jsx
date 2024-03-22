@@ -35,7 +35,7 @@ function RecoHlrIn() {
         <MenuPerso/>
         <Card id="support">
           <Title text="SUPPORT TECHNIQUE"/>
-          <Get url="http://127.0.0.1:8000/api/tbrecoitn/month/?month=2023-10" columns={columns} token={getTokenFromLocalStorage()}/>
+          <Get url="http://localhost:8085/api/gestionproblemes/problemes/clos" columns={columns} />
     
        </Card>
         
