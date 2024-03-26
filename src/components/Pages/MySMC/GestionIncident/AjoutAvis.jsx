@@ -213,10 +213,10 @@ function AjoutAvis() {
                    </form>
                     </CardContent>
                   </Card>
-                  <div   style={{marginLeft:"29%",position:"absolute",top:"53%",marginBottom:"10px",padding:"10px",width:"62%"}}>
+                  <div   style={{marginLeft:"29%",position:"absolute",top:"60%",marginBottom:"10px",padding:"10px",width:"62%"}}>
                 <Titleges  text="Causes et impacts" />
             </div>
-                  <Card className='form'  sx={{borderRadius:'8px',marginLeft:"30%",position:"absolute",top:"64%",width:"27%"}}>
+                  <Card className='form'  sx={{borderRadius:'8px',marginLeft:"30%",position:"absolute",top:"77%",width:"27%"}}>
                  <CardContent className='p-3' sx={{padding:"0px"}}>
                    <form>
                      <div className='mb-4 align-right' style={{display:"flex"}}>
