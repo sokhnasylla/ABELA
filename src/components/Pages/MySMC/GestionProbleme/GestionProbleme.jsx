@@ -45,11 +45,6 @@ const GestionProbleme = () =>{
     { name: 'Etat', selector: 'etat', sortable: true },
     { name: 'Action', selector: 'av', sortable: true },
 
-
-
-
-
-    // ... Ajoutez d'autres colonnes selon votre modèle de données
   ];
 
 

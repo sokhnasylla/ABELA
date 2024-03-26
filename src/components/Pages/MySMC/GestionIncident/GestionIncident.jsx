@@ -5,15 +5,14 @@ import { Col, Container, Row, Table } from 'react-bootstrap';
 import Title from '../../../Card/Title/Title';
 import { Grid,Select,MenuItem, InputLabel,TextField } from '@mui/material';
 import "../../MySMC/Menu/menumysmc.css"
-import MenuPerso from '../../../Card/MenuPerso/MenuPerso';
-import TableGesIncident from './TableGesIncident/TableGesIncident'
 import NavigatePerso from './NavigatePerso';
-import { FaPlusCircle, FaSearch, FaHome,FaChartLine } from 'react-icons/fa';
+import { FaPlusCircle, FaSearch, FaHome,FaChartLine,FaPaperclip } from 'react-icons/fa';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
-import AjoutAvis from './AjoutAvis';
+import AjoutAvis from "./AjoutAvis"
 import  MenuPersoGesIncident from '../GestionIncident/MenuPersoGesIncident'
+import Get from '../../../API/Get';
 
 
 const gestionIncidentItemsMenu =[
@@ -27,11 +26,20 @@ const gestionIncidentItemsNavigate =[
 {label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
 { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
 { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
-{ label: " Consignes Orchestrées", link: "#"},
+{ label: " Consignes Orchestrées", link: "#",icon:FaPaperclip},
 { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
 { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
 ];
 
+const columns = [
+  // Définissez les colonnes de votre DataTable
+  { name: 'Date Création', selector: 'dateCreation', sortable: true },
+  { name: 'N°Avis', selector: 'numAvis', sortable: true },
+  { name: 'Titre', selector: 'titre', sortable: true },
+  { name: 'Etat', selector: 'etat', sortable: true },
+  { name: 'Action', selector: '', sortable: true },
+
+];
 function GestionIncident() {
     useAuth()
     const [nombre, setNombre] = React.useState('10');
@@ -41,113 +49,68 @@ function GestionIncident() {
       setCurrentForm(link);
       console.log(link);
     }
-    
-  
-    const handleChange = (event) => {
-      setNombre(event.target.value);
-    };
+
   return (
-    <div id='home'>
-    <Header/>
     <div>
-    <MenuPersoGesIncident propsMenuItems={gestionIncidentItemsMenu} onItemClick={handleMenuClick}  />
-    </div>
-    <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
+    <Header/>
+    
+    {/* <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  /> */}
     <br />
-    <Container className='body'style={{marginLeft:"5px"}}>
+    <Container className='body'style={{marginLeft:"5%"}}>
         <Row>
-         <Col xs={10} className='content'>
-          <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024"/>
-         </Col> 
-         </Row>
-       <br />
-        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:"2%"}}>
-         <Grid className='panel' sx={{}}>
-            <h5 style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500"}}>Taux notification</h5>
+            <Col sm={8} className='content'>
+            <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024"/>
+
+            <br />
+        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:""}}>
+         <Grid className='panel' sx={{backgroundColor:"#F2DEDE",border:"#F2DEDE"}}>
+            <h5 style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500",color:"#a94442"}}>Taux notification</h5>
          </Grid>
-         <center><h2>67%</h2></center>
+         <center><h3>67%</h3></center>
         </div>
-        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:"20%"}}>
+        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:"15%"}}>
          <Grid className='panel' sx={{backgroundColor:"#DFF0D8",border:"#DFF0D8"}}>
             <h5 style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500",color:"#3C763D"}}>Taux détection</h5>
          </Grid>
-         <center><h2>83%</h2></center>
+         <center><h3>83%</h3></center>
         </div>
-        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:"38%"}}>
+        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:"30%"}}>
          <Grid className='panel' sx={{backgroundColor:"#D9EDF7",border:"#D9EDF7"}}>
             <h5 style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500",color:"#31708F"}}>Taux résolution 4h</h5>
          </Grid>
-         <center><h2>83%</h2></center>
+         <center><h3>83%</h3></center>
         </div>
-        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:"56%"}}>
+        <div className='col-xs-12 col-sm-6 col-md-2' style={{position:"absolute",marginLeft:"45%"}}>
          <Grid className='panel' sx={{backgroundColor:"#D9EDF7",border:"#D9EDF7"}}>
             <h5 style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500",color:"#31708F"}}>Taux résolution 24h</h5>
          </Grid>
-         <center><h2>83%</h2></center>
+         <center><h3>83%</h3></center>
         </div>
         <br /> <br /> <br /> <br />
-        <div>
+            </Col> 
+            <Col sm={4}>
+            <MenuPersoGesIncident propsMenuItems={gestionIncidentItemsMenu} onItemClick={handleMenuClick}  />
+            </Col>
+        </Row>
+       <hr />
         <Row>
-         <Col xs={10} className='content'>
-          <Title text="Liste des avis d'incidents / d'information en cours"/>
-         </Col> 
-         </Row>
-         </div>
+        <Col sm={8} className='content'>
+        <Title text="Liste des avis d'incidents / d'information en cours"/>
+        <Get url="http://localhost:8085/api/gestionIncidents/avisIncidents/encours" columns={columns} />
+        </Col>
+        <Col sm={4}>
+        <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
+        </Col>
+        </Row>
+        <hr />
+        <Row>
+        <Col sm={8} className='content'>
+        <Title text="Les avis fermés, Clotûrés ou annulés récemment"/>
+        <Get url="http://localhost:8085/api/gestionIncidents/avisIncidents/clos/ferme/annule" columns={columns} />
+        </Col>
         
-         <br />
-         <div style={{marginLeft:"2%"}}>
-          <label className='=label'> Afficher</label>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            onChange={handleChange}
-            size='small'
-            value={nombre} >
-                <MenuItem value="10">10</MenuItem>
-                <MenuItem value="25">25</MenuItem>
-                <MenuItem value="50">50</MenuItem>
-                <MenuItem value="100">100</MenuItem>         
-          </Select><label>elements</label>
-        </div>
-        <div style={{marginLeft:"46%",position:"absolute",top:"55%"}}>
-       <label >Rechercher: </label> &nbsp;
-       <TextField  variant='outlined' size='small'/>
-       </div>
-       <br />
-       
-       <TableGesIncident/>
-     
-       <br />
-       <div>
-        <Row>
-         <Col xs={10} className='content'>
-          <Title text="Les avis fermés, Clotûrés ou annulés récemment"/>
-         </Col> 
-         </Row>
-         </div>
-         <br />
-         <div style={{marginLeft:"2%"}}>
-          <label className='=label'> Afficher</label>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            onChange={handleChange}
-            size='small'
-            value={nombre} >
-                <MenuItem value="10">10</MenuItem>
-                <MenuItem value="25">25</MenuItem>
-                <MenuItem value="50">50</MenuItem>
-                <MenuItem value="100">100</MenuItem>         
-          </Select><label>elements</label>
-        </div>
-        <div style={{marginLeft:"46%",position:"absolute",top:"114%"}}>
-       <label >Rechercher: </label> &nbsp;
-       <TextField  variant='outlined' size='small'/>
-       </div>
-       <br />
-       
-       <TableGesIncident/>
-      
+        </Row>
+    
        </Container>
       
     </div>

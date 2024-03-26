@@ -6,7 +6,7 @@ import '../../../Card/Title/title.css'
 
 function Titleges({ text }) {
     return (
-      <Card className="titre" style={{width:"40%",marginBottom:"10px"}}>
+      <Card className="titre" style={{width:"45%",marginBottom:"10px"}}>
         <p>
           <IoIosInformationCircle />
             {text}

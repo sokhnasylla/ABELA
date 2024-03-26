@@ -70,52 +70,42 @@ function AjoutAvis() {
 
   return (
     <div id='home'>
-   <Header/>
-   <div>
-    <MenuPersoGesIncident propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
-    </div>
-    <div>
-    <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
-    </div>
-   <br />
-   <Container className='body'>
-   <div>
-      <div>
+    <Header/>
+    <br />
+      <Container  className='body'style={{marginLeft:"5%"}}>
         <Row>
-         <Col xs={9} className='content'>
+          <Col sm={8} className='content'>
           <Title text="Gestion des avis d'incidents - Formulaire de déclaration d'avis"/>
-         </Col> 
-         </Row>
-         <br />
-         <Table className="custom-table" bordered striped id='ajoutavis'>
-         <thead>
-					<tr>
-					<th  colSpan={3} id='text'> 	<ReportProblemIcon sx={{height:"18px"}}/>Consignes obligatoires à respecter</th>
-					</tr>
-				</thead>
-				<tbody style={{fontSize:".9em",fontWeight:"500"}} >
-                  
-                  <tr>
-                     <td> Delai de diffusion</td>
-                     <td colSpan={2}>45 minutes après détection même si les TMC ne valident pas.</td>
-                  </tr>
-                    
-                  <tr>
-                     <td>Delai de traitement</td>
-                     <td  colSpan={2}>4 heures après détection - Envoyez un état d'avancement chaque 4h.</td>
-                  </tr>
-
-                
-				</tbody>
-    </Table>
-    <div style={{height:"6px"}}>
-           <Row>
-            <Col xs={10} className='content' style={{fontSize:"14px"}}>
-              <Titleges text="Correspondance avis"/>
-            </Col> 
-            </Row>
-            <Card className='form'xs={9}  sx={{borderRadius:'8px',width:"33%"}}>
-              
+          <br />
+              <Table className="custom-table" bordered striped id='ajoutavis'>
+            <thead>
+              <tr>
+              <th  colSpan={3} id='text'> 	<ReportProblemIcon sx={{height:"18px"}}/>Consignes obligatoires à respecter</th>
+              </tr>
+            </thead>
+            <tbody style={{fontSize:".9em",fontWeight:"500"}} >
+                      
+                      <tr>
+                        <td> Delai de diffusion</td>
+                        <td colSpan={2}>45 minutes après détection même si les TMC ne valident pas.</td>
+                      </tr>
+                        
+                      <tr>
+                        <td>Delai de traitement</td>
+                        <td  colSpan={2}>4 heures après détection - Envoyez un état d'avancement chaque 4h.</td>
+                      </tr>  
+            </tbody>
+        </Table>
+        </Col>
+    <Col sm={4}>
+     <MenuPersoGesIncident propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
+    </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col sm={8}>
+          <Titleges text="Correspondance avis"/>
+        <Card className='form'  sx={{borderRadius:'8px',width:"45%"}}>
                  <CardContent className='p-3' sx={{padding:"0px"}}>
                    <form>
                      <div className='mb-4 align-right'>
@@ -223,15 +213,10 @@ function AjoutAvis() {
                    </form>
                     </CardContent>
                   </Card>
+                  <div   style={{marginLeft:"29%",position:"absolute",top:"53%",marginBottom:"10px",padding:"10px",width:"62%"}}>
+                <Titleges  text="Causes et impacts" />
             </div>
-            <div>
-            <Row >
-            <Col xs={10} className='content'style={{marginLeft:"34%",position:"absolute",top:"49%",fontSize:"14px",marginBottom:"10px",padding:"10px"}}>
-              <Titleges  text="Causes et impacts" />
-            </Col> 
-            </Row>
-            <Card className='form'xs={9}  sx={{borderRadius:'8px',width:"32%",marginLeft:"34%",position:"absolute",top:"60%"}}>
-              
+                  <Card className='form'  sx={{borderRadius:'8px',marginLeft:"30%",position:"absolute",top:"64%",width:"27%"}}>
                  <CardContent className='p-3' sx={{padding:"0px"}}>
                    <form>
                      <div className='mb-4 align-right' style={{display:"flex"}}>
@@ -279,22 +264,23 @@ function AjoutAvis() {
                      <InputLabel id="demo-simple-select-label">Observations</InputLabel>&nbsp;
                      <TextareaAutosize  id='textfield'  variant='outlined'  size='small' placeholder='Renseigner les observations' required/>
                      </div>
-                     
-                     
                    </form>
                     </CardContent>
                   </Card>
-            </div>
-         </div>
-        
-         <div className='col-sm-12' id='bouton'> 
-         <hr />
+          </Col>
+          <Col sm={4}>
+          <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
+          </Col>
+        </Row>
+        <hr />
+        <div className='col-sm-12' id='bouton'> 
          <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}>Creation avis</Button>
-          &nbsp;<Button style={{backgroundColor:"#C9302C",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}>Annulation avis</Button>
+          &nbsp; &nbsp;
+          <Button style={{backgroundColor:"#C9302C",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}>Annulation avis</Button>
           </div>
-  </div> 
+          <br /><br />
+          <br /> <br />
       </Container>
-   
    </div>
 
   )
