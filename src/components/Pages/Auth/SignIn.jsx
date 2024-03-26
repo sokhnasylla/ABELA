@@ -3,7 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -16,24 +15,31 @@ import { storeTokenInLocalStorage } from './authUtils';
 import axios from 'axios';
 
 function SignInSide() {
-  const [email, setEmail] = React.useState('');
+  const [login, setLogin] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
   const [isLoggedSuccess, setLoggedSuccess] = React.useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login", {
-        email,
+      const response = await axios.post("http://localhost:8082/ABELA-USERMANAGEMENT/api/v1/auth/authenticate", {
+        login,
         password
       });
+      console.log(response.data.data.token);
 
       setLoggedSuccess(true);
-      storeTokenInLocalStorage(response.data.token);
-
+      storeTokenInLocalStorage(response.data.data.token);
     } catch (error) {
+      setError(`Erreur: ${error.message}`);
       console.error('Erreur lors de la connexion', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,13 +89,13 @@ function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="login"
+                label="Login Windows"
+                name="login"
+                autoComplete="login"
                 autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -103,21 +109,32 @@ function SignInSide() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  backgroundColor: "#FF6600",
-                  "&:hover": {
+              {loading ? (
+                <Button
+                  fullWidth
+                  disabled
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Loading...
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    mt: 3,
+                    mb: 2,
                     backgroundColor: "#FF6600",
-                  },
-                }}
-              >
-                Se connecter
-              </Button>
+                    "&:hover": {
+                      backgroundColor: "#FF6600",
+                    },
+                  }}
+                >
+                  Se connecter
+                </Button>
+              )}
+              {error && <Typography color="error">{error}</Typography>}
             </Box>
           </Box>
         </Grid>

@@ -28,18 +28,12 @@ const columns = [
   },
 ];
 
-function createData(probleme,application, date, etat, action) {
- 
-  return { probleme,application, date, etat, action};
-}
 
-const rows = [
-  createData( "Aucune donnée disponible dans le tableau"	), 
-];
 
-export default function StickyHeadTable() {
+export default function StickyHeadTable(column) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const rows = column.rows
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

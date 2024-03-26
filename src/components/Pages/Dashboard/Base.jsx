@@ -53,7 +53,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
       width: drawerWidth,
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
+        duration: theme.transitions.duration.enteringcreen,
       }),
       boxSizing: 'border-box',
       ...(!open && {
@@ -86,7 +86,7 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Box sx={{ display: 'flex' }}>
-        <AppBar position="absolute" open={open} sx={{ background: '#148C8A' }}>
+        <AppBar position="fixed" style={{ top: 0, zIndex: 1000 }} open={open} sx={{ background: '#148C8A' }} >
           <Toolbar
             sx={{
               pr: '24px',
@@ -126,7 +126,7 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
        </Toolbar>
        
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={open}  >
           <Toolbar
             sx={{
               display: 'flex',
@@ -140,13 +140,14 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>
+          <List >
             <NestedList/>
           </List>
         </Drawer>
         <Box
           component="main"
           sx={{
+            width:drawerWidth,
             backgroundColor: (theme) =>
               theme.palette.mode === 'light'
                 ? theme.palette.grey[100]
