@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getTokenFromLocalStorage } from '../Auth/authUtils';
+import { getTokenFromLocalStorage } from '../../Auth/authUtils';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Title from './Title';
+import Title from '../Title';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { format } from 'date-fns';
 import { IconButton } from '@mui/material';
-import SignUp from '../Auth/SignUp';
+import SignUp from '../../Auth/SignUp';
 import { useNavigate } from 'react-router-dom';
 
 const formatDate = (dateString) => {
@@ -110,7 +110,7 @@ function ListUsers({onEditUser}) {
               <TableCell>Nom</TableCell>
               <TableCell>Login</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Roles</TableCell>
+              {/* <TableCell>Roles</TableCell> */}
               <TableCell>Structure</TableCell>
               <TableCell>Créé le</TableCell>
               <TableCell>Action</TableCell>
@@ -123,7 +123,7 @@ function ListUsers({onEditUser}) {
                 <TableCell>{user?.nom}</TableCell>
                 <TableCell>{user?.loginWindows}</TableCell>
                 <TableCell>{user?.email}</TableCell>
-                <TableCell>{user?.roles}</TableCell>
+                {/* <TableCell>{user?.roles}</TableCell> */}
                 <TableCell>{user?.structure}</TableCell>
                 <TableCell>{formatDate(user?.dateCreation)}</TableCell>
                 <TableCell sx={{display:'flex',flexDirection:"row"}}>

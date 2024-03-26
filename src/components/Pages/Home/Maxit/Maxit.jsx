@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../../Header/Header";
 import MenuPerso from "../../../Card/MenuPerso/MenuPerso";
 import Form from "../../../Form/Form";
@@ -11,23 +11,39 @@ import FormSupCompte from "./FormSupCompte";
 import FormVerifCompte from "./FormVerifCompte";
 
 const maxitItemsMenus = [
-  { label: " Export Transaction MaxIT", link: "#" },
-  { label: "Export Utilisateurs MaxIT", link: "#" },
-  { label: "Historique Transaction par ND", link: "#" },
-  { label: "Suppression Sous Compte", link: "#" },
-  { label: "Verification Existence Compte MaxIT", link: "#" },
+  { label: " Export Transaction MaxIT", link: "exportTrans" },
+  { label: "Export Utilisateurs MaxIT", link: "exportUser" },
+  { label: "Historique Transaction par ND", link: "histTrans" },
+  { label: "Suppression Sous Compte", link: "supCompte" },
+  { label: "Verification Existence Compte MaxIT", link: "verifCompte" },
 ];
 
 function Maxit() {
+
+  const [currentForm, setCurrentForm] = useState("")
+
+  const handleMenuClick = (link)=>{
+    setCurrentForm(link);
+    console.log(link);
+  }
+
+
+
   return (
     <div>
       <Header />
-      <MenuPerso propsMenuItems={maxitItemsMenus} />
+      <MenuPerso propsMenuItems={maxitItemsMenus} onItemClick={handleMenuClick} />
       <Card id="support">
         <Title text={"MAXIT"}/>
       </Card>
       <div>
-        <FormSupCompte />
+        {/* <FormExportTrans /> */}
+        {currentForm === "exportTrans" ? <FormExportTrans /> : null}
+        {currentForm === "exportUser" ? <FormExportUser /> : null}
+        {currentForm === "histTrans" ? <FormHistTrans /> : null}
+        {currentForm === "supCompte" ? <FormSupCompte /> : null}
+        {currentForm === "verifCompte" ? <FormVerifCompte /> : null}
+
       </div>
     </div>
   );

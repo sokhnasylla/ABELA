@@ -5,8 +5,10 @@ import MenuPerso from '../../Card/MenuPerso/MenuPerso'
 import Title from '../../Card/Title/Title'
 import Get from '../../API/Get'
 import { getTokenFromLocalStorage } from '../Auth/authUtils'
+import useAuth from '../Auth/useAuth'
 
 function RecoHlrIn() {
+  useAuth()
   const columns = [
     // Définissez les colonnes de votre DataTable
     { name: 'JOUR', selector: 'dateReco', sortable: true },

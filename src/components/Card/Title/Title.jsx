@@ -7,12 +7,13 @@ function Title({ text }) {
   return (
     <Card className="titre">
       <p>
-        <FaBars />
+        <FaBars style={{marginTop:'12px'}}  />
           {text}
-        <FaArrowCircleDown />
+        <FaArrowCircleDown style={{marginTop:'12px'}} />
       </p>
     </Card>
   );
 }
 
 export default Title;
+

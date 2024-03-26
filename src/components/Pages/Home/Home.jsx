@@ -1,6 +1,7 @@
 import React from 'react';
 import "./home.css"
 import Header from '../../Header/Header';
+import Footer from '../../Footer/Footer';
 import Menu from '../../Menu/Menu';
 import MenuLeft from '../../Card/MenuLeft/MenuLeft';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -10,6 +11,8 @@ import Title from '../../Card/Title/Title';
 import { FaHistory } from 'react-icons/fa';
 import { GrCatalogOption } from 'react-icons/gr';
 import { AiFillDashboard } from 'react-icons/ai'
+import useAuth from '../Auth/useAuth';
+
 
 const submenu=[
   {'text':"Audit Perso","icon":FaHistory
@@ -20,11 +23,22 @@ const submenu=[
 ]
 
 
+// const token= getTokenFromLocalStorage();
+// console.log(token);
+
+
 function Home() {
+
+  useAuth()
+
+
+  
   return (
     <div id='home'>
         <Header/>
+        <Footer/>
         <Menu/>
+      
        <Container className='body'>
         <Row>
          <Col className='menu'>

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Nav } from 'react-bootstrap';
+import '../../Header/header.css'
+import HomeIcon from '@mui/icons-material/Home';
 import {
   styled,
   createTheme,
@@ -22,7 +25,7 @@ import NestedList from './MyList';
 
 
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -105,12 +108,23 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
               component="h1"
               variant="h6"
               color="inherit"
-              noWrap
+              width="50%"
+              //noWrap
               sx={{ flexGrow: 1 }}
             >
               Back Office ABELA
             </Typography>
-          </Toolbar>
+            <div className='myhead'>
+          <Nav variant='tabs'style={{marginLeft:'89%'}}>
+          <Nav.Item >
+            <Nav.Link href='/home'style={{ fontSize: '8px' }}>
+            <HomeIcon />
+            </Nav.Link>
+          </Nav.Item>
+       </Nav>
+       </div>
+       </Toolbar>
+       
         </AppBar>
         <Drawer variant="permanent" open={open}>
           <Toolbar
@@ -138,7 +152,6 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100vh',
          
           }}
         >

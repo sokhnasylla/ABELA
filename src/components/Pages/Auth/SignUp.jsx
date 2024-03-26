@@ -16,13 +16,17 @@ import { redirect,useNavigate } from 'react-router-dom';
   import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
   import post from '../../API/post';
   import { useMutation, QueryClient, QueryClientProvider } from 'react-query';
+  import CustomizedSteppers from "./MyStep"
+import useAuth from './useAuth';
 
 
   const defaultTheme = createTheme();
 
   const queryClient = new QueryClient();
+ 
 
   export default function SignUp({ onFormSubmit, userData }) {
+   useAuth()
 
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState(userData?.prenom || '');
@@ -64,6 +68,7 @@ import { redirect,useNavigate } from 'react-router-dom';
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={defaultTheme}>
          <Paper>
+           <CustomizedSteppers/>
          <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
