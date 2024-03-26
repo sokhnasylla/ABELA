@@ -26,7 +26,7 @@ const gestionIncidentItemsNavigate =[
 
 function SuivisActivites() {
     useAuth()
-    const [currentForm, setCurrentForm] = useState("")
+    const [ setCurrentForm] = useState("")
 
     const handleMenuClick = (link)=>{
       setCurrentForm(link);
@@ -34,11 +34,7 @@ function SuivisActivites() {
       
     }
    
-    const [checked, setChecked] = React.useState(true);
-
-    const handleChanges = (event) => {
-      setChecked(event.target.checked);
-    };
+  ;
   return (
     <div id='home'>
         <div>
@@ -61,13 +57,13 @@ function SuivisActivites() {
           <Navbar.Brand href="/suivisactivites/anatest" className='Ad'>
               <SubMenu text="Ana Test" image={analytic} className/>
           </Navbar.Brand>
-          <Navbar.Brand href="" className='Ad'>
+          <Navbar.Brand href="/suivisactivites/ScenarioBook"  className='Ad'>
               <SubMenu text="Scenario Book" image={process}/>
           </Navbar.Brand>
           <Navbar.Brand href="" className='Ad'>
               <SubMenu text="Sur Dashbord" image={dashboard}/>
           </Navbar.Brand>
-          <Navbar.Brand href="" className='Ad'>
+          <Navbar.Brand href="/suivisactivites/AnaTestRas" className='Ad'>
               <SubMenu text="Ana Test RAS" image={analytic}/>
           </Navbar.Brand>
         </Container>
