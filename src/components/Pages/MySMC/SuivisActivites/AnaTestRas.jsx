@@ -10,7 +10,7 @@ import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
 import {Container,Col,Row, Button} from "react-bootstrap"
 import {InputLabel,TextField,MenuItem,Select} from "@mui/material"
-import TableAnaTest from './TableSuiviActivites/TableAnaTest'
+import  TableAnaTestRas from './TableSuiviActivites/TableAnaTestRas'
 
  const etatSupervisionItemsMenu =[
      { label: " Nouvelle analyse", link: "/anatest/nouvelleanalyse",icon:FaPlusCircle},
@@ -25,7 +25,7 @@ import TableAnaTest from './TableSuiviActivites/TableAnaTest'
   { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
   ];
 
-function AnaTest() {
+function AnaTestRas() {
     useAuth()
     const [nombre, setNombre] = React.useState('10');
     const [ setCurrentForm] = useState("")
@@ -91,11 +91,11 @@ function AnaTest() {
        <label >Rechercher: </label> &nbsp;
        <TextField  variant='outlined' size='small'/>
        </div><br />
-       <TableAnaTest/>
+       <TableAnaTestRas/>
         </Container>
 
     </div>
   )
 }
 
-export default AnaTest
+export default AnaTestRas

@@ -35,7 +35,7 @@ export default function NestedList( ) {
         <ListItemIcon>
           <LayersIcon />
         </ListItemIcon>
-        <ListItemText primary="Gestion des acitivités" />
+        <ListItemText primary="Gestion des activités" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>

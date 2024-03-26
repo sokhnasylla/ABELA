@@ -1,17 +1,16 @@
-
-.titre{
+.titre {
     margin: 0;
     border-radius: 5px;
-    margin-top: 5px;
+    margin-top: 40px;
     text-align: center;
     height: 9%;
-    background-color:#148C8A !important;
+    background-color: #148C8A !important; 
     color: white !important;
-    }
+}
 
-.titre  p{
-    padding: 0px 10px 0 10px;
+.titre p {
+    padding: 0px 40px;
     display: inline-flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center;  
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import '../../Header/header.css'
+import HomeIcon from '@mui/icons-material/Home';
 import {
   styled,
   createTheme,
@@ -116,7 +117,9 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
             <div className='myhead'>
           <Nav variant='tabs'style={{marginLeft:'89%'}}>
           <Nav.Item >
-            <Nav.Link href='/home'>Home</Nav.Link>
+            <Nav.Link href='/home'style={{ fontSize: '8px' }}>
+            <HomeIcon />
+            </Nav.Link>
           </Nav.Item>
        </Nav>
        </div>

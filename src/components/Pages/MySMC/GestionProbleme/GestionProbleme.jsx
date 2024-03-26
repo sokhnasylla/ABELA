@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { IoIosWarning } from "react-icons/io";
+
 import { Col, Container, Row } from 'react-bootstrap'
 import Header from '../../../Header/Header'
 import Title from '../../../Card/Title/Title'
@@ -13,6 +14,7 @@ import { FaPaperclip } from "react-icons/fa6";
 
 
 
+
 const GestionProbleme = () =>{
 
   const [currentForm, setCurrentForm] = useState("")
@@ -23,8 +25,8 @@ const GestionProbleme = () =>{
   }
 
   const gestionProblemeItemsMenu =[
-    {label: "Scanner un probleme", link: "/gestionprobleme/scannerprobleme",icon:FaPlusCircle},
-    { label: " Rechercher probleme", link: "/gestionincident/rechercheavis",icon:FaSearch},
+    {label: "Scanner un probleme", link: "/mysmc/",icon:FaPlusCircle},
+    { label: "Rechercher probleme", link: "/mysmc/gestionprobleme/rechercherprobleme",icon:FaSearch},
     ];
 
     const gestionIncidentItemsNavigate =[
@@ -59,7 +61,7 @@ const GestionProbleme = () =>{
               <Get url="http://localhost:8085/api/gestionproblemes/problemes/encours" columns={columns} />
             </Col> 
             <Col sm={4}>
-               <MenuPersoGesProbleme propsMenuItems={ gestionProblemeItemsMenu  }/>
+               <MenuPersoGesProbleme propsMenuItems={ gestionProblemeItemsMenu} onItemClick={handleMenuClick}/>
             </Col>
         </Row>
 

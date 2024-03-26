@@ -31,7 +31,11 @@ import GestionMaintenance from './components/Pages/MySMC/EtatSupervision/Gestion
 import RechercheMaintenance from './components/Pages/MySMC/EtatSupervision/RechercheMaintenance';
 import HistoriqueDesactivation from './components/Pages/MySMC/EtatSupervision/HistoriqueDesactivation';
 import AnaTest from './components/Pages/MySMC/SuivisActivites/AnaTest';
+import ScenarioBook from './components/Pages/MySMC/SuivisActivites/ScenarioBook';
 import Kaabu from './components/Pages/Kaabu/Kaabu';
+import RechercheProbleme from './components/Pages/MySMC/GestionProbleme/RechercheProbleme';
+import AnaTestRas from './components/Pages/MySMC/SuivisActivites/AnaTestRas';
+import MonProfil from './components/Pages/MonProfil/MonProfil';
 
 
 
@@ -47,6 +51,7 @@ function App() {
             <Route path="/support/reco_hlr_in" element={<RecoHlrIn/>}/>
             <Route path="/home" element={<Home/>} />
             <Route path="/mysmc" element={<Mysmc/>} />
+            <Route path="/monprofil" element={<MonProfil/>} />
             <Route path="/admin" element={<Dashboard/>} />
             <Route path="/admin/user" element={<User/>} />
             <Route path="/admin/group" element={<Auth/>} />
@@ -59,7 +64,8 @@ function App() {
             < Route path="/gestionincident/rechercheavis" element={<RechercheAvis/>} />
             < Route path="/gestionincident/statistique" element={<StatistiqueIncident/>} />
             < Route path="/mysmc/gestionprobleme" element={<GestionProbleme/>} />
-            < Route path="/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
+            < Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<RechercheProbleme/>} />
+            < Route path="/mysmc/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
             < Route path="/mysmc/etatsupervision" element={<EtatSupervision/>} />
             < Route path="/etatsupervision/alarmesok" element={<AlarmeOk/>} />
             < Route path="/etatsupervision/vr04service" element={<VR04Service/>} />
@@ -73,6 +79,9 @@ function App() {
             < Route path="/etatsupervision/baseconnaissance" element={<BaseConnaissance/>} />
             < Route path="/mysmc/suivisactivites" element={<SuivisActivites/>} />
             < Route path="/suivisactivites/anatest" element={<AnaTest/>} />
+            < Route path="/suivisactivites/anatestras" element={<AnaTestRas/>} />
+            < Route path="/suivisactivites/scenariobook" element={<ScenarioBook/>} />
+
             
             
 
