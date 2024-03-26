@@ -32,6 +32,7 @@ import RechercheMaintenance from './components/Pages/MySMC/EtatSupervision/Reche
 import HistoriqueDesactivation from './components/Pages/MySMC/EtatSupervision/HistoriqueDesactivation';
 import AnaTest from './components/Pages/MySMC/SuivisActivites/AnaTest';
 import Kaabu from './components/Pages/Kaabu/Kaabu';
+import RechercheProbleme from './components/Pages/MySMC/GestionProbleme/RechercheProbleme';
 
 
 
@@ -59,7 +60,8 @@ function App() {
             < Route path="/gestionincident/rechercheavis" element={<RechercheAvis/>} />
             < Route path="/gestionincident/statistique" element={<StatistiqueIncident/>} />
             < Route path="/mysmc/gestionprobleme" element={<GestionProbleme/>} />
-            < Route path="/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
+            < Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<RechercheProbleme/>} />
+            < Route path="/mysmc/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
             < Route path="/mysmc/etatsupervision" element={<EtatSupervision/>} />
             < Route path="/etatsupervision/alarmesok" element={<AlarmeOk/>} />
             < Route path="/etatsupervision/vr04service" element={<VR04Service/>} />
