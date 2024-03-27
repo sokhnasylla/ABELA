@@ -1,6 +1,7 @@
 import React from 'react';
 import "./home.css"
 import Header from '../../Header/Header';
+import Footer from '../../Footer/Footer';
 import Menu from '../../Menu/Menu';
 import MenuLeft from '../../Card/MenuLeft/MenuLeft';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -35,7 +36,9 @@ function Home() {
   return (
     <div id='home'>
         <Header/>
+        <Footer/>
         <Menu/>
+      
        <Container className='body'>
         <Row>
          <Col className='menu'>

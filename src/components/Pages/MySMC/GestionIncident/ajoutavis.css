@@ -1,4 +1,6 @@
-
+.form{
+    width: 50%;
+}
 .custom-table {
     margin: 0;
     table-layout: fixed;
@@ -21,7 +23,8 @@
     font-size: .9em;
     /*border-collapse: collapse;
      box-sizing: border-box; */
-    max-width: 75%;
+    max-width: 100%;
+    
 }
 
 #text {
@@ -45,15 +48,15 @@
     margin-right: 8px; 
     font-size: 14px;
 }
-#demo-simple-select-label{
+.demo-simple-select-label{
     font-size: 14px;
     font-family: fantasy;
     color: #000;
 }
-#textfield{
+.textfield{
     font-size: 14px;
 }
-#bouton{
+/* #bouton{
     position: absolute;
     top: 190%;
     margin-left: 20%;
@@ -61,7 +64,7 @@
     font-size:14px;
     font-Family:Helvetica Neue,Helvetica,Arial,sans-serif;
     color:white;
-}
+} */
 #title{
    margin-top: 1.5%;
 }

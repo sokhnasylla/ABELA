@@ -1,4 +1,4 @@
-.myhead{
+.myhead {
     background-color: #148C8A;
     color: white;
     height: 12%;
@@ -8,19 +8,16 @@
     justify-content: space-between;
     align-items: center;
 }
-.myhead p{
-    font-size: larger;
-    padding: 5px;
-    align-items: center;
-}
-/* .nav.nav-tabs{
-    color: white;
-    
-} */
-.myhead .nav-item{
+
+.myhead .nav-item {
     margin: 5px;
 }
-.myhead .nav-link{
+
+.myhead .nav-link {
     color: white !important;
     font-size: larger !important;
 }
+
+.profile-toggle {
+    color: white !important; /* Assurez-vous d'utiliser !important pour forcer la priorité */
+  }

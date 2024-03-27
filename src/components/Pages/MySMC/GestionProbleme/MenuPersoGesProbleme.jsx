@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav, Card } from 'react-bootstrap';
-import { FaBars, FaArrowCircleDown, FaPaperclip, FaArrowCircleRight } from "react-icons/fa";
+import { FaBars, FaArrowCircleDown, FaPaperclip } from "react-icons/fa";
 
 import "./menuperso.css"
 
@@ -20,10 +20,9 @@ function MenuPersoGesProbleme({ propsMenuItems, onItemClick }) {
         {/* SUPPORT TECHNIQUE */}
         {propsMenuItems.map((item, index) => (
           <Card className='success' key={index}>
-            <Nav.Link className='text-white' onClick={() => onItemClick(item.link) } style={{textAlign:"center"}}>
+            <Nav.Link href={item.link} className='text-white' onClick={() => onItemClick(item.link) } style={{textAlign:"center"}}>
               {getIconComponent(item.icon) || <FaPaperclip />}
               {item.label}
-
             </Nav.Link>
           </Card>
         ))}

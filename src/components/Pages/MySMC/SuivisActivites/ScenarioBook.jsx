@@ -8,9 +8,10 @@ import {  FaHome, FaPlusCircle, } from 'react-icons/fa';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
-import {Container,Col,Row, Button} from "react-bootstrap"
-import {InputLabel,TextField,MenuItem,Select} from "@mui/material"
-import TableAnaTest from './TableSuiviActivites/TableAnaTest'
+import {Container,Col,Row,} from "react-bootstrap"
+import {TextField,MenuItem,Select} from "@mui/material"
+import TableScenarioBook from './TableSuiviActivites/TableScenarioBook'
+
 
  const etatSupervisionItemsMenu =[
      { label: " Nouvelle analyse", link: "/anatest/nouvelleanalyse",icon:FaPlusCircle},
@@ -25,7 +26,7 @@ import TableAnaTest from './TableSuiviActivites/TableAnaTest'
   { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
   ];
 
-function AnaTest() {
+function ScenarioBook() {
     useAuth()
     const [nombre, setNombre] = React.useState('10');
     const [ setCurrentForm] = useState("")
@@ -54,23 +55,13 @@ function AnaTest() {
             <div id='title'>
                 <Row>
                 <Col xs={10} className='content'>
-                <Title text="Supervision ressenti utilisateur - Analyse des résultats de l'outil Newtest"/>
+                <Title text="Informations sur les scénarios Newtest & Selenium pour la supervision du ressenti utilisateur"/>
                 </Col> 
                 </Row>
             </div>
               <br />
-            <div style={{display:"flex"}}>
-              <div className='mb-4' >
-             <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small' type='date' sx={{width:"250px",marginRight:"35px"}}/>
-             </div>
-             <div className='mb-4' >
-             <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small' type='date' sx={{width:"250px",marginRight:"35px"}}/>
-             </div>
-             <div  className='mb-4' id='search'>
-              <Button style={{ backgroundColor:"#5CB85C", borderColor: "#5CB85C",width:"15p0x"}}>Rechercher</Button> 
-             </div> 
+           <div style={{display:"flex"}}>
+             
             </div>
             <br />
         <div style={{marginLeft:"2%"}}>
@@ -88,14 +79,15 @@ function AnaTest() {
           </Select><label>elements</label>
         </div>
         <div style={{marginLeft:"49%",position:"absolute",top:"43%"}}>
-       <label >Rechercher: </label> &nbsp;
+          
+       <label style={{ marginTop: '10px' }}>Rechercher: </label> &nbsp;
        <TextField  variant='outlined' size='small'/>
        </div><br />
-       <TableAnaTest/>
+       <TableScenarioBook/>
         </Container>
 
     </div>
   )
 }
 
-export default AnaTest
+export default ScenarioBook
