@@ -17,7 +17,6 @@ import {Card, CardContent, TextField, InputLabel,Select,MenuItem} from '@mui/mat
 import { TextareaAutosize } from '@mui/base';
 import { Button } from 'react-bootstrap'
 import axios from 'axios'
-import GetSelect from '../../../API/GetSelect'
 
 
 const ajoutAvisItemsMenu =[
@@ -45,26 +44,83 @@ function AjoutAvis() {
     const [currentForm, setCurrentForm] = useState("")
     const [typesAvis, setTypesAvis] = useState([]); // State pour stocker les types d'avis récupérés depuis l'API
     const [selectedType, setSelectedType] = useState(""); // State pour stocker le type d'avis sélectionné dans le Select
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [serviceImpact,setServiceImpacte]=useState([])
+    const [selectedService, setSelectedService] = useState("");
+    const [listValidation,setListValidation]=useState([])
+    const [selectedValide, setSelectedValide] = useState("");
+    const [listDiffusion,setListDiffusion]=useState([])
+    const [selectedDiffusion, setSelectedDiffusion] = useState("");
+    const [typeCause,setTypeCause]=useState([])
+    const [selectedCause, setSelectedCause] = useState("");
 
-    // Fonction pour gérer l'option sélectionnée
-    const handleSelectedOption = (option) => {
-        setSelectedOption(option);
-    };
 
     
-  //   useEffect(() => {
-  //     axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/typeavisincidents')
-  //         .then(response => {
-  //             // Récupérez les données des types d'avis depuis la réponse de l'API
-  //             const data = response.data;
-  //             // Mettez à jour le state avec les types d'avis récupérés depuis l'API
-  //             setTypesAvis(data);
-  //         })
-  //         .catch(error => {
-  //             console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
-  //         });
-  // }, []); 
+    
+    useEffect(() => {
+      axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/typeavisincidents')
+          .then(response => {
+              // Récupérez les données des types d'avis depuis la réponse de l'API
+              const data = response.data;
+              // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+              setTypesAvis(data);
+          })
+          .catch(error => {
+              console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+          });
+  }, []); 
+  useEffect(() => {
+    axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/applicationSI')
+        .then(response => {
+            // Récupérez les données des types d'avis depuis la réponse de l'API
+            const data = response.data;
+            // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+            setServiceImpacte(data);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+        });
+}, []); 
+
+
+useEffect(() => {
+  axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/listValidations')
+      .then(response => {
+          // Récupérez les données des types d'avis depuis la réponse de l'API
+          const data = response.data;
+          // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+          setListValidation(data);
+      })
+      .catch(error => {
+          console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+      });
+}, []); 
+
+useEffect(() => {
+  axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/listDiffusions')
+      .then(response => {
+          // Récupérez les données des types d'avis depuis la réponse de l'API
+          const data = response.data;
+          // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+          setListDiffusion(data);
+      })
+      .catch(error => {
+          console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+      });
+}, []); 
+
+useEffect(() => {
+  axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/typeCauseAvis')
+      .then(response => {
+          // Récupérez les données des types d'avis depuis la réponse de l'API
+          const data = response.data;
+          // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+          setTypeCause(data);
+      })
+      .catch(error => {
+          console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+      });
+}, []); 
+
 
     const handleMenuClick = (link)=>{
       setCurrentForm(link);
@@ -89,51 +145,64 @@ function AjoutAvis() {
         }
       ]
 
+      const  applicationSis=[
+        {
+          "id":selectedService
+        }
+      ]
+
+      const typeCauseIncident =[
+        {
+          "id":selectedCause
+        }
+      ]
+
       const formData = {
           objet,
+          dateDebut,
+          dateDetection,
+          impact,
+          observations,
+          ticketEzv,
+          ticketOceane,
           nature,
           typeAvisIncident,
-          service,
+          applicationSis,
           valide,
           diffusion,
           origine,
-          dateDebut,
-          dateDetection,
-          ticketEzv,
-          ticketOceane,
-          impact,
           causeRetard,
           causeProbable,
-          observations,
+          typeCauseIncident
          
           // Ajoutez d'autres champs du formulaire si nécessaire
       };
 
       console.log(formData);
-      // console.log(dateDebut,objet,dateDetection,ticketEzv,ticketOceane,impact,causeProbable,observations,nature);
 
+      
       // Effectuez la requête vers l'API ici en utilisant fetch ou Axios
-      // fetch('votre/api/url', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //         // Ajoutez des headers supplémentaires si nécessaire
-      //     },
-      //     body: JSON.stringify(formData)
-      // })
-      // .then(response => {
-      //     if (response.ok) {
-      //         // Gérez la réponse en cas de succès
-      //         console.log('Avis créé avec succès');
-      //     } else {
-      //         // Gérez la réponse en cas d'erreur
-      //         console.error('Erreur lors de la création de l\'avis');
-      //     }
-      // })
-      // .catch(error => {
-      //     // Gérez les erreurs de requête
-      //     console.error('Erreur lors de la requête', error);
-      // });
+      fetch('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncidents', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              // Ajoutez des headers supplémentaires si nécessaire
+          },
+          body: JSON.stringify(formData)
+      })
+      .then(response => {
+          if (response.ok) {
+              // Gérez la réponse en cas de succès
+              console.log('Avis créé avec succès');
+          } else {
+              // Gérez la réponse en cas d'erreur
+              console.error('Erreur lors de la création de l\'avis');
+          }
+      })
+      .catch(error => {
+          // Gérez les erreurs de requête
+          console.error('Erreur lors de la requête', error);
+      });
   };
 
 
@@ -146,17 +215,22 @@ function AjoutAvis() {
       setSelectedType(event.target.value);
   };
     const handleChangeService = (event) => {
-      setService(event.target.value);
+      setSelectedService(event.target.value);
     };
     const handleChangeValide = (event) => {
-      setValide(event.target.value);
+      setSelectedValide(event.target.value);
     };
     const handleChangeDiffusion = (event) => {
-      setDiffusion(event.target.value);
+      setSelectedDiffusion(event.target.value);
     };
     const handleChangeCause = (event) => {
       setCauseRetard(event.target.value);
     };
+
+    const handleChangeOrigine=(event)=>{
+      setSelectedCause(event.target.value)
+
+    }
 
 
   return (
@@ -222,23 +296,24 @@ function AjoutAvis() {
                               <MenuItem value="CONTENU">CONTENU</MenuItem>
                     </Select>
                   </div>
-                  {/* <div className='mb-4 align-right'>
+                   <div className='mb-4 align-right'>
                     <InputLabel className="demo-simple-select-label"> Type avis</InputLabel>&nbsp;
                     <Select
                         labelId="demo-simple-select-label"
                         className='textfield'
                         onChange={handleChangeType}
                         size='small'
-                        value={type} 
+                        value={selectedType}
                         required
-                          >
-                              <MenuItem value="choisir le type d'avis">{type}</MenuItem>
-                              <MenuItem value="Normale">Normale</MenuItem>
-                              <MenuItem value="Regularisation">Regularisation</MenuItem>
-                              <MenuItem value="Information">Information</MenuItem>
-                    </Select>
-                  </div> */}
-                 <GetSelect apiUrl="http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/typeavisincidents" handleSelectedOption={handleSelectedOption}/>
+                       >
+                    {/* Mappez les types d'avis dans des éléments MenuItem */}
+                    {typesAvis.map(type => (
+                        <MenuItem key={type.id} value={type.id}>
+                            {type.nom}
+                        </MenuItem>
+                    ))}
+                  </Select>
+               </div>
                   <div className='mb-4 align-right'>
                     <InputLabel className="demo-simple-select-label">Services impactés</InputLabel>&nbsp;
                     <Select
@@ -246,13 +321,14 @@ function AjoutAvis() {
                       className='textfield'
                       onChange={handleChangeService}
                       small
-                      value={service} 
+                      value={selectedService} 
                       required
                           >
-                              <MenuItem value="Application Test">{service}</MenuItem>
-                              <MenuItem value="Active Directory">Active Directory</MenuItem>
-                              <MenuItem value="Ascade">Ascade</MenuItem>
-                              <MenuItem value="ASP">ASP</MenuItem>
+                               {serviceImpact.map(service => (
+                        <MenuItem key={service.id} value={service.id}>
+                            {service.nom}
+                        </MenuItem>
+                    ))}
                     </Select>
                   </div>
                   <div className='mb-4 align-right'>
@@ -262,13 +338,14 @@ function AjoutAvis() {
                       id='textfield'
                       onChange={handleChangeValide}
                       size='small'
-                      value={valide} 
+                      value={selectedValide} 
                       required
                           >
-                              <MenuItem value="choisir la liste de validation">{valide}</MenuItem>
-                              <MenuItem value="TestValidation">TestValidation</MenuItem>
-                              <MenuItem value="Liste_Test_Deploiement">Liste_Test_Deploiement</MenuItem>
-                              <MenuItem value="ListeValidationMoctar">ListeValidationMoctar</MenuItem>
+                      {listValidation.map(valide => (
+                        <MenuItem key={valide.id} value={valide.id}>
+                            {valide.nom}
+                        </MenuItem>
+                    ))}
                     </Select>
                   </div>
                   <div className='mb-4 align-right' >
@@ -278,13 +355,14 @@ function AjoutAvis() {
                       id='textfield'
                       onChange={handleChangeDiffusion}
                       small
-                      value={diffusion} 
+                      value={selectedDiffusion} 
                       required
                           >
-                              <MenuItem value="Choisir la liste de diffusion">{diffusion}</MenuItem>
-                              <MenuItem value="Test">Test</MenuItem>
-                              <MenuItem value="Liste Application">Liste Application</MenuItem>
-                              <MenuItem value="Selfcare B2C/B2B">Selfcare B2C/B2B</MenuItem>
+                              {listDiffusion.map(diffusion => (
+                              <MenuItem key={diffusion.id} value={diffusion.id}>
+                            {diffusion.nom}
+                           </MenuItem>
+                    ))}
                     </Select>
                   </div>
                   <div className='mb-4 align-right'>
@@ -334,15 +412,16 @@ function AjoutAvis() {
                     <Select
                       labelId="demo-simple-select-label"
                       className='textfield'
-                      onChange={handleChangeType}
+                      onChange={handleChangeOrigine}
                       size='small'
-                      value={type} 
+                      value={selectedCause} 
                       required
                             >
-                                <MenuItem value="Definir une origine">{type}</MenuItem>
-                                <MenuItem value="Réseau">Réseau</MenuItem>
-                                <MenuItem value="Systeme">Systeme</MenuItem>
-                                <MenuItem value="Base de donneés">Base de donneés</MenuItem>
+                                {typeCause.map(cause => (
+                              <MenuItem key={cause.id} value={cause.id}>
+                            {cause.intitule}
+                           </MenuItem>
+                    ))}
                     </Select>
                   </div>
                   <div className='mb-4 align-right' style={{display:"flex"}}>
