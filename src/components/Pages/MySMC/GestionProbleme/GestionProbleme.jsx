@@ -25,7 +25,7 @@ const GestionProbleme = () =>{
   }
 
   const gestionProblemeItemsMenu =[
-    {label: "Scanner un probleme", link: "/mysmc/",icon:FaPlusCircle},
+    {label: "Scanner un probleme", link: "/mysmc/gestionprobleme/scannerprobleme",icon:FaPlusCircle},
     { label: "Rechercher probleme", link: "/mysmc/gestionprobleme/rechercherprobleme",icon:FaSearch},
     ];
 
@@ -60,7 +60,7 @@ const GestionProbleme = () =>{
               <Title text="Liste des problémes en cours"/>
               <Get url="http://localhost:8085/api/gestionproblemes/problemes/encours" columns={columns} />
             </Col> 
-            <Col sm={4}>
+            <Col sm={4} style={{marginTop:"3%"}}>
                <MenuPersoGesProbleme propsMenuItems={ gestionProblemeItemsMenu} onItemClick={handleMenuClick}/>
             </Col>
         </Row>

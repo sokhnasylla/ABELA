@@ -103,7 +103,7 @@ function RechercheProbleme() {
                 </Grid>
               </div>
             </Col>
-            <Col xs={4}>
+            <Col xs={4} style={{marginTop:"4%"}}>
               <MenuPersoGesProbleme propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick} />
             </Col>
           </Row>

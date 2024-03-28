@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import {useState,useEffect} from 'react'
 import useAuth from '../../Auth/useAuth'
 import Header from '../../../Header/Header'
 import { Container,Row,Col,Table } from 'react-bootstrap'
@@ -16,6 +16,7 @@ import Titleges from './Titleges'
 import {Card, CardContent, TextField, InputLabel,Select,MenuItem} from '@mui/material';
 import { TextareaAutosize } from '@mui/base';
 import { Button } from 'react-bootstrap'
+import axios from 'axios'
 
 
 const ajoutAvisItemsMenu =[
@@ -33,39 +34,203 @@ const ajoutAvisItemsMenu =[
     ];
    
 function AjoutAvis() {
-    useAuth()
-    const [nature, setNature] = React.useState('SI');
-    const [type, setType] = React.useState("choisir le type d'avis");
-    const [service, setService] = React.useState("Application Test");
-    const [valide, setValide] = React.useState("choisir la liste validation");
-    const [diffusion, setDiffusion] = React.useState("choisir la liste diffusion");
-    const [cause, setCause] = React.useState("Cause Retard Notification");
+    const [nature, setNature] = useState('SI');
+    const [type, setType] = useState("choisir le type d'avis");
+    const [service, setService] = useState("Application Test");
+    const [valide, setValide] = useState("choisir la liste validation");
+    const [diffusion, setDiffusion] = useState("choisir la liste diffusion");
+    const [causeRetard, setCauseRetard] = useState("Cause Retard Notification");
+    const [origine,setOrigine]=useState("Définir une origine");
     const [currentForm, setCurrentForm] = useState("")
+    const [typesAvis, setTypesAvis] = useState([]); // State pour stocker les types d'avis récupérés depuis l'API
+    const [selectedType, setSelectedType] = useState(""); // State pour stocker le type d'avis sélectionné dans le Select
+    const [serviceImpact,setServiceImpacte]=useState([])
+    const [selectedService, setSelectedService] = useState("");
+    const [listValidation,setListValidation]=useState([])
+    const [selectedValide, setSelectedValide] = useState("");
+    const [listDiffusion,setListDiffusion]=useState([])
+    const [selectedDiffusion, setSelectedDiffusion] = useState("");
+    const [typeCause,setTypeCause]=useState([])
+    const [selectedCause, setSelectedCause] = useState("");
+
+
+    
+    
+    useEffect(() => {
+      axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/typeavisincidents')
+          .then(response => {
+              // Récupérez les données des types d'avis depuis la réponse de l'API
+              const data = response.data;
+              // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+              setTypesAvis(data);
+          })
+          .catch(error => {
+              console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+          });
+  }, []); 
+  useEffect(() => {
+    axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/applicationSI')
+        .then(response => {
+            // Récupérez les données des types d'avis depuis la réponse de l'API
+            const data = response.data;
+            // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+            setServiceImpacte(data);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+        });
+}, []); 
+
+
+useEffect(() => {
+  axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/listValidations')
+      .then(response => {
+          // Récupérez les données des types d'avis depuis la réponse de l'API
+          const data = response.data;
+          // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+          setListValidation(data);
+      })
+      .catch(error => {
+          console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+      });
+}, []); 
+
+useEffect(() => {
+  axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/listDiffusions')
+      .then(response => {
+          // Récupérez les données des types d'avis depuis la réponse de l'API
+          const data = response.data;
+          // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+          setListDiffusion(data);
+      })
+      .catch(error => {
+          console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+      });
+}, []); 
+
+useEffect(() => {
+  axios.get('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/typeCauseAvis')
+      .then(response => {
+          // Récupérez les données des types d'avis depuis la réponse de l'API
+          const data = response.data;
+          // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+          setTypeCause(data);
+      })
+      .catch(error => {
+          console.error('Erreur lors de la récupération des types d\'avis depuis l\'API', error);
+      });
+}, []); 
+
 
     const handleMenuClick = (link)=>{
       setCurrentForm(link);
       console.log(link);
     }
-    
-  
+    // Fonction pour gérer la soumission du formulaire
+    const handleSubmit = () => {
+
+      const objet=document.getElementById("objet").value
+      const dateDebut=document.getElementById("dateDebut").value
+      const dateDetection=document.getElementById("dateDetection").value
+      const ticketEzv=document.getElementById("ticketEzv").value
+      const ticketOceane= document.getElementById("ticketOceane").value
+      const impact=document.getElementById("impact").value
+      const causeProbable= document.getElementById("causeProbable").value;
+      const observations=document.getElementById("observation").value
+      // const natures= document.getElementById("natures").value
+
+      const typeAvisIncident=[
+        {
+          "id":selectedType
+        }
+      ]
+
+      const  applicationSis=[
+        {
+          "id":selectedService
+        }
+      ]
+
+      const typeCauseIncident =[
+        {
+          "id":selectedCause
+        }
+      ]
+
+      const formData = {
+          objet,
+          dateDebut,
+          dateDetection,
+          impact,
+          observations,
+          ticketEzv,
+          ticketOceane,
+          nature,
+          typeAvisIncident,
+          applicationSis,
+          valide,
+          diffusion,
+          origine,
+          causeRetard,
+          causeProbable,
+          typeCauseIncident
+         
+          // Ajoutez d'autres champs du formulaire si nécessaire
+      };
+
+      console.log(formData);
+
+      
+      // Effectuez la requête vers l'API ici en utilisant fetch ou Axios
+      fetch('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncidents', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              // Ajoutez des headers supplémentaires si nécessaire
+          },
+          body: JSON.stringify(formData)
+      })
+      .then(response => {
+          if (response.ok) {
+              // Gérez la réponse en cas de succès
+              console.log('Avis créé avec succès');
+          } else {
+              // Gérez la réponse en cas d'erreur
+              console.error('Erreur lors de la création de l\'avis');
+          }
+      })
+      .catch(error => {
+          // Gérez les erreurs de requête
+          console.error('Erreur lors de la requête', error);
+      });
+  };
+
+
+
+   
     const handleChangeNature = (event) => {
       setNature(event.target.value);
     };
     const handleChangeType = (event) => {
-      setType(event.target.value);
-    };
+      setSelectedType(event.target.value);
+  };
     const handleChangeService = (event) => {
-      setService(event.target.value);
+      setSelectedService(event.target.value);
     };
     const handleChangeValide = (event) => {
-      setValide(event.target.value);
+      setSelectedValide(event.target.value);
     };
     const handleChangeDiffusion = (event) => {
-      setDiffusion(event.target.value);
+      setSelectedDiffusion(event.target.value);
     };
     const handleChangeCause = (event) => {
-      setCause(event.target.value);
+      setCauseRetard(event.target.value);
     };
+
+    const handleChangeOrigine=(event)=>{
+      setSelectedCause(event.target.value)
+
+    }
 
 
   return (
@@ -75,211 +240,219 @@ function AjoutAvis() {
       <Container  className='body'style={{marginLeft:"5%"}}>
         <Row>
           <Col sm={8} className='content'>
-          <Title text="Gestion des avis d'incidents - Formulaire de déclaration d'avis"/>
-          <br />
-              <Table className="custom-table" bordered striped id='ajoutavis'>
-            <thead>
-              <tr>
-              <th  colSpan={3} id='text'> 	<ReportProblemIcon sx={{height:"18px"}}/>Consignes obligatoires à respecter</th>
-              </tr>
-            </thead>
-            <tbody style={{fontSize:".9em",fontWeight:"500"}} >
-                      
-                      <tr>
-                        <td> Delai de diffusion</td>
-                        <td colSpan={2}>45 minutes après détection même si les TMC ne valident pas.</td>
-                      </tr>
-                        
-                      <tr>
-                        <td>Delai de traitement</td>
-                        <td  colSpan={2}>4 heures après détection - Envoyez un état d'avancement chaque 4h.</td>
-                      </tr>  
-            </tbody>
-        </Table>
-        </Col>
-    <Col sm={4}>
-     <MenuPersoGesIncident propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
-    </Col>
+             <Title text="Gestion des avis d'incidents - Formulaire de déclaration d'avis"/>
+             <br />
+             <Table className="custom-table" bordered striped id='ajoutavis'>
+                <thead>
+                  <tr>
+                  <th  colSpan={3} id='text'> 	<ReportProblemIcon sx={{height:"18px"}}/>Consignes obligatoires à respecter</th>
+                  </tr>
+                </thead>
+                <tbody style={{fontSize:".9em",fontWeight:"500"}} >   
+                  <tr>
+                    <td> Delai de diffusion</td>
+                    <td colSpan={2}>45 minutes après détection même si les TMC ne valident pas.</td>
+                  </tr> 
+                  <tr>
+                    <td>Delai de traitement</td>
+                    <td  colSpan={2}>4 heures après détection - Envoyez un état d'avancement chaque 4h.</td>
+                  </tr>  
+                </tbody>
+             </Table>
+          </Col>
+          <Col sm={4}>
+           <MenuPersoGesIncident propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
+          </Col>
         </Row>
         <br />
         <Row>
           <Col sm={8}>
-          <Titleges text="Correspondance avis"/>
-        <Card className='form'  sx={{borderRadius:'8px',width:"45%"}}>
-                 <CardContent className='p-3' sx={{padding:"0px"}}>
-                   <form>
-                     <div className='mb-4 align-right'>
-                     <InputLabel sx={{fontSize:"14",fontFamily: "fantasy",color:"#000"}} id="demo-simple-select-label"> Objet</InputLabel>&nbsp;
-                       <TextField  id='textfield' variant='outlined'  size='small' placeholder='objet avis' required/>
-                     </div>
-                     <div className='mb-4 align-right'>
-                     <InputLabel id="demo-simple-select-label"> Nature</InputLabel>&nbsp;
-                   
-                     <Select
-                          labelId="demo-simple-select-label"
-                          id='textfield'
-                          label="TYPE DE TRANSACTION"
-                          onChange={handleChangeNature}
-                          size='small'
-                          value={nature} 
-                          required
-                      >
-                          <MenuItem value="SI">{nature}</MenuItem>
-                          <MenuItem value="DATA">DATA</MenuItem>
-                          <MenuItem value="CONTENU">CONTENU</MenuItem>
-                      </Select>
-                     </div>
-                     <div className='mb-4 align-right'>
-                     <InputLabel id="demo-simple-select-label"> Type avis</InputLabel>&nbsp;
-                     <Select
-                          labelId="demo-simple-select-label"
-                          id='textfield'
-                          onChange={handleChangeType}
-                          size='small'
-                          value={type} 
-                          required
-                      >
-                          <MenuItem value="choisir le type d'avis">{type}</MenuItem>
-                          <MenuItem value="Normale">Normale</MenuItem>
-                          <MenuItem value="Regularisation">Regularisation</MenuItem>
-                          <MenuItem value="Information">Information</MenuItem>
-                      </Select>
-                     </div>
-                     <div className='mb-4 align-right'>
-                     <InputLabel id="demo-simple-select-label">Service impacté</InputLabel>&nbsp;
-                     <Select
-                          labelId="demo-simple-select-label"
-                          id='textfield'
-                          onChange={handleChangeService}
-                          small
-                          value={service} 
-                          required
-                      >
-                          <MenuItem value="Application Test">{service}</MenuItem>
-                          <MenuItem value="Active Directory">Active Directory</MenuItem>
-                          <MenuItem value="Ascade">Ascade</MenuItem>
-                          <MenuItem value="ASP">ASP</MenuItem>
-                      </Select>
-                     </div>
-                     <div className='mb-4 align-right'>
-                     <InputLabel id="demo-simple-select-label">Liste Validation</InputLabel>&nbsp;
-                     <Select
-                          labelId="demo-simple-select-label"
-                          id='textfield'
-                          onChange={handleChangeValide}
-                          size='small'
-                          value={valide} 
-                          required
-                      >
-                          <MenuItem value="choisir la liste de validation">{valide}</MenuItem>
-                          <MenuItem value="TestValidation">TestValidation</MenuItem>
-                          <MenuItem value="Liste_Test_Deploiement">Liste_Test_Deploiement</MenuItem>
-                          <MenuItem value="ListeValidationMoctar">ListeValidationMoctar</MenuItem>
-                      </Select>
-                     </div>
-                     <div className='mb-4 align-right' >
-                     <InputLabel id="demo-simple-select-label">Liste Diffusion</InputLabel>&nbsp;
-                     <Select
-                          labelId="demo-simple-select-label"
-                          id='textfield'
-                          onChange={handleChangeDiffusion}
-                          small
-                          value={diffusion} 
-                          required
-                      >
-                          <MenuItem value="Choisir la liste de diffusion">{diffusion}</MenuItem>
-                          <MenuItem value="Test">Test</MenuItem>
-                          <MenuItem value="Liste Application">Liste Application</MenuItem>
-                          <MenuItem value="Selfcare B2C/B2B">Selfcare B2C/B2B</MenuItem>
-                      </Select>
-                     </div>
-                     <div className='mb-4 align-right'>
-                     <InputLabel id="demo-simple-select-label">Date Début</InputLabel>&nbsp;
-                       <TextField id='textfield' variant='outlined'  size='small'type='date' required/>
-                     </div>
-                     <div className='mb-4 align-right' >
-                     <InputLabel id="demo-simple-select-label">Date Détection</InputLabel>&nbsp;
-                       <TextField id='textfield' variant='outlined'  size='small' type='date' required/>
-                     </div>
-                     <div className='mb-4 align-right'>
-                     <InputLabel id="demo-simple-select-label">Ticket EZV</InputLabel>&nbsp;
-                       <TextField id='textfield' variant='outlined'  size='small' placeholder='Numero ticket EasyVista'/>
-                     </div>
-                     <div className='mb-4 align-right'>
-                     <InputLabel id="demo-simple-select-label">Ticket Oceane</InputLabel>&nbsp;
-                       <TextField id='textfield' variant='outlined'  size='small' placeholder='Numero ticket Oceane'/>
-                     </div>
-                     
-                   </form>
-                    </CardContent>
-                  </Card>
-                  <div   style={{marginLeft:"29%",position:"absolute",top:"60%",marginBottom:"10px",padding:"10px",width:"62%"}}>
+            <Row>
+              <Col>
+              <Titleges text="Correspondance avis"/>
+                <form>
+                  <div className='mb-4 align-right'>
+                    <InputLabel sx={{fontSize:"14",fontFamily: "fantasy",color:"#000"}} className="demo-simple-select-label"> 
+                    Objet
+                    </InputLabel>&nbsp;
+                    <TextField  className='textfield'  id="objet" variant='outlined'  size='small' placeholder='objet avis' required/>
+                  </div>
+                  <div className='mb-4 align-right'>
+                    <InputLabel className="demo-simple-select-label" > 
+                      Nature
+                    </InputLabel>&nbsp;
+                    <Select
+                     id="natures"
+                      labelId="demo-simple-select-label"
+                      className='textfield'
+                      label="TYPE DE TRANSACTION"
+                      onChange={handleChangeNature}
+                      size='small'
+                      value={nature} 
+                      required
+                          >
+                              <MenuItem value="SI">{nature}</MenuItem>
+                              <MenuItem value="DATA">DATA</MenuItem>
+                              <MenuItem value="CONTENU">CONTENU</MenuItem>
+                    </Select>
+                  </div>
+                   <div className='mb-4 align-right'>
+                    <InputLabel className="demo-simple-select-label"> Type avis</InputLabel>&nbsp;
+                    <Select
+                        labelId="demo-simple-select-label"
+                        className='textfield'
+                        onChange={handleChangeType}
+                        size='small'
+                        value={selectedType}
+                        required
+                       >
+                    {/* Mappez les types d'avis dans des éléments MenuItem */}
+                    {typesAvis.map(type => (
+                        <MenuItem key={type.id} value={type.id}>
+                            {type.nom}
+                        </MenuItem>
+                    ))}
+                  </Select>
+               </div>
+                  <div className='mb-4 align-right'>
+                    <InputLabel className="demo-simple-select-label">Services impactés</InputLabel>&nbsp;
+                    <Select
+                      labelId="demo-simple-select-label"
+                      className='textfield'
+                      onChange={handleChangeService}
+                      small
+                      value={selectedService} 
+                      required
+                          >
+                               {serviceImpact.map(service => (
+                        <MenuItem key={service.id} value={service.id}>
+                            {service.nom}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                  </div>
+                  <div className='mb-4 align-right'>
+                    <InputLabel className="demo-simple-select-label">Liste Validation</InputLabel>&nbsp;
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id='textfield'
+                      onChange={handleChangeValide}
+                      size='small'
+                      value={selectedValide} 
+                      required
+                          >
+                      {listValidation.map(valide => (
+                        <MenuItem key={valide.id} value={valide.id}>
+                            {valide.nom}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                  </div>
+                  <div className='mb-4 align-right' >
+                    <InputLabel className="demo-simple-select-label">Liste Diffusion</InputLabel>&nbsp;
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id='textfield'
+                      onChange={handleChangeDiffusion}
+                      small
+                      value={selectedDiffusion} 
+                      required
+                          >
+                              {listDiffusion.map(diffusion => (
+                              <MenuItem key={diffusion.id} value={diffusion.id}>
+                            {diffusion.nom}
+                           </MenuItem>
+                    ))}
+                    </Select>
+                  </div>
+                  <div className='mb-4 align-right'>
+                    <InputLabel className="demo-simple-select-label">Date Début</InputLabel>&nbsp;
+                    <TextField className='textfield' id='dateDebut' variant='outlined'  size='small'type='date' required/>
+                  </div>
+                  <div className='mb-4 align-right' >
+                    <InputLabel className="demo-simple-select-label" >Date Détection</InputLabel>&nbsp;
+                    <TextField className='textfield' id='dateDetection' variant='outlined'  size='small' type='date' required/>
+                  </div>
+                  <div className='mb-4 align-right'>
+                    <InputLabel className="demo-simple-select-label" >Ticket EZV</InputLabel>&nbsp;
+                    <TextField className='textfield' id='ticketEzv' variant='outlined'  size='small' placeholder='Numero ticket EasyVista'/>
+                  </div>
+                  <div className='mb-4 align-right'>
+                    <InputLabel className="demo-simple-select-label" >Ticket Oceane</InputLabel>&nbsp;
+                    <TextField className='textfield' id="ticketOceane" variant='outlined'  size='small' placeholder='Numero ticket Oceane'/>
+                  </div>
+                        
+                </form>
+  
+              </Col>
+              <Col>
                 <Titleges  text="Causes et impacts" />
-            </div>
-                  <Card className='form'  sx={{borderRadius:'8px',marginLeft:"30%",position:"absolute",top:"77%",width:"27%"}}>
-                 <CardContent className='p-3' sx={{padding:"0px"}}>
-                   <form>
-                     <div className='mb-4 align-right' style={{display:"flex"}}>
-                     <InputLabel id="demo-simple-select-label">Impacts</InputLabel>&nbsp;
-                       <TextareaAutosize  id='textfield'  variant='outlined'  size='small' placeholder='Comment les utisateurs perçoivent le dysfonctionnement' required/>
-                     </div>
-                     <div className='mb-4 align-right' style={{display:"flex"}}>
-                     <InputLabel id="demo-simple-select-label">Cause Retard Notif.</InputLabel>&nbsp;
-                   
-                     <Select
+                <form>
+                  <div className='mb-4 align-right' style={{display:"flex"}}>
+                    <InputLabel className="demo-simple-select-label">Impacts</InputLabel>&nbsp;
+                    <TextareaAutosize  id="impact"className='textfield'  variant='outlined'  size='small' placeholder='Comment les utisateurs perçoivent le dysfonctionnement' required/>
+                  </div>
+                  <div className='mb-4 align-right' style={{display:"flex"}}>
+                      <InputLabel className="demo-simple-select-label">Cause Retard Notif.</InputLabel>&nbsp;
+                      <Select
                           labelId="demo-simple-select-label"
-                          id='textfield'
+                          className='textfield'
                           onChange={handleChangeCause}
                           size='small'
-                          value={cause} 
+                          value={causeRetard} 
                           required
-                      >
-                          <MenuItem value="Cause Retard Notification">{cause}</MenuItem>
-                          <MenuItem value="Non Supervisé">Non Supervisé</MenuItem>
-                          <MenuItem value="Retard Diffusion">Retard Diffusion</MenuItem>
+                            >
+                                <MenuItem value="Cause Retard Notification">{causeRetard}</MenuItem>
+                                <MenuItem value="Non Supervisé">Non Supervisé</MenuItem>
+                                <MenuItem value="Retard Diffusion">Retard Diffusion</MenuItem>
                       </Select>
-                     </div>
-                     <div className='mb-4 align-right' style={{display:"flex"}}>
-                     <InputLabel id="demo-simple-select-label">Origine Cause</InputLabel>&nbsp;
-                     <Select
-                          labelId="demo-simple-select-label"
-                          id='textfield'
-                          onChange={handleChangeType}
-                          size='small'
-                          value={type} 
-                          required
-                      >
-                          <MenuItem value="Definir une origine">{type}</MenuItem>
-                          <MenuItem value="Réseau">Réseau</MenuItem>
-                          <MenuItem value="Systeme">Systeme</MenuItem>
-                          <MenuItem value="Base de donneés">Base de donneés</MenuItem>
-                      </Select>
-                     </div>
-                     <div className='mb-4 align-right' style={{display:"flex"}}>
-                     <InputLabel id="demo-simple-select-label">Causes Problables</InputLabel>&nbsp;
-                     <TextareaAutosize   id='textfield' variant='outlined'  size='small' placeholder='(*) Demander systématiquement aux TMC(s) les causes probables
-                         (*) Eviter les expressions « Investigations en Cours » ; « causes inconnues » et préférer mettre « constat : xxxxxxxx »' required/>
-                     </div>
-                     <div className='mb-4 align-right' style={{display:"flex"}}>
-                     <InputLabel id="demo-simple-select-label">Observations</InputLabel>&nbsp;
-                     <TextareaAutosize  id='textfield'  variant='outlined'  size='small' placeholder='Renseigner les observations' required/>
-                     </div>
-                   </form>
-                    </CardContent>
-                  </Card>
+                  </div>
+                  <div className='mb-4 align-right' style={{display:"flex"}}>
+                    <InputLabel className="demo-simple-select-label" value={origine}>Origine Cause</InputLabel>&nbsp;
+                    <Select
+                      labelId="demo-simple-select-label"
+                      className='textfield'
+                      onChange={handleChangeOrigine}
+                      size='small'
+                      value={selectedCause} 
+                      required
+                            >
+                                {typeCause.map(cause => (
+                              <MenuItem key={cause.id} value={cause.id}>
+                            {cause.intitule}
+                           </MenuItem>
+                    ))}
+                    </Select>
+                  </div>
+                  <div className='mb-4 align-right' style={{display:"flex"}}>
+                    <InputLabel className="demo-simple-select-label">Causes Problables</InputLabel>&nbsp;
+                    <TextareaAutosize  id='causeProbable' className='textfield' variant='outlined'  size='small' placeholder='(*) Demander systématiquement aux TMC(s) les causes probables
+                      (*) Eviter les expressions « Investigations en Cours » ; « causes inconnues » et préférer mettre « constat : xxxxxxxx »' required/>
+                  </div>
+                  <div className='mb-4 align-right' style={{display:"flex"}}>
+                    <InputLabel className="demo-simple-select-label" >Observations</InputLabel>&nbsp;
+                    <TextareaAutosize id='observation' className='textfield'  variant='outlined'  size='small' placeholder='Renseigner les observations' required/>
+                  </div>
+                </form>
+              </Col>
+            </Row>
           </Col>
           <Col sm={4}>
-          <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
+            <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
           </Col>
         </Row>
         <hr />
-        <div className='col-sm-12' id='bouton'> 
-         <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}>Creation avis</Button>
+        <div className='col-sm-12' id='bouton' style={{display:"flex", justifyContent:"center",marginBottom:"10px"}}> 
+         <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}
+            onClick={handleSubmit} // Appel de la fonction handleSubmit lors du clic sur le bouton 
+            >
+          Creation avis
+          
+          </Button>
           &nbsp; &nbsp;
           <Button style={{backgroundColor:"#C9302C",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}>Annulation avis</Button>
-          </div>
-          <br /><br />
-          <br /> <br />
+        </div>
+  
       </Container>
    </div>
 
