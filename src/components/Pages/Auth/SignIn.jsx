@@ -13,6 +13,7 @@ import background from "../../../assets/background.jpeg";
 import { Navigate } from 'react-router-dom';
 import { storeTokenInLocalStorage } from './authUtils';
 import axios from 'axios';
+import { set } from 'date-fns';
 
 function SignInSide() {
   const [login, setLogin] = React.useState('');
@@ -31,17 +32,22 @@ function SignInSide() {
         login,
         password
       });
-      console.log(response.data.data.token);
 
-      setLoggedSuccess(true);
-      storeTokenInLocalStorage(response.data.data.token);
+      if (response.data.success) {
+        setLoggedSuccess(true);
+        storeTokenInLocalStorage(response.data.data.token);
+      } else {
+        setError(response.data.message); // Mettre le message d'erreur dans la variable error
+      }
+      
     } catch (error) {
-      setError(`Erreur: ${error.message}`);
+      // setError(`Erreur: ${error.message}`);
       console.error('Erreur lors de la connexion', error);
     } finally {
       setLoading(false);
     }
   };
+
 
   if (isLoggedSuccess) {
     return <Navigate to="/home" />;
