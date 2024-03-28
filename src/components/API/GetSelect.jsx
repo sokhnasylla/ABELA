@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Select, MenuItem, InputLabel } from '@mui/material'; // Importez les composants nécessaires depuis '@mui/material'
 
-function GetSelect({ apiUrl }) {
+function GetSelect({ apiUrl,text,onOptionChange  }) {
     const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState("");
 
@@ -24,7 +24,7 @@ function GetSelect({ apiUrl }) {
     return (
         <div>
             <div className='mb-4 align-right'>
-                <InputLabel className="demo-simple-select-label"> Choisissez une option</InputLabel>&nbsp;
+                <InputLabel className="demo-simple-select-label">{text}</InputLabel>&nbsp;
                 <Select
                     labelId="demo-simple-select-label"
                     className='textfield'
@@ -35,7 +35,7 @@ function GetSelect({ apiUrl }) {
                 >
                     {options.map(option => (
                         <MenuItem key={option.id} value={option.id}>
-                            {option.name}
+                            {option.nom}
                         </MenuItem>
                     ))}
                 </Select>
