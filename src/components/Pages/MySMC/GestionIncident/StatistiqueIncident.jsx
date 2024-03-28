@@ -36,7 +36,7 @@ function StatistiqueIncident() {
   return (
 <div id='home'>
      <Header/>
-     <br />
+   
        <Container>
         <Row>
           <Col sm={8}>
@@ -76,44 +76,7 @@ function StatistiqueIncident() {
           </Col>
         </Row>
        </Container>
-        {/* <div style={{position:"relative"}}>
-        <MenuPersoGesIncident  propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
-        </div>
-        <div style={{position:"relative",top:"30%"}}>
-        <NavigatePerso  propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick} />
-        </div>
-        <Container>
-        <div id='title'>
-            <Row>
-            <Col xs={9} className='content'>
-            <Title text="Historique des avis"/>
-            </Col> 
-            </Row>
-          </div>
-            <br />
-            <div style={{display:"flex"}}>
-            <div className='mb-4' >
-             <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small' type='date' sx={{width:"250px",marginRight:"35px"}}/>
-             </div>
-             <div className='mb-4' >
-             <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small' type='date' sx={{width:"250px",marginRight:"35px"}}/>
-             </div>
-             <div  className='mb-4' id='search'>
-              <Button style={{ backgroundColor:"#d9534f", borderColor: " #d9534f",width:"240px"}}><FaSearch/>Obtenir Statistiques</Button> 
-             </div>
-            
-        </div>
-            <div className='col-xs-12 col-sm-6 col-md-4' style={{position:"absolute",width:"66%"}}>
-              <Grid >
-                <h5 className=' alert alert-info' style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500",color:"#31708F"}}>
-                 Information : Merci d'effectuer une recherche au préalable pour afficher les avis
-                 </h5>
-              </Grid>
-            </div>
-           
-        </Container> */}
+        
  </div>
   )
 }

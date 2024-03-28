@@ -10,6 +10,8 @@ import { IoStatsChart } from "react-icons/io5";
 import { Container,Row,Col,Button } from 'react-bootstrap'
 import Title from '../../../Card/Title/Title'
 import { InputLabel,TextField,Grid } from '@mui/material'
+import { FaDownload } from 'react-icons/fa'
+import Get from '../../../API/Get'
 
 
 const ajoutAvisItemsMenu =[
@@ -27,70 +29,101 @@ const ajoutAvisItemsMenu =[
       ];
 
 function RechercheAvis() {
-    useAuth()
+   
     const [currentForm, setCurrentForm] = useState("")
+    const [text,setText]=useState(" Information : Merci d'effectuer une recherche au préalable pour afficher les avis");
+    const  [url,setUrl]=useState("")
+  
     const handleMenuClick = (link)=>{
         setCurrentForm(link);
         console.log(link);
-      }
+      }; 
+
+      const handleSearchClick = (link) =>{
+        const numeroAvis = document.getElementById('numeroAvis').value;
+        const dateDebut = document.getElementById('dateDebut').value;
+        const dateFin = document.getElementById('dateFin').value;
+        const application = document.getElementById('application').value;
+        setUrl(`http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`);
+        setText(`Resultat de la dernière recherche : | Numéro Avis : ${numeroAvis}` );
+        
+        setUrl(`http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncident/searchedAvisByAppName`);
+    
+      };
+
+      const columns = [
+        // Définissez les colonnes de votre DataTable
+        { name: 'Date Création', selector: 'dateCreation', sortable: true },
+        { name: 'N°Avis', selector: 'numAvis', sortable: true },
+        { name: 'Titre', selector: 'titre', sortable: true },
+        { name: 'Etat', selector: 'etat', sortable: true },
+        { name: 'Action', selector: '', sortable: true },
+      
+      ];
   return (
     <div id='home'>
-        <div>
          <Header/>
-         </div>   
-    <div>
-        <div style={{position:"relative",top:"120%"}}>
-        <MenuPersoGesIncident  propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
-        </div>
-        <div>
-        <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
-        </div>
-    </div>
-    <Container>
-        <div id='title'>
-        <Row>
-         <Col xs={9} className='content'>
-          <Title text="Recherche des avis"/>
-         </Col> 
-         </Row>
-        </div>
-        <br />
+         <br />
+         <Container>
+            <Row>
+                <Col sm={8} style={{marginTop:"-3%"}}>
+                <Title text="Recherche des avis"/>
+                <br />
         <div style={{display:"flex"}}>
-         <div className='mb-4' >
+         <div className='mb-3' >
              <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Numéro avis</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small' placeholder='Ex:XXX' sx={{width:"130px",marginRight:"35px"}}/>
+             <TextField id='numeroAvis' variant='outlined'  size='small' placeholder='Ex:XXX' sx={{width:"120px",marginRight:"20px"}}/>
              </div>
-             <div className='mb-4' >
+             <div className='mb-3' >
              <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small' type='date' sx={{marginRight:"35px"}}/>
+             <TextField id='dateDebut' variant='outlined'  size='small' type='date' sx={{marginRight:"20px"}}/>
              </div>
-             <div className='mb-4' >
+             <div className='mb-3' >
              <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small' type='date' sx={{marginRight:"35px"}}/>
+             <TextField id='dateFin' variant='outlined'  size='small' type='date' sx={{marginRight:"20px"}}/>
              </div>
-             <div className='mb-4' >
+             <div className='mb-3' >
              <InputLabel sx={{marginLeft:"6%"}} id="demo-simple-select-label">Application</InputLabel>&nbsp;
-             <TextField variant='outlined'  size='small'placeholder='Ex:OrangeMoney' sx={{width:"170px",marginRight:"27px"}}/>
+             <TextField id='application' variant='outlined'  size='small'placeholder='Ex:OrangeMoney' sx={{width:"150px",marginRight:"17px"}}/>
              </div>
-             <div  className='mb-4' id='search' >
-              <Button style={{ backgroundColor:" #C9302C", borderColor: " #C9302C"}}><FaSearch/></Button>
+             <div  className='mb-3' id='search' >
+              <Button onClick={handleSearchClick} style={{ backgroundColor:" #C9302C", borderColor: " #C9302C"}}><FaSearch/></Button>
              </div>
 
-            </div>
-            <div className='col-xs-12 col-sm-6 col-md-4' style={{position:"absolute",width:"66%"}}>
-              <Grid >
-                  <h5 className=' alert alert-info' style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500",color:"#31708F"}}>
-                      Information : Merci d'effectuer une recherche au préalable pour afficher les avis
-                  </h5>
-              </Grid>
-          </div>
+                </div>
+                <div className='col-xs-12 col-sm-6 col-md-4' style={{position:"absolute",width:"58%"}}>
+                <Grid >
+                    <h5 className=' alert alert-info' style={{fontSize:"14px",fontFamily:"inherit",fontWeight:"500",color:"#31708F"}}>
+                        {text}
+                    </h5>
+                </Grid>
+                </div>
+                </Col>
+                <Col sm={4}>
+                <MenuPersoGesIncident  propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
+                </Col>
+            </Row>
+            <Row>
+            <Col xs={8}>
+                <br />
+                <br />
+                <br />
+                 {url && 
+                 (<div>
+                    <Button variant='danger'><FaDownload/> Exporter problèmes au format Excel </Button>
+                    <Get url={url} columns={columns} showTable={true} />
+                 </div>)   
+                 }
+            </Col>
+            <Col xs={4}>
+                <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
 
-             
-        <div>
-
-        </div>
-    </Container>
-    </div>
+            </Col>
+          </Row>
+         </Container>
+         
+    
+    </div> 
   
    
      
