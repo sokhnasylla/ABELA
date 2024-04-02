@@ -7,13 +7,15 @@ import FormVerifLogin from './FormVerifLogin';
 import FormVerifNumHlr from './FormVerifNumHlr';
 import FormVerifLogKaabu from './FormVerifLogKaabu';
 import MenuPerso from '../../Card/MenuPerso/MenuPerso';
+import { Row,Col, Container } from 'react-bootstrap';
+import MenuPersoGesProbleme from '../MySMC/GestionProbleme/MenuPersoGesProbleme';
+import MenuPersoGesIncident from '../MySMC/GestionIncident/MenuPersoGesIncident';
 
 const kaabuItemsMenus=[
 
-    {label:"Verification d'un numero sur simplissimo",link:"verifnumsimplissimo"},
-    {label:"Verification d'un login sur simplissimo",link:"veriflogsimplissimo"},
-    {label:"Verification d'un numero sur HLR",link:"verifnumhlr"},
-    {label:"Verification d'un numero sur kaabu",link:"veriflogkaabu"}
+    {label:"Espace Client",link:"verifnumsimplissimo"},
+    {label:"Espace Vendeur",link:"veriflogsimplissimo"},
+   
 ];
 
 function Kaabu() {
@@ -28,14 +30,26 @@ function Kaabu() {
   
   return (
     <div>
-        <Header/>
-        <MenuPerso propsMenuItems={kaabuItemsMenus} onItemClick={handleMenuClick} />
-        <div>
+      <Header/>
+      <br />
+      <Container>
+      <Row>
+        <Col sm={8}>
+        </Col>
+
+        <Col  sm={4}>
+        <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus} onItemClick={handleMenuClick} />
+        </Col>
+      </Row>
+      </Container>
+        
+        
+        {/* <div>
         {currentForm === "verifnumsimplissimo" ?<FormVerifNum/> : null}
         {currentForm === "veriflogsimplissimo" ?<FormVerifLogin/> : null}
         {currentForm === "verifnumhlr" ?<FormVerifNumHlr/> : null}
         {currentForm === "veriflogkaabu" ?<FormVerifLogKaabu/> : null}
-      </div>
+      </div> */}
 
     </div>
   )
