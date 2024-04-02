@@ -9,8 +9,7 @@ import NavigatePerso from './NavigatePerso';
 import { FaPlusCircle, FaSearch, FaHome,FaChartLine,FaPaperclip } from 'react-icons/fa';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
-import { IoStatsChart } from "react-icons/io5";
-import AjoutAvis from "./AjoutAvis"
+import { IoStatsChart } from "react-icons/io5"
 import  MenuPersoGesIncident from '../GestionIncident/MenuPersoGesIncident'
 import Get from '../../../API/Get';
 
@@ -23,7 +22,7 @@ const gestionIncidentItemsMenu =[
 
 
 const gestionIncidentItemsNavigate =[
-{label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
+{label: " Gestion incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
 { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
 { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
 { label: " Consignes Orchestrées", link: "#",icon:FaPaperclip},
@@ -33,7 +32,10 @@ const gestionIncidentItemsNavigate =[
 
 const columns = [
   // Définissez les colonnes de votre DataTable
-  { name: 'Date Création', selector: 'dateCreation', sortable: true },
+  { name: 'Date Création', 
+    selector: 'dateCreation', 
+    sortable: true, 
+    cell: row => row.dateCreation ? <span>{new Date(row.dateCreation).toLocaleDateString('fr-FR')}</span> : <span>N/A</span> },
   { name: 'N°Avis', selector: 'numAvis', sortable: true },
   { name: 'Titre', selector: 'titre', sortable: true },
   { name: 'Etat', selector: 'etat', sortable: true },

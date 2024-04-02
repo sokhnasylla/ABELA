@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { IoIosWarning } from "react-icons/io";
-
-import { Col, Container, Row } from 'react-bootstrap'
+import { IoIosWarning} from "react-icons/io";
+import { IoEye } from "react-icons/io5";
+import { FaEye } from "react-icons/fa";
+import { Col, Container, Row,Button } from 'react-bootstrap'
 import Header from '../../../Header/Header'
 import Title from '../../../Card/Title/Title'
 import Get from '../../../API/Get'
@@ -11,11 +12,30 @@ import { IoStatsChart } from "react-icons/io5";
 import NavigatePerso from '../GestionIncident/NavigatePerso';
 import MenuPersoGesProbleme from './MenuPersoGesProbleme'
 import { FaPaperclip } from "react-icons/fa6";
+import { Link } from 'react-router-dom'; // Importer le composant Link
+
+// Composant de cellule personnalisé pour la colonne "Action"
+const CelluleAction = ({ id }) => (
+  <div>
+    {/* Votre bouton avec le composant fourni */}
+    <Link to={`/mysmc/gestionprobleme/details/${id}`}> {/* Rediriger vers "/details/id" au clic */}
+      <Button variant="info" 
+          style={{backgroundColor: "#31B0D5",padding:"1px 5px",lineHeight:"1.2",borderRadius:"3px"}}
+          title="Voir les détails du problème"
+        
+          >
+        <FaEye color='white' />
+      </Button>
+    </Link>
+  </div>
+);
 
 
 
 
 const GestionProbleme = () =>{
+
+  
 
   const [currentForm, setCurrentForm] = useState("")
 
@@ -43,9 +63,12 @@ const GestionProbleme = () =>{
     // Définissez les colonnes de votre DataTable
     { name: 'N°Probleme', selector: 'id', sortable: true },
     { name: 'Application', selector: 'application', sortable: true },
-    { name: 'Date Création', selector: 'dateCreation', sortable: true },
+    { name: 'Date Création',
+      selector: 'dateCreation',
+      sortable: true ,
+      cell: row => row.dateCreation ? <span>{new Date(row.dateCreation).toLocaleDateString('fr-FR')}</span> : <span>N/A</span> },
     { name: 'Etat', selector: 'etat', sortable: true },
-    { name: 'Action', selector: 'av', sortable: true },
+    { name: 'Action', sortable: true, cell: row => <CelluleAction id={row.id} /> },
 
   ];
 

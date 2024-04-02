@@ -36,6 +36,8 @@ import Kaabu from './components/Pages/Kaabu/Kaabu';
 import RechercheProbleme from './components/Pages/MySMC/GestionProbleme/RechercheProbleme';
 import AnaTestRas from './components/Pages/MySMC/SuivisActivites/AnaTestRas';
 import MonProfil from './components/Pages/MonProfil/MonProfil';
+import { Details } from '@mui/icons-material';
+import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsProbleme/DetailsProbleme';
 
 
 
@@ -66,6 +68,7 @@ function App() {
             < Route path="/mysmc/gestionprobleme" element={<GestionProbleme/>} />
             < Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<RechercheProbleme/>} />
             < Route path="/mysmc/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
+            <Route path={`/mysmc/gestionprobleme/details/:id`} element={<DetailsProbleme/>} />
             < Route path="/mysmc/etatsupervision" element={<EtatSupervision/>} />
             < Route path="/etatsupervision/alarmesok" element={<AlarmeOk/>} />
             < Route path="/etatsupervision/vr04service" element={<VR04Service/>} />

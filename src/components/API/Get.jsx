@@ -36,6 +36,7 @@ function Get({ url, columns, showTable = true }) {
   }, [url]);
 
   return (
+
     <div>
       {loading && <p>Chargement...</p>}
       {/* {error && <p>{error}</p>} */}
