@@ -77,7 +77,7 @@ const GestionProbleme = () =>{
     <div>
 
       <Header/>
-      <Container style={{marginTop:"2%"}}>
+      <Container>
         <Row>
             <Col sm={8} className='content'>
               <Title text="Liste des problémes en cours"/>

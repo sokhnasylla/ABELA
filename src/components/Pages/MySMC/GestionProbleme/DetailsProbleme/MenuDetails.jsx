@@ -6,14 +6,14 @@ import { IoIosInformationCircle } from "react-icons/io";
 
 function MenuDetails() {
   return (
-    <div>
+    <div style={{width:"75%"}} className='float-end'>
       <Card 
         style={{ display: 'flex',
                  flexDirection:"row",
                  alignItems: 'center',
                  justifyContent: 'space-around' ,
-                 padding:"5px",color:"#148C8A",
-                 border:"2px solid #148C8A"
+                 padding:"1Opx",color:"#148C8A",
+                 border:"2px solid #148C8A",
                  }}>
           <FaBars />
           <p style={{marginBottom: '0' }}>Menu Personnalisé</p>

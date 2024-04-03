@@ -16,3 +16,27 @@
     font-size: .9em;
     font-family: fantasy;
 }
+/* .menu{
+    margin-bottom: 10px;
+} */
+ .Ad .text{
+    display: flex;
+    justify-content: center;
+    font-size: small;
+    color: white;
+    margin-top: 5px;
+    background-color: #148C8A;
+    width: 8.9rem;
+    height: 1.5rem;
+    border-radius: 5px;
+    text-align: center;
+
+} 
+
+/* .Ad .iconsub{
+    width: 90%;
+    font-size: 3rem;
+    color: #148C8A;
+    margin-left: 20px;
+  
+} */

@@ -58,9 +58,9 @@ function GestionIncident() {
     
     {/* <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  /> */}
     <br />
-    <Container className='body'>
+    <Container className='body'style={{marginLeft:"5%"}}>
         <Row>
-            <Col sm={8} className='content' style={{marginTop:"-3%"}}>
+            <Col sm={8} className='content'>
             <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024"/>
 
             <br />
@@ -88,6 +88,7 @@ function GestionIncident() {
          </Grid>
          <center><h3>83%</h3></center>
         </div>
+        <br /> <br /> <br /> <br />
             </Col> 
             <Col sm={4}>
             <MenuPersoGesIncident propsMenuItems={gestionIncidentItemsMenu} onItemClick={handleMenuClick}  />
@@ -95,9 +96,9 @@ function GestionIncident() {
         </Row>
        <hr />
         <Row>
-        <Col sm={8} className='content' style={{marginTop:"-3%"}}>
+        <Col sm={8} className='content'>
         <Title text="Liste des avis d'incidents / d'information en cours"/>
-        <Get url="http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncidents/encours" columns={columns} />
+        <Get url="http://localhost:8085/api/gestionIncidents/avisIncidents/encours" columns={columns} />
         </Col>
         <Col sm={4}>
         <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
@@ -105,9 +106,9 @@ function GestionIncident() {
         </Row>
         <hr />
         <Row>
-        <Col sm={8} className='content' style={{marginTop:"-3%"}}>
+        <Col sm={8} className='content'>
         <Title text="Les avis fermés, Clotûrés ou annulés récemment"/>
-        <Get url="http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncidents/clos/ferme/annule" columns={columns} />
+        <Get url="http://localhost:8085/api/gestionIncidents/avisIncidents/clos/ferme/annule" columns={columns} />
         </Col>
         
         </Row>

@@ -54,10 +54,7 @@
     font-weight:700;
     color:#000;
 }
- #bouton{
-    position: absolute;
-    top: 190%;
-    margin-left: 20%;
+ #bouton{   
     border:#449D44;
     font-size:14px;
     font-Family:Helvetica Neue,Helvetica,Arial,sans-serif;

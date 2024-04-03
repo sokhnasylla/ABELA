@@ -18,7 +18,7 @@ const ajoutAvisItemsMenu =[
     { label: " Rechercher avis", link: "/gestionincident/rechercheavis",icon:FaSearch},
     ];
     const gestionIncidentItemsNavigate =[
-      {label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
+      {label: " Gestion incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
       { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
       { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
       { label: " Consignes Orchestrées", link: "#"},
@@ -80,7 +80,7 @@ function StatistiqueIncident() {
             </div>
             <hr />
           </Col>
-          <Col sm={4}>
+          <Col sm={4} style={{marginTop:"3%"}}>
           <MenuPersoGesIncident  propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
           </Col>
         </Row>
