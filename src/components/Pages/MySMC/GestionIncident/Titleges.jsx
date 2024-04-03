@@ -5,7 +5,7 @@ import { FaArrowCircleDown } from "react-icons/fa";
 
 function Titleges({ text }) {
     return (
-      <Card className="titre" style={{marginBottom:"10px",display:"flex",justifyContent:"space-beetween"}}>
+      <Card className="titre" style={{marginBottom:"10px",display:"flex",justifyContent:"space-around"}}>
         <p style={{textAlign:"center"}}>
           <IoIosInformationCircle />
             {text}

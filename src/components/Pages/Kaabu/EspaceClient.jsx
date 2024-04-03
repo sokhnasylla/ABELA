@@ -12,6 +12,8 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
 import Get from '../../API/Get'
+import FormKaabu from './FormKaabu'
+import FormSiplissimo from './FormSiplissimo'
 
 
 function EspaceClient() {
@@ -24,7 +26,7 @@ function EspaceClient() {
     { label: "Page d'acceuil", link: "/mysmc", icon: FaHome },
 ];
     const [currentForm, setCurrentForm] = useState("");
-    const [url, setUrl] = useState("");
+    const [url, setUrl] = useState(false);
     const [data, setData] = useState([]);
     const [noData, setNoData] = useState(false);
 
@@ -54,7 +56,7 @@ function EspaceClient() {
     }
 }, [url]);
     const handleSearchClick = (link) =>{
-      setUrl('');
+      setUrl(true);
     };
   return (
     <div id='home'>
@@ -81,27 +83,18 @@ function EspaceClient() {
             <Row>
               <Col sm={8}>
                     {url && (
-                         <div>
-                           <Title text="Informations du client"/>
-                            {data.length > 0 ? (
-                            <Get url={url} columns={columns} showTable={true} />
-                             ) : ( 
-                            <table className="table">
-                            <thead>
-                            <tr>
-                            {columns.map((column, index) => (
-                            <th key={index}>{column.name}</th>
-                            ))}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                            <td colSpan={columns.length}>Aucune donnée disponible pour cette recherche.</td>
-                            </tr>
-                            </tbody>
-                            </table>
-                            )}
-                            </div>
+                      <div>
+                        <Title text="Informations du client"/>
+                        <br />
+                        <div style={{display:"flex"}}>
+                           <FormKaabu />
+                        
+                           <FormSiplissimo />
+                         </div>   
+                             <br />
+                           
+                          
+                      </div>
                       )}
               </Col>
               <Col sm={4} style={{ marginTop: "3%" }}>
