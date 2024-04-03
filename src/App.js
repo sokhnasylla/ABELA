@@ -36,6 +36,9 @@ import Kaabu from './components/Pages/Kaabu/Kaabu';
 import RechercheProbleme from './components/Pages/MySMC/GestionProbleme/RechercheProbleme';
 import AnaTestRas from './components/Pages/MySMC/SuivisActivites/AnaTestRas';
 import MonProfil from './components/Pages/MonProfil/MonProfil';
+import VerificationNum from './components/Pages/Kaabu/EspaceClient';
+import EspaceClient from './components/Pages/Kaabu/EspaceClient';
+import EspaceVendeur from './components/Pages/Kaabu/EspaceVendeur';
 
 
 
@@ -58,6 +61,8 @@ function App() {
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />
             <Route path="/kaabu" element={<Kaabu/>} /> 
+            <Route path="/kaabu/espace/client" element={<EspaceClient/>} /> 
+            <Route path="/kaabu/espace/vendeur" element={<EspaceVendeur/>} /> 
             <Route path="/network" element={<Network/>} />
             < Route path="/mysmc/gestionincident" element={<GestionIncident/>} />
             < Route path="/gestionincident/ajoutavis" element={<AjoutAvis/>} />

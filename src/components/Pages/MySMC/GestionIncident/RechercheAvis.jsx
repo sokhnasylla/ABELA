@@ -131,28 +131,28 @@ function RechercheAvis() {
                         <br />
                         <br />
                         {url && (
-                            <div>
-                                <Button variant='danger'><FaDownload/> Exporter problèmes au format Excel </Button>
-                                &nbsp;
-                                <Button variant='' style={{backgroundColor:"#f0ad4e",color:"white"}}><FaDownload/> Exporter P.A au format Excel </Button>
-                                {data.length > 0 ? (
-                                    <Get url={url} columns={columns} showTable={true} />
-                                ) : ( 
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                {columns.map((column, index) => (
-                                                    <th key={index}>{column.name}</th>
-                                                ))}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colSpan={columns.length}>Aucune donnée disponible pour cette recherche.</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                )}
+                         <div>
+                            <Button variant='danger'><FaDownload/> Exporter problèmes au format Excel </Button>
+                             &nbsp;
+                            <Button variant='' style={{backgroundColor:"#f0ad4e",color:"white"}}><FaDownload/> Exporter P.A au format Excel </Button>
+                            {data.length > 0 ? (
+                            <Get url={url} columns={columns} showTable={true} />
+                             ) : ( 
+                            <table className="table">
+                            <thead>
+                            <tr>
+                            {columns.map((column, index) => (
+                            <th key={index}>{column.name}</th>
+                            ))}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                            <td colSpan={columns.length}>Aucune donnée disponible pour cette recherche.</td>
+                            </tr>
+                            </tbody>
+                            </table>
+                            )}
                             </div>
                         )}
                     </Col>
