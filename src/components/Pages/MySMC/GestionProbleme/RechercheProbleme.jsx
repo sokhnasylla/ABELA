@@ -10,7 +10,7 @@ import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
 import NavigatePerso from '../GestionIncident/NavigatePerso';
 import Get from '../../../API/Get';
-import DownloadIcon from '@mui/icons-material/Download';
+import "../GestionIncident/ajoutavis.css"
 
 const ajoutAvisItemsMenu = [
   { label: " Lister les problemes", link: "/mysmc/gestionprobleme", icon: FaList },
@@ -76,20 +76,20 @@ function RechercheProbleme() {
               <br />
               <div style={{ display: "flex" }}>
                 <div className='mb-3' >
-                  <InputLabel sx={{ marginLeft: "4%", fontWeight: "800", fontFamily: "'fantasy'!important" }} id="demo-simple-select-label">Numéro problème</InputLabel>&nbsp;
+                  <InputLabel sx={{ marginLeft: "4%" }} id="demo-simple-select-label">Numéro problème</InputLabel>&nbsp;
                   <TextField id="numeroProbleme" variant='outlined' size='small' placeholder='Ex:XXX' sx={{ width: "120px", marginRight: "25px" }} />
                 </div>
                 <div className='mb-3' >
-                  <InputLabel sx={{ marginLeft: "4%", fontWeight: "700", fontFamily: "'fantasy'!important" }} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
+                  <InputLabel sx={{ marginLeft: "4%"}} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
                   <TextField id="dateDebut" variant='outlined' size='small' type='date' sx={{ marginRight: "25px" }} />
                 </div>
                 <div className='mb-3' >
-                  <InputLabel sx={{ marginLeft: "4%", fontWeight: "700", fontFamily: "'fantasy'!important" }} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
+                  <InputLabel sx={{ marginLeft: "4%"}} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
                   <TextField id="dateFin" variant='outlined' size='small' type='date' />
                 </div>
                 <div className='mb-3' >
-                  <InputLabel sx={{ marginLeft: "4%", fontWeight: "700", fontFamily: "'fantasy'!important" }} id="demo-simple-select-label">Application</InputLabel>&nbsp;
-                  <TextField id="application" variant='outlined' size='small' placeholder='Ex:OrangeMoney' sx={{ width: "155px", marginRight: "10px" }} />
+                  <InputLabel sx={{ marginLeft: "4%"}} id="demo-simple-select-label">Application</InputLabel>&nbsp;
+                  <TextField id="application" variant='outlined' size='small' placeholder='Ex:OrangeMoney' sx={{ width: "155px", marginRight: "25px" }} />
                 </div>
                 <div className='mb-3' id='search' >
                   <Button onClick={handleSearchClick} style={{ backgroundColor: " #C9302C", borderColor: " #C9302C" }}><FaSearch /></Button>
@@ -103,7 +103,7 @@ function RechercheProbleme() {
                 </Grid>
               </div>
             </Col>
-            <Col xs={4} style={{marginTop:"4%"}}>
+            <Col xs={4} style={{marginTop:"3%"}}>
               <MenuPersoGesProbleme propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick} />
             </Col>
           </Row>

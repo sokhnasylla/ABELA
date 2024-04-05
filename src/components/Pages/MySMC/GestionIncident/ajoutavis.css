@@ -48,18 +48,13 @@
     margin-right: 8px; 
     font-size: 14px;
 }
-.demo-simple-select-label{
-    font-size: 14px;
+#demo-simple-select-label{
     font-family: fantasy;
-    color: #000;
+    font-size:14px;
+    font-weight:700;
+    color:#000;
 }
-.textfield{
-    font-size: 14px;
-}
-/* #bouton{
-    position: absolute;
-    top: 190%;
-    margin-left: 20%;
+ #bouton{   
     border:#449D44;
     font-size:14px;
     font-Family:Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -71,7 +66,6 @@
 #search{
     position: relative;
     color: white;
-  
     width: 45px;
     height: 37px;
     padding-left: 12px;

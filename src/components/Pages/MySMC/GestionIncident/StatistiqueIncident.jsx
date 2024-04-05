@@ -10,6 +10,7 @@ import { IoStatsChart } from "react-icons/io5";
 import Title from '../../../Card/Title/Title'
 import { Container,Row,Col,Button, Card } from 'react-bootstrap'
 import {InputLabel,TextField,Grid} from '@mui/material'
+import Taux from '../../../Card/Taux'
 
 
 const ajoutAvisItemsMenu =[
@@ -17,7 +18,7 @@ const ajoutAvisItemsMenu =[
     { label: " Rechercher avis", link: "/gestionincident/rechercheavis",icon:FaSearch},
     ];
     const gestionIncidentItemsNavigate =[
-      {label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
+      {label: " Gestion incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
       { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
       { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
       { label: " Consignes Orchestrées", link: "#"},
@@ -31,6 +32,7 @@ const ajoutAvisItemsMenu =[
 function StatistiqueIncident() {
 
     const [currentForm, setCurrentForm] = useState("")
+    const [etat,setEtat]=useState(false)
     const [text,setText]=useState("Information : Merci d'effectuer une recherche au préalable pour afficher les avis");
 
     const handleMenuClick = (link)=>{
@@ -43,13 +45,14 @@ function StatistiqueIncident() {
     const datedebut=document.getElementById("dateDebut").value
     const datefin=document.getElementById("dateFin").value
     setText(`Resultat de la dernière recherche :  Date Fin : ${datefin} | Date début : ${datedebut}` )
+    setEtat(true)
 
     console.log(datedebut,datefin);
   }
   return (
 <div id='home'>
      <Header/>
-     <br />
+   
        <Container>
         <Row>
           <Col sm={8}>
@@ -75,19 +78,58 @@ function StatistiqueIncident() {
                  </h5>
               </Grid>
             </div>
+            <hr />
           </Col>
-          <Col sm={4}>
+          <Col sm={4} style={{marginTop:"3%"}}>
           <MenuPersoGesIncident  propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
           </Col>
         </Row>
-        <Row>
+        <Row style={{margin:"10px 10px"}}>
           <Col sm={8}>
-            <Row>
-            <Col ><Card style={{height:"100%" }}></Card></Col>
-            <Col ><Card style={{height:"100%" }}>Hello</Card></Col>
-            <Col ><Card style={{height:"100%" }}>Hello</Card></Col>
-          </Row>
-           
+
+            {etat &&(
+              <div>
+                    <Row>
+              <Col>
+              <Taux taux="44" text="Total des avis Incidents" background="#337ab7" color="white"/>
+              </Col>
+              <Col >
+              <Taux taux="31" text="Total des avis Fermés" background="#337ab7" color="white"/>
+              </Col>
+              <Col >
+               <Taux taux="11" text="Total des avis ouverts" background="#337ab7" color="white"/>
+              </Col>
+            </Row>
+             <Row style={{marginTop:"10px"}}>
+              <Col>
+              <Taux taux="2" text="Taux avis annulés" background="#337ab7" color="white"/>
+              </Col>
+              <Col >
+              <Taux taux="30" text="Total avis clos avec détection dans les délais" background="#337ab7" color="white"/>
+              </Col>
+              <Col >
+               <Taux taux="14" text="Total avis clos avec notification dans les délais" background="#337ab7" color="white"/>
+              </Col>
+             </Row>
+             <Row style={{marginTop:"10px"}}>
+              <Col>
+              <Taux taux="44%" text="Taux Notification incidents" background="#DFF0D8" color="#3c763d"/>
+              </Col>
+              <Col >
+              <Taux taux="89%" text="Taux Detection incidents" background="#DFF0D8" color="#3c763d"/>
+              </Col>
+              <Col >
+               <Taux taux="50%" text="Taux Traitement 4h" background="#DFF0D8" color="#3c763d"/>
+              </Col>
+             </Row>
+             <Row style={{marginTop:"10px"}}>
+             <Col >
+               <Taux taux="50%" text="Taux Traitement 4h" background="#DFF0D8" color="#3c763d"/>
+              </Col>
+             </Row>
+              </div>
+            )}
+        
           </Col>
           <Col sm={4}>
           <NavigatePerso  propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick} />

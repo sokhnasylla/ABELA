@@ -25,7 +25,7 @@ const ajoutAvisItemsMenu =[
   { label: " Statistique avis d'incidents", link: "/gestionincident/statistique",icon:StackedLineChartTwoToneIcon}
   ];
   const gestionIncidentItemsNavigate =[
-    {label: " Gestion Incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
+    {label: " Gestion incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
     { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
     { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
     { label: " Consignes Orchestrées", link: "#"},
@@ -237,7 +237,7 @@ useEffect(() => {
     <div id='home'>
     <Header/>
     <br />
-      <Container  className='body'style={{marginLeft:"5%"}}>
+      <Container  className='body'>
         <Row>
           <Col sm={8} className='content'>
              <Title text="Gestion des avis d'incidents - Formulaire de déclaration d'avis"/>
@@ -260,7 +260,7 @@ useEffect(() => {
                 </tbody>
              </Table>
           </Col>
-          <Col sm={4}>
+          <Col sm={4} style={{marginTop:"3%"}}>
            <MenuPersoGesIncident propsMenuItems={ajoutAvisItemsMenu} onItemClick={handleMenuClick}  />
           </Col>
         </Row>
@@ -441,7 +441,6 @@ useEffect(() => {
             <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
           </Col>
         </Row>
-        <hr />
         <div className='col-sm-12' id='bouton' style={{display:"flex", justifyContent:"center",marginBottom:"10px"}}> 
          <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}
             onClick={handleSubmit} // Appel de la fonction handleSubmit lors du clic sur le bouton 
