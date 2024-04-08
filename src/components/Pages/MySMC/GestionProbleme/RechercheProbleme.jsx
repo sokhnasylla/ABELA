@@ -32,7 +32,7 @@ function RechercheProbleme() {
     const dateDebut = document.getElementById('dateDebut').value;
     const dateFin = document.getElementById('dateFin').value;
     const application = document.getElementById('application').value;
-     setUrl(`http://localhost:8082/ABELA-MYSMC/api/gestionproblemes/probleme/searchedProblemeByDate?dateDebut=${dateDebut}&dateFin=${dateFin}`);
+     setUrl(`http://localhost:8082/abela-mysmc/api/gestionproblemes/probleme/searchedProblemeByDate?dateDebut=${dateDebut}&dateFin=${dateFin}`);
      setText(`Resultat de la dernière recherche : | Date Fin : ${dateFin}| Date début : ${dateDebut}` )
 
 
