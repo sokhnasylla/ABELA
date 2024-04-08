@@ -69,9 +69,9 @@ function EspaceClient() {
                  <div style={{display:"flex"}}>
                  <div className='mb-3'>
                  <InputLabel sx={{ }} id="demo-simple-select-label">Numéro</InputLabel>
-                 <TextField id='numero' variant='outlined' size='small' placeholder='Ex:MISSDN' sx={{ width: "500px"}} />
+                 <TextField id='numero' variant='outlined' size='small' placeholder='Ex:MISSDN' sx={{ width: "450px"}} />
                  </div>
-                 <div className='mb-3' id='search' style={{marginLeft:"25%"}} >
+                 <div className='mb-3' id='search' style={{marginLeft:"20%"}} >
                  <Button onClick={handleSearchClick} style={{ backgroundColor: " #C9302C", borderColor: " #C9302C" }}><FaSearch /></Button>
                  </div>
                  </div>
