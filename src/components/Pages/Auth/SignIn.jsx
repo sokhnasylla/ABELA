@@ -13,8 +13,7 @@ import background from "../../../assets/background.jpeg";
 import { Navigate } from 'react-router-dom';
 import { storeTokenInLocalStorage } from './authUtils';
 import axios from 'axios';
-import { set } from 'date-fns';
-
+import { jwtDecode } from "jwt-decode";
 function SignInSide() {
   const [login, setLogin] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -36,6 +35,8 @@ function SignInSide() {
       if (response.data.success) {
         setLoggedSuccess(true);
         storeTokenInLocalStorage(response.data.data.token);
+        const decodedToken = jwtDecode(response.data.data.token);
+        console.log(decodedToken); // Affiche le contenu du token dans la console
       } else {
         setError(response.data.message); // Mettre le message d'erreur dans la variable error
       }
