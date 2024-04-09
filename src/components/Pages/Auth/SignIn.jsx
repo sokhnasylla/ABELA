@@ -27,7 +27,7 @@ function SignInSide() {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:8082/ABELA-USERMANAGEMENT/api/v1/auth/authenticate", {
+      const response = await axios.post("http://localhost:8082/abela-usermanagement/api/v1/auth/authenticate", {
         login,
         password
       });

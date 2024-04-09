@@ -1,56 +1,49 @@
-import React from 'react'
+import React,{useState} from 'react';
+import { Card, Table } from 'react-bootstrap';
 
-function FormKaabu() {
+function FormKaabu({ vendeur}) {
+
+    console.log(vendeur);
+   
   return (
-    <div> <div className='card' >
-    <div className='card-header'>
-        Kaabu:
-        <ul className='list-group list-group-flush'>
-            <li className='list-group-item'>
-                <b>Date Création:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Role:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Date Premiére Connection:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Téléphone:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Nom:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Opérations:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Contact:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Profils:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>TypeUser:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Prénom:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>E-mail:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Status:</b>
-            </li>
-            <li className='list-group-item'>
-                <b>Username:</b>
-            </li>
-        </ul>
-
-    </div>
-
-  </div></div>
-  )
+    <Card style={{width:"350px",maxWidth:"100%"}}>
+      <Card.Header className="text-center fs-4">Kaabu</Card.Header>
+      <Card.Body>
+        <Table striped bordered hover>
+          <tbody>
+          <tr>
+                            <th>Date Création:</th>
+                            <th>{vendeur.dateCreation}</th>
+                        </tr>
+                        <tr>
+                            <th>Role:</th>
+                            <th>{vendeur.role}</th>
+                        </tr>
+                        <tr>
+                            <th>Date Première Connection:</th>
+                            <th>{vendeur.datePremiereConnectionPin}</th>
+                        </tr>
+                        <tr>
+                            <th>Téléphone:</th>
+                            <th>{vendeur.telephone}</th>
+                        </tr>
+                        <tr>
+                            <th>Nom:</th>
+                            <th>{vendeur.nom}</th>
+                        </tr>
+                        <tr>
+                            <th>Opérations:</th>
+                            <th>{vendeur.operations}</th>
+                        </tr>
+                        <tr>
+                            <th>Contact:</th>
+                            <th>{vendeur.contact}</th>
+                        </tr>
+          </tbody>
+        </Table>
+      </Card.Body>
+    </Card>
+  );
 }
 
-export default FormKaabu
+export default FormKaabu;
