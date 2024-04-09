@@ -26,7 +26,9 @@ function EspaceVendeur() {
         { label: "Page d'acceuil", link: "/mysmc", icon: FaHome },
     ];
 
-    const [vendeur, setVendeur] = useState([]);
+    const [userkaabu, setUserkaabu] = useState([]);
+    const [simplissimo, setSimplissimo] = useState([]);
+
     const token = getTokenFromLocalStorage();
 
 
@@ -37,19 +39,27 @@ function EspaceVendeur() {
             },
         });
         console.log(response.data.data.userKaabu);
-        setVendeur(response.data.data.userKaabu);
+        setUserkaabu(response.data.data.userKaabu);
+        setSimplissimo(response.data.data.userSimplissimo)
        
         return response.data; 
       };
 
-    const handleSearchClick = () => {
+      const handleSearchClick = async () => {
         const identifiant = document.getElementById('identifiant').value;
-        const url=`http://localhost:8084/abela-selfservice/api/v1/kaabu/verification-user/${identifiant}`
-        GetData(url,token)
+        const url = `http://localhost:8084/abela-selfservice/api/v1/kaabu/verification-user/${identifiant}`;
+        console.log('URL:', url); // Vérifiez si l'URL est correcte
+        try {
+            const response = await GetData(url, token);
+            console.log('Response:', response); // Vérifiez la réponse de l'API
+        } catch (error) {
+            console.error('Error fetching data:', error); // Gérez les erreurs de requête
+        }
     };
+    
     useEffect(() => {
-        console.log(vendeur);
-    }, [vendeur ]);
+        
+    }, [userkaabu,simplissimo]);
 
     return (
         <div id='home'>
@@ -75,13 +85,13 @@ function EspaceVendeur() {
                 </Row>
                 <Row>
                     <Col sm={8}>
-                        {vendeur && (
+                        {userkaabu && (
                             <div>
                                 <Title text="Informations du client" />
                                 <br />
                                 <div style={{ display: "flex" }}>
-                                    <FormKaabu vendeur={vendeur} />
-                                    <FormSiplissimo/>
+                                    <FormKaabu userkaabu={userkaabu} />
+                                    <FormSiplissimo simplissimo={simplissimo}/>
                                 </div>
                                 <br />
                             </div>

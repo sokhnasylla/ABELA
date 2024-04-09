@@ -1,44 +1,57 @@
 import React,{useState} from 'react';
 import { Card, Table } from 'react-bootstrap';
 
-function FormKaabu({ vendeur}) {
+function FormKaabu({ userkaabu }) {
+  if (userkaabu.length === 0) {
+    return <div>Aucune donnée à afficher.</div>;
+  }
 
-    console.log(vendeur);
-   
   return (
-    <Card style={{width:"350px",maxWidth:"100%"}}>
+    <Card style={{ width: "350px", maxWidth: "100%" }}>
       <Card.Header className="text-center fs-4">Kaabu</Card.Header>
       <Card.Body>
         <Table striped bordered hover>
           <tbody>
-          <tr>
-                            <th>Date Création:</th>
-                            <th>{vendeur.dateCreation}</th>
-                        </tr>
-                        <tr>
-                            <th>Role:</th>
-                            <th>{vendeur.role}</th>
-                        </tr>
-                        <tr>
-                            <th>Date Première Connection:</th>
-                            <th>{vendeur.datePremiereConnectionPin}</th>
-                        </tr>
-                        <tr>
-                            <th>Téléphone:</th>
-                            <th>{vendeur.telephone}</th>
-                        </tr>
-                        <tr>
-                            <th>Nom:</th>
-                            <th>{vendeur.nom}</th>
-                        </tr>
-                        <tr>
-                            <th>Opérations:</th>
-                            <th>{vendeur.operations}</th>
-                        </tr>
-                        <tr>
-                            <th>Contact:</th>
-                            <th>{vendeur.contact}</th>
-                        </tr>
+            <tr>
+              <th>Date Création:</th>
+              <td>
+                {new Date(userkaabu[0].dateCreation).toLocaleDateString(
+                  "fr-FR",
+                  {
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                  }
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th>Role:</th>
+              <td>{userkaabu[0].role}</td>
+            </tr>
+            <tr>
+              <th>Date Première Connection:</th>
+              <td>{userkaabu[0].datePremierConnectionPin}</td>
+            </tr>
+            <tr>
+              <th>Téléphone:</th>
+              <td>{userkaabu[0].telephone}</td>
+            </tr>
+            <tr>
+              <th>Nom:</th>
+              <td>{userkaabu[0].nom}</td>
+            </tr>
+            <tr>
+              <th>Opérations:</th>
+              <td>{userkaabu[0].operations}</td>
+            </tr>
+            <tr>
+              <th>Contact:</th>
+              <td>{userkaabu[0].contact}</td>
+            </tr>
           </tbody>
         </Table>
       </Card.Body>
@@ -47,3 +60,4 @@ function FormKaabu({ vendeur}) {
 }
 
 export default FormKaabu;
+
