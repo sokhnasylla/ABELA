@@ -27,8 +27,7 @@ function EspaceClient() {
 ];
     const [currentForm, setCurrentForm] = useState("");
     const [url, setUrl] = useState(false);
-    const [data, setData] = useState([]);
-    const [noData, setNoData] = useState(false);
+    
 
     const handleMenuClick = (link)=>{
         setCurrentForm(link);
@@ -38,26 +37,13 @@ function EspaceClient() {
         {label:"Espace Client",link:"/kaabu/espace/client",icon:FaUserGroup},
         {label:"Espace Vendeur",link:"/kaabu/espace/vendeur",icon:FaUserGroup},  
     ];
-    const columns = [
-      { name: 'Date Création', selector: 'dateCreation', sortable: true },
-      { name: 'N°Avis', selector: 'numAvis', sortable: true },
-      { name: 'Titre', selector: 'titre', sortable: true },
-      { name: 'Etat', selector: 'etat', sortable: true },
-  ];
-  useEffect(() => {
-    if (url) {
-        fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                setData(result);
-                setNoData(result.length === 0);
-            })
-            .catch(error => console.error('Error:', error));
-    }
-}, [url]);
-    const handleSearchClick = (link) =>{
-      setUrl(true);
+    const [identifiant, setIdentifiant] = useState('');
+   
+  
+    const handleSearchClick = () => {
+      
     };
+  
   return (
     <div id='home'>
         <Header/>
@@ -69,7 +55,13 @@ function EspaceClient() {
                  <div style={{display:"flex"}}>
                  <div className='mb-3'>
                  <InputLabel sx={{ }} id="demo-simple-select-label">Numéro</InputLabel>
-                 <TextField id='numero' variant='outlined' size='small' placeholder='Ex:MISSDN' sx={{ width: "450px"}} />
+                 <TextField id='numero'
+                  variant='outlined' 
+                  size='small'
+                   placeholder='Ex:MSISDN'
+                    sx={{ width: "450px"}} 
+                    value={identifiant}
+                    />
                  </div>
                  <div className='mb-3' id='search' style={{marginLeft:"20%"}} >
                  <Button onClick={handleSearchClick} style={{ backgroundColor: " #C9302C", borderColor: " #C9302C" }}><FaSearch /></Button>
@@ -88,7 +80,6 @@ function EspaceClient() {
                         <br />
                         <div style={{display:"flex"}}>
                            <FormKaabu />
-                        
                            <FormSiplissimo />
                          </div>   
                              <br />
@@ -99,7 +90,6 @@ function EspaceClient() {
               </Col>
               <Col sm={4} style={{ marginTop: "3%" }}>
                 <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}/>
-                <Get columns={columns} showTable={true}/>
               </Col>
             </Row>
         </Container>

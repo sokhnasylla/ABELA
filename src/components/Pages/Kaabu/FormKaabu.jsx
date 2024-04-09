@@ -1,44 +1,48 @@
-import React,{useState} from 'react';
+import React from 'react';
 import { Card, Table } from 'react-bootstrap';
 
-function FormKaabu({ vendeur}) {
+function FormKaabu(props) {
+  const { vendeur } = props;
+  console.log("Type de vendeur :", typeof vendeur);
 
-    console.log(vendeur);
-   
+  if (!vendeur || typeof vendeur !== 'object') {
+    return <div>Aucune donnée à afficher</div>;
+  }
+
   return (
-    <Card style={{width:"350px",maxWidth:"100%"}}>
+    <Card style={{ width: "350px", maxWidth: "100%" }}>
       <Card.Header className="text-center fs-4">Kaabu</Card.Header>
       <Card.Body>
         <Table striped bordered hover>
           <tbody>
-          <tr>
-                            <th>Date Création:</th>
-                            <th>{vendeur.dateCreation}</th>
-                        </tr>
-                        <tr>
-                            <th>Role:</th>
-                            <th>{vendeur.role}</th>
-                        </tr>
-                        <tr>
-                            <th>Date Première Connection:</th>
-                            <th>{vendeur.datePremiereConnectionPin}</th>
-                        </tr>
-                        <tr>
-                            <th>Téléphone:</th>
-                            <th>{vendeur.telephone}</th>
-                        </tr>
-                        <tr>
-                            <th>Nom:</th>
-                            <th>{vendeur.nom}</th>
-                        </tr>
-                        <tr>
-                            <th>Opérations:</th>
-                            <th>{vendeur.operations}</th>
-                        </tr>
-                        <tr>
-                            <th>Contact:</th>
-                            <th>{vendeur.contact}</th>
-                        </tr>
+            <tr>
+              <th>Date Création:</th>
+              <td>{vendeur.dateCreation}</td>
+            </tr>
+            <tr>
+              <th>Role:</th>
+              <td>{vendeur.role}</td>
+            </tr>
+            <tr>
+              <th>Date Première Connection:</th>
+              <td>{vendeur.datePremierConnectionPin}</td>
+            </tr>
+            <tr>
+              <th>Téléphone:</th>
+              <td>{vendeur.telephone}</td>
+            </tr>
+            <tr>
+              <th>Nom:</th>
+              <td>{vendeur.nom}</td>
+            </tr>
+            <tr>
+              <th>Opérations:</th>
+              <td>{vendeur.operations}</td>
+            </tr>
+            <tr>
+              <th>Contact:</th>
+              <td>{vendeur.contact}</td>
+            </tr>
           </tbody>
         </Table>
       </Card.Body>

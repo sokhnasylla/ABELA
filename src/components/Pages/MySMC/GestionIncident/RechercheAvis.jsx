@@ -48,15 +48,15 @@ function RechercheAvis() {
         const application = document.getElementById('application').value;
 
         if (numeroAvis) {
-            setUrl(`http://localhost:8082/abela-mysmc/api/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`);
+            setUrl(`http://localhost:8085/api/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`);
             setText(`Resultat de la dernière recherche : | Numéro Avis : ${numeroAvis}`);
         }
         else if (dateDebut || dateFin) {
-            setUrl(`http://localhost:8082/abela-mysmcC/api/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`);
+            setUrl(`http://localhost:8085/api/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`);
             setText(`Resultat de la dernière recherche : | Date Fin : ${dateFin}| Date début : ${dateDebut}`);
         }
         else if (application) {
-            setUrl(`http://localhost:8082/abela-mysmc/api/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`);
+            setUrl(`http://localhost:8085/api/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`);
             setText(`Resultat de la derniere recherche : | Application : ${application}`);
         }
        
