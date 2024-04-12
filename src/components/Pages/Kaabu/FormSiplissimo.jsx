@@ -1,38 +1,42 @@
-import React from 'react'
-import { Card,Table} from 'react-bootstrap';
+import React from 'react';
+import { Card, Table } from 'react-bootstrap';
 
-function FormSiplissimo() {
+function FormSiplissimo({ simplissimo }) {
+  if (!simplissimo) {
+    return <div>Aucune donnée à afficher.</div>;
+  }
+
   return (
-    <Card style={{width:"350px",maxWidth:"100%",marginLeft:"30px"}}>
+    <Card style={{ width: "350px", maxWidth: "100%", marginLeft: "30px" }}>
       <Card.Header className="text-center fs-4">Simplissimo</Card.Header>
       <Card.Body>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <th>Login:</th>
-              <th></th>
-              </tr>
-              <tr>
-              <th>Nom:</th>
-              <th></th>
-              </tr>
+              <td>{simplissimo.login}</td>
+            </tr>
             <tr>
-              <th>Prenom:</th>
-              <th></th>
+              <th>Nom:</th>
+              <td>{simplissimo.nom}</td>
+            </tr>
+            <tr>
+              <th>Prénom:</th>
+              <td>{simplissimo.prenom}</td>
             </tr>
             <tr>
               <th>Contact:</th>
-              <th></th>
+              <td>{simplissimo.contact}</td>
             </tr>
             <tr>
               <th>Statut:</th>
-              <th></th>
+              <td>{simplissimo.statut}</td>
             </tr>
           </tbody>
         </Table>
       </Card.Body>
     </Card>
-  )
+  );
 }
 
-export default FormSiplissimo
+export default FormSiplissimo;

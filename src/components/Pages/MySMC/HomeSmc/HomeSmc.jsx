@@ -152,26 +152,25 @@ function HomeSmc() {
                           <span style={{backgroundColor:"#148C8A",color:"white",borderRadius: "5px",fontSize:"14px",padding:"2px"}}>Criticité : Faible</span>
                         <h6 style={{color:"#ea7714",fontSize:"12px"}}>2023-05-10 19:11:47, TMP_CISSE58568</h6>
                           <i > https://observability.seetlu.orange-sonatel.com/spaces/space_selector</i>
-                      </TimelineContent>
+                      </TimelineContent> 
                     </TimelineItem>
                     <TimelineItem>
                         <TimelineSeparator>
-                        <TimelineDot variant="outlined" color="primary" />
-                        <TimelineConnector />
-                    </TimelineSeparator>
-                    <TimelineContent sx={{fontSize:"14px",fontFamily:"inherit"}}> <b> CONFIGURATION ANSIBLE SUR LES DEMANDES DE SUPERVISION </b>
-                    &nbsp;<span style={{backgroundColor:"#148C8A",color:"white",borderRadius: "5px",fontSize:"14px",padding:"2px"}}>Criticité : Haute</span>
-                    <h6 style={{color:"#ea7714",fontSize:"12px"}}>2023-04-26 11:08:52, FALL028018</h6>
-                    <i>Bonjour, Pour les nouvelles demandes de Supervision , Merci de configurer systématiquement dans MYSMC l'orchestration ansible des partitions / pour linux et C ou systéme pour windows</i>
-                    
-                    </TimelineContent>
-                  </TimelineItem><br />
+                          <TimelineDot variant="outlined" color="primary" />
+                          <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent sx={{fontSize:"14px",fontFamily:"inherit"}}> <b> CONFIGURATION ANSIBLE SUR LES DEMANDES DE SUPERVISION </b>
+                        &nbsp;<span style={{backgroundColor:"#148C8A",color:"white",borderRadius: "5px",fontSize:"14px",padding:"2px"}}>Criticité : Haute</span>
+                        <h6 style={{color:"#ea7714",fontSize:"12px"}}>2023-04-26 11:08:52, FALL028018</h6>
+                        <i>Bonjour, Pour les nouvelles demandes de Supervision , Merci de configurer systématiquement dans MYSMC l'orchestration ansible des partitions / pour linux et C ou systéme pour windows</i>
+                       </TimelineContent>
+                    </TimelineItem><br />
                   <TimelineItem>
                     <TimelineSeparator>
                       <TimelineDot variant="outlined" color="primary" />
                       <TimelineConnector />
                     </TimelineSeparator>
-                    <TimelineContent sx={{fontSize:"14px",fontFamily:"inherit"}}> <b>Test </b>
+                  <TimelineContent sx={{fontSize:"14px",fontFamily:"inherit"}}> <b>Test </b>
                     &nbsp;<span style={{backgroundColor:"#148C8A",color:"white",borderRadius: "5px",fontSize:"14px",padding:"2px"}}>Criticité : Faible</span>
                     <h6 style={{color:"#ea7714",fontSize:"12px"}}>2023-04-19 08:44:18, admin</h6>
                     <i>Test</i>

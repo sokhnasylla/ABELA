@@ -1,228 +1,215 @@
-import React, { useState } from 'react'
-import Header from '../../../../Header/Header'
-import { Button, Card, Col, Container, Row, Table } from 'react-bootstrap'
-import MenuPersoGesProbleme from '../MenuPersoGesProbleme';
-import { FaPlusCircle, FaSearch, FaHome, FaBars, FaArrowCircleDown} from 'react-icons/fa';
-import { LuRefreshCcw } from "react-icons/lu";
+import React, { useState, useEffect } from 'react';
+import { Card, Col, Container, Row, Table } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { FaBars, FaArrowCircleDown } from "react-icons/fa";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Header from '../../../../Header/Header';
 import MenuDetails from './MenuDetails';
-import Title from '../../../Dashboard/Title';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import { InputLabel, MenuItem, Select, TextField, TextareaAutosize } from '@mui/material';
-import NavigatePerso from '../../GestionIncident/NavigatePerso';
-import { IoStatsChart } from "react-icons/io5";
-import { RiDashboard3Line } from "react-icons/ri";
+import NavigateMysmc from '../NavigateMysmc';
 import Titleges from '../../GestionIncident/Titleges';
 
-
-
-
-const gestionIncidentItemsNavigate =[
-  {label: " Gestion incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
-  { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
-  { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
-  { label: " Consignes Orchestrées", link: "#"},
-  { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
-  { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
-  ];
-
-
-
-
 function DetailsProbleme() {
+  const { id } = useParams();
+  const [probleme, setProbleme] = useState(null);
 
-  const [currentForm, setCurrentForm] = useState("")
+  useEffect(() => {
+    const fetchProbleme = async () => {
+      try {
+        const response = await fetch(`http://localhost:8085/api/gestionproblemes/probleme/${id}`);
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        const data = await response.json();
+        setProbleme(data);
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    };
+    fetchProbleme();
+  }, [id]);
 
-  const handleMenuClick = (link)=>{
-    setCurrentForm(link);
-    console.log(link);
+  if(!probleme){
+    return(<div>
+      Aucun probleme
+    </div>)
   }
-  const gestionProblemeItemsMenu =[
-    {label: "Réouverture de l'avis", link: "/mysmc/gestionprobleme/scannerprobleme",icon:LuRefreshCcw},
-    { label: "Rechercher probleme", link: "/mysmc/gestionprobleme/rechercherprobleme",icon:FaSearch},
-    ];
+
   return (
     <div>
-        <Header/>
-    <br />
-      <Container  className='body'>
+      <Header />
+      <br />
+      <Container className='body' style={{ fontSize: "14px" }}>
         <Row>
-          <Col sm={8} className='content'>
-          <Card 
-        style={{ display: 'flex',
-                 flexDirection:"row",
-                 alignItems: 'center',
-                 justifyContent: 'space-around' ,
-                 color:"#148C8A",
-                 border:"2px solid #148C8A",
-                 marginTop:"5%"
-                 }}>
-          <FaBars />
-          <p style={{marginBottom: '0' }}>Details de problème N°P_03022023_093438</p>
-        <FaArrowCircleDown />
-      </Card>
-
-      <Row>
-              <Col>
-              <Titleges text="Correspondance avis"/>
-                <form>
-                  <div className='mb-4 align-right'>
-                    <InputLabel sx={{fontSize:"14",fontFamily: "fantasy",color:"#000"}} className="demo-simple-select-label"> 
-                    Objet
-                    </InputLabel>&nbsp;
-                    <TextField  className='textfield'  id="objet" variant='outlined'  size='small' placeholder='objet avis' required/>
-                  </div>
-                  <div className='mb-4 align-right'>
-                    <InputLabel className="demo-simple-select-label" > 
-                      Nature
-                    </InputLabel>&nbsp;
-                    <Select
-                     id="natures"
-                      labelId="demo-simple-select-label"
-                      className='textfield'
-                      label="TYPE DE TRANSACTION"
-                      size='small'
-                      required
-                          >
-                              <MenuItem value="SI"></MenuItem>
-                              <MenuItem value="DATA">DATA</MenuItem>
-                              <MenuItem value="CONTENU">CONTENU</MenuItem>
-                    </Select>
-                  </div>
-                   <div className='mb-4 align-right'>
-                    <InputLabel className="demo-simple-select-label"> Type avis</InputLabel>&nbsp;
-                    <Select
-                        labelId="demo-simple-select-label"
-                        className='textfield'
-                        size='small'
-                        required
-                       >
-                    {/* Mappez les types d'avis dans des éléments MenuItem */}
-                   
-                  </Select>
-               </div>
-                  <div className='mb-4 align-right'>
-                    <InputLabel className="demo-simple-select-label">Services impactés</InputLabel>&nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      className='textfield'
-                      small
-                      required
-                          >
-                    </Select>
-                  </div>
-                  <div className='mb-4 align-right'>
-                    <InputLabel className="demo-simple-select-label">Liste Validation</InputLabel>&nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id='textfield'
-                      size='small'
-                      required
-                          >
-                    </Select>
-                  </div>
-                  <div className='mb-4 align-right' >
-                    <InputLabel className="demo-simple-select-label">Liste Diffusion</InputLabel>&nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id='textfield'
-                      small
-                      required
-                          >
-
-                    </Select>
-                  </div>
-                  <div className='mb-4 align-right'>
-                    <InputLabel className="demo-simple-select-label">Date Début</InputLabel>&nbsp;
-                    <TextField className='textfield' id='dateDebut' variant='outlined'  size='small'type='date' required/>
-                  </div>
-                  <div className='mb-4 align-right' >
-                    <InputLabel className="demo-simple-select-label" >Date Détection</InputLabel>&nbsp;
-                    <TextField className='textfield' id='dateDetection' variant='outlined'  size='small' type='date' required/>
-                  </div>
-                  <div className='mb-4 align-right'>
-                    <InputLabel className="demo-simple-select-label" >Ticket EZV</InputLabel>&nbsp;
-                    <TextField className='textfield' id='ticketEzv' variant='outlined'  size='small' placeholder='Numero ticket EasyVista'/>
-                  </div>
-                  <div className='mb-4 align-right'>
-                    <InputLabel className="demo-simple-select-label" >Ticket Oceane</InputLabel>&nbsp;
-                    <TextField className='textfield' id="ticketOceane" variant='outlined'  size='small' placeholder='Numero ticket Oceane'/>
-                  </div>
-                        
-                </form>
-  
+          <Col md={9} sm={12}>
+            <Row>
+              <Col sm={12}>
+                <Card
+                  style={{
+                    display: 'flex',
+                    flexDirection: "row",
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    color: "#148C8A",
+                    border: "2px solid #148C8A",
+                    marginTop: "5%"
+                  }}>
+                  <FaBars />
+                  <p style={{ marginBottom: "10px" }}>Details de problème N°P_03022023_093438</p>
+                  <FaArrowCircleDown />
+                </Card>
               </Col>
-              <Col>
-                <Titleges  text="Causes et impacts" />
-                <form>
-                  <div className='mb-4 align-right' style={{display:"flex"}}>
-                    <InputLabel className="demo-simple-select-label">Impacts</InputLabel>&nbsp;
-                    <TextareaAutosize  id="impact"className='textfield'  variant='outlined'  size='small' placeholder='Comment les utisateurs perçoivent le dysfonctionnement' required/>
-                  </div>
-                  <div className='mb-4 align-right' style={{display:"flex"}}>
-                      <InputLabel className="demo-simple-select-label">Cause Retard Notif.</InputLabel>&nbsp;
-                      <Select
-                          labelId="demo-simple-select-label"
-                          className='textfield'
-                          size='small'
-                          required
-                            >
-                                <MenuItem value="Cause Retard Notification"></MenuItem>
-                                <MenuItem value="Non Supervisé">Non Supervisé</MenuItem>
-                                <MenuItem value="Retard Diffusion">Retard Diffusion</MenuItem>
-                      </Select>
-                  </div>
-                  <div className='mb-4 align-right' style={{display:"flex"}}>
-                    <InputLabel className="demo-simple-select-label" >Origine Cause</InputLabel>&nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      className='textfield'
-                      size='small'
-                      required
-                            >
-                    </Select>
-                  </div>
-                  <div className='mb-4 align-right' style={{display:"flex"}}>
-                    <InputLabel className="demo-simple-select-label">Causes Problables</InputLabel>&nbsp;
-                    <TextareaAutosize  id='causeProbable' className='textfield' variant='outlined'  size='small' placeholder='(*) Demander systématiquement aux TMC(s) les causes probables
-                      (*) Eviter les expressions « Investigations en Cours » ; « causes inconnues » et préférer mettre « constat : xxxxxxxx »' required/>
-                  </div>
-                  <div className='mb-4 align-right' style={{display:"flex"}}>
-                    <InputLabel className="demo-simple-select-label" >Observations</InputLabel>&nbsp;
-                    <TextareaAutosize id='observation' className='textfield'  variant='outlined'  size='small' placeholder='Renseigner les observations' required/>
-                  </div>
-                </form>
+              <Col sm={8}>
+                <Titleges text='Prévisalusation du problème' probleme={true} />
+                <div className="table-responsive">
+                  <Table className="styled-table">
+                    <tbody>
+                      <tr>
+                        <th className="styled-table-td">Date</th>
+                        <th>{new Date(probleme.dateCreation).toLocaleDateString('fr-FR')}</th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Application</th>
+                        <th style={{ backgroundColor: "#EA7714", color: "white" }}><strong>{probleme.application}</strong></th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Description</th>
+                        <th><strong>{probleme.description }</strong></th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Priorité</th>
+                        <th style={{ backgroundColor: "#ffd4b1", color: "black" }}><strong>{probleme.priorite && probleme.priorite.toUpperCase()}</strong></th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Equipe en charge</th>
+                        <th>
+                          OneTeamSIRelationClient &lt;OneTeamSIRelationClient@orange-sonatel.com&gt;
+                        </th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Date de Fin</th>
+                        <th>{probleme.dateCloture && 
+                            new Date(probleme.dateCloture).toLocaleDateString('fr-FR', {
+                              day: 'numeric',
+                              month: 'numeric',
+                              year: 'numeric',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              second: 'numeric',
+                            })}</th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Durée problème</th>
+                        <th>{probleme.dureeProbleme &&
+                          probleme.dureeProbleme}</th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Incidents liés</th>
+                        <th>
+                          DYSFONCTIONNEMENT SUR SMILE <br /> Numéro avis: 221102_094540 <br /> Date Debut: 31-10-2022 11:00:00 <br /> Date Fin: 03-02-2023 09:45:00
+                        </th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Observations</th>
+                        <th>{probleme.observation}</th>
+                      </tr>
+                      <tr>
+                        <th className="styled-table-td">Troubleshooting</th>
+                        <th>{probleme.troubleshooting}</th>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Col>
+              <Col sm={4}>
+                <Titleges text=" Indicateurs clés " probleme={true} />
+                <div className="table-responsive">
+                  <Table className="table table-bordered table-striped">
+                    <tbody>
+                      <tr>
+                        <th>Nombre incidents</th>
+                        <th>1</th>
+                      </tr>
+                      <tr>
+                        <th>Validation avis</th>
+                        <th> <CheckCircleIcon sx={{ color: "green" }} /></th>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+                <Titleges text=" Autres infos " probleme={true} />
+                <div className="table-responsive">
+                  <Table className="table table-bordered table-striped">
+                    <tbody>
+                      <tr>
+                        <th>N° probleme</th>
+                        <th>{probleme.numProbleme}</th>
+                      </tr>
+                      <tr>
+                        <th>Liste Validation</th>
+                        <th>ONE TEAM SIRC</th>
+                      </tr>
+                      <tr>
+                        <th>Liste Diffusion</th>
+                        <th>Avisdeprobleme</th>
+                      </tr>
+                      <tr>
+                        <th style={{ backgroundColor: "#EA7714", color: "white" }}>Etat</th>
+                        <th style={{ backgroundColor: "#EA7714", color: "white" }}>{probleme.etat}</th>
+                      </tr>
+                      <tr>
+                        <th>Crée par</th>
+                        <th>admin</th>
+                      </tr>
+                      <tr>
+                        <th>Modifié par</th>
+                        <th>admin</th>
+                      </tr>
+                      <tr>
+                        <th>Date demande validation</th>
+                        <th>03/02/23 11:00:50</th>
+                      </tr>
+                      <tr>
+                        <th>Validation demandée par</th>
+                        <th>admin</th>
+                      </tr>
+                      <tr>
+                        <th>Date validation</th>
+                        <th>03/02/23 11:02:06</th>
+                      </tr>
+                      <tr>
+                        <th>Validation par</th>
+                        <th>Oumar SALL - 029168</th>
+                      </tr>
+                      <tr>
+                        <th>Date diffusion</th>
+                        <th>03/02/23 11:07:42</th>
+                      </tr>
+                      <tr>
+                        <th>Diffusé par</th>
+                        <th>admin</th>
+                      </tr>
+                      <tr>
+                        <th>Nombre Etat Avancement</th>
+                        <th>9</th>
+                      </tr>
+                      <tr>
+                        <th>Date dernier Etat avancement</th>
+                        <th>25/10/23 09:51:45</th>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
               </Col>
             </Row>
           </Col>
-          <Col sm={4} style={{marginTop:"3%"}}>
-           <MenuDetails/>
+          <Col md={3} sm={12} sx={{ marginTop: "5px" }}>
+            <MenuDetails />
+            <NavigateMysmc />
           </Col>
         </Row>
-        <br />
-        <Row>
-          <Col sm={8}>
-         
-          </Col>
-          <Col sm={4}>
-         
-          </Col>
-        </Row>
-        <hr />
-        <div className='col-sm-12' id='bouton' style={{display:"flex", justifyContent:"center",marginBottom:"10px"}}> 
-         <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}
-            // Appel de la fonction handleSubmit lors du clic sur le bouton 
-            >
-          Creation avis
-          
-          </Button>
-          &nbsp; &nbsp;
-          <Button style={{backgroundColor:"#C9302C",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",color:"white"}}>Annulation avis</Button>
-        </div>
-  
       </Container>
-   </div>
-
-  )
+    </div>
+  );
 }
 
-export default DetailsProbleme
+export default DetailsProbleme;
