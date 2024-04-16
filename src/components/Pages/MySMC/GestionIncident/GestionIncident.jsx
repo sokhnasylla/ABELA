@@ -98,7 +98,7 @@ function GestionIncident() {
         <Row>
         <Col sm={8} className='content'>
         <Title text="Liste des avis d'incidents / d'information en cours"/>
-        <Get url="http://localhost:8082/abela-mysmc/api/gestionIncidents/avisIncidents/encours" columns={columns} />
+        <Get url=" http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours" columns={columns} />
         </Col>
         <Col sm={4} >
         <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />
@@ -108,7 +108,7 @@ function GestionIncident() {
         <Row>
         <Col sm={8} className='content'>
         <Title text="Les avis fermés, Clotûrés ou annulés récemment"/>
-        <Get url="http://localhost:8082/abela-mysmc/api/gestionIncidents/avisIncidents/clos/ferme/annule" columns={columns} />
+        <Get url="http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule" columns={columns} />
         </Col>
        
         </Row>

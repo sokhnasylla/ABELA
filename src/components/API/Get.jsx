@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
+import { getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
 
 
 
@@ -8,20 +9,19 @@ function Get({ url, columns, showTable = true }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const token= getTokenFromLocalStorage();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        // const config = {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // };
-
-
-        const response = await axios.get(url);
+        console.log(token);
+        const response = await axios.get(url,{
+          headers:{
+              Authorization:`Bearer ${token}`
+          },
+      });
         console.log(response);
 
         setData(response.data);
@@ -39,7 +39,6 @@ function Get({ url, columns, showTable = true }) {
 
     <div>
       {loading && <p>Chargement...</p>}
-      {/* {error && <p>{error}</p>} */}
       {showTable ? (
         data.length > 0 && (
           <DataTable
