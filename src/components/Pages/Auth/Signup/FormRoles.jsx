@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import { Typography,Box, FormControlLabel } from '@mui/material';
+import { Typography, Box, FormControlLabel } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -9,147 +9,149 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { getTokenFromLocalStorage } from '../authUtils';
 import axios from 'axios';
+import GetData from '../../../API/GetData';
 
-export default function FormRoles({ onRolesAndTbRolesReady, formData }) {
+export default function FormRoles({ onRolesAndTbRolesReady }) {
   const [checked, setChecked] = useState([]);
   const [isChecked, setIsChecked] = useState({});
   const [childChecked, setChildChecked] = useState({});
   const [data, setData] = useState([]);
+  const url = "http://localhost:8082/abela-usermanagement/api/v1/users/roles"
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = getTokenFromLocalStorage();
-        const url = "http://127.0.0.1:8000/api/applications/roles";
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+  GetData(url)
 
-        const rolesWithDetails = await Promise.all(
-          response.data.map(async (index) => {
-            const apiUrl = "http://localhost:8000";
-            const roles = await Promise.all(
-              index.roles.map(async (roleLink) => {
-                try {
-                  const roleDetailsResponse = await axios.get(`${apiUrl}${roleLink}`, {
-                    headers: {
-                      Authorization: `Bearer ${token}`
-                    }
-                  });
-                  return {
-                    id: roleDetailsResponse.data.id,
-                    label: roleDetailsResponse.data.description,
-                  };
-                } catch (error) {
-                  console.error('Error fetching role details:', error);
-                  return null; // Gérer l'erreur selon vos besoins
-                }
-              })
-            );
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = getTokenFromLocalStorage();
+  //       const url = "http://localhost:8082/abela-usermanagement/api/v1/roles";
+  //       const response = await axios.get(url, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       });
+  //       console.log(response.data);
 
-            return {
-              id: index.id,
-              label: index.nomApp,
-              childrenLabels: roles.filter(role => role !== null), // Filtrer les résultats null
-            };
-          })
-        );
 
-        setData(rolesWithDetails);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  //       // const rolesWithDetails = await Promise.all(
+  //       //   response.data.map(async (index) => {
+  //       //     const apiUrl = "http://localhost:8000";
+  //       //     const roles = await Promise.all(
+  //       //       index.roles.map(async (roleLink) => {
+  //       //         try {
+  //       //           const roleDetailsResponse = await axios.get(`${apiUrl}${roleLink}`, {
+  //       //             headers: {
+  //       //               Authorization: `Bearer ${token}`
+  //       //             }
+  //       //           });
+  //       //           return {
+  //       //             id: roleDetailsResponse.data.id,
+  //       //             label: roleDetailsResponse.data.description,
+  //       //           };
+  //       //         } catch (error) {
+  //       //           console.error('Error fetching role details:', error);
+  //       //           return null;
+  //       //         }
+  //       //       })
+  //       //     );
 
-    fetchData();
-  }, []); // Aucune dépendance nécessaire ici, car cela doit être exécuté une seule fois au montage
+  //       //     return {
+  //       //       id: index.id,
+  //       //       label: index.nomApp,
+  //       //       childrenLabels: roles.filter(role => role !== null),
+  //       //     };
+  //       //   })
+  //       // );
 
-  const handleChange = (itemId) => (event) => {
-    setIsChecked((prev) => ({ ...prev, [itemId]: event.target.checked }));
-    console.log(checked);
-      
-  };
+  //       // setData(rolesWithDetails);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
 
-  const handleChildChange = (itemId, childIndex) => (event) => {
-    setChildChecked((prev)=>({...prev,[childIndex]:event.target.checked}))
-  
-    };
+  //   fetchData();
+  // }, []);
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  // const handleChange = (itemId) => (event) => {
+  //   setIsChecked((prev) => ({ ...prev, [itemId]: event.target.checked }));
+  //   console.log(checked);
+  // };
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
+  // const handleChildChange = (itemId, childIndex) => (event) => {
+  //   setChildChecked((prev)=>({...prev,[childIndex]:event.target.checked}));
+  // };
 
-    setChecked(newChecked);
+  // const handleToggle = (value) => () => {
+  //   const currentIndex = checked.indexOf(value);
+  //   const newChecked = [...checked];
 
-    const updatedChildChecked = { ...childChecked };
-    const item = data.find((item) => item.id === value);
-    if (item) {
-      item.childrenLabels.forEach((child) => {
-        updatedChildChecked[child.id] = newChecked.includes(value);
-      });
-    }
-    setChildChecked(updatedChildChecked);
-  };
+  //   if (currentIndex === -1) {
+  //     newChecked.push(value);
+  //   } else {
+  //     newChecked.splice(currentIndex, 1);
+  //   }
 
-  useEffect(() => {
-    if (onRolesAndTbRolesReady) {
-      const renderRoles = () => {
-        const roles = [];
-        checked.forEach((elementId) => {
-          let foundElement = data.find((element) => element.id === elementId);
-          if (foundElement) {
-            if (foundElement.label === "Support Technique") {
-              foundElement.label = "Support";
-            }
-            roles.push(`ROLE_${foundElement.label.toUpperCase()}`);
-          }
-        });
-        console.log(roles);
-      };
+  //   setChecked(newChecked);
 
-      const rendertbroles = () => {
-        const tbRole = [];
-        for (const key in childChecked) {
-          const object = childChecked[key];
-          for (const value in object) {
-            if (object[value] === true) {
-              tbRole.push(value);
-            }
-          }
-        }
-        return tbRole;
-      };
+  //   const updatedChildChecked = { ...childChecked };
+  //   const item = data.find((item) => item.id === value);
+  //   if (item) {
+  //     item.childrenLabels.forEach((child) => {
+  //       updatedChildChecked[child.id] = newChecked.includes(value);
+  //     });
+  //   }
+  //   setChildChecked(updatedChildChecked);
+  // };
 
-      const myrole=renderRoles()
-      console.log(myrole);
-      onRolesAndTbRolesReady(renderRoles(), rendertbroles());
-    }
-  }, [checked, childChecked, data, formData, onRolesAndTbRolesReady]);
+  // useEffect(() => {
+  //   if (onRolesAndTbRolesReady) {
+  //     const renderRoles = () => {
+  //       const roles = [];
+  //       checked.forEach((elementId) => {
+  //         let foundElement = data.find((element) => element.id === elementId);
+  //         if (foundElement) {
+  //           if (foundElement.label === "Support Technique") {
+  //             foundElement.label = "Support";
+  //           }
+  //           roles.push(`ROLE_${foundElement.label.toUpperCase()}`);
+  //         }
+  //       });
+  //       return roles; // Return roles array
+  //     };
 
-  const renderChildren = (itemId) => {
-    const childrenLabels = data.find((item) => item.id === itemId)?.childrenLabels || [];
+  //     const rendertbroles = () => {
+  //       const tbRole = [];
+  //       for (const key in childChecked) {
+  //         const object = childChecked[key];
+  //         for (const value in object) {
+  //           if (object[value] === true) {
+  //             tbRole.push(value);
+  //           }
+  //         }
+  //       }
+  //       return tbRole;
+  //     };
+
+  //     onRolesAndTbRolesReady(renderRoles(), rendertbroles());
+  //   }
+  // }, [checked, childChecked, data, onRolesAndTbRolesReady]);
+
+  // const renderChildren = (itemId) => {
+  //   const childrenLabels = data.find((item) => item.id === itemId)?.childrenLabels || [];
    
-    return childrenLabels.map((roles) => (
-      <FormControlLabel
-        key={roles.id}
-        label={roles.label}
-        control={
-          <Checkbox
-            checked={childChecked[itemId]?.[roles.id]}
-            onChange={handleChildChange(itemId, roles.id)}
-          />
-        }
-      />
-    ));
-  };
+  //   return childrenLabels.map((roles) => (
+  //     <FormControlLabel
+  //       key={roles.id}
+  //       label={roles.label}
+  //       control={
+  //         <Checkbox
+  //           checked={childChecked[itemId]?.[roles.id]}
+  //           onChange={handleChildChange(itemId, roles.id)}
+  //         />
+  //       }
+  //     />
+  //   ));
+  // };
 
   return (
     <Grid container spacing={3}>
@@ -164,7 +166,7 @@ export default function FormRoles({ onRolesAndTbRolesReady, formData }) {
 
           return (
             <ListItem key={item.id} disablePadding>
-              <ListItemButton role={undefined} onClick={handleToggle(item.id)} dense>
+              {/* <ListItemButton role={undefined} onClick={handleToggle(item.id)} dense>
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
@@ -179,7 +181,7 @@ export default function FormRoles({ onRolesAndTbRolesReady, formData }) {
               </ListItemButton>
               <Box sx={{ display: isChecked[item.id] ? 'flex' : 'none', flexDirection: 'column', ml: 3 }}>
                 {renderChildren(item.id)}
-              </Box>
+              </Box> */}
             </ListItem>
           );
         })}

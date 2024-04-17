@@ -4,23 +4,24 @@ import axios from 'axios';
 import { getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
 
 
-
 function Get({ url, columns, showTable = true }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const token = getTokenFromLocalStorage();
+  const token= getTokenFromLocalStorage();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
+        console.log(token);
         const response = await axios.get(url,{
           headers:{
-            Authorization:`Bearer ${token}`
+              Authorization:`Bearer ${token}`
           },
-        })
+      });
+        console.log(response);
 
         setData(response.data);
 
@@ -38,7 +39,6 @@ function Get({ url, columns, showTable = true }) {
 
     <div>
       {loading && <p>Chargement...</p>}
-      {/* {error && <p>{error}</p>} */}
       {showTable ? (
         data.length > 0 && (
           <DataTable
