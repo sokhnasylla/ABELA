@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Container, Nav, Button, Row, Col, Modal, OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { clearTokenFromLocalStorage } from '../Pages/Auth/authUtils';
+import { clearTokenFromLocalStorage, getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
 import { MdOutlineManageHistory } from "react-icons/md";
 import { BsBrowserEdge } from "react-icons/bs";
 import { FaStreetView, FaChevronLeft, FaChevronRight,FaMobile, FaNetworkWired } from "react-icons/fa";
@@ -10,6 +10,8 @@ import { Dashboard } from '@mui/icons-material';
 import AppsIcon from '@mui/icons-material/Apps';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
+import { jwtDecode } from 'jwt-decode';
+import { FaHome } from "react-icons/fa";
 
 function Header() {
   const navigate = useNavigate();
@@ -26,6 +28,15 @@ function Header() {
   ]);
   const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(0);
+  const token =getTokenFromLocalStorage();
+  const [myuser,setMyuser] =useState("Moi")
+
+  useEffect(() => {
+    if(token){
+      const decode = jwtDecode(token);
+      setMyuser(decode.sub);
+    }
+  }, [token]);
 
   const handleMenuItemClick = (route) => {
     navigate(route);
@@ -60,35 +71,38 @@ function Header() {
 
   return (
     <div className="myhead">
-      <Container>
+      <Container fluid>
         <Row className="align-items-center">
           <Col>
             <div>
               <h5>Dalal ak Jamm</h5>
             </div>
           </Col>
-          <Col className="d-flex justify-content-end align-items-center">
+          <Col className="d-flex justify-content-end align-items-center" id='menu'>
             <Col xs="auto">
               <Navbar variant='tabs'>
                 <Nav className='me-auto'>
                   <Nav.Link href='/home' style={{ fontSize: '8px' }}>
-                    <HomeIcon />
+                  <HomeIcon/>
                   </Nav.Link>
                 </Nav>
               </Navbar>
             </Col>
             <OverlayTrigger
               placement="bottom"
-              overlay={<Tooltip id="tooltip">Applications disponibles</Tooltip>}
+              overlay={<Tooltip id="tooltip" color='red'>Applications disponibles</Tooltip>}
             >
-              <Button variant="secondary" onClick={() => setShowModal(true)} style={{ background: 'none', border: 'none', marginRight: '10px', position: 'relative' }}>
+              <Button variant="secondary"  onClick={() => setShowModal(true)} style={{ background: 'none', border: 'none', position: 'relative' }}>
                 <AppsIcon style={{ color: 'white' }} />
               </Button>
             </OverlayTrigger>
-            <Dropdown>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="tooltip">{myuser}</Tooltip>}>
+                <Dropdown>
               <Dropdown.Toggle variant="custom" id="dropdown-basic" className="profile-toggle">
-                <PersonIcon />
-                Moi
+                {/* <span style={{ marginLeft:"2px" }}>{myuser}</span> */}
+                <PersonIcon/>
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
@@ -96,6 +110,9 @@ function Header() {
                 <Dropdown.Item onClick={handleLogout}>Deconnexion</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+
+            </OverlayTrigger>
+          
             <Modal show={showModal} onHide={() => setShowModal(false)}>
               <Modal.Body style={{ minHeight: '170px' }}>
                 <Row>
@@ -113,7 +130,7 @@ function Header() {
             </Modal>
           </Col>
         </Row>
-      </Container>
+      </ Container>
     </div>
   );
 }

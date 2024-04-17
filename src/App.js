@@ -40,6 +40,7 @@ import { Details } from '@mui/icons-material';
 import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsProbleme/DetailsProbleme';
 import EspaceClient from "./components/Pages/Kaabu/EspaceClient"
 import EspaceVendeur from "./components/Pages/Kaabu/EspaceVendeur"
+import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident/DetailsIncident';
 
 
 
@@ -73,6 +74,7 @@ function App() {
             < Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<RechercheProbleme/>} />
             < Route path="/mysmc/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
             <Route path={`/mysmc/gestionprobleme/details/:id`} element={<DetailsProbleme/>} />
+            <Route path={`/mysmc/gestionincident/details/:id`} element={<DetailsIncident/>} />
             < Route path="/mysmc/etatsupervision" element={<EtatSupervision/>} />
             < Route path="/etatsupervision/alarmesok" element={<AlarmeOk/>} />
             < Route path="/etatsupervision/vr04service" element={<VR04Service/>} />

@@ -21,10 +21,7 @@ function Auth({ onFormSubmit }) {
     nom: '',
     email: '',
     loginWindows: '',
-    structure: '',
-    password: '',
-    roles: [],
-    tb_roles: []
+    structure: ''
   });
 
   const handleInputChange = (e) => {
@@ -46,13 +43,13 @@ function Auth({ onFormSubmit }) {
   };
 
   const handleNext = async () => {
+    console.log(formData);
     if (
       (activeStep === 0 &&
-        formData.prenome &&
-        formData.nom &&
+        formData.firstName &&
+        formData.lastName &&
         formData.email &&
-        formData.structure &&
-        formData.password) ||
+        formData.structure) ||
       activeStep === 1
     ) {
       if (activeStep === steps.length - 1) {

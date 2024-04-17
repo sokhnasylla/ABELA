@@ -1,9 +1,9 @@
-import React,{useState} from 'react';
+import React from 'react';
 import { Card, Table } from 'react-bootstrap';
 
 function FormKaabu({ userkaabu }) {
   if (userkaabu.length === 0) {
-    return <div>Aucune donnée à afficher.</div>;
+    return <div></div>;
   }
 
   return (
@@ -37,8 +37,12 @@ function FormKaabu({ userkaabu }) {
               <td>{userkaabu[0].datePremierConnectionPin}</td>
             </tr>
             <tr>
-              <th>Téléphone:</th>
-              <td>{userkaabu[0].telephone}</td>
+              <th>Profil:</th>
+              <td>{userkaabu[0].profils}</td>
+            </tr>
+            <tr>
+              <th>TypeUser:</th>
+              <td>{userkaabu[0].typeuser}</td>
             </tr>
             <tr>
               <th>Nom:</th>

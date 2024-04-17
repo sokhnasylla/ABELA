@@ -121,6 +121,7 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
             <HomeIcon />
             </Nav.Link>
           </Nav.Item>
+          
        </Nav>
        </div>
        </Toolbar>

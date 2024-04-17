@@ -3,7 +3,7 @@ import Header from '../../../Header/Header';
 import useAuth from '../../Auth/useAuth';
 import MenuPersoGesIncident from './MenuPersoGesIncident';
 import NavigatePerso from './NavigatePerso';
-import { FaList, FaSearch, FaHome, FaChartLine, FaDownload } from "react-icons/fa";
+import { FaList, FaSearch, FaHome, FaChartLine, FaDownload, FaPaperclip } from "react-icons/fa";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
@@ -23,7 +23,7 @@ const gestionIncidentItemsNavigate = [
     { label: "Gestion Incidents", link: "/mysmc/gestionincident", icon: ReportProblemIcon },
     { label: "Gestion Probleme", link: "/mysmc/gestionprobleme", icon: ReportProblemIcon },
     { label: "Etat Supervision", link: "/mysmc/etatsupervision", icon: RiDashboard3Line },
-    { label: "Consignes Orchestrées", link: "#" },
+    { label: "Consignes Orchestrées", link: "#" ,icon: FaPaperclip},
     { label: "Suivi Activités ", link: "/mysmc/suivisactivites", icon: IoStatsChart },
     { label: "Page d'acceuil", link: "/mysmc", icon: FaHome },
 ];
@@ -48,15 +48,15 @@ function RechercheAvis() {
         const application = document.getElementById('application').value;
 
         if (numeroAvis) {
-            setUrl(`http://localhost:8082/abela-mysmc/api/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`);
+            setUrl(`http://localhost:8085/api/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`);
             setText(`Resultat de la dernière recherche : | Numéro Avis : ${numeroAvis}`);
         }
         else if (dateDebut || dateFin) {
-            setUrl(`http://localhost:8082/abela-mysmcC/api/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`);
+            setUrl(`http://localhost:8085/api/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`);
             setText(`Resultat de la dernière recherche : | Date Fin : ${dateFin}| Date début : ${dateDebut}`);
         }
         else if (application) {
-            setUrl(`http://localhost:8082/abela-mysmc/api/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`);
+            setUrl(`http://localhost:8085/api/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`);
             setText(`Resultat de la derniere recherche : | Application : ${application}`);
         }
        

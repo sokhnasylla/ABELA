@@ -1,9 +1,10 @@
 import React from 'react';
 import { Card, Table } from 'react-bootstrap';
+import "../MySMC/GestionIncident/ajoutavis.css"
 
 function FormSiplissimo({ simplissimo }) {
-  if (!simplissimo) {
-    return <div>Aucune donnée à afficher.</div>;
+  if (!simplissimo || simplissimo.length === 0) {
+    return <div></div>;
   }
 
   return (
@@ -30,8 +31,11 @@ function FormSiplissimo({ simplissimo }) {
             </tr>
             <tr>
               <th>Statut:</th>
-              <td>{simplissimo.statut}</td>
+              <td style={{ backgroundColor: simplissimo.statut === "Actif" ? "green" : "transparent", color: simplissimo.statut === "Actif" ? "white" : "black", fontWeight: simplissimo.statut === "Actif" ? "bold" : "normal" }}>
+                {simplissimo.statut}
+              </td>
             </tr>
+
           </tbody>
         </Table>
       </Card.Body>
