@@ -72,7 +72,6 @@ const GestionProbleme = () =>{
 
   ];
 
-
   return (
     <div>
 
@@ -81,7 +80,7 @@ const GestionProbleme = () =>{
         <Row>
             <Col sm={8} className='content'>
               <Title text="Liste des problémes en cours"/>
-              <Get url="http://localhost:8082/abela-mysmc/api/gestionproblemes/problemes/encours" columns={columns} />
+              <Get url="http://localhost:8082/abela-mysmc/api/v1/gestionproblemes/problemes/encours" columns={columns} />
             </Col> 
             <Col sm={4} style={{marginTop:"3%"}}>
                <MenuPersoGesProbleme propsMenuItems={ gestionProblemeItemsMenu} onItemClick={handleMenuClick}/>
@@ -91,7 +90,7 @@ const GestionProbleme = () =>{
         <Row style={{marginTop:"5%"}}>
             <Col sm={8} className='content'>
               <Title text="Les problémes clotûrés ou annulés récemment"/>
-              <Get url="http://localhost:8082/abela-mysmc/api/gestionproblemes/problemes/clos" columns={columns} />
+              <Get url="http://localhost:8082/abela-mysmc/api/v1/gestionproblemes/problemes/clos" columns={columns} />
             </Col> 
             <Col sm={4}>
             <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />

@@ -4,7 +4,7 @@ import Header from '../../../Header/Header'
 import { Container,Row,Col,Table } from 'react-bootstrap'
 import Title from '../../../Card/Title/Title'
 import './ajoutavis.css'
-import { FaList,FaSearch,FaHome } from "react-icons/fa";
+import { FaList,FaSearch,FaHome, FaPaperclip } from "react-icons/fa";
 import StackedLineChartTwoToneIcon from '@mui/icons-material/StackedLineChartTwoTone';
 import MenuPersoGesIncident from './MenuPersoGesIncident'
 import NavigatePerso from './NavigatePerso'
@@ -28,7 +28,7 @@ const ajoutAvisItemsMenu =[
     {label: " Gestion incidents", link: "/mysmc/gestionincident",icon:ReportProblemIcon},
     { label: " Gestion Probleme", link: "/mysmc/gestionprobleme",icon:ReportProblemIcon},
     { label: " Etat Supervision", link: "/mysmc/etatsupervision", icon:RiDashboard3Line},
-    { label: " Consignes Orchestrées", link: "#"},
+    { label: " Consignes Orchestrées", link: "#",icon: FaPaperclip},
     { label: " Suivi Activités ", link: "/mysmc/suivisactivites", icon:IoStatsChart},
     { label: " Page d'acceuil", link: "/mysmc",icon: FaHome },
     ];

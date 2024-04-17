@@ -7,43 +7,71 @@ import MenuPersoGesIncident from '../MySMC/GestionIncident/MenuPersoGesIncident'
 import "../MySMC/GestionIncident/ajoutavis.css"
 import { FaUserGroup } from 'react-icons/fa6'
 import NavigatePerso from '../MySMC/GestionIncident/NavigatePerso'
-import { FaSearch, FaHome} from "react-icons/fa";
+import { FaSearch, FaHome, FaPaperclip} from "react-icons/fa";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
-import Get from '../../API/Get'
 import FormKaabu from './FormKaabu'
 import FormSiplissimo from './FormSiplissimo'
-
+import { getTokenFromLocalStorage } from '../Auth/authUtils'
+import axios from 'axios'
+import FormSimplissimoClient from './FormSimplissimoClient'
 
 function EspaceClient() {
   const gestionIncidentItemsNavigate = [
     { label: "Gestion Incidents", link: "/mysmc/gestionincident", icon: ReportProblemIcon },
     { label: "Gestion Probleme", link: "/mysmc/gestionprobleme", icon: ReportProblemIcon },
     { label: "Etat Supervision", link: "/mysmc/etatsupervision", icon: RiDashboard3Line },
-    { label: "Consignes Orchestrées", link: "#" },
+    { label: "Consignes Orchestrées", link: "#" ,icon: FaPaperclip},
     { label: "Suivi Activités ", link: "/mysmc/suivisactivites", icon: IoStatsChart },
     { label: "Page d'acceuil", link: "/mysmc", icon: FaHome },
 ];
-    const [currentForm, setCurrentForm] = useState("");
-    const [url, setUrl] = useState(false);
-    
 
-    const handleMenuClick = (link)=>{
-        setCurrentForm(link);
-        console.log(link);
-      }
-    const kaabuItemsMenus=[
-        {label:"Espace Client",link:"/kaabu/espace/client",icon:FaUserGroup},
-        {label:"Espace Vendeur",link:"/kaabu/espace/vendeur",icon:FaUserGroup},  
-    ];
-    const [identifiant, setIdentifiant] = useState('');
+const kaabuItemsMenus=[
+  {label:"Espace Client",link:"/kaabu/espace/client",icon:FaUserGroup},
+  {label:"Espace Vendeur",link:"/kaabu/espace/vendeur",icon:FaUserGroup},  
+];
    
-  
-    const handleSearchClick = () => {
-      
+    const [userSimplissimo,setUserSimplissimo]=useState([]);
+    const token = getTokenFromLocalStorage();
+    
+    const GetData = async (url,token) => {
+      const response = await axios.get(url,{
+          headers:{
+              Authorization:`Bearer ${token}`
+          },
+      });
+      console.log(response.data);
+      setUserSimplissimo(response.data)
+      console.log(userSimplissimo);
+     
+      return response.data; 
     };
-  
+    const isInteger = (value) => {
+      return /^\d+$/.test(value);
+  };
+
+    const handleSearchClick = async() => {
+      const numero=document.getElementById('numero').value ; 
+       if (!isInteger(numero)) {
+        alert('Veuillez saisir un numéro valide (entier)');
+        return;
+    }
+      const url = `http://localhost:8082/abela-selfservice/api/v1/kaabu/verification-client/${numero}`;
+      console.log('URL:', url); // Vérifiez si l'URL est correcte
+      try {
+          const response = await GetData(url, token);
+          console.log('Response:', response); // Vérifiez la réponse de l'API
+      }
+      catch (error) {
+          console.error('Error fetching data:', error); // Gérez les erreurs de requête
+      }
+    };
+     
+    useEffect(() => {
+        
+    }, [userSimplissimo]);
+
   return (
     <div id='home'>
         <Header/>
@@ -60,27 +88,26 @@ function EspaceClient() {
                   size='small'
                    placeholder='Ex:MSISDN'
                     sx={{ width: "450px"}} 
-                    value={identifiant}
                     />
                  </div>
-                 <div className='mb-3' id='search' style={{marginLeft:"20%"}} >
-                 <Button onClick={handleSearchClick} style={{ backgroundColor: " #C9302C", borderColor: " #C9302C" }}><FaSearch /></Button>
+                 <div className='mb-3' id='search' style={{ marginLeft: "20%", display: "block" }}>
+                  <Button onClick={handleSearchClick} style={{ backgroundColor: "#C9302C", borderColor: "#C9302C" }}><FaSearch /></Button>
                  </div>
+
                  </div>
                 </Col>
                 <Col sm={4} style={{marginTop:"40px"}}>
-                    <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus} onItemClick={handleMenuClick}/>
+                    <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus}  onItemClick={() => { }}/>
                 </Col>
             </Row>
             <Row>
               <Col sm={8}>
-                    {url && (
+                    {userSimplissimo && (
                       <div>
                         <Title text="Informations du client"/>
                         <br />
                         <div style={{display:"flex"}}>
-                           <FormKaabu />
-                           <FormSiplissimo />
+                           <FormSimplissimoClient userSimplissimo={userSimplissimo}/>
                          </div>   
                              <br />
                            
@@ -89,7 +116,7 @@ function EspaceClient() {
                       )}
               </Col>
               <Col sm={4} style={{ marginTop: "3%" }}>
-                <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}/>
+                <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={() => { }}/>
               </Col>
             </Row>
         </Container>

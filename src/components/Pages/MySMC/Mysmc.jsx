@@ -7,7 +7,7 @@ import useAuth from '../Auth/useAuth'
 function Mysmc() {
   useAuth()
   return (
-    <div>
+    <div style={{fontSize:"14px"}}>
         <Header/>
         <MenuMysmc/>
         <HomeSmc/>

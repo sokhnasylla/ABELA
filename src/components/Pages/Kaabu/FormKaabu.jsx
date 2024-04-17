@@ -1,12 +1,9 @@
 import React from 'react';
 import { Card, Table } from 'react-bootstrap';
 
-function FormKaabu(props) {
-  const { vendeur } = props;
-  console.log("Type de vendeur :", typeof vendeur);
-
-  if (!vendeur || typeof vendeur !== 'object') {
-    return <div>Aucune donnée à afficher</div>;
+function FormKaabu({ userkaabu }) {
+  if (userkaabu.length === 0) {
+    return <div></div>;
   }
 
   return (
@@ -17,31 +14,47 @@ function FormKaabu(props) {
           <tbody>
             <tr>
               <th>Date Création:</th>
-              <td>{vendeur.dateCreation}</td>
+              <td>
+                {new Date(userkaabu[0].dateCreation).toLocaleDateString(
+                  "fr-FR",
+                  {
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                  }
+                )}
+              </td>
             </tr>
             <tr>
               <th>Role:</th>
-              <td>{vendeur.role}</td>
+              <td>{userkaabu[0].role}</td>
             </tr>
             <tr>
               <th>Date Première Connection:</th>
-              <td>{vendeur.datePremierConnectionPin}</td>
+              <td>{userkaabu[0].datePremierConnectionPin}</td>
             </tr>
             <tr>
-              <th>Téléphone:</th>
-              <td>{vendeur.telephone}</td>
+              <th>Profil:</th>
+              <td>{userkaabu[0].profils}</td>
+            </tr>
+            <tr>
+              <th>TypeUser:</th>
+              <td>{userkaabu[0].typeuser}</td>
             </tr>
             <tr>
               <th>Nom:</th>
-              <td>{vendeur.nom}</td>
+              <td>{userkaabu[0].nom}</td>
             </tr>
             <tr>
               <th>Opérations:</th>
-              <td>{vendeur.operations}</td>
+              <td>{userkaabu[0].operations}</td>
             </tr>
             <tr>
               <th>Contact:</th>
-              <td>{vendeur.contact}</td>
+              <td>{userkaabu[0].contact}</td>
             </tr>
           </tbody>
         </Table>
@@ -51,3 +64,4 @@ function FormKaabu(props) {
 }
 
 export default FormKaabu;
+

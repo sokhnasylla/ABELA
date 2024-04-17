@@ -5,7 +5,7 @@ import { Row,Col, Container } from 'react-bootstrap';
 import MenuPersoGesIncident from '../MySMC/GestionIncident/MenuPersoGesIncident';
 import Title from '../../Card/Title/Title';
 import Get from '../../API/Get';
-import { FaSearch, FaHome} from "react-icons/fa";
+import { FaSearch, FaHome, FaPaperclip} from "react-icons/fa";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
@@ -31,7 +31,7 @@ function Kaabu() {
       { label: "Gestion Incidents", link: "/mysmc/gestionincident", icon: ReportProblemIcon },
       { label: "Gestion Probleme", link: "/mysmc/gestionprobleme", icon: ReportProblemIcon },
       { label: "Etat Supervision", link: "/mysmc/etatsupervision", icon: RiDashboard3Line },
-      { label: "Consignes Orchestrées", link: "#" },
+      { label: "Consignes Orchestrées", link: "#",icon:FaPaperclip},
       { label: "Suivi Activités ", link: "/mysmc/suivisactivites", icon: IoStatsChart },
       { label: "Page d'acceuil", link: "/mysmc", icon: FaHome },
   ];

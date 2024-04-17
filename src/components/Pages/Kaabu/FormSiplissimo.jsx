@@ -1,38 +1,46 @@
-import React from 'react'
-import { Card,Table} from 'react-bootstrap';
+import React from 'react';
+import { Card, Table } from 'react-bootstrap';
+import "../MySMC/GestionIncident/ajoutavis.css"
 
-function FormSiplissimo() {
+function FormSiplissimo({ simplissimo }) {
+  if (!simplissimo || simplissimo.length === 0) {
+    return <div></div>;
+  }
+
   return (
-    <Card style={{width:"350px",maxWidth:"100%",marginLeft:"30px"}}>
+    <Card style={{ width: "350px", maxWidth: "100%", marginLeft: "30px" }}>
       <Card.Header className="text-center fs-4">Simplissimo</Card.Header>
       <Card.Body>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <th>Login:</th>
-              <th></th>
-              </tr>
-              <tr>
-              <th>Nom:</th>
-              <th></th>
-              </tr>
+              <td>{simplissimo.login}</td>
+            </tr>
             <tr>
-              <th>Prenom:</th>
-              <th></th>
+              <th>Nom:</th>
+              <td>{simplissimo.nom}</td>
+            </tr>
+            <tr>
+              <th>Prénom:</th>
+              <td>{simplissimo.prenom}</td>
             </tr>
             <tr>
               <th>Contact:</th>
-              <th></th>
+              <td>{simplissimo.contact}</td>
             </tr>
             <tr>
               <th>Statut:</th>
-              <th></th>
+              <td style={{ backgroundColor: simplissimo.statut === "Actif" ? "green" : "transparent", color: simplissimo.statut === "Actif" ? "white" : "black", fontWeight: simplissimo.statut === "Actif" ? "bold" : "normal" }}>
+                {simplissimo.statut}
+              </td>
             </tr>
+
           </tbody>
         </Table>
       </Card.Body>
     </Card>
-  )
+  );
 }
 
-export default FormSiplissimo
+export default FormSiplissimo;

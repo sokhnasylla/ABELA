@@ -106,3 +106,7 @@ h5 {
     border-top-right-radius: 3px;
     border-color: #ebccd1;
 }
+.active-status {
+    background-color: green;
+  }
+  
