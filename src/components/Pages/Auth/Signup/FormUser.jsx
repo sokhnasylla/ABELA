@@ -12,7 +12,7 @@ export default function FormUser({ handleInputChange, formData }) {
           required
           id="firstName"
           name="firstName"
-          label="Prénom"
+          label="Prenom"
           fullWidth
           autoComplete="given-name"
           variant="standard"
@@ -69,20 +69,6 @@ export default function FormUser({ handleInputChange, formData }) {
           variant="standard"
           onChange={handleInputChange}
           defaultValue={formData.structure}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          required
-          type="password"
-          id="password"
-          name="password"
-          label="Mot de Passe"
-          fullWidth
-          autoComplete="current-password"
-          variant="standard"
-          onChange={handleInputChange}
-          
         />
       </Grid>
     </Grid>

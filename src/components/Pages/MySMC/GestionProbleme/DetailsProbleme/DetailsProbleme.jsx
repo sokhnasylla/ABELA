@@ -7,20 +7,23 @@ import Header from '../../../../Header/Header';
 import MenuDetails from './MenuDetails';
 import NavigateMysmc from '../NavigateMysmc';
 import Titleges from '../../GestionIncident/Titleges';
+import { getTokenFromLocalStorage } from '../../../Auth/authUtils';
+import axios from 'axios';
 
 function DetailsProbleme() {
   const { id } = useParams();
   const [probleme, setProbleme] = useState(null);
+  const token =getTokenFromLocalStorage();
 
   useEffect(() => {
     const fetchProbleme = async () => {
       try {
-        const response = await fetch(`http://localhost:8085/api/gestionproblemes/probleme/${id}`);
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des données');
-        }
-        const data = await response.json();
-        setProbleme(data);
+        const response = await axios.get(`http://localhost:8082/abela-mysmc/api/v1/gestionproblemes/probleme/${id}`,{
+        headers:{
+            Authorization:`Bearer ${token}`
+        },
+    });
+      setProbleme(response.data)
       } catch (error) {
         console.error('Erreur:', error);
       }

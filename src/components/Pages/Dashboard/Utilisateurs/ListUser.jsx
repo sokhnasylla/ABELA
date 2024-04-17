@@ -14,8 +14,14 @@ import { format } from 'date-fns';
 import { IconButton, Button } from '@mui/material';
  
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return format(date, 'dd/MM/yyyy HH:mm:ss');
+  if(dateString){
+    const date = new Date(dateString);
+    return format(date, 'dd/MM/yyyy HH:mm:ss');
+  }
+  else{
+    return " ";
+  }
+ 
 };
  
 function ListUsers({onEditUser}) {
@@ -31,8 +37,8 @@ function ListUsers({onEditUser}) {
             Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axios.get("http://127.0.0.1:8083/api/v1/users", config);
-        setData(response.data[0]);
+        const response = await axios.get("http://localhost:8082/abela-usermanagement/api/v1/users", config);
+        setData(response.data.data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
@@ -41,6 +47,7 @@ function ListUsers({onEditUser}) {
     fetchData();
   }, [token]);
  console.log(data);
+ console.log(error);
   const handleDeleteClick = async (id) => {
     try {
       const response = await fetch(`http://127.0.0.1:8083/api/users/${id}/deactivate`, {
@@ -78,10 +85,11 @@ function ListUsers({onEditUser}) {
       <Table size="small">
   <TableHead>
     <TableRow>
-      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Nom d'utilisateur</TableCell>
-      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Adresse mail</TableCell>
-      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Groupes</TableCell>
-      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Active</TableCell>
+      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Prenom</TableCell>
+      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Nom</TableCell>
+      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Login</TableCell>
+      <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Structure</TableCell>
+      {/* <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Active</TableCell> */}
       <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Créé le</TableCell>
       <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Action</TableCell>
     </TableRow>
@@ -89,10 +97,12 @@ function ListUsers({onEditUser}) {
   <TableBody>
     {data?.map((user) => (
       <TableRow key={user.id}>
-        <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>{user?.username}</TableCell>
-        <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>{user?.email}</TableCell>
-        <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>{user?.groups.join(", ")}</TableCell>
-        <TableCell>
+        <TableCell sx={{color: 'black' }}>{user?.prenom}</TableCell>
+        <TableCell sx={{color: 'black' }}>{user?.nom}</TableCell>
+        <TableCell sx={{color: 'black' }}>{user?.login}</TableCell>
+        <TableCell sx={{color: 'black' }}>{user?.structure}</TableCell>
+        {/* <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>{user?.groups.join(", ")}</TableCell> */}
+        {/* <TableCell>
           <Button
             variant="contained"
             color={user.isActive ? "secondary" : "primary"}
@@ -103,9 +113,9 @@ function ListUsers({onEditUser}) {
           >
             {user.isActive ? "Désactiver" : "Activer"}
           </Button>
-        </TableCell>
-        <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>{formatDate(user?.createdAt)}</TableCell>
-        <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>
+        </TableCell> */}
+        <TableCell sx={{color: 'black' }}>{formatDate(user?.dateCreation)}</TableCell>
+        <TableCell sx={{color: 'black' }}>
           <IconButton aria-label="edit" size="small" onClick={() => handleEditClick(user.id)}>
             <EditIcon fontSize="inherit" sx={{ color: '#FF6600' }} />
           </IconButton>
