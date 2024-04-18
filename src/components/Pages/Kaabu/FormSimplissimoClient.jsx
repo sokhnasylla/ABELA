@@ -3,11 +3,11 @@ import { Card, Table } from 'react-bootstrap';
 
 function FormSimplissimoClient({userSimplissimo}) {
   if (userSimplissimo.length === 0) {
-    return <div>Aucune donnée à afficher.</div>;
+    return <div></div>;
   }
 
   return (
-    <Card style={{ width: "350px", maxWidth: "100%", marginLeft: "30px" }}>
+    <Card >
       <Card.Header className="text-center fs-4">Simplissimo</Card.Header>
       <Card.Body>
         <Table striped bordered hover>

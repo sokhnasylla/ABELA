@@ -8,7 +8,7 @@ function FormSiplissimo({ simplissimo }) {
   }
 
   return (
-    <Card style={{ width: "350px", maxWidth: "100%", marginLeft: "30px" }}>
+    <Card style={{ top: "15px"}}>
       <Card.Header className="text-center fs-4">Simplissimo</Card.Header>
       <Card.Body>
         <Table striped bordered hover>

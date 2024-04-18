@@ -6,6 +6,9 @@ import { FaArrowAltCircleDown, FaBars, FaThumbsDown } from 'react-icons/fa';
 import Titleges from '../Titleges';
 import { useParams } from 'react-router-dom';
 import { getTokenFromLocalStorage } from '../../../Auth/authUtils';
+import MenuDetailsIncident from './MenuDetailsIncident';
+import NavigateMysmc from '../../GestionProbleme/NavigateMysmc';
+
 
 
 function DetailsIncident() {
@@ -109,10 +112,14 @@ function DetailsIncident() {
                               second: 'numeric',
                             })}</th>
                       </tr>
-                      <tr>
+                      {incident.applicationSis && incident.applicationSis[0] && (
+                       <tr>
                         <th className="styled-table-td">Service Impactés</th>
-                        <th style={{ backgroundColor: "#EA7714", color: "white" }}><strong>{incident.applicationSis.nom}</strong></th>
-                      </tr>
+                        <th style={{ backgroundColor: "#EA7714", color: "white" }}>
+                          <strong>{incident.applicationSis[0].nom}</strong>
+                        </th>
+                       </tr>
+                      )}
                       <tr>
                         <th className="styled-table-td">Impacts</th>
                         <th>{incident.impact}</th>
@@ -186,8 +193,8 @@ function DetailsIncident() {
                         <th>{incident.updateBy}</th>
                       </tr>
                       <tr>
-                        <th>Date diffusion</th>
-                        <th>{incident.dateDiffusion
+                        <th style={{backgroundColor:"#FADBD8"}}>Date diffusion</th>
+                        <th style={{backgroundColor:"#FADBD8"}}>{incident.dateDiffusion
                         && 
                         new Date(incident.dateDiffusion ).toLocaleDateString('fr-FR', {
                           day: 'numeric',
@@ -199,15 +206,31 @@ function DetailsIncident() {
                         })}</th>
                       </tr>
                       <tr>
-                        <th>Diffusé par</th>
-                        <th>{incident.diffusePar}</th>
+                        <th style={{backgroundColor:"#FADBD8"}}>Diffusé par</th>
+                        <th style={{backgroundColor:"#FADBD8"}}>{incident.diffusePar}</th>
                       </tr>
+                      {incident.dateDemandeFermeture && (
+                        <tr>
+                        <th style={{backgroundColor:"#D6EAF8"}}>Demande Demande Fermeture</th>
+                        <th style={{backgroundColor:"#D6EAF8"}}>{incident.dateDemandeFermeture}</th>
+                      </tr>
+                      )}
+                       {incident.demandeFermeturePar && (
+                        <tr>
+                        <th style={{backgroundColor:"#D6EAF8"}}>Demande Demande Fermeture</th>
+                        <th style={{backgroundColor:"#D6EAF8"}}>{incident.demandeFermeturePar}</th>
+                      </tr>
+                      )}
                     </tbody>
                   </Table>
                 </div>
               </Col>
             </Row>
           </Col>
+        <Col md={3} sm={12} sx={{marginTop: "5px"}}>
+         <MenuDetailsIncident/>
+         <NavigateMysmc/>
+        </Col>
         </Row>
 
       </Container>

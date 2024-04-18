@@ -35,6 +35,8 @@ const kaabuItemsMenus=[
     const [userSimplissimo,setUserSimplissimo]=useState([]);
     const token = getTokenFromLocalStorage();
     
+    const [loading,setLoading] =useState(false);
+
     const GetData = async (url,token) => {
       const response = await axios.get(url,{
           headers:{
@@ -52,8 +54,10 @@ const kaabuItemsMenus=[
   };
 
     const handleSearchClick = async() => {
+      setLoading(true);
       const numero=document.getElementById('numero').value ; 
        if (!isInteger(numero)) {
+        setLoading(false);
         alert('Veuillez saisir un numéro valide (entier)');
         return;
     }
@@ -65,6 +69,9 @@ const kaabuItemsMenus=[
       }
       catch (error) {
           console.error('Error fetching data:', error); // Gérez les erreurs de requête
+      }
+      finally{
+        setLoading(false);
       }
     };
      
@@ -87,11 +94,12 @@ const kaabuItemsMenus=[
                   variant='outlined' 
                   size='small'
                    placeholder='Ex:MSISDN'
-                    sx={{ width: "450px"}} 
+                   sx={{ width: "500px", maxWidth: "100%" }}
+                    s
                     />
                  </div>
-                 <div className='mb-3' id='search' style={{ marginLeft: "20%", display: "block" }}>
-                  <Button onClick={handleSearchClick} style={{ backgroundColor: "#C9302C", borderColor: "#C9302C" }}><FaSearch /></Button>
+                 <div className='mb-3 float-end' id='search' style={{ marginLeft: "17%" }}>
+                  <Button onClick={handleSearchClick} style={{ backgroundColor: "#C9302C", borderColor: "#C9302C" }}>Rechercher</Button>
                  </div>
 
                  </div>
@@ -102,11 +110,13 @@ const kaabuItemsMenus=[
             </Row>
             <Row>
               <Col sm={8}>
-                    {userSimplissimo && (
+              {loading && (
+                            <div style={{ marginTop: "10px" }}>Chargement en cours...</div>
+                        )}
+                    {userSimplissimo && !loading && (
                       <div>
-                        <Title text="Informations du client"/>
                         <br />
-                        <div style={{display:"flex"}}>
+                        <div>
                            <FormSimplissimoClient userSimplissimo={userSimplissimo}/>
                          </div>   
                              <br />

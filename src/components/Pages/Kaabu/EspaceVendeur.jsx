@@ -34,6 +34,8 @@ function EspaceVendeur() {
     const [userNotFound, setUserNotFound] = useState(false);
     const token = getTokenFromLocalStorage();
 
+    const [loading, setLoading] = useState(false);
+
     const GetData = async (url,token) => {
         const response = await axios.get(url,{
             headers:{
@@ -48,12 +50,14 @@ function EspaceVendeur() {
       };
       
       const handleSearchClick = async () => {
+        setLoading(true);
         const identifiant = document.getElementById('identifiant').value;
         const url = `http://localhost:8082/abela-selfservice/api/v1/kaabu/verification-user/${identifiant}`;
         console.log('URL:', url); // Vérifiez si l'URL est correcte
         try {
             if (!identifiant || identifiant.trim() === "") {
                 alert('Veuillez saisir un identifiant valide');
+                setLoading(false);
                 return;
             }
     
@@ -69,6 +73,9 @@ function EspaceVendeur() {
             }
         } catch (error) {
             console.error('Error fetching data:', error); // Gérez les erreurs de requête
+        }
+        finally {
+            setLoading(false); // Réinitialiser l'état de chargement une fois que la requête est terminée
         }
         
     };
@@ -88,13 +95,16 @@ function EspaceVendeur() {
                         <div style={{ display: "flex" }}>
                             <div className='mb-3'>
                                 <InputLabel id="demo-simple-select-label">Identifiant</InputLabel>
-                                <TextField id='identifiant' variant='outlined' size='small' placeholder='Ex:MSISDN/LOGIN' sx={{ width: "450px" }} />
+                                <TextField id='identifiant' variant='outlined' size='small' placeholder='Ex:MSISDN/LOGIN' sx={{ width: "500px", maxWidth: "100%"}} />
                             </div>
-                            <div className='mb-3' id='search' style={{ marginLeft: "20%" }} >
-                                <Button onClick={handleSearchClick} style={{ backgroundColor: " #C9302C", borderColor: " #C9302C" }}><FaSearch /></Button>
+                            <div className='mb-3' id='search' style={{ marginLeft: "17%" }} >
+                                <Button onClick={handleSearchClick} style={{ backgroundColor: " #C9302C", borderColor: " #C9302C" }}>Rechercher</Button>
                             </div>
                         </div>
-                        {userNotFound && !userkaabu.length && (
+                        {loading && (
+                            <div style={{ marginTop: "10px" }}>Chargement en cours...</div>
+                        )}
+                        {userNotFound && !userkaabu.length && !loading && (
                             <div style={{ color: 'red' }}>L'utilisateur n'existe pas sur Kaabu</div>
                         )}
                     </Col>
@@ -106,9 +116,8 @@ function EspaceVendeur() {
                 <Col sm={8}>
                         {userkaabu && (
                             <div>
-                                <Title text="Informations du client" />
                                 <br />
-                                <div style={{ display: "flex" }}>
+                                <div >
                                     <FormKaabu userkaabu={userkaabu} />
                                     <FormSiplissimo simplissimo={simplissimo}/>
                                 </div>

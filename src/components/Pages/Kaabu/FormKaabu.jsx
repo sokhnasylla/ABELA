@@ -7,7 +7,7 @@ function FormKaabu({ userkaabu }) {
   }
 
   return (
-    <Card style={{ width: "350px", maxWidth: "100%" }}>
+    <Card>
       <Card.Header className="text-center fs-4">Kaabu</Card.Header>
       <Card.Body>
         <Table striped bordered hover>

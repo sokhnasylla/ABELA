@@ -48,10 +48,7 @@ function Kaabu() {
       <br />
       <Container>
       <Row>
-        <Col sm={8} style={{ marginTop: "-3%" }}>
-          <Title text="Kaabu-Simplissimo-Reseau"/>
-          <br />
-          <Get url="http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncidents/encours"  columns={columns} showTable={true} />
+        <Col sm={8} >
         </Col>
         <Col  sm={4}>
         <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus} onItemClick={handleMenuClick} />

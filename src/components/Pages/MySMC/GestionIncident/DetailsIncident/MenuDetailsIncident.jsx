@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card ,Nav} from 'react-bootstrap'
-import { FaArrowCircleDown, FaBars, FaInfoCircle, FaQuestionCircle, FaThumbsUp } from 'react-icons/fa'
+import { FaArrowCircleDown, FaBars, FaInfoCircle, FaList, FaQuestionCircle, FaThumbsUp } from 'react-icons/fa'
 
 
 function MenuDetailsIncident() {
@@ -21,43 +21,18 @@ function MenuDetailsIncident() {
             <FaArrowCircleDown/>
         </Card>
         <Nav className="flex-column justify-content-between navigation">
-          <Card
-            style={{ 
-            backgroundColor: "#f0ad4e",
-            transition: "background-color 0.3s",
-            "::hover": { backgroundColor: "#EC971F" } // Appliquer le style au survol
-            }}
-          > 
-            <Nav.link className='text-white'
-                style={{ textAlign: "center",
-                display:"flex",
-                justifyContent:"space-around",
-                alignItems:"center"}}
-            >
-                <FaQuestionCircle/>
-              Demande validation avis
-                <FaInfoCircle/> 
-            </Nav.link>
-          </Card>
-
-          <Card
-            style={{ 
-            backgroundColor: "#f0ad4e",
-            transition: "background-color 0.3s",
-            "::hover": { backgroundColor: "#EC971F" } // Appliquer le style au survol
-            }}
-          > 
-            <Nav.link className='text-white'
-                style={{ textAlign: "center",
-                display:"flex",
-                justifyContent:"space-around",
-                alignItems:"center"}}
-            >
-                <FaThumbsUp/>
-                  Validation de l'avis
-                <FaInfoCircle/> 
-            </Nav.link>
-          </Card>
+        <Nav className="flex-column justify-content-between navigation">
+        <Card>
+          <Nav.Link className='text-white' 
+                    href='/mysmc/gestionincident'
+                    style={{ textAlign: "center",display:"flex",justifyContent:"space-around",alignItems:"center"}}>
+            <FaList />
+            Retour à la liste avis
+            <FaInfoCircle/>
+          </Nav.Link>
+        </Card>
+      </Nav>
+      
         </Nav>
     </div>
   )
