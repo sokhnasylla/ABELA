@@ -46,7 +46,7 @@ function Kaabu() {
     <div>
       <Header/>
       <br />
-      <Container>
+      <Container className='body'>
       <Row>
         <Col sm={8} >
         </Col>
