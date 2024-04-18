@@ -1,6 +1,4 @@
-#home .container{
-   
-}
+
 #home{
     height: 100vh;
     margin: 0;
@@ -14,6 +12,15 @@
 .content{
     margin: 0;
 }
+
+div.menu.card {
+    border: none;
+}
+
+.content {
+    margin-bottom: 50px; /* pour ne pas cacher la pagination */
+}
+
 #home .titre{
     /* margin: 0;
     border-radius: 5px;

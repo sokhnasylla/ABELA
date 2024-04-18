@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import "./home.css"
 import Header from '../../Header/Header';
 import Footer from '../../Footer/Footer';
@@ -27,34 +27,59 @@ const submenu=[
 // console.log(token);
 
 
-function Home() {
+class Home extends Component {
+  state = {
+    historiques: []
+  };
 
-  useAuth()
-
-
+  componentDidMount() {
+    fetch('http://localhost:8084/abela-selfservice/api/v1/local/historiques')
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Erreur de récupération des données');
+      })
+      .then((result) => {
+        if (result.success) {
+          this.setState({ historiques: result.data });
+        } else {
+          throw new Error('Erreur de succès');
+        }
+      })
+      .catch(error => {
+        console.error('Erreur de récupération des données:', error);
+      });
+  }
   
-  return (
-    <div id='home'>
-        <Header/>
-        <Footer/>
-        <Menu/>
+  ///useAuth()
+
+  render() {
+    return (
+      <div id='home'>
+        <Header />
+        <Footer />
+        <Menu />
       
-       <Container className='body'>
-        <Row>
-         <Col className='menu'>
-          <MenuLeft submenu={submenu}/></Col>
-         <Col xs={10} className='content'>
-          <Title text="20 dernieres taches integrees dans SELF"/>
-          <TableBase
-          columns={columns}
-          data={data}
-    />
-         </Col> 
-        </Row>
-       </Container>
-     
-    </div>
-  )
+        <Container className='body'>
+          <Row>
+            <Col className='menu'>
+              <MenuLeft submenu={submenu} />
+            </Col>
+            <Col xs={10} className='content'>
+              <Title text="20 dernieres taches integrees dans SELF" />
+              <TableBase
+                columns={columns}
+                data={this.state.historiques}
+              />
+            </Col>
+          </Row>
+        </Container>
+      
+      </div>
+    );
+  }
 }
+
 
 export default Home

@@ -80,7 +80,7 @@ function EspaceVendeur() {
     return (
         <div id='home'>
             <Header />
-            <Container>
+            <Container className='body'>
                 <Row>
                     <Col sm={8}>
                         <Title text="Vérification par numéro ou login" />

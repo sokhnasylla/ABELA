@@ -5,25 +5,30 @@ const columns = [
         selector: row => row.id,
         sortable: true,
     },
-    {
-        name: 'Libelle Tache Applicatif',
-        selector: row => row.libelle,
-    },
+    // {
+    //     name: 'Libelle Tache Applicatif',
+    //     selector: row => row.libelle,
+    // },
     
     {
         name: 'Description',
-        selector: row => row.desc,
+        selector: row => row.evenement,
     },
     {
         name: 'Application',
-        selector: row => row.app,
+        selector: row => row.application,
+    },
+    {
+        name: 'Reference Client',
+        selector: row => row.refClient,
     },
     {
         name: 'Date de Création',
-        selector: row => row.date,
+        selector: row => row.timestamp,
         sortable: true,
     },
 ];
+
 const data=[
     {
         id:1,
