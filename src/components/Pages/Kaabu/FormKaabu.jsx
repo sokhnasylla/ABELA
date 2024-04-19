@@ -18,6 +18,7 @@ function getStatusText(status) {
 }
 
 function FormKaabu({ userkaabu }) {
+  
   if (userkaabu.length === 0) {
     return <div></div>;
   }
@@ -46,16 +47,23 @@ function FormKaabu({ userkaabu }) {
             </tr>
             <tr>
               <th>Role:</th>
-              <td>{userkaabu[0].role}</td>
-            </tr>
-            <tr>
-              <th>Date Première Connection:</th>
-              <td>{userkaabu[0].datePremierConnectionPin}</td>
+              <td style={{ backgroundColor: userkaabu[0].role === "Vendeur" ? "green" : "red",
+               color: userkaabu[0].role === "Vendeur" ? "white" : "white", 
+               fontWeight: userkaabu[0].role === "Vendeur" ? "bold" : "bold" }}>
+                {userkaabu[0].role}
+              </td>
             </tr>
             <tr>
               <th>Profil:</th>
-              <td><li>{userkaabu[0].profils}</li></td>
+              <td>
+                <ul>
+                  {userkaabu[0].profils.map((profil, index) => (
+                    <li key={index}>{profil}</li>
+                  ))}
+                </ul>
+              </td>
             </tr>
+
             <tr>
               <th>TypeUser:</th>
               <td>{userkaabu[0].typeuser}</td>
@@ -66,8 +74,15 @@ function FormKaabu({ userkaabu }) {
             </tr>
             <tr>
               <th>Opérations:</th>
-              <td><li>{userkaabu[0].operations}</li></td>
+              <td>
+                <ul>
+                  {userkaabu[0].operations.map((operation, index) => (
+                    <li key={index}>{operation}</li>
+                  ))}
+                </ul>
+              </td>
             </tr>
+
             <tr>
               <th>Contact:</th>
               <td>{userkaabu[0].contact}</td>

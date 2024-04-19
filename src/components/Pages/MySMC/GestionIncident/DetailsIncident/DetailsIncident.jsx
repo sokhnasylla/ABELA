@@ -147,7 +147,7 @@ function DetailsIncident() {
                     <tbody>
                       <tr>
                         <th>Diffusion</th>
-                        <th>{incident.delaiDetection}<FaThumbsDown  sx={{ color: "red" }} /> </th>
+                        <th>{incident.delaiDetection}<FaThumbsDown /> </th>
                       </tr>
                       <tr>
                         <th>Traitement</th>
