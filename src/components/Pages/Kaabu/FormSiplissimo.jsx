@@ -31,11 +31,12 @@ function FormSiplissimo({ simplissimo }) {
             </tr>
             <tr>
               <th>Statut:</th>
-              <td style={{ backgroundColor: simplissimo.statut === "Actif" ? "green" : "transparent", color: simplissimo.statut === "Actif" ? "white" : "black", fontWeight: simplissimo.statut === "Actif" ? "bold" : "normal" }}>
+              <td style={{ backgroundColor: simplissimo.statut === "Actif" ? "green" : "transparent",
+               color: simplissimo.statut === "Actif" ? "white" : "black", 
+               fontWeight: simplissimo.statut === "Actif" ? "bold" : "normal" }}>
                 {simplissimo.statut}
               </td>
             </tr>
-
           </tbody>
         </Table>
       </Card.Body>

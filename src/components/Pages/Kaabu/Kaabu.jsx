@@ -45,10 +45,10 @@ function Kaabu() {
   return (
     <div>
       <Header/>
-      <br />
+      <br /><br />
       <Container className='body'>
       <Row>
-        <Col sm={8} >
+        <Col>
         </Col>
         <Col  sm={4}>
         <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus} onItemClick={handleMenuClick} />

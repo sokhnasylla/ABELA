@@ -14,16 +14,17 @@ function FormSimplissimoClient({userSimplissimo}) {
           <tbody>
             <tr>
               <th>Identification:</th>
-              {userSimplissimo.data.isIdentified ? (<td>OUI</td>):(<td>NON</td>)}
+              {userSimplissimo.data.isIdentified ? (<td style={{backgroundColor:"green",color:"white",fontWeight:"bold"}}>OUI</td>)
+              :(<td style={{backgroundColor:"red",color:"white",fontWeight:"bold"}}>NON</td>)}
             </tr>
             <tr>
               <th>APNNOMAD:</th>
-              <td>
+              <td style={{ padding: "0"}}>
                 {userSimplissimo.data.services && userSimplissimo.data.services.some(service => service.code.includes("APNNOMAD")) ? (
                   userSimplissimo.data.services
                     .filter(service => service.code.includes("APNNOMAD"))
                     .map(service => (
-                      <div key={service.statut}>
+                      <div key={service.statut} style={{ backgroundColor: service.statut === "Active" ? "green" : "red", color: "white", fontWeight: "bold", padding: "10px" }}>
                         {service.statut === "Active" || service.statut === "Desactive" ? (
                           service.statut
                         ) : (
@@ -35,7 +36,9 @@ function FormSimplissimoClient({userSimplissimo}) {
                   "Service non disponible"
                 )}
               </td>
-           </tr>
+            </tr>
+
+
 
           </tbody>
         </Table>
