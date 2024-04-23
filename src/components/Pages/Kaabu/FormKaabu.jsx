@@ -1,7 +1,24 @@
 import React from 'react';
 import { Card, Table } from 'react-bootstrap';
 
+
+function getStatusText(status) {
+  switch (status) {
+      case "0":
+          return { text: "Activer", backgroundColor: "green", color: "white" };
+      case "-1":
+          return { text: "Désactiver", backgroundColor: "red", color: "white" };
+      case "1":
+          return { text: "Suspendre", backgroundColor: "red", color: "white" };
+      case "2":
+          return { text: "Cloturer", backgroundColor: "red", color: "white" };
+      default:
+          return { text: "Inconnu", backgroundColor: "black", color: "white" };
+  }
+}
+
 function FormKaabu({ userkaabu }) {
+  
   if (userkaabu.length === 0) {
     return <div></div>;
   }
@@ -30,16 +47,23 @@ function FormKaabu({ userkaabu }) {
             </tr>
             <tr>
               <th>Role:</th>
-              <td>{userkaabu[0].role}</td>
-            </tr>
-            <tr>
-              <th>Date Première Connection:</th>
-              <td>{userkaabu[0].datePremierConnectionPin}</td>
+              <td style={{ backgroundColor: userkaabu[0].role === "Vendeur" ? "green" : "red",
+               color: userkaabu[0].role === "Vendeur" ? "white" : "white", 
+               fontWeight: userkaabu[0].role === "Vendeur" ? "bold" : "bold" }}>
+                {userkaabu[0].role}
+              </td>
             </tr>
             <tr>
               <th>Profil:</th>
-              <td>{userkaabu[0].profils}</td>
+              <td>
+                <ul>
+                  {userkaabu[0].profils.map((profil, index) => (
+                    <li key={index}>{profil}</li>
+                  ))}
+                </ul>
+              </td>
             </tr>
+
             <tr>
               <th>TypeUser:</th>
               <td>{userkaabu[0].typeuser}</td>
@@ -50,12 +74,26 @@ function FormKaabu({ userkaabu }) {
             </tr>
             <tr>
               <th>Opérations:</th>
-              <td>{userkaabu[0].operations}</td>
+              <td>
+                <ul>
+                  {userkaabu[0].operations.map((operation, index) => (
+                    <li key={index}>{operation}</li>
+                  ))}
+                </ul>
+              </td>
             </tr>
+
             <tr>
               <th>Contact:</th>
               <td>{userkaabu[0].contact}</td>
             </tr>
+            <tr>
+              <th>Statut:</th>
+              <td style={{ backgroundColor: userkaabu[0].status ? getStatusText(userkaabu[0].status).backgroundColor : "", color: "white",fontWeight:"bold" }}>
+                {userkaabu[0].status && getStatusText(userkaabu[0].status).text}
+              </td>
+            </tr>
+
           </tbody>
         </Table>
       </Card.Body>
@@ -64,4 +102,3 @@ function FormKaabu({ userkaabu }) {
 }
 
 export default FormKaabu;
-
