@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Table } from 'react-bootstrap';
 import "../MySMC/GestionIncident/ajoutavis.css"
 
-function FormSiplissimo({ simplissimo }) {
+function FormSimplissimo({ simplissimo }) {
   if (!simplissimo || simplissimo.length === 0) {
     return <div></div>;
   }
@@ -44,4 +44,4 @@ function FormSiplissimo({ simplissimo }) {
   );
 }
 
-export default FormSiplissimo;
+export default FormSimplissimo;

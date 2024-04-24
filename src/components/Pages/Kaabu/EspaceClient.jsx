@@ -11,8 +11,6 @@ import { FaSearch, FaHome, FaPaperclip} from "react-icons/fa";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
-import FormKaabu from './FormKaabu'
-import FormSiplissimo from './FormSiplissimo'
 import { getTokenFromLocalStorage } from '../Auth/authUtils'
 import axios from 'axios'
 import FormSimplissimoClient from './FormSimplissimoClient'

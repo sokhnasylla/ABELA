@@ -13,7 +13,7 @@ import { IoStatsChart } from "react-icons/io5";
 import FormKaabu from './FormKaabu';
 import { getTokenFromLocalStorage } from '../Auth/authUtils';
 import axios from 'axios';
-import FormSiplissimo from './FormSiplissimo';
+import FormSimplissimo from './FormSimplissimo';
 
 function EspaceVendeur() {
     const gestionIncidentItemsNavigate = [
@@ -119,7 +119,7 @@ function EspaceVendeur() {
                                 <br />
                                 <div >
                                     <FormKaabu userkaabu={userkaabu} />
-                                    <FormSiplissimo simplissimo={simplissimo}/>
+                                    <FormSimplissimo simplissimo={simplissimo}/>
                                 </div>
                                 <br />
                             </div>
