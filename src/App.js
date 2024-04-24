@@ -41,6 +41,7 @@ import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsPro
 import EspaceClient from "./components/Pages/Kaabu/EspaceClient"
 import EspaceVendeur from "./components/Pages/Kaabu/EspaceVendeur"
 import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident/DetailsIncident';
+import Role from './components/Pages/Dashboard/Role/Role'
 
 
 
@@ -59,6 +60,7 @@ function App() {
             <Route path="/monprofil" element={<MonProfil/>} />
             <Route path="/admin" element={<Dashboard/>} />
             <Route path="/admin/user" element={<User/>} />
+            <Route path="/admin/role" element={<Role/>} />
             <Route path="/admin/group" element={<Auth/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />

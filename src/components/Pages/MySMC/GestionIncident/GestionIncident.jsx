@@ -20,7 +20,7 @@ const CelluleAction = ({id}) => (
     <Link to={`/mysmc/gestionincident/details/${id}`}>
       <Button variant='info'
         style={{backgroundColor: "#31B0D5",padding:"1px 5px",lineHeight:"1.2",borderRadius:"3px"}}
-        title="Voir les détails du problème">
+        title="Voir les détails de l'avis">
         <FaEye color='white'/>
 
       </Button>

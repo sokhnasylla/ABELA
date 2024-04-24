@@ -63,14 +63,6 @@ function Kaabu() {
       </Row>
       </Container>
         
-        
-        {/* <div>
-        {currentForm === "verifnumsimplissimo" ?<FormVerifNum/> : null}
-        {currentForm === "veriflogsimplissimo" ?<FormVerifLogin/> : null}
-        {currentForm === "verifnumhlr" ?<FormVerifNumHlr/> : null}
-        {currentForm === "veriflogkaabu" ?<FormVerifLogKaabu/> : null}
-      </div> */}
-
     </div>
   )
 }

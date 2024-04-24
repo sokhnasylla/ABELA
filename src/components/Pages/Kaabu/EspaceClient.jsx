@@ -11,8 +11,6 @@ import { FaSearch, FaHome, FaPaperclip} from "react-icons/fa";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
-import FormKaabu from './FormKaabu'
-import FormSiplissimo from './FormSiplissimo'
 import { getTokenFromLocalStorage } from '../Auth/authUtils'
 import axios from 'axios'
 import FormSimplissimoClient from './FormSimplissimoClient'
@@ -33,8 +31,9 @@ const kaabuItemsMenus=[
 ];
    
     const [userSimplissimo,setUserSimplissimo]=useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
     const token = getTokenFromLocalStorage();
-    
+    const [userNotFound, setUserNotFound] = useState(false);
     const [loading,setLoading] =useState(false);
 
     const GetData = async (url,token) => {
@@ -58,8 +57,12 @@ const kaabuItemsMenus=[
       const numero=document.getElementById('numero').value ; 
        if (!isInteger(numero)) {
         setLoading(false);
-        alert('Veuillez saisir un numéro valide (entier)');
+        setErrorMessage('Veuillez saisir un numéro valide (entier)');
+        setUserNotFound(false);
         return;
+    }
+    else{
+      setUserNotFound(true);
     }
       const url = `http://localhost:8082/abela-selfservice/api/v1/kaabu/verification-client/${numero}`;
       console.log('URL:', url); // Vérifiez si l'URL est correcte
@@ -101,8 +104,15 @@ const kaabuItemsMenus=[
                  <div className='mb-3 float-end' id='search' style={{ marginLeft: "17%" }}>
                   <Button onClick={handleSearchClick} style={{ backgroundColor: "#C9302C", borderColor: "#C9302C" }}>Rechercher</Button>
                  </div>
-
-                 </div>
+                </div>
+                {loading && (
+                            <div style={{ marginTop: "10px" }}>Chargement en cours...</div>
+                )}
+                {errorMessage && (
+                            <div className="alert alert-danger" role="alert">
+                                {errorMessage}
+                            </div>
+                        )}
                 </Col>
                 <Col sm={4} style={{marginTop:"40px"}}>
                     <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus}  onItemClick={() => { }}/>
@@ -110,20 +120,16 @@ const kaabuItemsMenus=[
             </Row>
             <Row>
               <Col sm={8}>
-              {loading && (
-                            <div style={{ marginTop: "10px" }}>Chargement en cours...</div>
-                        )}
-                    {userSimplissimo && !loading && (
+                    {userSimplissimo &&(
                       <div>
                         <br />
                         <div>
                            <FormSimplissimoClient userSimplissimo={userSimplissimo}/>
                          </div>   
                              <br />
-                           
-                          
                       </div>
                       )}
+                      
               </Col>
               <Col sm={4} style={{ marginTop: "3%" }}>
                 <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={() => { }}/>
