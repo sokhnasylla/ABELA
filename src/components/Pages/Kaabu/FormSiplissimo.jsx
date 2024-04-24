@@ -3,6 +3,8 @@ import { Card, Table } from 'react-bootstrap';
 import "../MySMC/GestionIncident/ajoutavis.css"
 
 function FormSiplissimo({ simplissimo }) {
+
+  console.log("----------------", simplissimo);
   if (!simplissimo || simplissimo.length === 0) {
     return <div></div>;
   }
