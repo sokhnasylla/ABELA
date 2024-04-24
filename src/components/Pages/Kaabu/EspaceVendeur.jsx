@@ -31,6 +31,7 @@ function EspaceVendeur() {
 
     const [userkaabu, setUserkaabu] = useState([]);
     const [simplissimo, setSimplissimo] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
     const [userNotFound, setUserNotFound] = useState(false);
     const token = getTokenFromLocalStorage();
 
@@ -56,10 +57,15 @@ function EspaceVendeur() {
         console.log('URL:', url); // Vérifiez si l'URL est correcte
         try {
             if (!identifiant || identifiant.trim() === "") {
-                alert('Veuillez saisir un identifiant valide');
                 setLoading(false);
-                return;
-            }
+                setErrorMessage("Veuillez saisir un identifiant valide");
+                return;      
+             }
+             if(!simplissimo){
+                setLoading(false);
+                setErrorMessage("L'utilisateur n'existe pas sur simplissimo");
+                return;  
+             }
     
             const response = await GetData(url, token);
             console.log('Response:', response); // Vérifiez la réponse de l'API
@@ -69,8 +75,9 @@ function EspaceVendeur() {
                 setSimplissimo(response.data.data.userSimplissimo);
                 setUserNotFound(false); // Réinitialiser l'état userNotFound
             } else {
-                setUserNotFound(true);
+                setUserNotFound(true);     
             }
+            
         } catch (error) {
             console.error('Error fetching data:', error); // Gérez les erreurs de requête
         }
@@ -104,9 +111,18 @@ function EspaceVendeur() {
                         {loading && (
                             <div style={{ marginTop: "10px" }}>Chargement en cours...</div>
                         )}
-                        {userNotFound && !userkaabu.length && !loading && (
-                            <div style={{ color: 'red' }}>L'utilisateur n'existe pas sur Kaabu</div>
+                         {errorMessage && (
+                            <div className="alert alert-danger" role="alert">
+                                {errorMessage}
+                            </div>
                         )}
+
+                        {userNotFound && !userkaabu.length && !loading && (
+                            <div className="alert alert-danger" role="alert">
+                                L'utilisateur n'existe pas sur Kaabu
+                            </div>
+                        )} 
+                                                                        
                     </Col>
                     <Col sm={4} style={{ marginTop: "40px" }}>
                         <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus} onItemClick={() => { }} />

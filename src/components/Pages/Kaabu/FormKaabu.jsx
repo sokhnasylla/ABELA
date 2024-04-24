@@ -18,7 +18,7 @@ function getStatusText(status) {
 }
 
 function FormKaabu({ userkaabu }) {
-  
+  console.log("----------------", userkaabu);
   if (userkaabu.length === 0) {
     return <div></div>;
   }
