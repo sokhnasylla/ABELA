@@ -40,6 +40,7 @@ import { Details } from '@mui/icons-material';
 import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsProbleme/DetailsProbleme';
 import EspaceClient from "./components/Pages/Kaabu/EspaceClient"
 import EspaceVendeur from "./components/Pages/Kaabu/EspaceVendeur"
+import Audit from './components/Pages/Dashboard/Audit/Audit';
 
 
 
@@ -58,6 +59,7 @@ function App() {
             <Route path="/monprofil" element={<MonProfil/>} />
             <Route path="/admin" element={<Dashboard/>} />
             <Route path="/admin/user" element={<User/>} />
+            <Route path='/admin/audit' element={<Audit/>}/>
             <Route path="/admin/group" element={<Auth/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />

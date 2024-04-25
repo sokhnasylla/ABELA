@@ -46,8 +46,8 @@ function Auth({ onFormSubmit }) {
     console.log(formData);
     if (
       (activeStep === 0 &&
-        formData.firstName &&
-        formData.lastName &&
+        formData.prenom &&
+        formData.nom &&
         formData.email &&
         formData.structure) ||
       activeStep === 1
@@ -77,8 +77,8 @@ function Auth({ onFormSubmit }) {
       }
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     } else {
-      // Afficher un message d'erreur ou empêcher la progression
-      alert('Veuillez remplir tous les champs obligatoires.');
+      // // Afficher un message d'erreur ou empêcher la progression
+      // alert('Veuillez remplir tous les champs obligatoires.');
     }
   };
 

@@ -11,7 +11,7 @@ export default function FormUser({ handleInputChange, formData }) {
         <TextField
           required
           id="firstName"
-          name="firstName"
+          name="prenom"
           label="Prenom"
           fullWidth
           autoComplete="given-name"
@@ -24,7 +24,7 @@ export default function FormUser({ handleInputChange, formData }) {
         <TextField
           required
           id="lastName"
-          name="lastName"
+          name="nom"
           label="Nom"
           fullWidth
           autoComplete="family-name"

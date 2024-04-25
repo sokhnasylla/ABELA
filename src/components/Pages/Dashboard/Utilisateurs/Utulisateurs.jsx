@@ -51,26 +51,9 @@ function Utulisateurs() {
     <Container maxWidth="lg" sx={{ mt: 2, mb: 2, mr: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          {/* <Auth/> */}
-
+       
           {content}
-          {/* {showForm ? (
-            <Auth onFormSubmit={handleFormSubmit} />
-          ) : (
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-              <Grid sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
-                <Fab variant="extended" sx={{backgroundColor:"#148C8A" ,color:"white"}}>
-                  <FilterAlt sx={{ mr: 1, color: 'white' }} />
-                  Filtrer
-                </Fab>
-                <Fab variant="extended" onClick={handleAddClick} sx={{backgroundColor:"#148C8A" ,color:"white"}}>
-                  <AddCircleIcon sx={{ mr: 1, color: 'white' }} />
-                  Ajouter
-                </Fab>
-              </Grid>
-              <ListUsers onEditUser={handleEditUser} />
-            </Paper>
-          )} */}
+    
         </Grid>
       </Grid>
     </Container>
