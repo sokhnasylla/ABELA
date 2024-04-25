@@ -40,7 +40,8 @@ import { Details } from '@mui/icons-material';
 import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsProbleme/DetailsProbleme';
 import EspaceClient from "./components/Pages/Kaabu/EspaceClient"
 import EspaceVendeur from "./components/Pages/Kaabu/EspaceVendeur"
-import Audit from './components/Pages/Dashboard/Audit/Audit';
+import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident/DetailsIncident';
+import Role from './components/Pages/Dashboard/Role/Role'
 
 
 
@@ -59,7 +60,7 @@ function App() {
             <Route path="/monprofil" element={<MonProfil/>} />
             <Route path="/admin" element={<Dashboard/>} />
             <Route path="/admin/user" element={<User/>} />
-            <Route path='/admin/audit' element={<Audit/>}/>
+            <Route path="/admin/role" element={<Role/>} />
             <Route path="/admin/group" element={<Auth/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />
@@ -75,6 +76,7 @@ function App() {
             < Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<RechercheProbleme/>} />
             < Route path="/mysmc/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
             <Route path={`/mysmc/gestionprobleme/details/:id`} element={<DetailsProbleme/>} />
+            <Route path={`/mysmc/gestionincident/details/:id`} element={<DetailsIncident/>} />
             < Route path="/mysmc/etatsupervision" element={<EtatSupervision/>} />
             < Route path="/etatsupervision/alarmesok" element={<AlarmeOk/>} />
             < Route path="/etatsupervision/vr04service" element={<VR04Service/>} />

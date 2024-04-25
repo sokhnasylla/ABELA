@@ -1,13 +1,14 @@
 import React from 'react';
 import { Card, Table } from 'react-bootstrap';
+import "../MySMC/GestionIncident/ajoutavis.css"
 
 function FormSiplissimo({ simplissimo }) {
-  if (!simplissimo) {
-    return <div>Aucune donnée à afficher.</div>;
+  if (!simplissimo || simplissimo.length === 0) {
+    return <div></div>;
   }
 
   return (
-    <Card style={{ width: "350px", maxWidth: "100%", marginLeft: "30px" }}>
+    <Card style={{ top: "15px"}}>
       <Card.Header className="text-center fs-4">Simplissimo</Card.Header>
       <Card.Body>
         <Table striped bordered hover>
@@ -30,7 +31,11 @@ function FormSiplissimo({ simplissimo }) {
             </tr>
             <tr>
               <th>Statut:</th>
-              <td>{simplissimo.statut}</td>
+              <td style={{ backgroundColor: simplissimo.statut === "Actif" ? "green" : "transparent",
+               color: simplissimo.statut === "Actif" ? "white" : "black", 
+               fontWeight: simplissimo.statut === "Actif" ? "bold" : "normal" }}>
+                {simplissimo.statut}
+              </td>
             </tr>
           </tbody>
         </Table>

@@ -4,7 +4,6 @@ import axios from 'axios';
 import { getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
 
 
-
 function Get({ url, columns, showTable = true }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -25,6 +24,7 @@ function Get({ url, columns, showTable = true }) {
         console.log(response);
 
         setData(response.data);
+
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       } finally {

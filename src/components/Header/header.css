@@ -1,4 +1,7 @@
 .myhead {
+    position: fixed;
+    top: 0;
+    overflow: hidden;
     font-size: 12px !important;
     background-color: #148C8A;
     color: white;
@@ -7,6 +10,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 1;
 }
 
 .myhead .nav-item {

@@ -69,6 +69,14 @@ export default function NestedList( ) {
         </ListItemIcon>
         <ListItemText primary="Supervision Technique" />
       </ListItemButton>
+      <Link href="/admin/role" color="initial" underline='none'>
+         <ListItemButton >
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Roles"  />
+          </ListItemButton>
+      </Link>
       <Link href="/admin/user" color="initial" underline='none'>
          <ListItemButton >
                 <ListItemIcon>
