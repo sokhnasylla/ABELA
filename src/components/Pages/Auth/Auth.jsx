@@ -23,7 +23,7 @@ function Auth({ onFormSubmit }) {
     loginWindows: '',
     structure: ''
   });
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({

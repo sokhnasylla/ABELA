@@ -50,7 +50,7 @@ function ListRole(onEditUser) {
    console.log(error);
     const handleDeleteClick = async (id) => {
       try {
-        const response = await fetch(`http://127.0.0.1:8083/api/users/${id}/deactivate`, {
+        const response = await fetch(`http://localhost:8082/abela-usermanagement/api/v1/users/roles/${id}/deactivate`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ function ListRole(onEditUser) {
             Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axios.get(`http://127.0.0.1:8083/api/users/${id}`, config);
+        const response = await axios.get(`http://localhost:8082/abela-usermanagement/api/v1/users/roles/${id}`, config);
         onEditUser(response.data);
       } catch (error) {
         console.error('Une erreur s\'est produite lors de la récupération des données de l\'utilisateur : ', error);

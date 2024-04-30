@@ -101,19 +101,6 @@ function ListUsers({onEditUser}) {
         <TableCell sx={{color: 'black' }}>{user?.nom}</TableCell>
         <TableCell sx={{color: 'black' }}>{user?.login}</TableCell>
         <TableCell sx={{color: 'black' }}>{user?.structure}</TableCell>
-        {/* <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>{user?.groups.join(", ")}</TableCell> */}
-        {/* <TableCell>
-          <Button
-            variant="contained"
-            color={user.isActive ? "secondary" : "primary"}
-            sx={{ fontWeight: 'bold', color: 'black' }}
-            onMouseEnter={(event) => event.target.style.color = 'blue'}
-            onMouseLeave={(event) => event.target.style.color = 'black'}
-            onClick={() => handleDeleteClick(user.id)}
-          >
-            {user.isActive ? "Désactiver" : "Activer"}
-          </Button>
-        </TableCell> */}
         <TableCell sx={{color: 'black' }}>{formatDate(user?.dateCreation)}</TableCell>
         <TableCell sx={{color: 'black' }}>
           <IconButton aria-label="edit" size="small" onClick={() => handleEditClick(user.id)}>
