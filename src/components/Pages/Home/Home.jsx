@@ -37,15 +37,14 @@ class Home extends Component {
 
   componentDidMount() {
     getHistorique().then((result) => {
-        if (result.success) {
-          this.setState({ historiques: result.data });
-        } else {
-          throw new Error('Erreur de succès');
+        if(result) {
+          if (result.success) {
+            this.setState({ historiques: result.data });
+          } else {
+            this.alertService.showNotificationAlertError(result.message || 'Une erreur s\'est produite');
+          }
         }
       })
-      .catch(error => {
-        // console.error('Erreur de récupération des données:', error);
-      });
   }
   
   ///useAuth()

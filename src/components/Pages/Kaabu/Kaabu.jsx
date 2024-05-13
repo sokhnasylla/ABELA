@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{Component, useEffect, useState} from 'react'
 import useAuth from '../Auth/useAuth';
 import Header from '../../Header/Header'
 import { Container,Row,Col, Button } from 'react-bootstrap'
@@ -18,141 +18,113 @@ import { InputLabel, TextField } from '@mui/material';
 import FormKaabu from './FormKaabu';
 import FormSimplissimo from './FormSimplissimo';
 import httpClient from '../../../config/interceptor.config';
+import getAllInfoUser from './kaabu.service';
+import { AlertService } from '../../../utils/alert.service';
+import FormNetwork from './FormNetwork';
 
-const kaabuItemsMenus=[
 
-    {label:"Espace Client",link:"/kaabu/espace/client",icon:FaUserGroup},
-    {label:"Espace Vendeur",link:"/kaabu/espace/vendeur",icon:FaUserGroup},
-   
-];
+class Kaabu extends Component {
 
-function Kaabu() {
+ alertService = new AlertService();
 
-  const gestionIncidentItemsNavigate = [
+  gestionIncidentItemsNavigate = [
     { label: "Gestion Incidents", link: "/mysmc/gestionincident", icon: ReportProblemIcon },
     { label: "Gestion Probleme", link: "/mysmc/gestionprobleme", icon: ReportProblemIcon },
     { label: "Etat Supervision", link: "/mysmc/etatsupervision", icon: RiDashboard3Line },
     { label: "Consignes Orchestrées", link: "#",icon: FaPaperclip },
     { label: "Suivi Activités ", link: "/mysmc/suivisactivites", icon: IoStatsChart },
     { label: "Page d'acceuil", link: "/mysmc", icon: FaHome },
-];
-const kaabuItemsMenus=[
-    {label:"Espace Client",link:"/kaabu/espace/client",icon:FaUserGroup},
-    {label:"Espace Vendeur",link:"/kaabu/espace/vendeur",icon:FaUserGroup}, 
-];
+  ];
 
-const [userkaabu, setUserkaabu] = useState([]);
-const [simplissimo, setSimplissimo] = useState([]);
-const [userNotFound, setUserNotFound] = useState(false);
-const token = getTokenFromLocalStorage();
+  kaabuItemsMenus=[
+      {label:"Espace Client",link:"/kaabu/espace/client",icon:FaUserGroup},
+      {label:"Espace Vendeur",link:"/kaabu/espace/vendeur",icon:FaUserGroup}, 
+  ];
 
-const [loading, setLoading] = useState(false);
-
-// const GetData = async (url,token) => {
-//     const response = await axios.get(url,{
-//         headers:{
-//             Authorization:`Bearer ${token}`
-//         },
-//     });
-//     console.log(response.data.data.userKaabu);
-//     setUserkaabu(response.data.data.userKaabu);
-//     setSimplissimo(response.data.data.userSimplissimo)
-   
-//     return response.data; 
-//   };
-
-  const GetData = async (url,token) => {
-    const response = await httpClient.get(url);
-    console.log(response.data.data.userKaabu);
-    setUserkaabu(response.data.data.userKaabu);
-    setSimplissimo(response.data.data.userSimplissimo)
-    return response.data; 
+  state = {
+    data: null,
+    loading: false
   };
+
   
-  const handleSearchClick = async () => {
-    setLoading(true);
+  handleSearchClick = () => {
+    this.setState({
+      loading: true,
+      data: null,
+     });
     const identifiant = document.getElementById('identifiant').value;
-    const url = `http://localhost:8082/abela-selfservice/api/v1/kaabu/verification-user/${identifiant}`;
-    console.log('URL:', url); // Vérifiez si l'URL est correcte
-    try {
-        if (!identifiant || identifiant.trim() === "") {
-            alert('Veuillez saisir un identifiant valide');
-            setLoading(false);
-            return;
+      if (!identifiant || identifiant.trim() === "") {
+        this.setState({
+          loading: false,
+         });
+        return;
+      }
+      getAllInfoUser(identifiant).then((result) => {
+        if(result) {
+          if (result.success) {
+            this.setState({
+              data: result.data,
+             });
+          } else {
+            this.alertService.showNotificationAlertError(result.message || 'Une erreur s\'est produite');
+          }
         }
+      })
+      .finally(() => {
+        this.setState({
+          loading: false,
+         });
+      });
+  }
 
-        const response = await GetData(url, token);
-        console.log('Response:', response); // Vérifiez la réponse de l'API
-
-        if (response.data.data && response.data.data.userKaabu && response.data.data.userKaabu.length) {
-            setUserkaabu(response.data.data.userKaabu);
-            setSimplissimo(response.data.data.userSimplissimo);
-            setUserNotFound(false); // Réinitialiser l'état userNotFound
-        } else {
-            setUserNotFound(true);
-        }
-    } catch (error) {
-        console.error('Error fetching data:', error); // Gérez les erreurs de requête
-    }
-    finally {
-        setLoading(false); // Réinitialiser l'état de chargement une fois que la requête est terminée
-    }
-    
-};
-
-useEffect(() => {
-    
-}, [userkaabu,simplissimo]);
-
-return (
-    <div id='home'>
-        <Header />
-        <Container className='body'>
-            <Row>
-                <Col sm={8}>
-                    <Title text="Espace Kaabu Mobile" />
-                    <br />
-                    <div style={{ display: "flex" }}>
-                        <div className='mb-3'>
-                            <InputLabel id="demo-simple-select-label">Identifiant</InputLabel>
-                            <TextField id='identifiant' variant='outlined' size='small' placeholder='Login, Msisdn...' sx={{ width: "500px", maxWidth: "100%"}} />
-                        </div>
-                        <div className='mb-3' id='search' style={{ marginLeft: "83px" }} >
-                            <Button onClick={handleSearchClick} style={{ height: "40px", marginTop: "3px", width: "140px", backgroundColor: "#FF6600", borderColor: " #FF6600" }}>Rechercher</Button>
-                        </div>
-                    </div>
-                    {loading && (
-                        <div style={{ marginTop: "10px" }}>Chargement en cours...</div>
-                    )}
-                    {userNotFound && !userkaabu.length && !loading && (
-                        <div style={{ color: 'red' }}>L'utilisateur n'existe pas sur Kaabu</div>
-                    )}
-                </Col>
-                <Col sm={4} style={{ marginTop: "40px" }}>
-                    <MenuPersoGesIncident propsMenuItems={kaabuItemsMenus} onItemClick={() => { }} />
-                </Col>
-            </Row>
-            <Row>
-            <Col sm={8}>
-                    {userkaabu && (
-                        <div>
-                            <br />
-                            <div >
-                                <FormKaabu userkaabu={userkaabu} />
-                                <FormSimplissimo simplissimo={simplissimo}/>
+  render() {
+    return (
+        <div id='home'>
+            <Header />
+            <Container className='body'>
+                <Row>
+                    <Col sm={8}>
+                        <Title text="Espace Kaabu Mobile" />
+                        <br />
+                        <div style={{ display: "flex" }}>
+                            <div className='mb-3'>
+                                <InputLabel id="demo-simple-select-label">Identifiant</InputLabel>
+                                <TextField id='identifiant' variant='outlined' size='small' placeholder='Login, Msisdn...' sx={{ width: "500px", maxWidth: "100%"}} />
                             </div>
-                            <br />
+                            <div className='mb-3' id='search' style={{ marginLeft: "83px" }} >
+                                <Button onClick={this.handleSearchClick} style={{ height: "40px", marginTop: "3px", width: "140px", backgroundColor: "#FF6600", borderColor: " #FF6600" }}>Rechercher</Button>
+                            </div>
                         </div>
-                    )}
-                </Col>
-                <Col sm={4} style={{ marginTop: "3%" }}>
-                    <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={() => { }} />
-                </Col>
-            </Row>
-        </Container>
-    </div>
-);
-
+                        {this.state.loading && (
+                            <div style={{ marginTop: "10px" }}>Chargement en cours...</div>
+                        )}
+                    </Col>
+                    <Col sm={4} style={{ marginTop: "40px" }}>
+                        <MenuPersoGesIncident propsMenuItems={this.kaabuItemsMenus} onItemClick={() => { }} />
+                    </Col>
+                </Row>
+                <Row>
+                  <Col sm={8}>
+                          {(this.state.data) && (
+                              <div>
+                                  <br />
+                                  <div >
+                                      <FormKaabu userkaabu={this.state.data.userKaabu} />
+                                      <FormSimplissimo simplissimo={this.state.data.userSimplissimo}/>
+                                      <FormNetwork clientNetwork={this.state.data.clientNetwork} />
+                                  </div>
+                                  <br />
+                              </div>
+                          )}
+                  </Col>
+                  <Col sm={4} style={{ marginTop: "3%" }}>
+                    <NavigatePerso propsMenuItems={this.gestionIncidentItemsNavigate} onItemClick={() => { }} />
+                  </Col>
+                </Row>
+            </Container>
+        </div>
+    );
+  }
 
 
 
