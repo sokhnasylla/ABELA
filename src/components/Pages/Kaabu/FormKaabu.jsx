@@ -132,7 +132,7 @@ function FormKaabu({ userkaabu }) {
                   ))}
                 </ul>)}
                 <span>{ new Date(userkaabu.dateLastTransaction).toLocaleDateString("fr-FR",{day: "numeric", month: "numeric", year: "numeric", hour: "numeric", minute: "numeric", second: "numeric",})}</span>
-              </td>): "Pas de demande"}
+              </td>): (<td>Pas de demande</td>)}
             </tr>
           </tbody>)}
         </Table>

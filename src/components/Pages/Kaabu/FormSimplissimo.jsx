@@ -59,7 +59,7 @@ function FormSimplissimo({ simplissimo }) {
                     {simplissimo.verificationMsisdnSimplissimo.apnNomad.statut}
                   </td>
                 ) : (
-                  <td></td>
+                  <td style={{backgroundColor: "#DC143C", color: "white", fontWeight: "bold"}}>Indisponible</td>
                 )}
               </tr>
             )}
