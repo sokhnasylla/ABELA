@@ -49,13 +49,13 @@ export default function FormUser({ handleInputChange, formData }) {
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
-          id="loginWindows"
-          name="loginWindows"
+          id="login"
+          name="login"
           label="Login Windows"
           autoComplete="Login Windows"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formData.loginWindows}
+          defaultValue={formData.login}
         />
       </Grid>
       <Grid item xs={12} sm={6}>

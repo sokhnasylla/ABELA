@@ -105,7 +105,6 @@ function SignInSide() {
                 onChange={(e) => setLogin(e.target.value)}
               />
               <TextField
-                margin="normal"
                 required
                 fullWidth
                 name="password"

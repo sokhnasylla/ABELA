@@ -20,8 +20,9 @@ function Auth({ onFormSubmit }) {
     prenom: '',
     nom: '',
     email: '',
-    loginWindows: '',
-    structure: ''
+    login: '',
+    structure: '',
+    roles:'',
   });
   
   const handleInputChange = (e) => {
@@ -55,7 +56,7 @@ function Auth({ onFormSubmit }) {
       if (activeStep === steps.length - 1) {
 
         const token = getTokenFromLocalStorage();
-        const url = 'http://127.0.0.1:8000/api/register';
+        const url = 'http://localhost:8082/abela-usermanagement/api/v1/auth/register';
         console.log(formData);
         try {
           const response = await axios.post(url, formData, {

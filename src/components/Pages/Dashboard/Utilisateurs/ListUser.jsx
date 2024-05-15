@@ -50,8 +50,8 @@ function ListUsers({onEditUser}) {
  console.log(error);
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8083/api/users/${id}/deactivate`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:8082/abela-usermanagement/api/v1/users/desactiver/${id}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
