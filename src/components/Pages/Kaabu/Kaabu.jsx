@@ -1,23 +1,18 @@
-import React,{Component, useEffect, useState} from 'react'
-import useAuth from '../Auth/useAuth';
+import React,{Component} from 'react'
 import Header from '../../Header/Header'
 import { Container,Row,Col, Button } from 'react-bootstrap'
 import MenuPersoGesIncident from '../MySMC/GestionIncident/MenuPersoGesIncident';
 import Title from '../../Card/Title/Title';
-import Get from '../../API/Get';
-import { FaSearch, FaHome, FaPaperclip} from "react-icons/fa";
+import { FaHome, FaPaperclip} from "react-icons/fa";
 import "../MySMC/GestionIncident/ajoutavis.css"
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { RiDashboard3Line } from "react-icons/ri";
 import { IoStatsChart } from "react-icons/io5";
 import { FaUserGroup } from 'react-icons/fa6';
 import NavigatePerso from '../MySMC/GestionIncident/NavigatePerso';
-import { getTokenFromLocalStorage } from '../Auth/authUtils';
-import axios from 'axios';
 import { InputLabel, TextField } from '@mui/material';
 import FormKaabu from './FormKaabu';
 import FormSimplissimo from './FormSimplissimo';
-import httpClient from '../../../config/interceptor.config';
 import getAllInfoUser from './kaabu.service';
 import { AlertService } from '../../../utils/alert.service';
 import FormNetwork from './FormNetwork';
@@ -86,13 +81,13 @@ class Kaabu extends Component {
                     <Col sm={8}>
                         <Title text="Espace Kaabu Mobile" />
                         <br />
-                        <div style={{ display: "flex" }}>
-                            <div className='mb-3'>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+                            <div>
                                 <InputLabel id="demo-simple-select-label">Identifiant</InputLabel>
                                 <TextField id='identifiant' variant='outlined' size='small' placeholder='Login, Msisdn...' sx={{ width: "500px", maxWidth: "100%"}} />
                             </div>
-                            <div className='mb-3' id='search' style={{ marginLeft: "83px" }} >
-                                <Button onClick={this.handleSearchClick} style={{ height: "40px", marginTop: "3px", width: "140px", backgroundColor: "#FF6600", borderColor: " #FF6600" }}>Rechercher</Button>
+                            <div>
+                                <Button onClick={this.handleSearchClick} style={{ height: "40px", marginTop: "21px", width: "140px", backgroundColor: "#FF6600", borderColor: " #FF6600" }}>Rechercher</Button>
                             </div>
                         </div>
                         {this.state.loading && (
