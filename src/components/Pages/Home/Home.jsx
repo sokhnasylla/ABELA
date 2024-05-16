@@ -12,6 +12,9 @@ import { FaHistory } from 'react-icons/fa';
 import { GrCatalogOption } from 'react-icons/gr';
 import { AiFillDashboard } from 'react-icons/ai'
 import useAuth from '../Auth/useAuth';
+import { getTokenFromLocalStorage } from '../Auth/authUtils';
+import httpClient from '../../../config/interceptor.config';
+import getHistorique from './home.service';
 
 
 const submenu=[
@@ -33,23 +36,15 @@ class Home extends Component {
   };
 
   componentDidMount() {
-    fetch('http://localhost:8084/abela-selfservice/api/v1/local/historiques')
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Erreur de récupération des données');
-      })
-      .then((result) => {
-        if (result.success) {
-          this.setState({ historiques: result.data });
-        } else {
-          throw new Error('Erreur de succès');
+    getHistorique().then((result) => {
+        if(result) {
+          if (result.success) {
+            this.setState({ historiques: result.data });
+          } else {
+            this.alertService.showNotificationAlertError(result.message || 'Une erreur s\'est produite');
+          }
         }
       })
-      .catch(error => {
-        console.error('Erreur de récupération des données:', error);
-      });
   }
   
   ///useAuth()
