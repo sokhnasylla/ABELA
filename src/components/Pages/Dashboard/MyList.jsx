@@ -19,12 +19,14 @@ export default function NestedList( ) {
   return (
     <React.Fragment
     >
-      <ListItemButton>
-        <ListItemIcon>
-          <FaChartLine size={25}/>
-        </ListItemIcon>
-        <ListItemText primary="Audit" />
-      </ListItemButton>
+       <Link href="/admin/audit" color="initial" underline='none'></Link>
+          <ListItemButton>
+            <ListItemIcon>
+              <FaChartLine size={25}/>
+            </ListItemIcon>
+            <ListItemText primary="Audit" />
+          </ListItemButton>
+        <Link/>
       <ListItemButton>
         <ListItemIcon>
           <BarChartIcon />

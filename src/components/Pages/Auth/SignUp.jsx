@@ -32,7 +32,7 @@ import useAuth from './useAuth';
     const [firstName, setFirstName] = useState(userData?.prenom || '');
     const [lastName, setLastName] = useState(userData?.nom || '');
     const [email, setEmail] = useState(userData?.email || '');
-    const [loginWindows, setLoginWindows] = useState(userData?.loginWindows || '');
+    const [login, setLogin] = useState(userData?.login || '');
     const [structure, setStructure] = useState(userData?.structure || '');
     const [password, setPassword] = useState('');
     const [isSubmmitted, setIsSubmitted]=useState(false);
@@ -59,7 +59,7 @@ import useAuth from './useAuth';
         email: email,
         password: password,
         structure: structure,
-        loginWindows: loginWindows,
+        login: login,
       };
       mutation.mutate(userData);
     };
@@ -127,12 +127,12 @@ import useAuth from './useAuth';
                     <TextField
                       required
                       fullWidth
-                      id="loginWindow"
+                      id="login"
                       label="Login Windows"
-                      name="loginWindows"
+                      name="login"
                       autoComplete="loginWindows"
-                      value={loginWindows}
-                      onChange={(e) => setLoginWindows(e.target.value)}
+                      value={login}
+                      onChange={(e) => setLogin(e.target.value)}
                     />
                   </Grid>
                   <Grid item xs={12}>

@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import { Nav } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Dropdown, Nav, Navbar, OverlayTrigger } from 'react-bootstrap';
 import '../../Header/header.css'
 import HomeIcon from '@mui/icons-material/Home';
+import AppsIcon from '@mui/icons-material/Apps';
+import PersonIcon from '@mui/icons-material/Person';
+
+
 import {
   styled,
   createTheme,
@@ -15,6 +19,7 @@ import {
   Divider,
   IconButton,
   Box,
+  Tooltip,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -22,6 +27,9 @@ import {
   
 } from '@mui/icons-material';
 import NestedList from './MyList';
+import { jwtDecode } from 'jwt-decode';
+import { clearTokenFromLocalStorage, getTokenFromLocalStorage } from '../Auth/authUtils';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -74,12 +82,30 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const defaultTheme = createTheme();
 
 export default function Base({ dynamicComponent: DynamicComponent }) {
+  const navigate = useNavigate();
+  
   const [open, setOpen] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const token =getTokenFromLocalStorage();
 
+const [myuser,setMyuser] =useState("Moi")
+
+  useEffect(() => {
+    if(token){
+      const decode = jwtDecode(token);
+      setMyuser(decode.sub);
+    }
+  }, [token]);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const handleLogout = () => {
+    clearTokenFromLocalStorage();
+    navigate('/');
+  };
+
+
 
 
   return (
@@ -115,14 +141,50 @@ export default function Base({ dynamicComponent: DynamicComponent }) {
               Back Office ABELA
             </Typography>
             <div className='myhead'>
-          <Nav variant='tabs'style={{marginLeft:'89%'}}>
+
+            <Col  className="d-flex justify-content-end align-items-center" id='menu'>
+              <Navbar >
+                <Nav className='me-auto'>
+                  <Nav.Link href='/home' style={{ fontSize: '8px' }}>
+                  <HomeIcon/>
+                  </Nav.Link>
+                </Nav>
+              </Navbar>
+            </Col>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="tooltip" color='red'>Applications disponibles</Tooltip>}
+            >
+              <Button variant="secondary"  onClick={() => setShowModal(true)} style={{ background: 'none', border: 'none', position: 'relative' }}>
+                <AppsIcon style={{ color: 'white' }} />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="tooltip">{myuser}</Tooltip>}>
+                <Dropdown>
+              <Dropdown.Toggle variant="custom" id="dropdown-basic" className="profile-toggle">
+                {/* <span style={{ marginLeft:"2px" }}>{myuser}</span> */}
+                <PersonIcon/>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="/monprofil">Mon Profil</Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>Deconnexion</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            </OverlayTrigger>
+          
+
+          {/* <Nav variant='tabs'style={{marginLeft:'89%'}}>
           <Nav.Item >
             <Nav.Link href='/home'style={{ fontSize: '8px' }}>
             <HomeIcon />
             </Nav.Link>
-          </Nav.Item>
+          </Nav.Item> */}
           
-       </Nav>
+       {/* </Nav> */}
        </div>
        </Toolbar>
        

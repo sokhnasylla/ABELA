@@ -6,7 +6,7 @@ function Taux({taux,text,background,color}) {
           <Card style={{ width: '13rem' ,height:"8rem",backgroundColor:background,color:color,fontFamily:"inherit"}}>
                   <Card.Body style={{textAlign:"right"}}>
                     <Card.Title style={{fontSize:"36px"}} >{taux}</Card.Title>
-                    <Card.Text>
+                    <Card.Text style={{fontSize:"14px"}}>
                     {text}
                     </Card.Text>
                   </Card.Body>

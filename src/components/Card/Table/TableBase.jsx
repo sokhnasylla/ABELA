@@ -9,6 +9,8 @@ const selectProps = { indeterminate: isIndeterminate => isIndeterminate };
 function TableBase(props) {
   return (
     <DataTable
+    ixedHeaderScrollHeight="300px"
+    style={{height:"340px"}}
     pagination
     selectableRowsComponent={Checkbox}
     selectableRowsComponentProps={selectProps}

@@ -50,8 +50,8 @@ function ListUsers({onEditUser}) {
  console.log(error);
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8083/api/users/${id}/deactivate`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:8082/abela-usermanagement/api/v1/users/${id}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -101,19 +101,6 @@ function ListUsers({onEditUser}) {
         <TableCell sx={{color: 'black' }}>{user?.nom}</TableCell>
         <TableCell sx={{color: 'black' }}>{user?.login}</TableCell>
         <TableCell sx={{color: 'black' }}>{user?.structure}</TableCell>
-        {/* <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>{user?.groups.join(", ")}</TableCell> */}
-        {/* <TableCell>
-          <Button
-            variant="contained"
-            color={user.isActive ? "secondary" : "primary"}
-            sx={{ fontWeight: 'bold', color: 'black' }}
-            onMouseEnter={(event) => event.target.style.color = 'blue'}
-            onMouseLeave={(event) => event.target.style.color = 'black'}
-            onClick={() => handleDeleteClick(user.id)}
-          >
-            {user.isActive ? "Désactiver" : "Activer"}
-          </Button>
-        </TableCell> */}
         <TableCell sx={{color: 'black' }}>{formatDate(user?.dateCreation)}</TableCell>
         <TableCell sx={{color: 'black' }}>
           <IconButton aria-label="edit" size="small" onClick={() => handleEditClick(user.id)}>
