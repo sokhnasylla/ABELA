@@ -1,7 +1,7 @@
 import { green } from '@mui/material/colors';
 import React from 'react';
 import { Card, Table } from 'react-bootstrap';
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheckCircle, FaExclamationCircle, FaTimesCircle } from "react-icons/fa";
 
 
 
@@ -60,7 +60,7 @@ function FormKaabu({ userkaabu }) {
                 {userkaabu.telephone === userkaabu.contact ? (
                   <FaCheckCircle style={{float: "right", color: "#40E0D0", fontSize:'125%'}}/>
                 ) : (
-                  <FaTimesCircle style={{float: "right", color: "#DC143C", fontSize:'125%'}}/>
+                  <FaExclamationCircle style={{float: "right", color: "#FFD700", fontSize:'125%'}}/>
                 )}
               </td>
             </tr>
@@ -126,12 +126,12 @@ function FormKaabu({ userkaabu }) {
             <tr>
               <th>Version Installée:</th>
               {userkaabu.versionsInstalle ? (<td>
-                {userkaabu.versionsInstalle[0] && (<ul>
-                  {userkaabu.versionsInstalle.map((version, index) => (
-                    <li key={index}>{version}</li>
-                  ))}
-                </ul>)}
-                <span>{ new Date(userkaabu.dateLastTransaction).toLocaleDateString("fr-FR",{day: "numeric", month: "numeric", year: "numeric", hour: "numeric", minute: "numeric", second: "numeric",})}</span>
+              <ul>
+                <li>{userkaabu.versionsInstalle} </li>
+                <li>
+                  <span>{ new Date(userkaabu.dateLastTransaction).toLocaleDateString("fr-FR",{day: "numeric", month: "numeric", year: "numeric", hour: "numeric", minute: "numeric", second: "numeric",})}</span>
+                </li>
+              </ul>              
               </td>): (<td>Pas de demande</td>)}
             </tr>
           </tbody>)}

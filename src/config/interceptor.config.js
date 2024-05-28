@@ -37,14 +37,12 @@ httpClient.interceptors.response.use(
       if (error.code === AxiosError.ECONNABORTED) {
         console.log('Timeout de la requête !');
         alertService.showConfirmAlert({ title: 'Timeout de la requête !!!' });
-      }
-      if (error.response && error.response.status===HttpStatusCode.Forbidden) {
+      } else if (error.response && error.response.status===HttpStatusCode.Forbidden) {
         alertService.showConfirmAlert({ title: 'Votre connexion au serveur a expiré. Veuillez vous reconnecter.' }).then(() => {
           return window.location.href = "/";
         });
-        
       } else {
-        alertService.showNotificationAlertError(error.response.data.error || error.message || 'Une erreur s\'est produite').then(() => {
+        alertService.showNotificationAlertError(error.message || 'Une erreur s\'est produite').then(() => {
           return window.location.href = "/";
         });
       }
