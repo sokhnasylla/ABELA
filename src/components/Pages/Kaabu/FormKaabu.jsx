@@ -1,7 +1,7 @@
 import { green } from '@mui/material/colors';
 import React from 'react';
 import { Card, Table } from 'react-bootstrap';
-import { FaCheckCircle, FaExclamationCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 
 
 
@@ -24,13 +24,13 @@ function FormKaabu({ userkaabu }) {
 
   console.log("------KAABU----------", userkaabu);
   return (
-    <Card>
-      <Card.Header style={{backgroundColor: "#F0F8FF"}} className="text-center fs-4">Kaabu</Card.Header>
-      <Card.Body>
-        <Table striped bordered hover>
+    <Card style={{marginTop: "50px", borderRadius: "1px"}}>
+      <Card.Header style={{backgroundColor: "#F0F8FF", borderRadius: "0px"}} className="text-center fs-4">Kaabu</Card.Header>
+      <Card.Body style={{padding: "0px"}}>
+        <Table striped bordered hover style={{margin: "0px"}}>
           {userkaabu && (<tbody>
             <tr>
-              <th style={{ width: "300px"}}>Prénom:</th>
+              <th style={{ width: "170px"}}>Prénom:</th>
               <td>{userkaabu.prenom}</td>
             </tr>
             <tr>
@@ -64,7 +64,6 @@ function FormKaabu({ userkaabu }) {
                 )}
               </td>
             </tr>
-
             <tr>
               <th>TypeUser:</th>
               <td>{userkaabu.typeuser}</td>

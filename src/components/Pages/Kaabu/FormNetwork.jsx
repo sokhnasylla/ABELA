@@ -24,23 +24,28 @@ function FormNetwork({ clientNetwork }) {
 
   console.log("------NETWORK----------", clientNetwork);
   return (
-    <Card style={{marginTop: "50px"}}>
-      <Card.Header style={{backgroundColor: "silver"}} className="text-center fs-4">Network</Card.Header>
-      <Card.Body>
-        <Table striped bordered hover>
+    <Card style={{marginTop: "50px", borderRadius: "1px"}}>
+      <Card.Header style={{backgroundColor: "silver", borderRadius: "0px"}} className="text-center fs-4">Network</Card.Header>
+      <Card.Body style={{padding: "0px"}}>
+        <Table striped bordered hover style={{margin: "0px"}}>
           {clientNetwork && (<tbody>
             <tr>
-              <th style={{ width: "300px"}}>MSISDN:</th>
+              <th style={{ width: "170px"}}>MSISDN:</th>
               <td>
                 {clientNetwork.msisdn}</td>
             </tr>
             <tr>
-              <th style={{ width: "300px"}}>APN NOMAD:</th>
+              <th>APN INTERNET:</th>
+              <td style={{ backgroundColor: clientNetwork.apnInternet ? "#40E0D0" : "#DC143C", color: "white", fontWeight: "bold" }}>
+                {clientNetwork.apnInternet ? "Activé" : "Desactivé"}</td>
+            </tr>
+            <tr>
+              <th>APN NOMAD:</th>
               <td style={{ backgroundColor: clientNetwork.apnNomad ? "#40E0D0" : "#DC143C", color: "white", fontWeight: "bold" }}>
                 {clientNetwork.apnNomad ? "Activé" : "Desactivé"}</td>
             </tr>
             <tr>
-              <th style={{ width: "300px"}}>Données Mobile:</th>
+              <th>Données Mobile:</th>
               <td style={{ backgroundColor: clientNetwork.isDonneeMobileActif ? "#40E0D0" : "#DC143C", color: "white", fontWeight: "bold" }}>
                 {clientNetwork.isDonneeMobileActif ? "Activé" : "Desactivé"}</td>
             </tr>

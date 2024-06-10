@@ -12,13 +12,13 @@ function FormSimplissimo({ simplissimo }) {
 
   console.log("-----SIMPLISSIMO----NOT NULL----- #D8BFD8 --", simplissimo);
   return (
-    <Card style={{ top: "25px"}}>
-      <Card.Header style={{backgroundColor: "#D8BFD8"}} className="text-center fs-4">Simplissimo</Card.Header>
-      <Card.Body>
-        <Table striped bordered hover>
+    <Card style={{marginTop: "20px", borderRadius: "0px"}}>
+      <Card.Header style={{backgroundColor: "#D8BFD8", borderRadius: "0px"}} className="text-center fs-4">Simplissimo</Card.Header>
+      <Card.Body style={{padding: "0px", borderRadius: "0px"}}>
+        <Table striped bordered hover style={{margin: "0px"}}>
           <tbody>
             {simplissimo.parcUtilisateurSimplissimo && (<tr>
-              <th>Prénom:</th>
+              <th style={{ width: "170px"}}>Prénom:</th>
               <td>{simplissimo.parcUtilisateurSimplissimo.prenom}</td>
             </tr>)}
             {simplissimo.parcUtilisateurSimplissimo && (<tr>
@@ -26,7 +26,7 @@ function FormSimplissimo({ simplissimo }) {
               <td>{simplissimo.parcUtilisateurSimplissimo.nom}</td>
             </tr>)}
             {simplissimo.parcUtilisateurSimplissimo && (<tr>
-              <th style={{ width: "300px"}}>Login:</th>
+              <th>Login:</th>
               <td>{simplissimo.parcUtilisateurSimplissimo.login}</td>
             </tr>)}
             {simplissimo.parcUtilisateurSimplissimo &&(<tr>
@@ -35,17 +35,17 @@ function FormSimplissimo({ simplissimo }) {
             </tr>)} 
             {simplissimo.parcUtilisateurSimplissimo && (<tr>
               <th>Statut:</th>
-              <td style={{ backgroundColor: simplissimo.parcUtilisateurSimplissimo.statut === "Actif" ? "#40E0D0" : "transparent",
-               color: simplissimo.parcUtilisateurSimplissimo.statut === "Actif" ? "white" : "black", 
-               fontWeight: simplissimo.parcUtilisateurSimplissimo.statut === "Actif" ? "bold" : "normal" }}>
+              <td style={{ backgroundColor: simplissimo.parcUtilisateurSimplissimo.statut === "Actif" ? "#40E0D0" : "#DC143C",
+               color: simplissimo.parcUtilisateurSimplissimo.statut === "Actif" ? "white" : "white", 
+               fontWeight: simplissimo.parcUtilisateurSimplissimo.statut === "Actif" ? "bold" : "bold" }}>
                 {simplissimo.parcUtilisateurSimplissimo.statut}
               </td>
             </tr>)}
             {simplissimo.verificationMsisdnSimplissimo &&(<tr>
-              <th style={{ width: "300px"}}>Identification:</th>
+              <th style={{ width: "170px"}}>Identification:</th>
               {simplissimo.verificationMsisdnSimplissimo.isIdentified ? (<td style={{backgroundColor:"#40E0D0",color:"white",fontWeight:"bold"}}>OUI</td>)
               :(<td style={{backgroundColor:"#DC143C",color:"white",fontWeight:"bold"}}>NON</td>)}
-            </tr>)} 
+            </tr>)}
 
             {simplissimo.verificationMsisdnSimplissimo && (
               <tr>
@@ -63,7 +63,6 @@ function FormSimplissimo({ simplissimo }) {
                 )}
               </tr>
             )}
-
           </tbody>
         </Table>
         {!simplissimo.parcUtilisateurSimplissimo && (<div style={{ top: "20px"}} className="alert alert-danger" role="alert">L'utilisateur n'existe pas sur Simplissimo </div>)}

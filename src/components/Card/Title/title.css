@@ -1,7 +1,7 @@
 .titre {
     margin: 0;
     border-radius: 5px;
-    margin-top: 50px;
+    margin-top: 10px;
     text-align: center;
     height: 9%;
     background-color: #148C8A !important; 
@@ -13,4 +13,7 @@
     display: inline-flex;
     justify-content: space-between;
     align-items: center;  
+    font-size: 100%;
+    font-weight: bold;
+    margin-top: 15px;
 }

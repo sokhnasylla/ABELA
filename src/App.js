@@ -38,8 +38,6 @@ import AnaTestRas from './components/Pages/MySMC/SuivisActivites/AnaTestRas';
 import MonProfil from './components/Pages/MonProfil/MonProfil';
 import { Details } from '@mui/icons-material';
 import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsProbleme/DetailsProbleme';
-import EspaceClient from "./components/Pages/Kaabu/EspaceClient"
-import EspaceVendeur from "./components/Pages/Kaabu/EspaceVendeur"
 import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident/DetailsIncident';
 import Role from './components/Pages/Dashboard/Role/Role'
 
@@ -65,8 +63,6 @@ function App() {
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/maxit" element={<Maxit/>} />
             <Route path="/kaabu" element={<Kaabu/>} /> 
-            <Route path="/kaabu/espace/client" element={<EspaceClient/>} /> 
-            <Route path="/kaabu/espace/vendeur" element={<EspaceVendeur/>} /> 
             <Route path="/network" element={<Network/>} />
             < Route path="/mysmc/gestionincident" element={<GestionIncident/>} />
             < Route path="/gestionincident/ajoutavis" element={<AjoutAvis/>} />
@@ -92,10 +88,6 @@ function App() {
             < Route path="/suivisactivites/anatest" element={<AnaTest/>} />
             < Route path="/suivisactivites/anatestras" element={<AnaTestRas/>} />
             < Route path="/suivisactivites/scenariobook" element={<ScenarioBook/>} />
-
-            
-            
-
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

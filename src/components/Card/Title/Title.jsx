@@ -7,9 +7,9 @@ function Title({ text }) {
   return (
     <Card className="titre">
       <p>
-        <FaBars style={{marginTop:'12px'}}  />
+        <FaBars style={{marginTop:' 5px'}}  />
           {text}
-        <FaArrowCircleDown style={{marginTop:'12px'}} />
+        <FaArrowCircleDown style={{marginTop:'5px'}} />
       </p>
     </Card>
   );
