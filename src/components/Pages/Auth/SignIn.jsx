@@ -14,6 +14,9 @@ import { Navigate } from 'react-router-dom';
 import { storeTokenInLocalStorage } from './authUtils';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
+
+
+
 function SignInSide() {
   const [login, setLogin] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -27,7 +30,7 @@ function SignInSide() {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:8082/abela-usermanagement/api/v1/auth/authenticate", {
+      const response = await axios.post("http://10.137.15.78:8082/abela-usermanagement/api/v1/auth/authenticate", {
         login,
         password
       });
