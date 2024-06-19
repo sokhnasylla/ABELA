@@ -94,7 +94,7 @@ class Kaabu extends Component {
       searchLoading: true,
       userSearch: []
      });
-    if (!search || search.trim() === "") {
+    if (!search || search.trim() === "" || search.length === 1) {
       this.setState({
         searchLoading: false,
         userSearch: []

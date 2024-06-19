@@ -56,14 +56,13 @@ function Auth({ onFormSubmit }) {
       if (activeStep === steps.length - 1) {
 
         const token = getTokenFromLocalStorage();
-        const url = 'http://10.137.15.78:8082/abela-usermanagement/api/v1/auth/register';
+        // const url = 'http://10.137.15.78:8082/abela-usermanagement/api/v1/auth/register';
+        const url = 'http://localhost:8082/abela-usermanagement/api/v1/auth/register';
         console.log(formData);
         try {
           const response = await axios.post(url, formData, {
             headers: {
-              Authorization: `Bearer ${token}`,
-              
-              
+              Authorization: `Bearer ${token}`,  
             },
           });
           // Handle the response as needed

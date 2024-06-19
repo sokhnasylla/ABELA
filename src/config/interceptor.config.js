@@ -5,9 +5,9 @@ import { AlertService } from '../utils/alert.service';
 
 // Créez une instance Axios avec une configuration de base
 const httpClient = axios.create({
-  timeout: 10000, // 10 secondes
-  // baseURL: 'http://localhost:8082/',
-  baseURL: 'http://10.137.15.78:8082/',
+  timeout: 20000, // 10 secondes
+  baseURL: 'http://localhost:8082/',
+  // baseURL: 'http://10.137.15.78:8082/',
 
 });
 
@@ -36,6 +36,7 @@ httpClient.interceptors.response.use(
     },
     function (error) {
       // si timeout
+      console.log('-------RESPONSE----------', error);
       if (error.code === AxiosError.ECONNABORTED) {
         console.log('Timeout de la requête !');
         alertService.showConfirmAlert({ title: 'Timeout de la requête !!!' });
