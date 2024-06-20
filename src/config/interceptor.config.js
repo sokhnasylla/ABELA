@@ -6,8 +6,8 @@ import { AlertService } from '../utils/alert.service';
 // Créez une instance Axios avec une configuration de base
 const httpClient = axios.create({
   timeout: 20000, // 10 secondes
-  baseURL: 'http://localhost:8082/',
-  // baseURL: 'http://10.137.15.78:8082/',
+  // baseURL: 'http://localhost:8082/',
+  baseURL: 'http://10.137.15.78:8082/',
 
 });
 
