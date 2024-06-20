@@ -30,7 +30,7 @@ function FormNetwork({ clientNetwork }) {
         <Table striped bordered hover style={{margin: "0px"}}>
           {clientNetwork && (<tbody>
             <tr>
-              <th style={{ width: "170px"}}>MSISDN:</th>
+              <th style={{ width: "240px"}}>MSISDN:</th>
               <td>
                 {clientNetwork.msisdn}</td>
             </tr>
@@ -45,23 +45,23 @@ function FormNetwork({ clientNetwork }) {
                 {clientNetwork.apnNomad ? "Activé" : "Desactivé"}</td>
             </tr>
             <tr>
-              <th>Données Mobile:</th>
-              <td style={{ backgroundColor: clientNetwork.isDonneeMobileActif ? "#40E0D0" : "#DC143C", color: "white", fontWeight: "bold" }}>
+              <th>Suspension Données Mobile:</th>
+              <td style={{ backgroundColor: clientNetwork.isDonneeMobileActif ? "#DC143C" : "#40E0D0" , color: "white", fontWeight: "bold" }}>
                 {clientNetwork.isDonneeMobileActif ? "Activé" : "Desactivé"}</td>
             </tr>
             <tr>
-              <th>Appel Entrant:</th>
-              <td style={{ backgroundColor: clientNetwork.isAppelSortantActif ? "#40E0D0" : "#DC143C", color:  "white", fontWeight: "bold" }}>
+              <th>Suspension Appel Entrant:</th>
+              <td style={{ backgroundColor: clientNetwork.isAppelSortantActif ?  "#DC143C" : "#40E0D0", color:  "white", fontWeight: "bold" }}>
                 {clientNetwork.isAppelSortantActif ? "Activé" : "Desactivé"}</td>
             </tr>
             <tr>
-              <th>Appel Sortant:</th>
-              <td style={{ backgroundColor: clientNetwork.isAppelEntrantActif ? "#40E0D0" : "#DC143C", color: "white", fontWeight: "bold"}}>
+              <th>Suspension Appel Sortant:</th>
+              <td style={{ backgroundColor: clientNetwork.isAppelEntrantActif ? "#DC143C" : "#40E0D0", color: "white", fontWeight: "bold"}}>
                 {clientNetwork.isAppelEntrantActif ? "Activé" : "Desactivé"}</td>
             </tr>
             <tr>
-              <th>Service USSD:</th>
-              <td style={{ backgroundColor: clientNetwork.isUssdActif ? "#40E0D0" : "#DC143C", color: "white", fontWeight: "bold"}}>
+              <th>Suspension Service USSD:</th>
+              <td style={{ backgroundColor: clientNetwork.isUssdActif ? "#DC143C" : "#40E0D0" , color: "white", fontWeight: "bold"}}>
                 {clientNetwork.isUssdActif ? "Activé" : "Desactivé"}
               </td>
             </tr>

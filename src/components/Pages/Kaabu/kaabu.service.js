@@ -24,14 +24,17 @@ function getDeviceVendeurService(msisdn) {
 function getDeviceImageService(id) {
     return httpClient.get(selfserviceUrl + '/kaabu/get-device-image/' + id, { responseType: 'blob' })
       .then(response => {
-        console.log("SERVICE", response); 
+        console.log("------SERVICE GET IMAGE RESPONSE", response); 
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => {
             resolve(reader.result);
           };
           reader.onerror = reject;
-          reader.readAsDataURL(response.data);
+          console.log("------RESPONSE DATA", response.data); 
+          if(response.data) {
+            reader.readAsDataURL(response.data);
+          }
         });
       });
   }

@@ -18,7 +18,7 @@ function FormSimplissimo({ simplissimo }) {
         <Table striped bordered hover style={{margin: "0px"}}>
           <tbody>
             {simplissimo.parcUtilisateurSimplissimo && (<tr>
-              <th style={{ width: "170px"}}>Prénom:</th>
+              <th style={{ width: "240px"}}>Prénom:</th>
               <td>{simplissimo.parcUtilisateurSimplissimo.prenom}</td>
             </tr>)}
             {simplissimo.parcUtilisateurSimplissimo && (<tr>
@@ -42,7 +42,7 @@ function FormSimplissimo({ simplissimo }) {
               </td>
             </tr>)}
             {simplissimo.verificationMsisdnSimplissimo &&(<tr>
-              <th style={{ width: "170px"}}>Identification:</th>
+              <th>Identification:</th>
               {simplissimo.verificationMsisdnSimplissimo.isIdentified ? (<td style={{backgroundColor:"#40E0D0",color:"white",fontWeight:"bold"}}>OUI</td>)
               :(<td style={{backgroundColor:"#DC143C",color:"white",fontWeight:"bold"}}>NON</td>)}
             </tr>)}

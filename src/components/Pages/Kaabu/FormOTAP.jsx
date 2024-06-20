@@ -41,8 +41,8 @@ class DeviceCard extends Component {
               imageLoading: true,
           });
            getDeviceImageService(result.data.subscriber.device.id).then(dataUri => {
-            console.log("----getDeviceImageService----------", dataUri);
-            if (dataUri === "data:text/xml;base64,") {
+            console.log("------getDeviceImageService----------", dataUri);
+            if (dataUri == null || dataUri === "data:text/xml;base64,") {
               console.log("----------------------");
               this.setState({imageLoading: true, imageData: this.state.imageDefault });
             } else {
@@ -86,7 +86,7 @@ class DeviceCard extends Component {
       <div style={{marginTop: "50px"}}>
         <div style={{display: 'flex', alignItems: "center", justifyContent: "space-between"}}>
           {this.state.imageLoading ? <CircularProgress color="primary" size={50} /> : <img style={{padding: "20px", height: "130px"}} src={this.state.imageData} alt={this.state.subscriber.device.model} />}
-          <Button onClick={() => this.setState({showModal: true})} style={{ height: "40px", marginTop: "50px", fontWeight: 'bold', backgroundColor: "black", borderColor: " black" }}><FaSearchLocation style={{color: "white", fontSize:'125%', marginRight: "10px"}}/>Localiser le vendeur</Button>
+          <Button onClick={() => this.setState({showModal: true})} style={{ height: "40px", marginTop: "50px", fontSize: '90%', fontWeight: 'bold', backgroundColor: "black", borderColor: " black" }}><FaSearchLocation style={{color: "white", fontSize:'125%', marginRight: "10px"}}/>Localiser le vendeur</Button>
         </div>
         
         <CardContent style={{marginTop: "7px", borderTop: "1px silver solid"}}>
