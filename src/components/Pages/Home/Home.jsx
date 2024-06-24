@@ -40,6 +40,7 @@ class Home extends Component {
         if(result) {
           if (result.success) {
             this.setState({ historiques: result.data });
+            console.log("HISTORIQUE::: ", this.state.historiques);
           } else {
             this.alertService.showNotificationAlertError(result.message || 'Une erreur s\'est produite');
           }

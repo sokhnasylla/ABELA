@@ -5,11 +5,10 @@ const columns = [
         selector: row => row.id,
         sortable: true,
     },
-    // {
-    //     name: 'Libelle Tache Applicatif',
-    //     selector: row => row.libelle,
-    // },
-    
+    {
+        name: 'Utilisateur',
+        selector: row => row.username,
+    },
     {
         name: 'Description',
         selector: row => row.evenement,
@@ -19,7 +18,7 @@ const columns = [
         selector: row => row.application,
     },
     {
-        name: 'Reference Client',
+        name: 'Reference Vendeur',
         selector: row => row.refClient,
     },
     {
