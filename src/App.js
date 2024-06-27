@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/Pages/Home/Home';
 import Support from './components/Pages/Support Technique/Support';
 import RecoHlrIn from './components/Pages/Reco_hlr_in/RecoHlrIn';
@@ -41,14 +41,13 @@ import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsPro
 import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident/DetailsIncident';
 import Role from './components/Pages/Dashboard/Role/Role'
 
-
-
 const queryClient= new QueryClient();
+
 function App() {
   return (
     <div className="App">
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/" element={<SignInSide/>}/>
             <Route path="/support" element={<Support/>}/>
@@ -89,7 +88,7 @@ function App() {
             < Route path="/suivisactivites/anatestras" element={<AnaTestRas/>} />
             < Route path="/suivisactivites/scenariobook" element={<ScenarioBook/>} />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </QueryClientProvider>
     </div>
   );

@@ -185,8 +185,8 @@ class Kaabu extends Component {
                   <Col sm={6}>
                     {(this.state.data) && (
                       <div>
-                        {this.state.data.userKaabu && (<DeviceCard username={this.state.data.userKaabu.username} telephone={this.state.data.userKaabu.telephone} latitude={this.state.data.userKaabu.latitudeLastTransaction} longitude={this.state.data.userKaabu.longitudeLastTransaction} />)}
                         <FormSimplissimo simplissimo={this.state.data.userSimplissimo}/>
+                        {this.state.data.userKaabu && (<DeviceCard username={this.state.data.userKaabu.username} telephone={this.state.data.userKaabu.telephone} latitude={this.state.data.userKaabu.latitudeLastTransaction} longitude={this.state.data.userKaabu.longitudeLastTransaction} />)}
                         <FormNetwork clientNetwork={this.state.data.clientNetwork} />
                       </div>
                     )}

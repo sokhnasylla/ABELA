@@ -82,7 +82,7 @@ function Header() {
             <Col xs="auto">
               <Navbar variant='tabs'>
                 <Nav className='me-auto'>
-                  <Nav.Link href='/home' style={{ fontSize: '8px' }}>
+                  <Nav.Link href='/#/home' style={{ fontSize: '8px' }}>
                   <HomeIcon/>
                   </Nav.Link>
                 </Nav>

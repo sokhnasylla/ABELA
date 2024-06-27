@@ -28,7 +28,7 @@ function FormNetwork({ clientNetwork }) {
       <Card.Header style={{backgroundColor: "silver", borderRadius: "0px"}} className="text-center fs-4">Network</Card.Header>
       <Card.Body style={{padding: "0px"}}>
         <Table striped bordered hover style={{margin: "0px"}}>
-          {clientNetwork && (<tbody>
+          {clientNetwork && ( clientNetwork.msisdn && (<tbody>
             <tr>
               <th style={{ width: "240px"}}>MSISDN:</th>
               <td>
@@ -65,9 +65,10 @@ function FormNetwork({ clientNetwork }) {
                 {clientNetwork.isUssdActif ? "Activé" : "Desactivé"}
               </td>
             </tr>
-          </tbody>)}
+          </tbody>))}
         </Table>
         {!clientNetwork && (<div style={{ top: "20px"}} className="alert alert-danger" role="alert">Ce numéro n'existe pas sur HRL</div>)}
+        {!clientNetwork.msisdn && (<div style={{ top: "20px"}} className="alert alert-danger" role="alert">Connexion timed out: Serveur n'est pas accessible</div>)}
       </Card.Body>
     </Card>
   );

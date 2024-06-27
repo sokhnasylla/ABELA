@@ -7,12 +7,12 @@ function FormSimplissimo({ simplissimo }) {
 
   if (!simplissimo) {
     console.log("-----SIMPLISSIMO-----------", simplissimo);
-    return (<div style={{ top: "20px"}} className="alert alert-danger" role="alert">L'utilisateur n'existe pas sur Simplissimo </div>);
+    return (<div style={{ top: "50px"}} className="alert alert-danger" role="alert">L'utilisateur n'existe pas sur Simplissimo </div>);
   }
 
   console.log("-----SIMPLISSIMO----NOT NULL----- #D8BFD8 --", simplissimo);
   return (
-    <Card style={{marginTop: "20px", borderRadius: "0px"}}>
+    <Card style={{marginTop: "50px", borderRadius: "0px"}}>
       <Card.Header style={{backgroundColor: "#D8BFD8", borderRadius: "0px"}} className="text-center fs-4">Simplissimo</Card.Header>
       <Card.Body style={{padding: "0px", borderRadius: "0px"}}>
         <Table striped bordered hover style={{margin: "0px"}}>
@@ -41,6 +41,12 @@ function FormSimplissimo({ simplissimo }) {
                 {simplissimo.parcUtilisateurSimplissimo.statut}
               </td>
             </tr>)}
+            {simplissimo.parcUtilisateurSimplissimo && ( simplissimo.parcUtilisateurSimplissimo.motifCloture && (<tr>
+              <th>Motif Clôture:</th>
+              <td>
+                {simplissimo.parcUtilisateurSimplissimo.motifCloture}
+              </td>
+            </tr>))}
             {simplissimo.verificationMsisdnSimplissimo &&(<tr>
               <th>Identification:</th>
               {simplissimo.verificationMsisdnSimplissimo.isIdentified ? (<td style={{backgroundColor:"#40E0D0",color:"white",fontWeight:"bold"}}>OUI</td>)
