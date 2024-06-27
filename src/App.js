@@ -4,7 +4,7 @@ import Home from './components/Pages/Home/Home';
 import Support from './components/Pages/Support Technique/Support';
 import RecoHlrIn from './components/Pages/Reco_hlr_in/RecoHlrIn';
 import Mysmc from './components/Pages/MySMC/Mysmc';
-import Dashboard from './components/Pages/Dashboard/Dashboard'
+import Dashboard from './components/Pages/Dashboard/Dashboard';
 import SignUp from './components/Pages/Auth/SignUp';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Maxit from './components/Pages/Maxit/Maxit';
@@ -36,12 +36,12 @@ import Kaabu from './components/Pages/Kaabu/Kaabu';
 import RechercheProbleme from './components/Pages/MySMC/GestionProbleme/RechercheProbleme';
 import AnaTestRas from './components/Pages/MySMC/SuivisActivites/AnaTestRas';
 import MonProfil from './components/Pages/MonProfil/MonProfil';
-import { Details } from '@mui/icons-material';
 import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsProbleme/DetailsProbleme';
 import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident/DetailsIncident';
-import Role from './components/Pages/Dashboard/Role/Role'
+import Role from './components/Pages/Dashboard/Role/Role';
+import Layout from './components/layout';
 
-const queryClient= new QueryClient();
+const queryClient = new QueryClient();
 
 function App() {
   return (
@@ -49,44 +49,45 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <HashRouter>
           <Routes>
-            <Route path="/" element={<SignInSide/>}/>
-            <Route path="/support" element={<Support/>}/>
-            <Route path="/support/reco_hlr_in" element={<RecoHlrIn/>}/>
-            <Route path="/home" element={<Home/>} />
-            <Route path="/mysmc" element={<Mysmc/>} />
-            <Route path="/monprofil" element={<MonProfil/>} />
-            <Route path="/admin" element={<Dashboard/>} />
-            <Route path="/admin/user" element={<User/>} />
-            <Route path="/admin/role" element={<Role/>} />
-            <Route path="/admin/group" element={<Auth/>} />
-            <Route path="/signup" element={<SignUp/>} />
-            <Route path="/maxit" element={<Maxit/>} />
-            <Route path="/kaabu" element={<Kaabu/>} /> 
-            <Route path="/network" element={<Network/>} />
-            < Route path="/mysmc/gestionincident" element={<GestionIncident/>} />
-            < Route path="/gestionincident/ajoutavis" element={<AjoutAvis/>} />
-            < Route path="/gestionincident/rechercheavis" element={<RechercheAvis/>} />
-            < Route path="/gestionincident/statistique" element={<StatistiqueIncident/>} />
-            < Route path="/mysmc/gestionprobleme" element={<GestionProbleme/>} />
-            < Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<RechercheProbleme/>} />
-            < Route path="/mysmc/gestionprobleme/scannerprobleme" element={<ScannerProbleme/>} />
-            <Route path={`/mysmc/gestionprobleme/details/:id`} element={<DetailsProbleme/>} />
-            <Route path={`/mysmc/gestionincident/details/:id`} element={<DetailsIncident/>} />
-            < Route path="/mysmc/etatsupervision" element={<EtatSupervision/>} />
-            < Route path="/etatsupervision/alarmesok" element={<AlarmeOk/>} />
-            < Route path="/etatsupervision/vr04service" element={<VR04Service/>} />
-            < Route path="/etatsupervision/vr24service" element={<VR24Service/>} />
-            <Route path='/etatsupervision/vr04application' element={<VR04Application/>} />
-            <Route path='/etatsupervision/gestionmaintenance' element={<GestionMaintenance/>} />
-            <Route path='/etatsupervision/gesmaintenance/recherchemaintenance' element={<RechercheMaintenance/>} />
-            < Route path="/etatsupervision/historiquedesactivation" element={<HistoriqueDesactivation/>} />
-            < Route path="/etatsupervision/creeralarme" element={<CreerAlarme/>} />
-            < Route path="/etatsupervision/groupealarme" element={<GroupeAlarme/>} />
-            < Route path="/etatsupervision/baseconnaissance" element={<BaseConnaissance/>} />
-            < Route path="/mysmc/suivisactivites" element={<SuivisActivites/>} />
-            < Route path="/suivisactivites/anatest" element={<AnaTest/>} />
-            < Route path="/suivisactivites/anatestras" element={<AnaTestRas/>} />
-            < Route path="/suivisactivites/scenariobook" element={<ScenarioBook/>} />
+            <Route path="/signin" element={<SignInSide />} />
+            <Route path="/signup" element={<SignUp />} />
+            
+            <Route path="/" element={<Layout><Home /></Layout>} />
+            <Route path="/support" element={<Layout><Support /></Layout>} />
+            <Route path="/support/reco_hlr_in" element={<Layout><RecoHlrIn /></Layout>} />
+            <Route path="/mysmc" element={<Layout><Mysmc /></Layout>} />
+            <Route path="/monprofil" element={<Layout><MonProfil /></Layout>} />
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/user" element={<Layout><User /></Layout>} />
+            <Route path="/admin/role" element={<Layout><Role /></Layout>} />
+            <Route path="/admin/group" element={<Layout><Auth /></Layout>} />
+            <Route path="/maxit" element={<Layout><Maxit /></Layout>} />
+            <Route path="/kaabu" element={<Layout><Kaabu /></Layout>} />
+            <Route path="/network" element={<Layout><Network /></Layout>} />
+            <Route path="/mysmc/gestionincident" element={<Layout><GestionIncident /></Layout>} />
+            <Route path="/gestionincident/ajoutavis" element={<Layout><AjoutAvis /></Layout>} />
+            <Route path="/gestionincident/rechercheavis" element={<Layout><RechercheAvis /></Layout>} />
+            <Route path="/gestionincident/statistique" element={<Layout><StatistiqueIncident /></Layout>} />
+            <Route path="/mysmc/gestionprobleme" element={<Layout><GestionProbleme /></Layout>} />
+            <Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<Layout><RechercheProbleme /></Layout>} />
+            <Route path="/mysmc/gestionprobleme/scannerprobleme" element={<Layout><ScannerProbleme /></Layout>} />
+            <Route path="/mysmc/gestionprobleme/details/:id" element={<Layout><DetailsProbleme /></Layout>} />
+            <Route path="/mysmc/gestionincident/details/:id" element={<Layout><DetailsIncident /></Layout>} />
+            <Route path="/mysmc/etatsupervision" element={<Layout><EtatSupervision /></Layout>} />
+            <Route path="/etatsupervision/alarmesok" element={<Layout><AlarmeOk /></Layout>} />
+            <Route path="/etatsupervision/vr04service" element={<Layout><VR04Service /></Layout>} />
+            <Route path="/etatsupervision/vr24service" element={<Layout><VR24Service /></Layout>} />
+            <Route path="/etatsupervision/vr04application" element={<Layout><VR04Application /></Layout>} />
+            <Route path="/etatsupervision/gestionmaintenance" element={<Layout><GestionMaintenance /></Layout>} />
+            <Route path="/etatsupervision/gesmaintenance/recherchemaintenance" element={<Layout><RechercheMaintenance /></Layout>} />
+            <Route path="/etatsupervision/historiquedesactivation" element={<Layout><HistoriqueDesactivation /></Layout>} />
+            <Route path="/etatsupervision/creeralarme" element={<Layout><CreerAlarme /></Layout>} />
+            <Route path="/etatsupervision/groupealarme" element={<Layout><GroupeAlarme /></Layout>} />
+            <Route path="/etatsupervision/baseconnaissance" element={<Layout><BaseConnaissance /></Layout>} />
+            <Route path="/mysmc/suivisactivites" element={<Layout><SuivisActivites /></Layout>} />
+            <Route path="/suivisactivites/anatest" element={<Layout><AnaTest /></Layout>} />
+            <Route path="/suivisactivites/anatestras" element={<Layout><AnaTestRas /></Layout>} />
+            <Route path="/suivisactivites/scenariobook" element={<Layout><ScenarioBook /></Layout>} />
           </Routes>
         </HashRouter>
       </QueryClientProvider>

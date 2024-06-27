@@ -124,7 +124,7 @@ class Kaabu extends Component {
     console.log("render------------VALUE--------------", this.state.userSearch);
     return (
         <div id='home'>
-            <Header />
+            {/* <Header /> */}
             <Container style={{marginBottom: "15px"}} className='body'>
                 <Row>
                     <Col sm={12}>

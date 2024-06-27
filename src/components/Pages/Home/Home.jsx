@@ -53,9 +53,9 @@ class Home extends Component {
   render() {
     return (
       <div id='home'>
-        <Header />
-        <Footer />
-        <Menu />
+        {/* <Header /> */}
+        {/* <Footer /> */}
+        {/* <Menu /> */}
       
         <Container className='body'>
           <Row>

@@ -31,11 +31,11 @@ function MonProfil() {
 
     return (
         <div>
-            <div>
+            {/* <div>
                 <Header />
                 <Footer />
 
-            </div>
+            </div> */}
             <Container>
             <div id='title'>
                 <Row>

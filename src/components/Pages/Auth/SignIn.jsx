@@ -55,7 +55,7 @@ function SignInSide() {
 
 
   if (isLoggedSuccess) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   const defaultTheme = createTheme();

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Container, Nav, Button, Row, Col, Modal, OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { clearTokenFromLocalStorage, getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
 import { MdOutlineManageHistory } from "react-icons/md";
 import { BsBrowserEdge } from "react-icons/bs";
@@ -39,12 +39,13 @@ function Header() {
   }, [token]);
 
   const handleMenuItemClick = (route) => {
+    setShowModal(false);
     navigate(route);
   };
 
   const handleLogout = () => {
     clearTokenFromLocalStorage();
-    navigate('/');
+    navigate('/signin');
   };
 
   const totalPages = Math.ceil(menuItems.length / itemsPerPage);
@@ -75,16 +76,16 @@ function Header() {
         <Row className="align-items-center">
           <Col>
             <div>
-              <h5>Dalal ak Jamm</h5>
+              <h5>ABELA</h5>
             </div>
           </Col>
           <Col className="d-flex justify-content-end align-items-center" id='menu'>
             <Col xs="auto">
               <Navbar variant='tabs'>
                 <Nav className='me-auto'>
-                  <Nav.Link href='/#/home' style={{ fontSize: '8px' }}>
+                  <Link to='/' style={{ fontSize: '8px', color: "white"}}>
                   <HomeIcon/>
-                  </Nav.Link>
+                  </Link>
                 </Nav>
               </Navbar>
             </Col>
@@ -106,14 +107,14 @@ function Header() {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item href="/monprofil">Mon Profil</Dropdown.Item>
+                <Dropdown.Item as={Link} to="/monprofil">Mon Profil</Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout}>Deconnexion</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
 
             </OverlayTrigger>
           
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal style={{zIndex: '2000'}} show={showModal} onHide={() => setShowModal(false)}>
               <Modal.Body style={{ minHeight: '170px' }}>
                 <Row>
                   {renderMenuItems()}

@@ -6,7 +6,7 @@ import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
 import NoteIcon from '@mui/icons-material/Note';
 import LayersIcon from '@mui/icons-material/Layers';
 import PeopleIcon from '@mui/icons-material/People';
-import { Link } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { FaChartLine } from "react-icons/fa";
 
 
@@ -69,7 +69,7 @@ export default function NestedList( ) {
         </ListItemIcon>
         <ListItemText primary="Supervision Technique" />
       </ListItemButton>
-      <Link href="/admin/role" color="initial" underline='none'>
+      <Link to="/admin/role" style={{textDecoration: 'inherit', color: 'inherit'}}>
          <ListItemButton >
                 <ListItemIcon>
                   <PeopleIcon />
@@ -77,7 +77,7 @@ export default function NestedList( ) {
                 <ListItemText primary="Roles"  />
           </ListItemButton>
       </Link>
-      <Link href="/admin/user" color="initial" underline='none'>
+      <Link to="/admin/user" style={{textDecoration: 'inherit', color: 'inherit'}}  >
          <ListItemButton >
                 <ListItemIcon>
                   <PeopleIcon />

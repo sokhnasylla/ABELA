@@ -30,6 +30,7 @@ import NestedList from './MyList';
 import { jwtDecode } from 'jwt-decode';
 import { clearTokenFromLocalStorage, getTokenFromLocalStorage } from '../Auth/authUtils';
 import { useNavigate } from 'react-router-dom';
+import Header from '../../Header/Header';
 
 
 
@@ -112,7 +113,7 @@ const [myuser,setMyuser] =useState("Moi")
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Box sx={{ display: 'flex' }}>
-        <AppBar position="fixed" style={{ top: 0, zIndex: 1000 }} open={open} sx={{ background: '#148C8A' }} >
+        <AppBar position="fixed" style={{ top: 0 }} open={open} sx={{ background: '#148C8A' }} >
           <Toolbar
             sx={{
               pr: '24px',
@@ -130,7 +131,7 @@ const [myuser,setMyuser] =useState("Moi")
             >
               <MenuIcon />
             </IconButton>
-            <Typography
+            {/* <Typography
               component="h1"
               variant="h6"
               color="inherit"
@@ -139,53 +140,10 @@ const [myuser,setMyuser] =useState("Moi")
               sx={{ flexGrow: 1 }}
             >
               Back Office ABELA
-            </Typography>
-            <div className='myhead'>
+            </Typography> */}
 
-            <Col  className="d-flex justify-content-end align-items-center" id='menu'>
-              <Navbar >
-                <Nav className='me-auto'>
-                  <Nav.Link href='/home' style={{ fontSize: '8px' }}>
-                  <HomeIcon/>
-                  </Nav.Link>
-                </Nav>
-              </Navbar>
-            </Col>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={<Tooltip id="tooltip" color='red'>Applications disponibles</Tooltip>}
-            >
-              <Button variant="secondary"  onClick={() => setShowModal(true)} style={{ background: 'none', border: 'none', position: 'relative' }}>
-                <AppsIcon style={{ color: 'white' }} />
-              </Button>
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={<Tooltip id="tooltip">{myuser}</Tooltip>}>
-                <Dropdown>
-              <Dropdown.Toggle variant="custom" id="dropdown-basic" className="profile-toggle">
-                {/* <span style={{ marginLeft:"2px" }}>{myuser}</span> */}
-                <PersonIcon/>
-              </Dropdown.Toggle>
+            <Header/>
 
-              <Dropdown.Menu>
-                <Dropdown.Item href="/monprofil">Mon Profil</Dropdown.Item>
-                <Dropdown.Item onClick={handleLogout}>Deconnexion</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-
-            </OverlayTrigger>
-          
-
-          {/* <Nav variant='tabs'style={{marginLeft:'89%'}}>
-          <Nav.Item >
-            <Nav.Link href='/home'style={{ fontSize: '8px' }}>
-            <HomeIcon />
-            </Nav.Link>
-          </Nav.Item> */}
-          
-       {/* </Nav> */}
-       </div>
        </Toolbar>
        
         </AppBar>
