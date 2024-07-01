@@ -104,6 +104,7 @@ class Kaabu extends Component {
     searchLoginService(search).then((result) => {
       if(result) {
         if (result.success) {
+          console.log("----------------RESP---------", result);
           this.setState({
             userSearch: result.data,
            });

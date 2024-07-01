@@ -6,7 +6,7 @@ import Footer from './Footer/Footer';
 import { Navigate } from 'react-router-dom';
 import { getTokenFromLocalStorage } from './Pages/Auth/authUtils';
 
-const Layout = ({ children }) => {
+const LayoutAdmin = ({ children }) => {
   const token = getTokenFromLocalStorage();
   if (!token) {
     return <Navigate to="/signin" />;
@@ -14,8 +14,6 @@ const Layout = ({ children }) => {
 
   return (
     <div>
-      <Header />
-      <Menu />
       <div className="content">
         {children}
       </div>
@@ -24,4 +22,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout;
+export default LayoutAdmin;

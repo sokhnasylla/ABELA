@@ -40,6 +40,7 @@ import DetailsProbleme from './components/Pages/MySMC/GestionProbleme/DetailsPro
 import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident/DetailsIncident';
 import Role from './components/Pages/Dashboard/Role/Role';
 import Layout from './components/layout';
+import LayoutAdmin from './components/layout-admin';
 
 const queryClient = new QueryClient();
 
@@ -57,10 +58,10 @@ function App() {
             <Route path="/support/reco_hlr_in" element={<Layout><RecoHlrIn /></Layout>} />
             <Route path="/mysmc" element={<Layout><Mysmc /></Layout>} />
             <Route path="/monprofil" element={<Layout><MonProfil /></Layout>} />
-            <Route path="/admin" element={<Dashboard />} />
-            <Route path="/admin/user" element={<Layout><User /></Layout>} />
-            <Route path="/admin/role" element={<Layout><Role /></Layout>} />
-            <Route path="/admin/group" element={<Layout><Auth /></Layout>} />
+            <Route path="/admin" element={<LayoutAdmin><Dashboard /></LayoutAdmin> } />
+            <Route path="/admin/user" element={<LayoutAdmin><User /></LayoutAdmin>} />
+            <Route path="/admin/role" element={<LayoutAdmin><Role /></LayoutAdmin>} />
+            <Route path="/admin/group" element={<LayoutAdmin><Auth /></LayoutAdmin>} />
             <Route path="/maxit" element={<Layout><Maxit /></Layout>} />
             <Route path="/kaabu" element={<Layout><Kaabu /></Layout>} />
             <Route path="/network" element={<Layout><Network /></Layout>} />

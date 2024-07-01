@@ -2,12 +2,13 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { getTokenFromLocalStorage } from '../components/Pages/Auth/authUtils';
 import { AlertService } from '../utils/alert.service';
+import { Navigate } from 'react-router-dom';
 
 // Créez une instance Axios avec une configuration de base
 const httpClient = axios.create({
-  timeout: 30000, // 10 secondes
-  // baseURL: 'http://localhost:8082/',
-  baseURL: 'http://10.137.15.78:8082/',
+  timeout: 30000, // 30 secondes
+  baseURL: 'http://localhost:8082/',
+  // baseURL: 'http://10.137.15.78:8082/',
 
 });
 
@@ -45,7 +46,7 @@ httpClient.interceptors.response.use(
       }
       else if (error.response && error.response.status===HttpStatusCode.Forbidden) {
         alertService.showConfirmAlert({ title: 'Votre connexion au serveur a expiré. Veuillez vous reconnecter.' }).then(() => {
-          return window.location.href = "/";
+          return window.location.href = "/#/signin";
         });
       } else {
         alertService.showNotificationAlertError(error.message || 'Une erreur s\'est produite').then(() => {
