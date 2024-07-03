@@ -11,20 +11,24 @@ import FormUser from './Signup/FormUser';
 import FormRoles from './Signup/FormRoles';
 import axios from 'axios';
 import { getTokenFromLocalStorage } from './authUtils';
+import { addUser } from '../Dashboard/user.service';
+import { AlertService } from '../../../utils/alert.service';
 
 const steps = ['User', 'Sécurité'];
 
-function Auth({ onFormSubmit }) {
+function AddUser({ onFormSubmit, onClose }) {
+ const [alertService, setAlertService] = useState(new AlertService())
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     prenom: '',
     nom: '',
-    email: '',
     login: '',
+    telephone: '',
     structure: '',
-    roles:'',
+    roles: '',
+    profils: []
   });
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -34,12 +38,12 @@ function Auth({ onFormSubmit }) {
   };
 
   const handleRolesAndTbRolesReady = (roles, tbRoles) => {
-    console.log('Role',roles)
-    console.log("TbRole",tbRoles);
+    console.log('Role', roles);
+    console.log("TbRole", tbRoles);
     setFormData((prevData) => ({
       ...prevData,
       roles,
-      tbroles:tbRoles, // Join array elements into a string
+      tbroles: tbRoles,
     }));
   };
 
@@ -49,36 +53,43 @@ function Auth({ onFormSubmit }) {
       (activeStep === 0 &&
         formData.prenom &&
         formData.nom &&
-        formData.email &&
+        formData.telephone &&
+        formData.login &&
         formData.structure) ||
       activeStep === 1
     ) {
       if (activeStep === steps.length - 1) {
-
-        const token = getTokenFromLocalStorage();
-        // const url = 'http://10.137.15.78:8082/abela-usermanagement/api/v1/auth/register';
-        const url = 'http://localhost:8082/abela-usermanagement/api/v1/auth/register';
         console.log(formData);
-        try {
-          const response = await axios.post(url, formData, {
-            headers: {
-              Authorization: `Bearer ${token}`,  
-            },
-          });
-          // Handle the response as needed
-          console.log(response.data);
-          // Call the onFormSubmit function if provided
-          if (onFormSubmit) {
-            onFormSubmit(response.data);
+        addUser(formData).then(response => {
+          if (response) {
+            if (response.success) {
+              console.log(response.data);
+              if (onFormSubmit) {
+                onFormSubmit(response.data);
+              }
+              setFormData({
+                prenom: '',
+                nom: '',
+                login: '',
+                telephone: '',
+                structure: '',
+                roles: '',
+                profils: []
+              });
+              setActiveStep(0);
+            } else {
+              alertService.showNotificationAlertError(response.message || 'Une erreur s\'est produite');
+            }
           }
-        } catch (error) {
-          console.error('Error submitting form:', error);
-        }
+        }).finally(() => {
+          onClose();
+        })
+      } else {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
       }
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
     } else {
-      // // Afficher un message d'erreur ou empêcher la progression
-      // alert('Veuillez remplir tous les champs obligatoires.');
+      // Afficher un message d'erreur ou empêcher la progression
+      alert('Veuillez remplir tous les champs obligatoires.');
     }
   };
 
@@ -93,17 +104,17 @@ function Auth({ onFormSubmit }) {
       case 1:
         return <FormRoles onRolesAndTbRolesReady={handleRolesAndTbRolesReady} formData={formData} />;
       default:
-        throw new Error('Unknown step');
+        return 'Unknown step';
     }
   }
 
   return (
-    <Paper id='auth'>
-      <CustomizedSteppers activeStep={activeStep} />
+    <Paper id='auth' sx={{}} >
+      <CustomizedSteppers activeStep={activeStep} steps={steps} />
       <React.Fragment>
         <CssBaseline />
-        <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
-          <Paper variant="outlined" sx={{ my: { xs: 1, md: 2 }, p: { xs: 2, md: 3 } }}>
+        <Container sx={{paddingBottom: 1}} component="main">
+          <Paper variant="outlined" sx={{ my: { xs: 1, md: 2 }, p: { xs: 2, md: 3 }  }}>
             <Typography variant="h5" gutterBottom>
               {getStepContent(activeStep)}
             </Typography>
@@ -122,4 +133,4 @@ function Auth({ onFormSubmit }) {
   );
 }
 
-export default Auth;
+export default AddUser;

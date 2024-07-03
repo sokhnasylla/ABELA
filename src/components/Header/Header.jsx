@@ -23,7 +23,7 @@ function Header() {
     { text: "Maxit", icon: <FaMobile style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/maxit' },
     { text: "Network", icon: <FaNetworkWired style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/network' },
     { text: "Mysmc", icon: <GrSystem style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/mysmc' },
-    { text: "Dashboard Admin", icon: <Dashboard style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/admin' },
+    { text: "Dashboard Admin", icon: <Dashboard style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/admin/user' },
     // Ajoutez d'autres éléments du menu ici au besoin
   ]);
   const itemsPerPage = 6;

@@ -174,8 +174,10 @@ const [myuser,setMyuser] =useState("Moi")
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-         
+            marginTop: 1,
+            
           }}
+          
         >
           <Toolbar />
           {DynamicComponent && <DynamicComponent />}

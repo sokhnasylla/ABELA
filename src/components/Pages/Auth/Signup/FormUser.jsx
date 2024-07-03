@@ -36,15 +36,14 @@ export default function FormUser({ handleInputChange, formData }) {
       <Grid item xs={12}>
         <TextField
           required
-          type="email"
-          id="email"
-          name="email"
-          label="Adresse Email"
+          id="telephone"
+          name="telephone"
+          label=" Téléphone"
           fullWidth
-          autoComplete="email"
+          autoComplete="telephone"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formData.email}
+          defaultValue={formData.telephone}
         />
       </Grid>
       <Grid item xs={12} sm={6}>

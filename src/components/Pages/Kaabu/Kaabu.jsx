@@ -126,7 +126,7 @@ class Kaabu extends Component {
     return (
         <div id='home'>
             {/* <Header /> */}
-            <Container style={{marginBottom: "15px"}} className='body'>
+            <Container style={{marginBottom: "100px"}} className='body'>
                 <Row>
                     <Col sm={12}>
                         <Title text="Espace Kaabu Mobile" />

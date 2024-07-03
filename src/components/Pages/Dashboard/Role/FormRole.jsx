@@ -1,40 +1,40 @@
-import { Grid, TextField } from '@mui/material'
-import React from 'react'
 
-function FormRole(handleInputChange,formDataRole) {
+
+import * as React from 'react';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+
+
+export default function FormRole({ handleInputChange, formData }) {
+  
   return (
-    <div>
-     <Grid container spacing={3} sx={{ marginBottom: 6 }}>
-      <Grid item xs={12}>
+    <Grid container spacing={3} sx={{ marginBottom: 6 }}>
+      <Grid item xs={12} sm={6}>
         <TextField
           required
           id="code"
           name="code"
           label="Code"
           fullWidth
-          autoComplete="code"
+          autoComplete="given-name"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formDataRole.code}
+          defaultValue={formData.code}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={6}>
         <TextField
           required
-          type="name"
           id="name"
           name="name"
-          label="Name"
+          label="Nom"
           fullWidth
-          autoComplete="name"
+          autoComplete="family-name"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formDataRole.name}
+          defaultValue={formData.name}
         />
       </Grid>
     </Grid>
-    </div>
-  )
+  );
 }
-
-export default FormRole

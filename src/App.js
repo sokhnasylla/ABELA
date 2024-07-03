@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import Maxit from './components/Pages/Maxit/Maxit';
 import Network from './components/Pages/Network/Network';
 import User from './components/Pages/Dashboard/Utilisateurs/User';
-import Auth from './components/Pages/Auth/Auth';
+import AddUser from './components/Pages/Auth/AddUser';
 import SignInSide from './components/Pages/Auth/SignIn';
 import GestionIncident from './components/Pages/MySMC/GestionIncident/GestionIncident';
 import AjoutAvis from './components/Pages/MySMC/GestionIncident/AjoutAvis';
@@ -61,7 +61,7 @@ function App() {
             <Route path="/admin" element={<LayoutAdmin><Dashboard /></LayoutAdmin> } />
             <Route path="/admin/user" element={<LayoutAdmin><User /></LayoutAdmin>} />
             <Route path="/admin/role" element={<LayoutAdmin><Role /></LayoutAdmin>} />
-            <Route path="/admin/group" element={<LayoutAdmin><Auth /></LayoutAdmin>} />
+            <Route path="/admin/group" element={<LayoutAdmin><AddUser /></LayoutAdmin>} />
             <Route path="/maxit" element={<Layout><Maxit /></Layout>} />
             <Route path="/kaabu" element={<Layout><Kaabu /></Layout>} />
             <Route path="/network" element={<Layout><Network /></Layout>} />
