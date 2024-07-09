@@ -5,6 +5,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
 import NoteIcon from '@mui/icons-material/Note';
 import LayersIcon from '@mui/icons-material/Layers';
+import PersonIcon from '@mui/icons-material/Person';
+import BuildIcon from '@mui/icons-material/Build';
 import PeopleIcon from '@mui/icons-material/People';
 import { Link } from 'react-router-dom';
 import { FaChartLine } from "react-icons/fa";
@@ -19,7 +21,7 @@ export default function NestedList( ) {
   return (
     <React.Fragment
     >
-       <Link href="/admin/audit" color="initial" underline='none'></Link>
+       {/* <Link href="/admin/audit" color="initial" underline='none'></Link>
           <ListItemButton>
             <ListItemIcon>
               <FaChartLine size={25}/>
@@ -68,11 +70,19 @@ export default function NestedList( ) {
           <LayersIcon />
         </ListItemIcon>
         <ListItemText primary="Supervision Technique" />
-      </ListItemButton>
+      </ListItemButton> */}
+      <Link to="#" style={{textDecoration: 'inherit', color: 'inherit'}}>
+         <ListItemButton >
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText primary="Profils"  />
+          </ListItemButton>
+      </Link>
       <Link to="/admin/role" style={{textDecoration: 'inherit', color: 'inherit'}}>
          <ListItemButton >
                 <ListItemIcon>
-                  <PeopleIcon />
+                  <BuildIcon />
                 </ListItemIcon>
                 <ListItemText primary="Roles"  />
           </ListItemButton>

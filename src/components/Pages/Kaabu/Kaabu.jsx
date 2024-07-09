@@ -61,6 +61,7 @@ class Kaabu extends Component {
       data: null,
      });
     const identifiant = this.state.search
+    console.log("RECHERCHE KAABU ::: ", identifiant);
       if (!identifiant || identifiant.trim() === "") {
         this.setState({
           loading: false,
@@ -92,7 +93,8 @@ class Kaabu extends Component {
   searchLogin(search) {
     this.setState({
       searchLoading: true,
-      userSearch: []
+      userSearch: [],
+      search: search
      });
     if (!search || search.trim() === "" || search.length === 1) {
       this.setState({

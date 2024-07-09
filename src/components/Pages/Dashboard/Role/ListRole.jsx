@@ -62,10 +62,10 @@ class ListRole extends Component {
                 <TableCell sx={{ color: 'black' }}>{role?.code}</TableCell>
                 <TableCell sx={{ color: 'black' }}>{role?.name}</TableCell>
                 <TableCell sx={{ color: 'black' }}>
-                  <IconButton aria-label="edit" size="small" onClick={() => this.handleEditClick(role.id)}>
+                  <IconButton disabled="true" aria-label="edit" size="small" onClick={() => this.handleEditClick(role.id)}>
                     <EditIcon fontSize="inherit" sx={{ color: '#FF6600' }} />
                   </IconButton>
-                  <IconButton aria-label="delete" size="small" onClick={() => this.handleDeleteClick(role.id)}>
+                  <IconButton disabled="true" aria-label="delete" size="small" onClick={() => this.handleDeleteClick(role.id)}>
                     <DeleteIcon fontSize="inherit" sx={{ color: '#FF6600' }} />
                   </IconButton>
                 </TableCell>
