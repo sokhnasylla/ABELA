@@ -3,8 +3,9 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
 
-export default function FormUser({ handleInputChange, formData }) {
+export default function FormUser({isUpdate, handleInputChange, formData }) {
   
+  console.log("TEST UPDATE ----------", formData);
   return (
     <Grid container spacing={3} sx={{ marginBottom: 6 }}>
       <Grid item xs={12} sm={6}>
@@ -17,7 +18,7 @@ export default function FormUser({ handleInputChange, formData }) {
           autoComplete="given-name"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formData.prenom}
+          value={formData.prenom}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
@@ -30,7 +31,7 @@ export default function FormUser({ handleInputChange, formData }) {
           autoComplete="family-name"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formData.nom}
+          value={formData.nom}
         />
       </Grid>
       <Grid item xs={12}>
@@ -43,18 +44,20 @@ export default function FormUser({ handleInputChange, formData }) {
           autoComplete="telephone"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formData.telephone}
+          value={formData.telephone}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
+          required
           id="login"
           name="login"
           label="Login Windows"
+          disabled={isUpdate}
           autoComplete="Login Windows"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formData.login}
+          value={formData.login}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
@@ -67,7 +70,7 @@ export default function FormUser({ handleInputChange, formData }) {
           autoComplete="Structure"
           variant="standard"
           onChange={handleInputChange}
-          defaultValue={formData.structure}
+          value={formData.structure}
         />
       </Grid>
     </Grid>

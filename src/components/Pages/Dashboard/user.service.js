@@ -12,6 +12,14 @@ function deleteUsersService(id) {
   return httpClient.delete(usermanagementUrl + '/users/' + id).then(response => response ? response.data : null);
 }
 
+function activerOrDesactiverUsersService(id) {
+  return httpClient.post(usermanagementUrl + '/users/desactiver/' + id).then(response => response ? response.data : null);
+}
+
+function cloturerUsersService(id) {
+  return httpClient.post(usermanagementUrl + '/users/cloturer/' + id).then(response => response ? response.data : null);
+}
+
 
 function editUsersService(id, data) {
   return httpClient.post(usermanagementUrl + '/users/' + id, data).then(response => response ? response.data : null);
@@ -41,10 +49,14 @@ function addUser(data) {
   return httpClient.post(usermanagementUrl + '/auth/register', data).then(response => response ? response.data : null);
 }
 
+function login(data) {
+  return httpClient.post(usermanagementUrl + '/auth/authenticate', data).then(response => response ? response.data : null);
+}
+
 
 
 
 export {
   getUsersService, deleteUsersService, editUsersService, getRolesService, 
-  deleteRolesService, editRolesService, addUser, addRole
+  deleteRolesService, editRolesService, addUser, addRole, login, activerOrDesactiverUsersService, cloturerUsersService
 }

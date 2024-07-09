@@ -91,7 +91,7 @@ class Utilisateurs extends Component {
                   Ajouter
                 </Fab>
               </Grid>
-              <ListUsers users={users} fetchUsers={this.fetchUsers} onEditUser={this.handleEditUser} /> {/* Passer les utilisateurs et fetchUsers */}
+              <ListUsers users={users} fetchUsers={this.fetchUsers} onEditUser={this.handleEditUser} />
             </Paper>
           </Grid>
         </Grid>

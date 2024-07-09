@@ -52,7 +52,6 @@ function App() {
           <Routes>
             <Route path="/signin" element={<SignInSide />} />
             <Route path="/signup" element={<SignUp />} />
-            
             <Route path="/" element={<Layout><Home /></Layout>} />
             <Route path="/support" element={<Layout><Support /></Layout>} />
             <Route path="/support/reco_hlr_in" element={<Layout><RecoHlrIn /></Layout>} />
