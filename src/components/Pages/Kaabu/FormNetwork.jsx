@@ -22,6 +22,11 @@ function getStatusText(status) {
 
 function FormNetwork({ clientNetwork }) {
 
+  if (!clientNetwork) {
+    console.log("-----SIMPLISSIMO-----------", clientNetwork);
+    return (<div style={{ top: "50px"}} className="alert alert-danger" role="alert">Ce numéro n'existe pas sur HRL</div>);
+  }
+
   console.log("------NETWORK----------", clientNetwork);
   return (
     <Card style={{marginTop: "50px", borderRadius: "1px"}}>
@@ -68,7 +73,7 @@ function FormNetwork({ clientNetwork }) {
           </tbody>))}
         </Table>
         {!clientNetwork && (<div style={{ top: "20px"}} className="alert alert-danger" role="alert">Ce numéro n'existe pas sur HRL</div>)}
-        {!clientNetwork.msisdn && (<div style={{ top: "20px"}} className="alert alert-danger" role="alert">Connexion timed out: Serveur n'est pas accessible</div>)}
+        {clientNetwork && (!clientNetwork.msisdn && (<div style={{ top: "20px"}} className="alert alert-danger" role="alert">Connexion timed out: Serveur n'est pas accessible</div>))}
       </Card.Body>
     </Card>
   );
