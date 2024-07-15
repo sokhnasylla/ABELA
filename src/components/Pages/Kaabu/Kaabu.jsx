@@ -167,7 +167,7 @@ class Kaabu extends Component {
                               </Stack>
                             </div>
                             <div>
-                                <Button onClick={this.handleSearchClick} style={{ height: "40px", marginTop: "21px", width: "140px", backgroundColor: "#FF6600", borderColor: " #FF6600" }}>Rechercher</Button>
+                                <Button onClick={this.handleSearchClick} style={{ height: "40px", fontWeight: 'bold', marginTop: "21px", width: "140px", backgroundColor: "#FF6600", borderColor: " #FF6600" }}>Rechercher</Button>
                             </div>
                         </div>
                         {this.state.loading && (

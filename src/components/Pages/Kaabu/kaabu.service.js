@@ -39,4 +39,8 @@ function getDeviceImageService(id) {
       });
   }
 
-export {getAllInfoUserService, searchLoginService, getDeviceImageService, getDeviceVendeurService}
+  function sendMessageService(sms) {
+    return httpClient.post(selfserviceUrl + '/kaabu/send-sms', sms).then(response => response ? response.data : null);
+  }
+
+export {getAllInfoUserService, searchLoginService, getDeviceImageService, getDeviceVendeurService, sendMessageService}
