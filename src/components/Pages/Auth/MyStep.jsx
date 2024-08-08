@@ -5,17 +5,17 @@ import Stack from '@mui/material/Stack';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { Person } from '@mui/icons-material';
 import LockOutlined from '@mui/icons-material/LockOutlined';
+import AccessibilityIcon from '@mui/icons-material/Accessibility';
 
 
 
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
-    top: 22,
+    top: 45,
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
@@ -47,7 +47,7 @@ const ColorlibStepIconRoot = styled('div')(({ theme, ownerState }) => ({
   height: 40,
   display: 'flex',
   borderRadius: '50%',
-  marginTop:'15px',
+  marginTop:'25px',
   justifyContent: 'center',
   alignItems: 'center',
   ...(ownerState.active && {
@@ -68,7 +68,8 @@ function ColorlibStepIcon(props) {
 
   const icons = {
     1: <Person />,
-    2: <LockOutlined />
+    2: <LockOutlined />,
+    3: <AccessibilityIcon />
   };
 
   return (
@@ -96,7 +97,11 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 
-const steps = ['Utilisateurs', 'Securité'];
+const steps = [
+  'Utilisateurs', 
+  'Securité', 
+  // "Profil"
+];
 
 export default function CustomizedSteppers({ activeStep }) {
   return (

@@ -2,7 +2,6 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { getTokenFromLocalStorage, storeTokenInLocalStorage } from '../components/Pages/Auth/authUtils';
 import { AlertService } from '../utils/alert.service';
-import { Navigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 // Créez une instance Axios avec une configuration de base

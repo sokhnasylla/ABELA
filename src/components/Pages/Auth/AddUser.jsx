@@ -6,8 +6,13 @@ import FormUser from './Signup/FormUser';
 import FormRoles from './Signup/FormRoles';
 import { addUser, editUsersService } from '../Dashboard/user.service';
 import { AlertService } from '../../../utils/alert.service';
+import FormProfiles from './Signup/FormProfiles';
 
-const steps = ['User', 'Sécurité'];
+const steps = [
+  'User', 
+  'Roles', 
+  // "Profils"
+];
 
 class AddUser extends Component {
   constructor(props) {
@@ -80,22 +85,39 @@ class AddUser extends Component {
     }));
   };
 
+
+  handleProfilesChange = (profils) => {
+    console.log("----handleProfilesChange-- ", profils);
+    this.setState((prevState) => ({
+      formData: {
+        ...prevState.formData,
+        profils,
+      }
+    }));
+  };
+
+
   handleNext = async () => {
     const { formData, activeStep } = this.state;
     const { user, onFormSubmit, onClose } = this.props;
 
-    if (
-      (activeStep === 0 &&
-        formData.prenom &&
-        formData.nom &&
-        formData.telephone &&
-        formData.login &&
-        formData.structure) ||
-      activeStep === 1
-    ) {
+    console.log("--------STEP--------- ", activeStep, steps.length);
+    if (activeStep === 0) {
+      if (formData.prenom && formData.nom && formData.telephone && formData.login && formData.structure) {
+        this.setState((prevState) => ({
+          activeStep: prevState.activeStep + 1
+        }));
+      } else {
+        alert('Veuillez remplir tous les champs obligatoires.');
+      }
+    // } else if(activeStep === 1) {
+    //   this.setState((prevState) => ({
+    //     activeStep: prevState.activeStep + 1
+    //   }));
+    } else {
       if (activeStep === steps.length - 1) {
         try {
-          let response;
+          let response;  
           if (user) {
             response = await editUsersService(user.id, formData);
           } else {
@@ -119,8 +141,6 @@ class AddUser extends Component {
           activeStep: prevState.activeStep + 1
         }));
       }
-    } else {
-      alert('Veuillez remplir tous les champs obligatoires.');
     }
   };
 
@@ -154,6 +174,8 @@ class AddUser extends Component {
         return <FormUser isUpdate={!!user} handleInputChange={this.handleInputChange} formData={formData} />;
       case 1:
         return <FormRoles onRolesChange={this.handleRolesChange} formData={formData} />;
+      // case 2: 
+      //   return <FormProfiles onProfilesChange={this.handleProfilesChange} formData={formData} />;
       default:
         return 'Unknown step';
     }

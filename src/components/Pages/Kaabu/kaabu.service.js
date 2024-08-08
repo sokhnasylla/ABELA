@@ -11,6 +11,11 @@ function searchLoginService(search) {
     return httpClient.get(selfserviceUrl + '/kaabu/search-users-kaabu/'+search).then(response => response ? response.data : null);
 }
 
+function searchAutocomplateLoginService(search) {
+  return httpClient.get(selfserviceUrl + '/kaabu/search-users-login-kaabu/'+search).then(response => response ? response.data : null);
+}
+
+
 
 function getDeviceVendeurService(msisdn) {
     return httpClient.get(selfserviceUrl + '/kaabu/get-info-device/'+msisdn).then(response => response ? response.data : null);
@@ -43,4 +48,4 @@ function getDeviceImageService(id) {
     return httpClient.post(selfserviceUrl + '/kaabu/send-sms', sms).then(response => response ? response.data : null);
   }
 
-export {getAllInfoUserService, searchLoginService, getDeviceImageService, getDeviceVendeurService, sendMessageService}
+export {getAllInfoUserService, searchLoginService, searchAutocomplateLoginService, getDeviceImageService, getDeviceVendeurService, sendMessageService}

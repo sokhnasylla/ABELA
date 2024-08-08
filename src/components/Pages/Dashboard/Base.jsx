@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Dropdown, Nav, Navbar, OverlayTrigger } from 'react-bootstrap';
 import '../../Header/header.css'
-import HomeIcon from '@mui/icons-material/Home';
-import AppsIcon from '@mui/icons-material/Apps';
-import PersonIcon from '@mui/icons-material/Person';
 
 
 import {
@@ -15,11 +11,9 @@ import {
   AppBar as MuiAppBar,
   Toolbar,
   List,
-  Typography,
   Divider,
   IconButton,
   Box,
-  Tooltip,
 } from '@mui/material';
 import {
   Menu as MenuIcon,

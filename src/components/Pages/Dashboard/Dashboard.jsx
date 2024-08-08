@@ -3,7 +3,7 @@ import Base from './Base'
 import useAuth from '../Auth/useAuth'
 
 function Dashboard() {
-  useAuth()
+  // useAuth()
   return (
     <Base/>
   )

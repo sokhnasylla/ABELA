@@ -12,7 +12,7 @@ import { Stack, Autocomplete, InputLabel, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormKaabu from './FormKaabu';
 import FormSimplissimo from './FormSimplissimo';
-import {getAllInfoUserService, getDeviceVendeur, searchLoginService} from './kaabu.service';
+import {getAllInfoUserService, searchAutocomplateLoginService} from './kaabu.service';
 import { AlertService } from '../../../utils/alert.service';
 import FormNetwork from './FormNetwork';
 import DeviceCard from './FormOTAP';
@@ -103,7 +103,7 @@ class Kaabu extends Component {
        });
       return;
     }
-    searchLoginService(search).then((result) => {
+    searchAutocomplateLoginService(search).then((result) => {
       if(result) {
         if (result.success) {
           console.log("----------------RESP---------", result);

@@ -1,100 +1,89 @@
 import * as React from 'react';
 import {ListItemButton,ListItemIcon,ListItemText} from "@mui/material"
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
-import NoteIcon from '@mui/icons-material/Note';
-import LayersIcon from '@mui/icons-material/Layers';
 import PersonIcon from '@mui/icons-material/Person';
 import BuildIcon from '@mui/icons-material/Build';
 import PeopleIcon from '@mui/icons-material/People';
 import { Link } from 'react-router-dom';
-import { FaChartLine } from "react-icons/fa";
+import { FaChartLine } from 'react-icons/fa';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import { getTokenDecode } from '../Auth/authUtils';
+import { RoleConstants } from '../../../config/role.constants';
 
 
 export default function NestedList( ) {
- 
 
- 
+  const userToken = getTokenDecode();
+
+  console.log("--------MENU ADMIN---ACCESS-------- ", RoleConstants.admin.code, " --------- ", userToken.roles, userToken.roles.includes(RoleConstants.admin.code));
 
 
   return (
     <React.Fragment
     >
-       {/* <Link href="/admin/audit" color="initial" underline='none'></Link>
-          <ListItemButton>
+      { userToken.roles.includes(RoleConstants.mysmc.code) && (<Link to="/admin/audit" style={{textDecoration: 'inherit', color: 'inherit'}}>
+        <ListItemButton>
             <ListItemIcon>
               <FaChartLine size={25}/>
             </ListItemIcon>
             <ListItemText primary="Audit" />
-          </ListItemButton>
-        <Link/>
-      <ListItemButton>
+        </ListItemButton>
+      </Link>)}
+      {/* <ListItemButton>
         <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Gestion de mon équipe" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
+          <RowingIcon />
         </ListItemIcon>
         <ListItemText primary="Gestion des activités" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Gestion des application" />
-      </ListItemButton>
-      <ListItemButton>
+      </ListItemButton> */}
+      {/* <ListItemButton>
         <ListItemIcon>
           <FilterNoneOutlinedIcon />
         </ListItemIcon>
         <ListItemText primary="Organisation" />
-      </ListItemButton>
-      <ListItemButton>
+      </ListItemButton> */}
+      {userToken.roles.includes(RoleConstants.mysmc.code) && (<ListItemButton>
         <ListItemIcon>
-          <NoteIcon />
+          <ContactsIcon />
         </ListItemIcon>
         <ListItemText primary="Carnet D'adresse" />
-      </ListItemButton>
-      <ListItemButton>
+      </ListItemButton>)}
+      {userToken.roles.includes(RoleConstants.mysmc.code) && (<ListItemButton>
         <ListItemIcon>
-          <AssignmentIcon />
+          <SupervisorAccountIcon />
         </ListItemIcon>
         <ListItemText primary="Supervision Metier" />
-      </ListItemButton>
-      <ListItemButton>
+      </ListItemButton>)}
+      {userToken.roles.includes(RoleConstants.mysmc.code) && (<ListItemButton>
         <ListItemIcon>
-          <LayersIcon />
+          <SyncAltIcon />
         </ListItemIcon>
         <ListItemText primary="Supervision Technique" />
-      </ListItemButton> */}
-      <Link to="#" style={{textDecoration: 'inherit', color: 'inherit'}}>
+      </ListItemButton>)}
+      {userToken.roles.includes(RoleConstants.superAdmin.code) && (<Link to="#" style={{textDecoration: 'inherit', color: 'inherit'}}>
          <ListItemButton >
                 <ListItemIcon>
                   <PersonIcon />
                 </ListItemIcon>
-                <ListItemText primary="Profils"  />
+                <ListItemText primary="Gestion des Profils"  />
           </ListItemButton>
-      </Link>
-      <Link to="/admin/role" style={{textDecoration: 'inherit', color: 'inherit'}}>
+      </Link>)}
+      {userToken.roles.includes(RoleConstants.superAdmin.code) && (<Link to="/admin/role" style={{textDecoration: 'inherit', color: 'inherit'}}>
          <ListItemButton >
                 <ListItemIcon>
                   <BuildIcon />
                 </ListItemIcon>
-                <ListItemText primary="Roles"  />
+                <ListItemText primary="Gestion des Rôles"  />
           </ListItemButton>
-      </Link>
-      <Link to="/admin/user" style={{textDecoration: 'inherit', color: 'inherit'}}  >
+      </Link>)}
+      {userToken.roles.includes(RoleConstants.admin.code) && (<Link to="/admin/user" style={{textDecoration: 'inherit', color: 'inherit'}}  >
          <ListItemButton >
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Utilisateurs"  />
+                <ListItemText primary="Mon équipe" />
           </ListItemButton>
-      </Link>
+      </Link>)}
      
     </React.Fragment>
   );

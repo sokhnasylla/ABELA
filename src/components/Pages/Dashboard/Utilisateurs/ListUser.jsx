@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { activerOrDesactiverUsersService, cloturerUsersService, deleteUsersService,  } from '../user.service';
+import { activerOrDesactiverUsersService, cloturerUsersService, deleteUsersService } from '../user.service';
 import { AlertService } from '../../../../utils/alert.service';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
@@ -10,24 +10,21 @@ import TableRow from '@mui/material/TableRow';
 import Title from '../Title';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
 import { format } from 'date-fns';
 import { IconButton, Modal, Box } from '@mui/material';
 import { Dropdown } from 'react-bootstrap';
 import AddUser from '../../Auth/AddUser';
-
 
 const modalStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 700,  // Augmenter la largeur
   bgcolor: 'silver',
   boxShadow: 24,
   // p: 4,
 };
-
 
 const formatDate = (dateString) => {
   if (dateString) {
@@ -37,7 +34,6 @@ const formatDate = (dateString) => {
     return "";
   }
 };
-
 
 const formatEtat = (etat) => {
   switch (etat) {
@@ -103,7 +99,6 @@ class ListUsers extends Component {
       });
   };
 
-
   handleCloturerClick = (id) => {
     this.alertService.showPromptAlert({
       title: 'Etes-vous sûre de vouloir Clôturer ?',
@@ -119,7 +114,6 @@ class ListUsers extends Component {
           });
       }
     });
-    
   };
 
   handleEditClick = (user) => {
@@ -140,7 +134,7 @@ class ListUsers extends Component {
     console.log("------------USER----------- ", users);
     return (
       <React.Fragment>
-        <Title>Utilisateurs</Title>
+        <Title>Mon Equipe</Title>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -163,7 +157,7 @@ class ListUsers extends Component {
                 <TableCell sx={{ color: 'black' }}>{user?.structure}</TableCell>
                 <TableCell sx={{ color: 'black' }}>{user?.creeParUsername}</TableCell>
                 <TableCell sx={{ color: 'black' }}>{formatDate(user?.dateCreation)}</TableCell>
-                <TableCell sx={{ color: getEtatColor(user?.status)}}>{formatEtat(user?.status)}</TableCell>
+                <TableCell sx={{ color: getEtatColor(user?.status) }}>{formatEtat(user?.status)}</TableCell>
                 <TableCell sx={{ color: 'black' }}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <IconButton aria-label="edit" size="small" onClick={() => this.handleEditClick(user)}>
@@ -174,9 +168,9 @@ class ListUsers extends Component {
                         <MoreVertIcon sx={{ color: '#FF6600' }} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <Dropdown.Item disabled={user?.status==="1" || user?.status==="2"} onClick={() => this.handleActiverORDesactiverClick(user?.id)}>{user?.status==="0" ? "Désactiver" : "Activer"}</Dropdown.Item>
-                        <Dropdown.Item disabled={user?.status==="2"} onClick={() => this.handleCloturerClick(user?.id)}>Clôturer</Dropdown.Item>
-                        <Dropdown.Item disabled="false" onClick={() => {}}>Suspendre</Dropdown.Item>
+                        <Dropdown.Item disabled={user?.status === "1" || user?.status === "2"} onClick={() => this.handleActiverORDesactiverClick(user?.id)}>{user?.status === "0" ? "Désactiver" : "Activer"}</Dropdown.Item>
+                        <Dropdown.Item disabled={user?.status === "2"} onClick={() => this.handleCloturerClick(user?.id)}>Clôturer</Dropdown.Item>
+                        <Dropdown.Item disabled="false" onClick={() => { }}>Suspendre</Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
                   </div>

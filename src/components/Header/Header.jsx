@@ -10,21 +10,52 @@ import { Dashboard } from '@mui/icons-material';
 import AppsIcon from '@mui/icons-material/Apps';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
-import { jwtDecode } from 'jwt-decode';
+import { ProfilConstants } from '../../config/profil.constants';
+import { RoleConstants } from '../../config/role.constants';
 
 class Header extends Component {
+
+  roleAdmin = [
+    RoleConstants.admin.code,
+  ];
+
+
+  roleKaabu = [
+    RoleConstants.kaabu.code,
+  ];
+
+  roleSupport = [
+    RoleConstants.support.code,
+  ];
+
+  roleMysmc = [
+    RoleConstants.mysmc.code,
+  ];
+
+  roleMaxit = [
+    RoleConstants.maxit.code,
+  ];
+  
+  roleIris = [
+    RoleConstants.iris.code,
+  ];
+
+  roleNetwork = [
+    RoleConstants.network.code,
+  ];
+
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
       menuItems: [
-        { text: "Support Technique", icon: <MdOutlineManageHistory style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/support', roles: ['ADMIN']  },
-        { text: "Iris", icon: <BsBrowserEdge style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/iris', roles: ['ADMIN'] },
-        { text: "Kaabu", icon: <FaStreetView style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/kaabu', roles: ['ADMIN', 'KAABU'] },
-        { text: "Maxit", icon: <FaMobile style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/maxit', roles: ['ADMIN'] },
-        { text: "Network", icon: <FaNetworkWired style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/network', roles: ['ADMIN'] },
-        { text: "Mysmc", icon: <GrSystem style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/mysmc', roles: ['ADMIN'] },
-        { text: "Dashboard Admin", icon: <Dashboard style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/admin/user',roles: ['ADMIN'] },
+        { text: "Support Technique", icon: <MdOutlineManageHistory style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/support', roles: this.roleSupport },
+        { text: "Iris", icon: <BsBrowserEdge style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/iris', roles: this.roleIris },
+        { text: "Kaabu", icon: <FaStreetView style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/kaabu', roles: this.roleKaabu },
+        { text: "Maxit", icon: <FaMobile style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/maxit', roles: this.roleMaxit },
+        { text: "Network", icon: <FaNetworkWired style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/network', roles: this.roleNetwork },
+        { text: "Mysmc", icon: <GrSystem style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/mysmc', roles: this.roleMysmc },
+        { text: "Dashboard Admin", icon: <Dashboard style={{ color: '#FF6600', fontSize: '24px' }} />, route: '/admin/user', roles: this.roleAdmin },
       ],
       itemsPerPage: 6,
       currentPage: 0,

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, FormControlLabel, FormGroup } from '@mui/material';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import Checkbox from '@mui/material/Checkbox';
 import { getRolesService } from '../../Dashboard/user.service';
+import { getTokenDecode } from '../authUtils';
 
 class FormRoles extends Component {
   constructor(props) {
@@ -13,8 +12,13 @@ class FormRoles extends Component {
       checked: [],
       isChecked: {},
       data: [],
+      userToken: getTokenDecode()
     };
   }
+
+
+  // console.log("-----------ACCESS-------- ", roleAdminAll, " --------- ", userToken.profils, userToken.profils.some(profil => roleAdminAll.includes(profil)));
+
 
   componentDidMount() {
     this.fetchRolesData();
@@ -80,18 +84,18 @@ class FormRoles extends Component {
             Roles
           </Typography>
         </Grid>
-        <List sx={{ width: '100%', maxWidth: 400, bgcolor: 'background.paper' }}>
+        {/* <List sx={{ width: '100%', maxWidth: 400, bgcolor: 'background.paper' }}> */}
           {data.map((item) => (
-            <ListItem key={item.id} >
+            <Grid item xs={6} key={item.id}>
               <FormGroup>
                 <FormControlLabel
-                  control={<Checkbox checked={!!isChecked[item.id]} onChange={this.handleChange(item.id)} />}
+                  control={<Checkbox disabled={!this.state.userToken.roles.includes("SUPER_ADMIN") && !this.state.userToken.roles.includes(item.code)} checked={!!isChecked[item.id]} onChange={this.handleChange(item.id)} />}
                   label={item.name}
                 />
               </FormGroup>
-            </ListItem>
+            </Grid>  
           ))}
-        </List>
+        {/* </List> */}
       </Grid>
     );
   }

@@ -28,7 +28,7 @@ class FormKaabu extends Component {
     super(props);
     this.state = {
       showModal: false,
-      message: "Bjr. Si vous avez des difficultes pour utiliser KAABU sur ANDROID, desinstallez votre version actuelle et installez la nouvelle version de KAABU 0.x.x Lien Telechargement: "
+      message: ""
     };
   }
 
