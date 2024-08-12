@@ -141,8 +141,8 @@ class ListUsers extends Component {
               <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Prenom</TableCell>
               <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Nom</TableCell>
               <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Login</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Téléphone</TableCell>
               <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Structure</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Créé par</TableCell>
               <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Créé le</TableCell>
               <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Etat</TableCell>
               <TableCell sx={{ fontWeight: 'bold', color: 'black' }}>Action</TableCell>
@@ -154,8 +154,8 @@ class ListUsers extends Component {
                 <TableCell sx={{ color: 'black' }}>{user?.prenom}</TableCell>
                 <TableCell sx={{ color: 'black' }}>{user?.nom}</TableCell>
                 <TableCell sx={{ color: 'black' }}>{user?.login}</TableCell>
+                <TableCell sx={{ color: 'black' }}>{user?.telephone}</TableCell>
                 <TableCell sx={{ color: 'black' }}>{user?.structure}</TableCell>
-                <TableCell sx={{ color: 'black' }}>{user?.creeParUsername}</TableCell>
                 <TableCell sx={{ color: 'black' }}>{formatDate(user?.dateCreation)}</TableCell>
                 <TableCell sx={{ color: getEtatColor(user?.status) }}>{formatEtat(user?.status)}</TableCell>
                 <TableCell sx={{ color: 'black' }}>
