@@ -1,6 +1,6 @@
 import React from 'react'
 import { InputLabel ,TextField,Select,MenuItem} from '@mui/material'
-import { Button, Card, Col, Container,Row } from 'react-bootstrap'
+import { Button, Col,Container,Row } from 'react-bootstrap'
 import menupng from "../../../../assets/menu.png"
 import MenuLeft from '../../../Card/MenuLeft/MenuLeft'
 import { TfiBlackboard } from "react-icons/tfi";
@@ -76,7 +76,7 @@ function HomeSmc() {
             </Col>
             <Col xs={10}>
             <Container className='blockinf' style={{borderBottom: "1px solid #e5e5e5"}}>
-                <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif"}} onClick={handleOpen}>
+                <Button style={{backgroundColor:"#5cb85c",border:"#449D44",fontSize:"14px",fontFamily:"Helvetica Neue,Helvetica,Arial,sans-serif",marginTop:"8px"}} onClick={handleOpen}>
                    <FaPlusCircle/>   
                    Partager une information
                 </Button>
@@ -136,7 +136,7 @@ function HomeSmc() {
                     [`& .${timelineItemClasses.root}:before`]: {
                       flex: 0,
                       padding: 0,
-                    },height:"400px",
+                    },height:"350px",
                     overflowY:"auto",
                     position:"relative",
 
@@ -240,7 +240,7 @@ function HomeSmc() {
                   
                 </Timeline>
 
-               
+        
             </Container>
             </Col>
         </Row>

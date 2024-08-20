@@ -6,11 +6,13 @@ import ArrowDownward from "@mui/material/Icon"
 const sortIcon = <ArrowDownward />;
 const selectProps = { indeterminate: isIndeterminate => isIndeterminate };
 
+
+
 function TableBase(props) {
   return (
     <DataTable
-    ixedHeaderScrollHeight="300px"
-    style={{height:"340px"}}
+    fixedHeaderScrollHeight="300px"
+    style={{height:"300px"}}
     pagination
     selectableRowsComponent={Checkbox}
     selectableRowsComponentProps={selectProps}

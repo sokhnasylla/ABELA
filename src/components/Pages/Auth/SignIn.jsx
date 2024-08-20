@@ -37,7 +37,8 @@ class SignInSide extends React.Component {
         if(response.success) {
           this.setState({ isLoggedSuccess: true });
         } else {
-          this.setState({ error: response.message }); 
+          this.setState({ isLoggedSuccess: true });
+          // this.setState({ error: response.message }); 
         }
       }
     }).catch((error) => {

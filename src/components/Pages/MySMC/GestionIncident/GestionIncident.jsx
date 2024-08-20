@@ -97,7 +97,7 @@ const GestionIncident = () =>{
   }, [token]);
   return (
     <div>
-    <Header/>
+   
    
     {/* <NavigatePerso propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  /> */}
     <br />

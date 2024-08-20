@@ -1,5 +1,5 @@
 import './App.css';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/Pages/Home/Home';
 import Support from './components/Pages/Support Technique/Support';
 import RecoHlrIn from './components/Pages/Reco_hlr_in/RecoHlrIn';
@@ -48,7 +48,7 @@ function App() {
   return (
     <div className="App">
       <QueryClientProvider client={queryClient}>
-        <HashRouter>
+        <BrowserRouter>
           <Routes>
             <Route path="/signin" element={<SignInSide />} />
             <Route path="/signup" element={<SignUp />} />
@@ -89,7 +89,7 @@ function App() {
             <Route path="/suivisactivites/anatestras" element={<Layout><AnaTestRas /></Layout>} />
             <Route path="/suivisactivites/scenariobook" element={<Layout><ScenarioBook /></Layout>} />
           </Routes>
-        </HashRouter>
+        </BrowserRouter>
       </QueryClientProvider>
     </div>
   );

@@ -38,7 +38,7 @@ function SuivisActivites() {
   return (
     <div id='home'>
         <div>
-            <Header/>
+           {/*  <Header/> */}
         </div>
         <div style={{position:"relative"}}>
         <NavigatePersoEtatSup propsMenuItems={gestionIncidentItemsNavigate} onItemClick={handleMenuClick}  />

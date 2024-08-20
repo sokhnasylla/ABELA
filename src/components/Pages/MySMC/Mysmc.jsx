@@ -8,7 +8,6 @@ function Mysmc() {
   useAuth()
   return (
     <div style={{fontSize:"14px"}}>
-        <Header/>
         <MenuMysmc/>
         <HomeSmc/>
     </div>

@@ -53,21 +53,18 @@ class Home extends Component {
   render() {
     return (
       <div id='home'>
-        {/* <Header /> */}
-        {/* <Footer /> */}
-        {/* <Menu /> */}
       
         <Container className='body'>
           <Row>
             <Col className='menu'>
-              <MenuLeft submenu={submenu} />
+             <MenuLeft submenu={submenu} />
             </Col>
             <Col xs={10} className='content'>
               <Title text="20 dernieres taches integrees dans SELF" />
-              <TableBase
+              {/* <TableBase
                 columns={columns}
                 data={this.state.historiques}
-              />
+              /> */}
             </Col>
           </Row>
         </Container>
