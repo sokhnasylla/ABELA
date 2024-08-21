@@ -13,6 +13,7 @@ import User from './components/Pages/Dashboard/Utilisateurs/User';
 import AddUser from './components/Pages/Auth/AddUser';
 import SignInSide from './components/Pages/Auth/SignIn';
 import GestionProbleme from './components/Pages/MySMC/GestionProbleme/GestionProbleme';
+import GestionIncident from './components/Pages/MySMC/GestionIncident/GestionIncident';
 import Kaabu from './components/Pages/Kaabu/Kaabu';
 import MonProfil from './components/Pages/MonProfil/MonProfil';
 
@@ -43,7 +44,7 @@ function App() {
             <Route path="/kaabu" element={<Layout><Kaabu /></Layout>} />
             <Route path="/network" element={<Layout><Network /></Layout>} />
             <Route path="/mysmc/gestionprobleme" element={<Layout><GestionProbleme/></Layout>} />
-            {/* <Route path="/mysmc/gestionincident" element={<Layout><GestionIncident /></Layout>} /> */}
+            {<Route path="/mysmc/gestionincident" element={<Layout><GestionIncident /></Layout>} />}
             {/* <Route path="/gestionincident/ajoutavis" element={<Layout><AjoutAvis /></Layout>} />
             <Route path="/gestionincident/rechercheavis" element={<Layout><RechercheAvis /></Layout>} />
             <Route path="/gestionincident/statistique" element={<Layout><StatistiqueIncident /></Layout>} />
