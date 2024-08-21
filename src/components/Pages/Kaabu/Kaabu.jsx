@@ -1,12 +1,6 @@
 import React,{Component} from 'react'
-import Header from '../../Header/Header'
 import { Container,Row,Col, Button } from 'react-bootstrap'
 import Title from '../../Card/Title/Title';
-import { FaHome, FaPaperclip} from "react-icons/fa";
-import "../MySMC/GestionIncident/ajoutavis.css"
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import { RiDashboard3Line } from "react-icons/ri";
-import { IoStatsChart } from "react-icons/io5";
 import { FaUserGroup } from 'react-icons/fa6';
 import { Stack, Autocomplete, InputLabel, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -17,24 +11,13 @@ import { AlertService } from '../../../utils/alert.service';
 import FormNetwork from './FormNetwork';
 import DeviceCard from './FormOTAP';
 
-import MapsWidget from './MapsWidget'
-import MapsWidget2 from './MapsWidget2'
-
 
 
 class Kaabu extends Component {
 
  alertService = new AlertService();
 
-  gestionIncidentItemsNavigate = [
-    { label: "Gestion Incidents", link: "/mysmc/gestionincident", icon: ReportProblemIcon },
-    { label: "Gestion Probleme", link: "/mysmc/gestionprobleme", icon: ReportProblemIcon },
-    { label: "Etat Supervision", link: "/mysmc/etatsupervision", icon: RiDashboard3Line },
-    { label: "Consignes Orchestrées", link: "#",icon: FaPaperclip },
-    { label: "Suivi Activités ", link: "/mysmc/suivisactivites", icon: IoStatsChart },
-    { label: "Page d'acceuil", link: "/mysmc", icon: FaHome },
-  ];
-
+  
   kaabuItemsMenus=[
       {label:"Espace Client",link:"/kaabu/espace/client",icon:FaUserGroup},
       {label:"Espace Vendeur",link:"/kaabu/espace/vendeur",icon:FaUserGroup}, 

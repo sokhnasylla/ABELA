@@ -7,7 +7,7 @@ import "./support.css"
 import MenuPerso from '../../Card/MenuPerso/MenuPerso'
 import useAuth from '../Auth/useAuth'
 import Get from '../../API/Get'
-import MenuPersoGesIncident from '../MySMC/GestionIncident/MenuPersoGesIncident'
+// import MenuPersoGesIncident from '../MySMC/GestionIncident/MenuPersoGesIncident'
 
 
 const Support = () =>{
@@ -38,7 +38,7 @@ const Support = () =>{
   return (
     <div>
        <Header/>
-        <MenuPersoGesIncident propsMenuItems={ menuItems  }/>
+        {/* <MenuPersoGesIncident propsMenuItems={ menuItems  }/> */}
        <Card id="support">
           <Title text="SUPPORT TECHNIQUE"/>
 
