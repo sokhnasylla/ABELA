@@ -61,10 +61,10 @@ class Home extends Component {
             </Col>
             <Col xs={10} className='content'>
               <Title text="20 dernieres taches integrees dans SELF" />
-              {/* <TableBase
+              <TableBase
                 columns={columns}
                 data={this.state.historiques}
-              /> */}
+              />
             </Col>
           </Row>
         </Container>

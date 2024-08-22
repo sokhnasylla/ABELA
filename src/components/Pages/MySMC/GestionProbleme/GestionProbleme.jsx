@@ -1,10 +1,11 @@
 import React from 'react'
-import { Row,Col,Button } from 'react-bootstrap'
+import { Row,Col,Button,Container } from 'react-bootstrap'
 import MenuMysmc from '../Menu/MenuMysmc'
-import Get from '../../../API/Get'
 import Title from '../../../Card/Title/Title'
 import { Link } from 'react-router-dom'
 import { FaEye } from 'react-icons/fa'
+import Get from '../../../API/Get'
+
 
 
 function GestionProbleme() {
@@ -28,28 +29,31 @@ function GestionProbleme() {
 
 
     const columns = [
-        // Définissez les colonnes de votre DataTable
-        { name: 'N°Probleme', selector: 'id', sortable: true },
-        { name: 'Application', selector: 'application', sortable: true },
-        { name: 'Date Création',
-          selector: 'dateCreation',
-          sortable: true ,
-          cell: row => row.dateCreation ? <span>{new Date(row.dateCreation).toLocaleDateString('fr-FR')}</span> : <span>N/A</span> },
-        { name: 'Etat', selector: 'etat', sortable: true },
-        { name: 'Action', sortable: true, cell: row => <CelluleAction id={row.id} /> },
-    
-      ];
-    
+      // Définissez les colonnes de votre DataTable
+      { name: 'N°Probleme', selector: 'numProbleme', sortable: true },
+      { name: 'Application', selector: 'application', sortable: true },
+      { name: 'Date Création',
+        selector: 'dateCreation',
+        sortable: true ,
+        cell: row => row.dateCreation ? <span>{new Date(row.dateCreation).toLocaleDateString('fr-FR')}</span> : <span>N/A</span> },
+      { name: 'Etat', selector: 'etat', sortable: true },
+      { name: 'Action', sortable: true, cell: row => <CelluleAction id={row.id} /> },
+  
+    ];
+  
   return (
-    <div>
+    <Container>
         <MenuMysmc/>
-        {/* <Row>
-        <Col sm={8} className='content'>
-              <Title text="Liste des problémes en cours"/>
-              <Get url="http://localhost:8082/abela-mysmc/api/v1/gestionproblemes/problemes/encours" columns={columns} />
-            </Col>
-        </Row> */}
-    </div>
+        <Container>
+        <Row>
+        <Col sm={9}>
+           <Title text="Liste des Problemes"/>
+           get
+        </Col>
+       </Row>
+       <Row></Row>
+    </Container>
+    </Container>
   )
 }
 
