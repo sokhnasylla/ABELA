@@ -3,7 +3,7 @@
     border-radius: 5px;
     margin-top: 10px;
     text-align: center;
-    height: 9%;
+    height: 8%;
     background-color: #148C8A !important; 
     color: white !important;
 }
@@ -15,5 +15,5 @@
     align-items: center;  
     font-size: 100%;
     font-weight: bold;
-    margin-top: 15px;
+    margin-top: 5px;
 }

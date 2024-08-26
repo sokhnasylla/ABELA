@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
+import './Get.css'; // Importer les styles personnalisés
 
-
-function Get({ url, columns, showTable = true }) {
+function Get({ url, columns, showTable = true, searchTerm }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -35,15 +35,26 @@ function Get({ url, columns, showTable = true }) {
     fetchData();
   }, [url]);
 
-  return (
+  // Filtrer les données en fonction du terme de recherche*
+  console.log(data);
+  
+  const filteredData = data.filter(item => 
+    console.log(item.numProbleme),
+    
+    item.numProbleme.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.application.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.dateCreation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.etat.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  return (
     <div>
       {loading && <p>Chargement...</p>}
       {showTable ? (
-        data.length > 0 && (
+        filteredData.length > 0 && (
           <DataTable
             columns={columns}
-            data={data}
+            data={filteredData}
             pagination
             highlightOnHover
             striped
@@ -56,5 +67,4 @@ function Get({ url, columns, showTable = true }) {
     </div>
   );
 }
-
-export default Get;
+export default Get
