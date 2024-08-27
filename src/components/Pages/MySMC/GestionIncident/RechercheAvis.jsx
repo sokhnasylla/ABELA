@@ -1,138 +1,96 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import useAuth from '../../Auth/useAuth';
-// import MenuPersoGesIncident from './MenuPersoGesIncident';
-// import NavigatePerso from './NavigatePerso';
-import { FaList, FaSearch, FaHome, FaChartLine, FaDownload, FaPaperclip } from "react-icons/fa";
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import { RiDashboard3Line } from "react-icons/ri";
-import { IoStatsChart } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Title from '../../../Card/Title/Title';
-import { InputLabel, TextField, Grid } from '@mui/material';
-import Get from '../../../API/Get';
-import { Message } from '@mui/icons-material';
+import { InputLabel, TextField } from '@mui/material';
 
-function RechercheAvis() {
+function RechercheAvis({ onSearch }) { 
+    const [error, setError] = useState(""); // State for error messages
 
-    const [currentForm, setCurrentForm] = useState("");
-    const [text, setText] = useState("Information : Merci d'effectuer une recherche au préalable pour afficher les avis");
-    const [url, setUrl] = useState("");
-    const [data, setData] = useState([]);
-    const [noData, setNoData] = useState(false);
-
-    const handleMenuClick = (link) => {
-        setCurrentForm(link);
-        console.log(link);
+    // Helper function to handle API requests
+    const fetchData = async (url) => {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Erreur lors de la recherche");
+            const result = await response.json();
+            if (result.length === 0) throw new Error("Aucun avis trouvé");
+            return result;
+        } catch (err) {
+            throw new Error(err.message || "Erreur réseau");
+        }
     };
 
-    const handleSearchClick = (link) => {
+    // Handle form submission
+    const handleSearch = async (event) => {
+        event.preventDefault(); 
+
         const numeroAvis = document.getElementById('numeroAvis').value;
         const dateDebut = document.getElementById('dateDebut').value;
         const dateFin = document.getElementById('dateFin').value;
         const application = document.getElementById('application').value;
 
-        if (numeroAvis) {
-            setUrl(`http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByNumber?numAvis=${numeroAvis}`);
-            setText(`Resultat de la dernière recherche : | Numéro Avis : ${numeroAvis}`);
+        let newUrl = "";
+        let newHisto = "";
+        let errorMessage = "";
+
+        try {
+            if (numeroAvis) {
+                newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`;
+                newHisto = `Résultat de la dernière recherche : Numéro Avis : ${numeroAvis}`;
+                await fetchData(newUrl);
+            } else if (application && dateDebut && dateFin) {
+                newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
+                newHisto = `Résultat de la dernière recherche : Application : ${application} | Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
+                await fetchData(newUrl);
+            } else if (application) {
+                newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`;
+                newHisto = `Résultat de la dernière recherche : Application : ${application}`;
+                await fetchData(newUrl);
+            } else if (dateDebut && dateFin) {
+                newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`;
+                newHisto = `Résultat de la dernière recherche : Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
+                await fetchData(newUrl);
+            } else {
+                throw new Error("Veuillez remplir au moins un champ de recherche");
+            }
+
+            setError("");
+            onSearch(newUrl, newHisto);
+
+        } catch (error) {
+            setError(error.message);
         }
-        else if (dateDebut || dateFin) {
-            setUrl(`http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`);
-            setText(`Resultat de la dernière recherche : | Date Fin : ${dateFin}| Date début : ${dateDebut}`);
-        }
-        else if (application) {
-            setUrl(`http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByAppName?nom=${application}`);
-            setText(`Resultat de la derniere recherche : | Application : ${application}`);
-        }
-       
     };
-
-    const columns = [
-        { name: 'Date Création', selector: 'dateCreation', sortable: true },
-        { name: 'N°Avis', selector: 'numAvis', sortable: true },
-        { name: 'Titre', selector: 'titre', sortable: true },
-        { name: 'Etat', selector: 'etat', sortable: true },
-        { name: 'Action', selector: '', sortable: true },
-    ];
-
-    useEffect(() => {
-        if (url) {
-            fetch(url)
-                .then(response => response.json())
-                .then(result => {
-                    setData(result);
-                    setNoData(result.length === 0);
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    }, [url]);
 
     return (
         <div id='home'>
             <Container>
                 <Row>
-                    <Col sm={8} style={{ marginTop: "-3%" }}>
-                        <br />
-                        <div style={{ display: "flex" }}>
-                            <div className='mb-3' >
+                    <Col sm={12} style={{ marginTop: "10px" }}>
+                        <form onSubmit={handleSearch} style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                            <div className='mb-3' style={{ flex: "1 1 200px" }}>
                                 <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Numéro avis</InputLabel>&nbsp;
-                                <TextField id='numeroAvis' variant='outlined' size='small' placeholder='Ex:XXX' sx={{ width: "120px", marginRight: "20px" }} />
+                                <TextField id='numeroAvis' variant='outlined' size='small' placeholder='Ex:XXX' sx={{ width: "100%" }} />
                             </div>
-                            <div className='mb-3' >
-                                <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
-                                <TextField id='dateDebut' variant='outlined' size='small' type='date' sx={{ marginRight: "20px" }} />
-                            </div>
-                            <div className='mb-3' >
-                                <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
-                                <TextField id='dateFin' variant='outlined' size='small' type='date' sx={{ marginRight: "20px" }} />
-                            </div>
-                            <div className='mb-3' >
+                            <div className='mb-3' style={{ flex: "1 1 200px" }}>
                                 <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Application</InputLabel>&nbsp;
-                                <TextField id='application' variant='outlined' size='small' placeholder='Ex:OrangeMoney' sx={{ width: "150px", marginRight: "17px" }} />
+                                <TextField id='application' variant='outlined' size='small' placeholder='Ex:OrangeMoney' sx={{ width: "100%" }} />
                             </div>
-                            <div className='mb-3' id='search' >
-                                <Button onClick={handleSearchClick} style={{ backgroundColor: " #C9302C", borderColor: " #C9302C" }}><FaSearch /></Button>
+                            <div className='mb-3' style={{ flex: "1 1 200px" }}>
+                                <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
+                                <TextField id='dateDebut' variant='outlined' size='small' type='date' sx={{ width: "100%" }} />
                             </div>
-
-                        </div>
-                        <div className='col-xs-12 col-sm-6 col-md-4' style={{ position: "absolute", width: "58%" }}>
-                            <Grid >
-                                <h5 className=' alert alert-info' style={{ fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>
-                                    {text}
-                                </h5>
-                            </Grid>
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={8}>
-                        <br />
-                        <br />
-                        <br />
-                        {url && (
-                         <div>
-                            <Button variant='danger'><FaDownload/> Exporter problèmes au format Excel </Button>
-                             &nbsp;
-                            <Button variant='' style={{backgroundColor:"#f0ad4e",color:"white"}}><FaDownload/> Exporter P.A au format Excel </Button>
-                            {data.length > 0 ? (
-                            <Get url={url} columns={columns} showTable={true} />
-                             ) : ( 
-                            <table className="table">
-                            <thead>
-                            <tr>
-                            {columns.map((column, index) => (
-                            <th key={index}>{column.name}</th>
-                            ))}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                            <td colSpan={columns.length}>Aucune donnée disponible pour cette recherche.</td>
-                            </tr>
-                            </tbody>
-                            </table>
-                            )}
+                            <div className='mb-3' style={{ flex: "1 1 200px" }}>
+                                <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
+                                <TextField id='dateFin' variant='outlined' size='small' type='date' sx={{ width: "100%" }} />
                             </div>
-                        )}
+                            <div className='mb-3' style={{ flex: "1 1 100px" }}>
+                                <Button type="submit" style={{ backgroundColor: "#C9302C", borderColor: "#C9302C", width: "100%" }}>
+                                    <FaSearch />
+                                </Button>
+                            </div>
+                        </form>
+                        {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
                     </Col>
                 </Row>
             </Container>

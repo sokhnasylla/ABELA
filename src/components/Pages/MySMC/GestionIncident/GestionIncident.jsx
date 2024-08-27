@@ -1,34 +1,37 @@
-import { Button, Col, Container, Row, Table, Modal  } from 'react-bootstrap'
-import MenuMysmc from '../Menu/MenuMysmc'
-import Get from '../../../API/Get'
-import Title from '../../../Card/Title/Title'
-import { Link } from 'react-router-dom'
-import { FaEye } from 'react-icons/fa'
-import React, {useEffect, useState} from 'react'
-import useAuth from '../../Auth/useAuth'
+import { Button, Col, Container, Row, Modal } from 'react-bootstrap';
+import MenuMysmc from '../Menu/MenuMysmc';
+import Get from '../../../API/Get';
+import Title from '../../../Card/Title/Title';
+import { Link } from 'react-router-dom';
+import { FaEye } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import useAuth from '../../Auth/useAuth';
 import { getTokenFromLocalStorage } from '../../Auth/authUtils';
 import axios from 'axios';
-import { Grid,Select,MenuItem, InputLabel,TextField } from '@mui/material';
-import RechercheAvis from './RechercheAvis'
+import { Grid } from '@mui/material';
+import RechercheAvis from './RechercheAvis';
 
-function GestionIncident() { 
-  useAuth()
+function GestionIncident() {
+  useAuth();
   const [nombre, setNombre] = React.useState('10');
-  const [currentForm, setCurrentForm] = useState("")
+  const [currentForm, setCurrentForm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [histo, setHisto] = useState("Aucune recherche récente.");
+  const [dataUrl, setDataUrl] = useState("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents");
 
+  const handleSearchSubmit = (url,histo) => {
+    setDataUrl(url);
+    setShowModal(false);
+    setHisto(histo);
+  };
+  const token = getTokenFromLocalStorage();
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [tauxNotificationAvis, setTauxNotificationAvis] = useState(null);
+  const [tauxDetectionAvis, setTauxDetectionAvis] = useState(null);
+  const [tauxTraitement4H, setTauxTraitement4H] = useState(null);
+  const [tauxTraitement24H, setTauxTraitement24H] = useState(null);
 
-  const handleMenuClick = (link)=>{
-    setCurrentForm(link);
-    console.log(link);
-  }
-    const token =getTokenFromLocalStorage();
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [tauxNotificationAvis,setTauxNotificationAvis] = useState(null);
-    const [tauxDetectionAvis,setTauxDetectionAvis] = useState(null);
-    const[ tauxTraitement4H,setTauxTraitement4H ]= useState(null);
-    const [tauxTraitement24H,setTauxTraitement24H] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,28 +44,29 @@ function GestionIncident() {
         setTauxNotificationAvis(response.data.tauxNotificationAvis);
         setTauxDetectionAvis(response.data.tauxDetectionAvis);
         setTauxTraitement4H(response.data.tauxTraitement4H);
-        setTauxTraitement24H(response.data.tauxTraitement4H);
+        setTauxTraitement24H(response.data.tauxTraitement24H);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
     };
- 
+
     fetchData();
   }, [token]);
-  const CelluleAction = ({id}) => (
+
+  const CelluleAction = ({ id }) => (
     <div>
       <Link to={`/mysmc/gestionincident/details/${id}`}>
-        <Button variant='info'
-          style={{backgroundColor: "#31B0D5",padding:"1px 5px",lineHeight:"1.2",borderRadius:"3px"}}
+        <Button
+          variant='info'
+          style={{ backgroundColor: "#31B0D5", padding: "1px 5px", lineHeight: "1.2", borderRadius: "3px" }}
           title="Voir les détails de l'avis">
-          <FaEye color='white'/>
-  
+          <FaEye color='white' />
         </Button>
       </Link>
     </div>
   );
+
   const columns = [
-    // Définissez les colonnes de votre DataTable
     { name: 'Date Création',
       selector: row => row.dateCreation,
       sortable: true,
@@ -70,75 +74,83 @@ function GestionIncident() {
     { name: 'N°Avis', selector: row => row.numAvis, sortable: true },
     { name: 'Titre', selector: row => row.titre, sortable: true },
     { name: 'Etat', selector: row => row.etat, sortable: true },
-    { name: 'Action', selector: '', sortable: true ,cell: row => <CelluleAction id = {row.id} />},
+    { name: 'Action', selector: '', sortable: true, cell: row => <CelluleAction id={row.id} /> },
   ];
+
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
-     
+
   return (
     <div>
-      <MenuMysmc/>
-      <Container className='body'style={{marginLeft:"5%"}}>
+      <MenuMysmc />
+      <Container className='body' style={{ marginLeft: "5%" }}>
+        <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
+        <Row className="mb-4">
+          <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+            <Grid container direction="column" alignItems="center" style={{ backgroundColor: "#F2DEDE", border: "1px solid #F2DEDE", borderRadius: "10px", padding: "10px" }}>
+              <div style={{ fontSize: "24px", fontWeight: "bold", color: "#a94442" }}>
+                {tauxNotificationAvis !== null ? `${tauxNotificationAvis.toFixed(2)} %` : '0 %'}
+              </div>
+              <div>Notification Avis</div>
+            </Grid>
+          </Col>
+          <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+            <Grid container direction="column" alignItems="center" style={{ backgroundColor: "#D9EDF7", border: "1px solid #D9EDF7", borderRadius: "10px", padding: "10px" }}>
+              <div style={{ fontSize: "24px", fontWeight: "bold", color: "#31708F" }}>
+                {tauxDetectionAvis !== null ? `${tauxDetectionAvis.toFixed(2)} %` : '0 %'}
+              </div>
+              <div>Détection Avis</div>
+            </Grid>
+          </Col>
+          <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+            <Grid container direction="column" alignItems="center" style={{ backgroundColor: "#DFF0D8", border: "1px solid #DFF0D8", borderRadius: "10px", padding: "10px" }}>
+              <div style={{ fontSize: "24px", fontWeight: "bold", color: "#3C763D" }}>
+                {tauxTraitement4H !== null ? `${tauxTraitement4H.toFixed(2)} %` : '0 %'}
+              </div>
+              <div>Traitement 4H</div>
+            </Grid>
+          </Col>
+          <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+            <Grid container direction="column" alignItems="center" style={{ backgroundColor: "#DFF0D8", border: "1px solid #DFF0D8", borderRadius: "10px", padding: "10px" }}>
+              <div style={{ fontSize: "24px", fontWeight: "bold", color: "#3C763D" }}>
+                {tauxTraitement24H !== null ? `${tauxTraitement24H.toFixed(2)} %` : '0 %'}
+              </div>
+              <div>Traitement 24H</div>
+            </Grid>
+          </Col>
+        </Row>
         <Row>
           <Col sm={8} className='content'>
-            <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024"/>
-              <div >
-                <br />
-                <div className='col-xs-12 col-sm-6 col-md-2' style={{ position: "absolute", marginLeft: "" }}>
-                  <Grid className='panel' sx={{ backgroundColor: "#F2DEDE", border: "#F2DEDE" }}>
-                    <h5 style={{ fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#a94442" }}>Taux notification</h5>
-                  </Grid>
-                  <center><h3>{tauxNotificationAvis}%</h3></center>
-                </div>
-                <div className='col-xs-12 col-sm-6 col-md-2' style={{ position: "absolute", marginLeft: "15%" }}>
-                  <Grid className='panel' sx={{ backgroundColor: "#DFF0D8", border: "#DFF0D8" }}>
-                    <h5 style={{ fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#3C763D" }}>Taux détection</h5>
-                  </Grid>
-                <center><h3>{tauxDetectionAvis}%</h3></center>
-                </div>
-                <div className='col-xs-12 col-sm-6 col-md-2' style={{ position: "absolute", marginLeft: "30%" }}>
-                  <Grid className='panel' sx={{ backgroundColor: "#D9EDF7", border: "#D9EDF7" }}>
-                    <h5 style={{ fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>Taux résolution 4h</h5>
-                  </Grid>
-                <center><h3>{tauxTraitement4H}%</h3></center>
-                </div>
-                <div className='col-xs-12 col-sm-6 col-md-2' style={{ position: "absolute", marginLeft: "45%" }}>
-                  <Grid className='panel' sx={{ backgroundColor: "#D9EDF7", border: "#D9EDF7" }}>
-                    <h5 style={{ fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>Taux résolution 24h</h5>
-                  </Grid>
-                <center><h3>{tauxTraitement24H}%</h3></center>
-                </div>
-                <br /> 
-              </div>
-            </Col>
-      </Row>
-      <hr />
-      <Row>  
-          <Col sm={8} className='content'>
-            {/* Button to open the modal */}
             <Button variant="primary" onClick={handleShow}>Rechercher</Button>
-            <Modal show={showModal} onHide={handleClose}>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Reporting incident</Button>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Plan d'action incident</Button>
+            <Modal show={showModal} onHide={handleClose} dialogClassName="custom-modal">
               <Modal.Header closeButton>
                 <Modal.Title>Recherche d'avis</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <RechercheAvis />
+                <RechercheAvis onSearch={handleSearchSubmit} />
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
+                <Button variant="danger" onClick={handleClose}>Fermer</Button>
               </Modal.Footer>
             </Modal>
-          </Col>
-          <Col sm={8} className='content'>
-            <Title text="Liste des avis d'incidents / d'information en cours" />
-            <Get url="http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents" columns={columns} />
+  
+        <div className='col-12 alert alert-info' style={{ textAlign: "center", fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>
+           {histo}
+        </div>
+            
           </Col>
         </Row>
-  </Container>
+        <Title text="Liste des avis d'incidents / d'information en cours" />
+        <Row>
+          <Col sm={8} className='content'>
+            <Get url={dataUrl} columns={columns} /> {/* Use the URL passed from RechercheAvis */}
+          </Col>
+        </Row>
+      </Container>
     </div>
-   )
- }
- 
- export default GestionIncident
+  );
+}
+
+export default GestionIncident;
