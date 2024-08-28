@@ -10,6 +10,8 @@ import { getTokenFromLocalStorage } from '../../Auth/authUtils';
 import axios from 'axios';
 import { Grid } from '@mui/material';
 import RechercheAvis from './RechercheAvis';
+import addAvis from '../../../../assets/ajouter.gif';
+
 
 function GestionIncident() {
   useAuth();
@@ -124,6 +126,8 @@ function GestionIncident() {
             <Button variant="primary" onClick={handleShow}>Rechercher</Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Reporting incident</Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Plan d'action incident</Button>
+      
+
             <Modal show={showModal} onHide={handleClose} dialogClassName="custom-modal">
               <Modal.Header closeButton>
                 <Modal.Title>Recherche d'avis</Modal.Title>
@@ -145,7 +149,7 @@ function GestionIncident() {
         <Title text="Liste des avis d'incidents / d'information en cours" />
         <Row>
           <Col sm={8} className='content'>
-            <Get url={dataUrl} columns={columns} /> {/* Use the URL passed from RechercheAvis */}
+            <Get url={dataUrl} columns={columns} />
           </Col>
         </Row>
       </Container>
