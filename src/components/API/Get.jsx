@@ -22,6 +22,8 @@ function Get({ url, columns, searchTerm }) {
 
     return (
         <DataTable
+            fixedHeaderScrollHeight="200px"
+            style={{height:"200px"}}
             columns={columns}
             data={filteredData} // Utilisation des données filtrées
             pagination
