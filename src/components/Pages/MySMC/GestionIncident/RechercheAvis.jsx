@@ -8,59 +8,66 @@ function RechercheAvis({ onSearch }) {
     const [error, setError] = useState(""); // State for error messages
 
     // Helper function to handle API requests
-    const fetchData = async (url) => {
+    const fetchData = async (url, errorMessage) => {
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Erreur lors de la recherche");
             const result = await response.json();
-            if (result.length === 0) throw new Error("Aucun avis trouvé");
+            if (result.length === 0) throw new Error(errorMessage);
             return result;
         } catch (err) {
             throw new Error(err.message || "Erreur réseau");
         }
     };
-
+    
     // Handle form submission
     const handleSearch = async (event) => {
         event.preventDefault(); 
-
+    
         const numeroAvis = document.getElementById('numeroAvis').value;
         const dateDebut = document.getElementById('dateDebut').value;
         const dateFin = document.getElementById('dateFin').value;
         const application = document.getElementById('application').value;
 
+        if (dateDebut && dateFin && new Date(dateDebut) > new Date(dateFin)) {
+            setError("La date de début ne doit pas être supérieure à la date de fin.");
+            return; 
+        }
+    
         let newUrl = "";
         let newHisto = "";
         let errorMessage = "";
-
+    
         try {
             if (numeroAvis) {
                 newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`;
-                newHisto = `Résultat de la dernière recherche : Numéro Avis : ${numeroAvis}`;
-                await fetchData(newUrl);
+                newHisto = `Résultat de la dernière recherche, Numéro Avis : ${numeroAvis}`;
+                errorMessage = "Aucun avis trouvé pour le numéro spécifié";
             } else if (application && dateDebut && dateFin) {
                 newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
-                newHisto = `Résultat de la dernière recherche : Application : ${application} | Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
-                await fetchData(newUrl);
+                newHisto = `Résultat de la dernière recherche, Application : ${application} | Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
+                errorMessage = `Aucun avis trouvé pour l'application ${application} sur la période spécifiées`;
             } else if (application) {
                 newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`;
-                newHisto = `Résultat de la dernière recherche : Application : ${application}`;
-                await fetchData(newUrl);
+                newHisto = `Résultat de la dernière recherche, Application : ${application}`;
+                errorMessage = "Aucun avis trouvé pour l'application spécifiée";
             } else if (dateDebut && dateFin) {
                 newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`;
-                newHisto = `Résultat de la dernière recherche : Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
-                await fetchData(newUrl);
+                newHisto = `Résultat de la dernière recherche, Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
+                errorMessage = "Aucun avis trouvé pour la période spécifiée";
             } else {
                 throw new Error("Veuillez remplir au moins un champ de recherche");
             }
-
+    
+            await fetchData(newUrl, errorMessage);
             setError("");
             onSearch(newUrl, newHisto);
-
+    
         } catch (error) {
             setError(error.message);
         }
     };
+    
 
     return (
         <div id='home'>
