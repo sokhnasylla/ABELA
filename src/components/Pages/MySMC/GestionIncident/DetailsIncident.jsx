@@ -1,12 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import Header from '../../../../Header/Header';
 import { Card, Col, Container, Row, Table } from 'react-bootstrap';
 import { FaArrowAltCircleDown, FaBars, FaThumbsDown } from 'react-icons/fa';
-import Titleges from '../Titleges';
 import { useParams } from 'react-router-dom';
-import { getTokenFromLocalStorage } from '../../../Auth/authUtils';
-import MenuDetailsIncident from './MenuDetailsIncident';
+import { getTokenFromLocalStorage } from '../../Auth/authUtils';
+import { Title } from '@mui/icons-material';
 
 
 
@@ -41,8 +39,6 @@ function DetailsIncident() {
  
   return (
     <div>
-      <Header/>
-      <br />
       <Container className='body' style={{fontSize:"14px"}}>
         <Row>
           <Col md={9} sm={12}>
@@ -64,7 +60,7 @@ function DetailsIncident() {
                 </Card>
               </Col>
               <Col sm={8}>
-                <Titleges text="Prévisalusation de l'avis" incident={true} />
+                <Title text="Prévisalusation de l'avis" incident={true} />
                 <div className="table-responsive">
                   <Table className="styled-table">
                     <tbody>
@@ -141,7 +137,7 @@ function DetailsIncident() {
                 </div>
               </Col>
               <Col sm={4}>
-                <Titleges text='Indicateurs clés'/>
+                <Title text='Indicateurs clés'/>
                 <div className="table-responsive">
                   <Table className="table table-bordered table-striped">
                     <tbody>
@@ -156,7 +152,7 @@ function DetailsIncident() {
                     </tbody>
                   </Table>
                 </div>
-                <Titleges text="Infos Complémentaires" incident={true}/>
+                <Title text="Infos Complémentaires" incident={true}/>
                 <div className="table-responsive">
                   <Table className="table table-bordered table-striped">
                     <tbody>
@@ -228,7 +224,7 @@ function DetailsIncident() {
             </Row>
           </Col>
         <Col md={3} sm={12} sx={{marginTop: "5px"}}>
-         <MenuDetailsIncident/>
+         {/* <MenuDetailsIncident/> */}
          {/* <NavigateMysmc/> */}
         </Col>
         </Row>
