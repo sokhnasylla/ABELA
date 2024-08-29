@@ -14,8 +14,8 @@ import DetailsProbleme from './DetailsProbleme';
 function AdvancedSearchModal({ show, handleClose, handleAdvancedSearch }) {
     return (
         <Modal show={show} onHide={handleClose} size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Recherche Avancée</Modal.Title>
+            <Modal.Header closeButton className="recherche-avancee-header">
+                <Modal.Title  >Recherche Avancée</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <RechercheProbleme />
