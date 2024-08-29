@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-import { Button, Col, Container, Row, Modal } from 'react-bootstrap';
-import MenuMysmc from '../Menu/MenuMysmc';
-import Get from '../../../API/Get';
-import Title from '../../../Card/Title/Title';
-import { Link } from 'react-router-dom';
-import { FaEye } from 'react-icons/fa';
-import React, { useEffect, useState } from 'react';
-import useAuth from '../../Auth/useAuth';
-import { getTokenFromLocalStorage } from '../../Auth/authUtils';
-import axios from 'axios';
-import { Grid } from '@mui/material';
-import RechercheAvis from './RechercheAvis';
-import RechercheStatistiques from './RechercheStatistiques';
-=======
 import {
   Button,
   Col,
@@ -35,7 +20,6 @@ import axios from "axios";
 import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
 import addAvis from "../../../../assets/ajouter.gif";
->>>>>>> c2d66f3f3dd9d7e6e7c0de87062c68f3a3f37b04
 
 function GestionIncident() {
   useAuth();
@@ -45,14 +29,11 @@ function GestionIncident() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
 
-<<<<<<< HEAD
-=======
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,15 +48,11 @@ function GestionIncident() {
     setShowOverlay(false);
   };
 
->>>>>>> c2d66f3f3dd9d7e6e7c0de87062c68f3a3f37b04
   const handleSearchSubmit = (url, histo) => {
     setDataUrl(url);
     setShowModal(false);
     setHisto(histo);
   };
-<<<<<<< HEAD
-
-=======
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
     setDataUrl(
@@ -83,7 +60,6 @@ function GestionIncident() {
     );
     setShowModal(false);
   };
->>>>>>> c2d66f3f3dd9d7e6e7c0de87062c68f3a3f37b04
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
   const [tauxNotificationAvis, setTauxNotificationAvis] = useState(null);
@@ -191,13 +167,6 @@ function GestionIncident() {
     },
   ];
 
-<<<<<<< HEAD
-  const handleShowSearchModal = () => setShowModal(true);
-  const handleCloseSearchModal = () => setShowModal(false);
-  const handleShowStatModal = () => setShowStatModal(true);
-  const handleCloseStatModal = () => setShowStatModal(false);
-  
-=======
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
@@ -208,7 +177,6 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
->>>>>>> c2d66f3f3dd9d7e6e7c0de87062c68f3a3f37b04
   return (
     <div>
       <MenuMysmc />
@@ -337,19 +305,10 @@ function GestionIncident() {
                   : "0 %"}
               </div>
               <div>Traitement 24H</div>
-              <Button variant="primary" onClick={handleShowStatModal}>Stats</Button>
             </Grid>
           </Col>
         </Row>
         <Row>
-<<<<<<< HEAD
-          <Col sm={8} className='content'>
-            <Button variant="primary" onClick={handleShowSearchModal}>Rechercher</Button>
-            <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Reporting incident</Button>
-            <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Plan d'action incident</Button>
-
-            <Modal show={showModal} onHide={handleCloseSearchModal} dialogClassName="custom-modal">
-=======
           <Col sm={8} className="content">
             <Button variant="primary" onClick={handleShow}>
               Rechercher
@@ -366,7 +325,6 @@ function GestionIncident() {
               onHide={handleClose}
               dialogClassName="custom-modal"
             >
->>>>>>> c2d66f3f3dd9d7e6e7c0de87062c68f3a3f37b04
               <Modal.Header closeButton>
                 <Modal.Title>Recherche d'avis</Modal.Title>
               </Modal.Header>
@@ -374,26 +332,6 @@ function GestionIncident() {
                 <RechercheAvis onSearch={handleSearchSubmit} />
               </Modal.Body>
               <Modal.Footer>
-<<<<<<< HEAD
-                <Button variant="danger" onClick={handleCloseSearchModal}>Fermer</Button>
-              </Modal.Footer>
-            </Modal>
-
-            <Modal show={showStatModal} onHide={handleCloseStatModal} dialogClassName="custom-modal">
-              <Modal.Header closeButton>
-                <Modal.Title>Statistiques</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <RechercheStatistiques onSearch={handleSearchSubmit} />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="danger" onClick={handleCloseStatModal}>Fermer</Button>
-              </Modal.Footer>
-            </Modal>
-
-            <div className='col-12 alert alert-info' style={{ textAlign: "center", fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>
-              {histo}
-=======
                 <Button variant="danger" onClick={handleClose}>
                   Fermer
                 </Button>
@@ -429,7 +367,6 @@ function GestionIncident() {
                   </button>
                 </div>
               )}
->>>>>>> c2d66f3f3dd9d7e6e7c0de87062c68f3a3f37b04
             </div>
           </Col>
         </Row>
