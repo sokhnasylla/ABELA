@@ -19,7 +19,6 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
 import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
-import addAvis from "../../../../assets/ajouter.gif";
 
 function GestionIncident() {
   useAuth();
@@ -37,7 +36,7 @@ function GestionIncident() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = 20;
 
   const handleMouseEnter = (event) => {
     setOverlayTarget(event.target);
@@ -83,7 +82,6 @@ function GestionIncident() {
         setTauxDetectionAvis(response.data.tauxDetectionAvis);
         setTauxTraitement4H(response.data.tauxTraitement4H);
         setTauxTraitement24H(response.data.tauxTraitement24H);
-        // setFilteredData(response.data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
@@ -92,9 +90,8 @@ function GestionIncident() {
     fetchData();
   }, [token]);
 
-  // Recuperation des données de dataUrl
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataAvisIncidents = async () => {
       try {
         const config = {
           headers: {
@@ -110,62 +107,13 @@ function GestionIncident() {
       }
     };
 
-    fetchData();
+    fetchDataAvisIncidents();
   }, [dataUrl, token]);
-
-  const CelluleAction = ({ id }) => (
-    <div>
-      <Link to={`/mysmc/gestionincident/details/${id}`}>
-        <Button
-          variant="info"
-          style={{
-            backgroundColor: "#31B0D5",
-            padding: "1px 5px",
-            lineHeight: "1.2",
-            borderRadius: "3px",
-          }}
-          title="Voir les détails de l'avis"
-        >
-          <FaEye color="white" />
-        </Button>
-      </Link>
-    </div>
-  );
 
   const handleRowClick = (id) => {
     console.log(`Row with id ${id} was clicked`);
     navigate(`/mysmc/gestionincident/details/${id}`);
   };
-
-  const columns = [
-    {
-      name: "Date Création",
-      selector: (row) => row.dateCreation,
-      sortable: true,
-      cell: (row) =>
-        row.dateCreation ? (
-          <span>{new Date(row.dateCreation).toLocaleDateString("fr-FR")}</span>
-        ) : (
-          <span>N/A</span>
-        ),
-      wrap: true,
-    },
-    {
-      name: "N°Avis",
-      selector: (row) => row.numAvis,
-      sortable: true,
-      wrap: true,
-    },
-    { name: "Titre", selector: (row) => row.titre, sortable: true, wrap: true },
-    { name: "Etat", selector: (row) => row.etat, sortable: true, wrap: true },
-    {
-      name: "Action",
-      selector: "",
-      sortable: true,
-      cell: (row) => <CelluleAction id={row.id} />,
-      wrap: true,
-    },
-  ];
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -371,11 +319,6 @@ function GestionIncident() {
           </Col>
         </Row>
         <Title text="Liste des avis d'incidents / d'information en cours" />
-        {/* <Row>
-          <Col sm={8} className="content">
-            <Get url={dataUrl} columns={columns} />
-          </Col>
-        </Row> */}
         <table className="table table-hover">
           <thead>
             <tr>
