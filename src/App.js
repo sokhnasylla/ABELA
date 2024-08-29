@@ -20,6 +20,7 @@ import MonProfil from './components/Pages/MonProfil/MonProfil';
 import Role from './components/Pages/Dashboard/Role/Role';
 import Layout from './components/layout';
 import LayoutAdmin from './components/layout-admin';
+import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident';
 
 const queryClient = new QueryClient();
 
@@ -50,8 +51,8 @@ function App() {
             <Route path="/gestionincident/statistique" element={<Layout><StatistiqueIncident /></Layout>} />
             <Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<Layout><RechercheProbleme /></Layout>} />
             <Route path="/mysmc/gestionprobleme/scannerprobleme" element={<Layout><ScannerProbleme /></Layout>} /> */}
-            {/* <Route path="/mysmc/gestionprobleme/details/:id" element={<Layout><DetailsProbleme /></Layout>} />
-            <Route path="/mysmc/gestionincident/details/:id" element={<Layout><DetailsIncident /></Layout>} /> */}
+            {/* <Route path="/mysmc/gestionprobleme/details/:id" element={<Layout><DetailsProbleme /></Layout>} /> */}
+            <Route path="/mysmc/gestionincident/details/:id" element={<Layout><DetailsIncident /></Layout>} />
             {/* <Route path="/mysmc/etatsupervision" element={<Layout><EtatSupervision /></Layout>} />
             <Route path="/etatsupervision/alarmesok" element={<Layout><AlarmeOk /></Layout>} />
             <Route path="/etatsupervision/vr04service" element={<Layout><VR04Service /></Layout>} />
