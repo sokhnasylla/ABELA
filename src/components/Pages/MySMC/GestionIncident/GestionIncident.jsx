@@ -19,6 +19,7 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
 import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
+import RechercheStatistiques from "./RechercheStatistiques";
 import addAvis from "../../../../assets/search.png";
 
 function GestionIncident() {
@@ -29,6 +30,7 @@ function GestionIncident() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
@@ -51,6 +53,7 @@ function GestionIncident() {
   const handleSearchSubmit = (url, histo) => {
     setDataUrl(url);
     setShowModal(false);
+    setShowStatModal(false);
     setHisto(histo);
   };
   const reinitHisto = () => {
@@ -120,6 +123,8 @@ function GestionIncident() {
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+  const handleStatShow = () => setShowStatModal(true);
+  const handleStatClose = () => setShowStatModal(false);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -257,6 +262,28 @@ function GestionIncident() {
               </div>
               <div>Traitement 24H</div>
             </Grid>
+          </Col>
+          <Col>
+          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
+              Stats      
+              </Button>
+              <Modal
+              show={showStatModal}
+              onHide={handleStatClose}
+              dialogClassName="custom-modal"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Statistiques</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <RechercheStatistiques onSearch={handleSearchSubmit} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="danger" onClick={handleStatClose}>
+                  Fermer
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </Col>
         </Row>
         <Row>
