@@ -29,6 +29,7 @@ function GestionIncident() {
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
+  const [etat, setEtat] = useState("");
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
@@ -47,13 +48,15 @@ function GestionIncident() {
     setShowOverlay(false);
   };
 
-  const handleSearchSubmit = (url, histo) => {
+  const handleSearchSubmit = (url, histo, etat) => {
     setDataUrl(url);
     setShowModal(false);
     setHisto(histo);
+    setEtat(etat);
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
+    setEtat("");
     setDataUrl(
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
     );
@@ -101,7 +104,6 @@ function GestionIncident() {
         const response = await axios.get(dataUrl, config);
         setData(response.data);
         setFilteredData(response.data);
-        console.log(response.data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
@@ -258,9 +260,6 @@ function GestionIncident() {
         </Row>
         <Row>
           <Col sm={8} className="content">
-            <Button variant="primary" onClick={handleShow}>
-              Rechercher
-            </Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }}>
               Exporter Reporting incident
             </Button>
@@ -299,9 +298,8 @@ function GestionIncident() {
                 {histo}
               </div>
 
-              {histo !== "Aucune recherche récente." && (
                 <div
-                  className="mt-3 alert alert-danger"
+                  className="mt-3 alert"
                   style={{
                     textAlign: "center",
                     fontSize: "14px",
@@ -310,15 +308,42 @@ function GestionIncident() {
                     color: "#31708F",
                   }}
                 >
-                  <button onClick={reinitHisto} className="btn">
-                    &times;
-                  </button>
+                  <Button variant="primary" onClick={handleShow}>
+                    Rechercher
+                  </Button>
+                </div>
+
+              {histo !== "Aucune recherche récente." && (
+                <div
+                  className="mt-3 alert"
+                  style={{
+                    textAlign: "center",
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    fontWeight: "500",
+                    color: "#31708F",
+                  }}
+                >
+                  <Button onClick={reinitHisto} variant="danger">
+                    Réinitialiser
+                  </Button>
                 </div>
               )}
             </div>
           </Col>
         </Row>
-        <Title text="Liste des avis d'incidents / d'information en cours" />
+        {etat === "Annulé" && (
+          <Title text="Liste des avis d'incident / d'information annulés" />
+        )}
+        {etat === "Cloturé" && (
+          <Title text="Liste des avis d'incident / d'information clôturés" />
+        )}
+        {etat === "Fermé" && (
+          <Title text="Liste des avis d'incident / d'information fermés" />
+        )}
+        {etat !== "Annulé" && etat !== "Cloturé" && etat !== "Fermé" && (
+          <Title text="Liste des avis d'incidents / d'information en cours" />
+        )}
         <table className="table table-hover">
           <thead>
             <tr>
