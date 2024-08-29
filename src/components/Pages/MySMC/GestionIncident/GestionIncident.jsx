@@ -10,22 +10,23 @@ import { getTokenFromLocalStorage } from '../../Auth/authUtils';
 import axios from 'axios';
 import { Grid } from '@mui/material';
 import RechercheAvis from './RechercheAvis';
-import addAvis from '../../../../assets/ajouter.gif';
-
+import RechercheStatistiques from './RechercheStatistiques';
 
 function GestionIncident() {
   useAuth();
   const [nombre, setNombre] = React.useState('10');
   const [currentForm, setCurrentForm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [dataUrl, setDataUrl] = useState("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents");
 
-  const handleSearchSubmit = (url,histo) => {
+  const handleSearchSubmit = (url, histo) => {
     setDataUrl(url);
     setShowModal(false);
     setHisto(histo);
   };
+
   const token = getTokenFromLocalStorage();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -79,9 +80,11 @@ function GestionIncident() {
     { name: 'Action', selector: '', sortable: true, cell: row => <CelluleAction id={row.id} /> },
   ];
 
-  const handleShow = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
-
+  const handleShowSearchModal = () => setShowModal(true);
+  const handleCloseSearchModal = () => setShowModal(false);
+  const handleShowStatModal = () => setShowStatModal(true);
+  const handleCloseStatModal = () => setShowStatModal(false);
+  
   return (
     <div>
       <MenuMysmc />
@@ -118,17 +121,17 @@ function GestionIncident() {
                 {tauxTraitement24H !== null ? `${tauxTraitement24H.toFixed(2)} %` : '0 %'}
               </div>
               <div>Traitement 24H</div>
+              <Button variant="primary" onClick={handleShowStatModal}>Stats</Button>
             </Grid>
           </Col>
         </Row>
         <Row>
           <Col sm={8} className='content'>
-            <Button variant="primary" onClick={handleShow}>Rechercher</Button>
+            <Button variant="primary" onClick={handleShowSearchModal}>Rechercher</Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Reporting incident</Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Plan d'action incident</Button>
-      
 
-            <Modal show={showModal} onHide={handleClose} dialogClassName="custom-modal">
+            <Modal show={showModal} onHide={handleCloseSearchModal} dialogClassName="custom-modal">
               <Modal.Header closeButton>
                 <Modal.Title>Recherche d'avis</Modal.Title>
               </Modal.Header>
@@ -136,14 +139,25 @@ function GestionIncident() {
                 <RechercheAvis onSearch={handleSearchSubmit} />
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="danger" onClick={handleClose}>Fermer</Button>
+                <Button variant="danger" onClick={handleCloseSearchModal}>Fermer</Button>
               </Modal.Footer>
             </Modal>
-  
-        <div className='col-12 alert alert-info' style={{ textAlign: "center", fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>
-           {histo}
-        </div>
-            
+
+            <Modal show={showStatModal} onHide={handleCloseStatModal} dialogClassName="custom-modal">
+              <Modal.Header closeButton>
+                <Modal.Title>Statistiques</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <RechercheStatistiques onSearch={handleSearchSubmit} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="danger" onClick={handleCloseStatModal}>Fermer</Button>
+              </Modal.Footer>
+            </Modal>
+
+            <div className='col-12 alert alert-info' style={{ textAlign: "center", fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>
+              {histo}
+            </div>
           </Col>
         </Row>
         <Title text="Liste des avis d'incidents / d'information en cours" />
