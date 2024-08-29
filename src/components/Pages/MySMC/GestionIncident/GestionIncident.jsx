@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Button, Col, Container, Row, Modal } from 'react-bootstrap';
 import MenuMysmc from '../Menu/MenuMysmc';
 import Get from '../../../API/Get';
@@ -11,22 +12,72 @@ import axios from 'axios';
 import { Grid } from '@mui/material';
 import RechercheAvis from './RechercheAvis';
 import RechercheStatistiques from './RechercheStatistiques';
+=======
+import {
+  Button,
+  Col,
+  Container,
+  Row,
+  Modal,
+  Pagination,
+  Overlay,
+  Tooltip,
+} from "react-bootstrap";
+import MenuMysmc from "../Menu/MenuMysmc";
+import Get from "../../../API/Get";
+import Title from "../../../Card/Title/Title";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import useAuth from "../../Auth/useAuth";
+import { getTokenFromLocalStorage } from "../../Auth/authUtils";
+import axios from "axios";
+import { Grid } from "@mui/material";
+import RechercheAvis from "./RechercheAvis";
+import addAvis from "../../../../assets/ajouter.gif";
+>>>>>>> 481ca84667ba8c6cbee08f6269563ef23966bb6c
 
 function GestionIncident() {
   useAuth();
   const [nombre, setNombre] = React.useState('10');
   const [currentForm, setCurrentForm] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [dataUrl, setDataUrl] = useState("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents");
 
+<<<<<<< HEAD
+=======
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayTarget, setOverlayTarget] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+
+  const handleMouseEnter = (event) => {
+    setOverlayTarget(event.target);
+    setShowOverlay(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowOverlay(false);
+  };
+
+>>>>>>> 481ca84667ba8c6cbee08f6269563ef23966bb6c
   const handleSearchSubmit = (url, histo) => {
     setDataUrl(url);
     setShowModal(false);
     setHisto(histo);
   };
+<<<<<<< HEAD
 
+=======
+  const reinitHisto = () => {
+    setHisto("Aucune recherche récente.");
+    setDataUrl(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
+    );
+    setShowModal(false);
+  };
+>>>>>>> 481ca84667ba8c6cbee08f6269563ef23966bb6c
   const token = getTokenFromLocalStorage();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -80,11 +131,24 @@ function GestionIncident() {
     { name: 'Action', selector: '', sortable: true, cell: row => <CelluleAction id={row.id} /> },
   ];
 
+<<<<<<< HEAD
   const handleShowSearchModal = () => setShowModal(true);
   const handleCloseSearchModal = () => setShowModal(false);
   const handleShowStatModal = () => setShowStatModal(true);
   const handleCloseStatModal = () => setShowStatModal(false);
   
+=======
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+>>>>>>> 481ca84667ba8c6cbee08f6269563ef23966bb6c
   return (
     <div>
       <MenuMysmc />
@@ -121,17 +185,35 @@ function GestionIncident() {
                 {tauxTraitement24H !== null ? `${tauxTraitement24H.toFixed(2)} %` : '0 %'}
               </div>
               <div>Traitement 24H</div>
-              <Button variant="primary" onClick={handleShowStatModal}>Stats</Button>
             </Grid>
           </Col>
         </Row>
         <Row>
+<<<<<<< HEAD
           <Col sm={8} className='content'>
             <Button variant="primary" onClick={handleShowSearchModal}>Rechercher</Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Reporting incident</Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }}>Exporter Plan d'action incident</Button>
 
             <Modal show={showModal} onHide={handleCloseSearchModal} dialogClassName="custom-modal">
+=======
+          <Col sm={8} className="content">
+            <Button variant="primary" onClick={handleShow}>
+              Rechercher
+            </Button>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Reporting incident
+            </Button>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Plan d'action incident
+            </Button>
+
+            <Modal
+              show={showModal}
+              onHide={handleClose}
+              dialogClassName="custom-modal"
+            >
+>>>>>>> 481ca84667ba8c6cbee08f6269563ef23966bb6c
               <Modal.Header closeButton>
                 <Modal.Title>Recherche d'avis</Modal.Title>
               </Modal.Header>
@@ -139,6 +221,7 @@ function GestionIncident() {
                 <RechercheAvis onSearch={handleSearchSubmit} />
               </Modal.Body>
               <Modal.Footer>
+<<<<<<< HEAD
                 <Button variant="danger" onClick={handleCloseSearchModal}>Fermer</Button>
               </Modal.Footer>
             </Modal>
@@ -157,6 +240,43 @@ function GestionIncident() {
 
             <div className='col-12 alert alert-info' style={{ textAlign: "center", fontSize: "14px", fontFamily: "inherit", fontWeight: "500", color: "#31708F" }}>
               {histo}
+=======
+                <Button variant="danger" onClick={handleClose}>
+                  Fermer
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <div className="d-flex">
+              <div
+                className="col-12 mt-3 alert alert-info"
+                style={{
+                  textAlign: "center",
+                  fontSize: "14px",
+                  fontFamily: "inherit",
+                  fontWeight: "500",
+                  color: "#31708F",
+                }}
+              >
+                {histo}
+              </div>
+
+              {histo !== "Aucune recherche récente." && (
+                <div
+                  className="mt-3 alert alert-danger"
+                  style={{
+                    textAlign: "center",
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    fontWeight: "500",
+                    color: "#31708F",
+                  }}
+                >
+                  <button onClick={reinitHisto} className="btn">
+                    &times;
+                  </button>
+                </div>
+              )}
+>>>>>>> 481ca84667ba8c6cbee08f6269563ef23966bb6c
             </div>
           </Col>
         </Row>
