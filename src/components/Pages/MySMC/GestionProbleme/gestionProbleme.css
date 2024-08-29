@@ -1,0 +1,9 @@
+.recherche-avancee-header {
+    background-color: #148C8A; /* Couleur verte */
+    color: white; /* Texte en blanc */
+    text-align: center; /* Centrage du texte */
+    padding: 10px; /* Espacement intérieur */
+    border-radius: 5px 5px 0 0; /* Coins arrondis en haut */
+    font-size: 16px; /* Taille de la police */
+    font-weight: bold; /* Texte en gras */
+}

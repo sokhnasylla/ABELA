@@ -32,6 +32,7 @@ function GestionIncident() {
   const [showModal, setShowModal] = useState(false);
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
+  const [etat, setEtat] = useState("");
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
@@ -50,14 +51,16 @@ function GestionIncident() {
     setShowOverlay(false);
   };
 
-  const handleSearchSubmit = (url, histo) => {
+  const handleSearchSubmit = (url, histo, etat) => {
     setDataUrl(url);
     setShowModal(false);
     setShowStatModal(false);
     setHisto(histo);
+    setEtat(etat);
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
+    setEtat("")
     setDataUrl(
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
     );
@@ -86,7 +89,6 @@ function GestionIncident() {
         setTauxDetectionAvis(response.data.tauxDetectionAvis);
         setTauxTraitement4H(response.data.tauxTraitement4H);
         setTauxTraitement24H(response.data.tauxTraitement24H);
-        // setFilteredData(response.data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
@@ -95,7 +97,6 @@ function GestionIncident() {
     fetchData();
   }, [token]);
 
-  // Recuperation des données de dataUrl
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -306,61 +307,74 @@ function GestionIncident() {
               </Modal.Footer>
             </Modal>
             <p >
-  {histo === "Aucune recherche récente." && (
-    <div >
-          <Button variant="primary" onClick={handleShow} className="btn">
-            Recherche
-          </Button>
-      <p className="alert alert-info mt-3 d-flex align-items-center"
-        style={{
-          fontSize: "14px",
-          fontFamily: "inherit",
-          fontWeight: "500",
-          color: "#31708F",
-          textAlign: "center",
-        }}
-      >
-        {/* Case avec le texte ou historique */}
-        Aucune recherche récente.
-      </p>
-    </div>
-  )}
+              {histo === "Aucune recherche récente." && (
+                <div >
+                  <Button variant="primary" onClick={handleShow} className="btn">
+                    Recherche
+                  </Button>
+                  <p className="alert alert-info mt-3 d-flex align-items-center"
+                    style={{
+                      fontSize: "14px",
+                      fontFamily: "inherit",
+                      fontWeight: "500",
+                      color: "#31708F",
+                      textAlign: "center",
+                    }}
+                  >
+                    {/* Case avec le texte ou historique */}
+                    Aucune recherche récente.
+                  </p>
+                </div>
+              )}
 
-  {histo !== "Aucune recherche récente." && (
-    <div >
-      <Button variant="primary" onClick={handleShow} className="btn">
-            Recherche
-          </Button>
-       <Button variant="secondary" onClick={reinitHisto} className="btn">
-        Supprimer filtre
-      </Button>
-      <div className="alert alert-info mt-3 d-flex align-items-center"
-        style={{
-          fontSize: "14px",
-          fontFamily: "inherit",
-          fontWeight: "500",
-          color: "#31708F",
-          textAlign: "center",
-          marginRight: "10px", // Espacement entre la case d'historique et le bouton
-        }}
-      >
-       {histo}
-      </div>
+              {histo !== "Aucune recherche récente." && (
+                <div >
+                  <Button variant="primary" onClick={handleShow} className="btn">
+                    Recherche
+                  </Button>
+                  <Button variant="secondary" onClick={reinitHisto} className="btn">
+                    Supprimer filtre
+                  </Button>
+                  <div className="alert alert-info mt-3 d-flex align-items-center"
+                    style={{
+                      fontSize: "14px",
+                      fontFamily: "inherit",
+                      fontWeight: "500",
+                      color: "#31708F",
+                      textAlign: "center",
+                      marginRight: "10px", // Espacement entre la case d'historique et le bouton
+                    }}
+                  >
+                    {histo}
+                  </div>
 
-    </div>
-  )}
-</p>
+                </div>
+              )}
+            </p>
 
           </Col>
         </Row>
-          <Button variant="secondary" style={{ marginLeft: "10px" }}>
-              Exporter Reporting incident
-            </Button>
-            <Button variant="secondary" style={{ marginLeft: "10px" }}>
-              Exporter Plan d'action incident
-            </Button>
-        <Title text="Liste des avis d'incidents / d'information en cours" />
-        
+
+        <Button variant="secondary" style={{ marginLeft: "10px" }}>
+          Exporter Reporting incident
+        </Button>
+        <Button variant="secondary" style={{ marginLeft: "10px" }}>
+          Exporter Plan d'action incident
+        </Button>
+
+        {etat === "Annulé" && (
+          <Title text="Liste des avis d'incident / d'information annulés" />
+        )}
+        {etat === "Cloturé" && (
+          <Title text="Liste des avis d'incident / d'information clôturés" />
+        )}
+        {etat === "Fermé" && (
+          <Title text="Liste des avis d'incident / d'information fermés" />
+        )}
+        {etat !== "Annulé" && etat !== "Cloturé" && etat !== "Fermé" && (
+          <Title text="Liste des avis d'incidents / d'information en cours" />
+        )}
+
         {/* <Row>
           <Col sm={8} className="content">
             <Get url={dataUrl} columns={columns} />
