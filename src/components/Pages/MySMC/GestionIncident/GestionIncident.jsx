@@ -19,6 +19,7 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
 import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
+import addAvis from "../../../../assets/search.png";
 
 function GestionIncident() {
   useAuth();
@@ -37,7 +38,7 @@ function GestionIncident() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 15;
 
   const handleMouseEnter = (event) => {
     setOverlayTarget(event.target);
@@ -56,7 +57,7 @@ function GestionIncident() {
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
-    setEtat("");
+    setEtat("")
     setDataUrl(
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
     );
@@ -94,7 +95,7 @@ function GestionIncident() {
   }, [token]);
 
   useEffect(() => {
-    const fetchDataAvisIncidents = async () => {
+    const fetchData = async () => {
       try {
         const config = {
           headers: {
@@ -104,12 +105,13 @@ function GestionIncident() {
         const response = await axios.get(dataUrl, config);
         setData(response.data);
         setFilteredData(response.data);
+        console.log(response.data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
     };
 
-    fetchDataAvisIncidents();
+    fetchData();
   }, [dataUrl, token]);
 
   const handleRowClick = (id) => {
@@ -260,13 +262,6 @@ function GestionIncident() {
         </Row>
         <Row>
           <Col sm={8} className="content">
-            <Button variant="secondary" style={{ marginLeft: "10px" }}>
-              Exporter Reporting incident
-            </Button>
-            <Button variant="secondary" style={{ marginLeft: "10px" }}>
-              Exporter Plan d'action incident
-            </Button>
-
             <Modal
               show={showModal}
               onHide={handleClose}
@@ -284,54 +279,62 @@ function GestionIncident() {
                 </Button>
               </Modal.Footer>
             </Modal>
-            <div className="d-flex">
-              <div
-                className="col-12 mt-3 alert alert-info"
-                style={{
-                  textAlign: "center",
-                  fontSize: "14px",
-                  fontFamily: "inherit",
-                  fontWeight: "500",
-                  color: "#31708F",
-                }}
-              >
-                {histo}
-              </div>
-
-                <div
-                  className="mt-3 alert"
-                  style={{
-                    textAlign: "center",
-                    fontSize: "14px",
-                    fontFamily: "inherit",
-                    fontWeight: "500",
-                    color: "#31708F",
-                  }}
-                >
-                  <Button variant="primary" onClick={handleShow}>
-                    Rechercher
+            <p >
+              {histo === "Aucune recherche récente." && (
+                <div >
+                  <Button variant="primary" onClick={handleShow} className="btn">
+                    Recherche
                   </Button>
-                </div>
-
-              {histo !== "Aucune recherche récente." && (
-                <div
-                  className="mt-3 alert"
-                  style={{
-                    textAlign: "center",
-                    fontSize: "14px",
-                    fontFamily: "inherit",
-                    fontWeight: "500",
-                    color: "#31708F",
-                  }}
-                >
-                  <Button onClick={reinitHisto} variant="danger">
-                    Réinitialiser
-                  </Button>
+                  <p className="alert alert-info mt-3 d-flex align-items-center"
+                    style={{
+                      fontSize: "14px",
+                      fontFamily: "inherit",
+                      fontWeight: "500",
+                      color: "#31708F",
+                      textAlign: "center",
+                    }}
+                  >
+                    {/* Case avec le texte ou historique */}
+                    Aucune recherche récente.
+                  </p>
                 </div>
               )}
-            </div>
+
+              {histo !== "Aucune recherche récente." && (
+                <div >
+                  <Button variant="primary" onClick={handleShow} className="btn">
+                    Recherche
+                  </Button>
+                  <Button variant="secondary" onClick={reinitHisto} className="btn">
+                    Supprimer filtre
+                  </Button>
+                  <div className="alert alert-info mt-3 d-flex align-items-center"
+                    style={{
+                      fontSize: "14px",
+                      fontFamily: "inherit",
+                      fontWeight: "500",
+                      color: "#31708F",
+                      textAlign: "center",
+                      marginRight: "10px", // Espacement entre la case d'historique et le bouton
+                    }}
+                  >
+                    {histo}
+                  </div>
+
+                </div>
+              )}
+            </p>
+
           </Col>
         </Row>
+
+        <Button variant="secondary" style={{ marginLeft: "10px" }}>
+          Exporter Reporting incident
+        </Button>
+        <Button variant="secondary" style={{ marginLeft: "10px" }}>
+          Exporter Plan d'action incident
+        </Button>
+
         {etat === "Annulé" && (
           <Title text="Liste des avis d'incident / d'information annulés" />
         )}
@@ -344,6 +347,12 @@ function GestionIncident() {
         {etat !== "Annulé" && etat !== "Cloturé" && etat !== "Fermé" && (
           <Title text="Liste des avis d'incidents / d'information en cours" />
         )}
+
+        {/* <Row>
+          <Col sm={8} className="content">
+            <Get url={dataUrl} columns={columns} />
+          </Col>
+        </Row> */}
         <table className="table table-hover">
           <thead>
             <tr>
