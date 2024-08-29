@@ -19,7 +19,7 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
 import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
-import addAvis from "../../../../assets/ajouter.gif";
+import addAvis from "../../../../assets/search.png";
 
 function GestionIncident() {
   useAuth();
@@ -113,59 +113,10 @@ function GestionIncident() {
     fetchData();
   }, [dataUrl, token]);
 
-  const CelluleAction = ({ id }) => (
-    <div>
-      <Link to={`/mysmc/gestionincident/details/${id}`}>
-        <Button
-          variant="info"
-          style={{
-            backgroundColor: "#31B0D5",
-            padding: "1px 5px",
-            lineHeight: "1.2",
-            borderRadius: "3px",
-          }}
-          title="Voir les détails de l'avis"
-        >
-          <FaEye color="white" />
-        </Button>
-      </Link>
-    </div>
-  );
-
   const handleRowClick = (id) => {
     console.log(`Row with id ${id} was clicked`);
     navigate(`/mysmc/gestionincident/details/${id}`);
   };
-
-  const columns = [
-    {
-      name: "Date Création",
-      selector: (row) => row.dateCreation,
-      sortable: true,
-      cell: (row) =>
-        row.dateCreation ? (
-          <span>{new Date(row.dateCreation).toLocaleDateString("fr-FR")}</span>
-        ) : (
-          <span>N/A</span>
-        ),
-      wrap: true,
-    },
-    {
-      name: "N°Avis",
-      selector: (row) => row.numAvis,
-      sortable: true,
-      wrap: true,
-    },
-    { name: "Titre", selector: (row) => row.titre, sortable: true, wrap: true },
-    { name: "Etat", selector: (row) => row.etat, sortable: true, wrap: true },
-    {
-      name: "Action",
-      selector: "",
-      sortable: true,
-      cell: (row) => <CelluleAction id={row.id} />,
-      wrap: true,
-    },
-  ];
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -310,16 +261,6 @@ function GestionIncident() {
         </Row>
         <Row>
           <Col sm={8} className="content">
-            <Button variant="primary" onClick={handleShow}>
-              Rechercher
-            </Button>
-            <Button variant="secondary" style={{ marginLeft: "10px" }}>
-              Exporter Reporting incident
-            </Button>
-            <Button variant="secondary" style={{ marginLeft: "10px" }}>
-              Exporter Plan d'action incident
-            </Button>
-
             <Modal
               show={showModal}
               onHide={handleClose}
@@ -337,40 +278,62 @@ function GestionIncident() {
                 </Button>
               </Modal.Footer>
             </Modal>
-            <div className="d-flex">
-              <div
-                className="col-12 mt-3 alert alert-info"
-                style={{
-                  textAlign: "center",
-                  fontSize: "14px",
-                  fontFamily: "inherit",
-                  fontWeight: "500",
-                  color: "#31708F",
-                }}
-              >
-                {histo}
-              </div>
+            <p >
+  {histo === "Aucune recherche récente." && (
+    <div >
+          <Button variant="primary" onClick={handleShow} className="btn">
+            Recherche
+          </Button>
+      <p className="alert alert-info mt-3 d-flex align-items-center"
+        style={{
+          fontSize: "14px",
+          fontFamily: "inherit",
+          fontWeight: "500",
+          color: "#31708F",
+          textAlign: "center",
+        }}
+      >
+        {/* Case avec le texte ou historique */}
+        Aucune recherche récente.
+      </p>
+    </div>
+  )}
 
-              {histo !== "Aucune recherche récente." && (
-                <div
-                  className="mt-3 alert alert-danger"
-                  style={{
-                    textAlign: "center",
-                    fontSize: "14px",
-                    fontFamily: "inherit",
-                    fontWeight: "500",
-                    color: "#31708F",
-                  }}
-                >
-                  <button onClick={reinitHisto} className="btn">
-                    &times;
-                  </button>
-                </div>
-              )}
-            </div>
+  {histo !== "Aucune recherche récente." && (
+    <div >
+      <Button variant="primary" onClick={handleShow} className="btn">
+            Recherche
+          </Button>
+       <Button variant="secondary" onClick={reinitHisto} className="btn">
+        Supprimer filtre
+      </Button>
+      <div className="alert alert-info mt-3 d-flex align-items-center"
+        style={{
+          fontSize: "14px",
+          fontFamily: "inherit",
+          fontWeight: "500",
+          color: "#31708F",
+          textAlign: "center",
+          marginRight: "10px", // Espacement entre la case d'historique et le bouton
+        }}
+      >
+       {histo}
+      </div>
+
+    </div>
+  )}
+</p>
+
           </Col>
         </Row>
+          <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Reporting incident
+            </Button>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Plan d'action incident
+            </Button>
         <Title text="Liste des avis d'incidents / d'information en cours" />
+        
         {/* <Row>
           <Col sm={8} className="content">
             <Get url={dataUrl} columns={columns} />
