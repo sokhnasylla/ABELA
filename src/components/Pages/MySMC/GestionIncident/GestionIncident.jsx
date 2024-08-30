@@ -22,6 +22,7 @@ import RechercheAvis from "./RechercheAvis";
 import RechercheStatistiques from "./RechercheStatistiques";
 import addAvis from "../../../../assets/search.png";
 import DetailsIncident from "./DetailsIncident";
+import AddIncident from "./AddIncident";
 
 function GestionIncident() {
   useAuth();
@@ -32,6 +33,7 @@ function GestionIncident() {
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [etat, setEtat] = useState("");
@@ -100,6 +102,8 @@ function GestionIncident() {
     fetchData();
   }, [token]);
 
+  const handleAddAvis = () => {};
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -129,6 +133,8 @@ function GestionIncident() {
   const handleClose = () => setShowModal(false);
   const handleStatShow = () => setShowStatModal(true);
   const handleStatClose = () => setShowStatModal(false);
+  const handleAddShow = () => setShowAddModal(true);
+  const handleAddClose = () => setShowAddModal(false);
 
   const handleShowDetails = (avis) => {
     console.log(`Avis with id ${avis.id} was double-clicked`);
@@ -144,11 +150,32 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
+  const getCurrentMonthAndYear = () => {
+    const date = new Date();
+    const month = [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
+    ];
+    const currentMonth = month[date.getMonth()];
+    const currentYear = date.getFullYear();
+    return `${currentMonth} ${currentYear}`;
+  };
+
   return (
     <div>
       <MenuMysmc />
       <Container className="body" style={{ marginLeft: "5%" }}>
-        <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
+        <Title text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`} />
         <Row className="mb-4">
           <Col
             xs={12}
@@ -275,10 +302,14 @@ function GestionIncident() {
             </Grid>
           </Col>
           <Col>
-          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
-              Stats      
-              </Button>
-              <Modal
+            <Button
+              variant="primary"
+              onClick={handleStatShow}
+              style={{ marginLeft: "10px" }}
+            >
+              Stats
+            </Button>
+            <Modal
               show={showStatModal}
               onHide={handleStatClose}
               dialogClassName="custom-modal"
@@ -340,13 +371,6 @@ function GestionIncident() {
               <div>
                 <div className="">
                   <Button
-                    variant="primary"
-                    onClick={handleShow}
-                    className="btn mr-3"
-                  >
-                    Recherche
-                  </Button>
-                  <Button
                     variant="danger"
                     onClick={reinitHisto}
                     className="btn pl-3"
@@ -371,13 +395,22 @@ function GestionIncident() {
             )}
           </Col>
         </Row>
-
-        <Button variant="secondary" style={{ marginLeft: "10px" }}>
-          Exporter Reporting incident
-        </Button>
-        <Button variant="secondary" style={{ marginLeft: "10px" }}>
-          Exporter Plan d'action incident
-        </Button>
+        <div className="d-flex justify-content-between">
+          <div>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Reporting incident
+            </Button>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Plan d'action incident
+            </Button>
+          </div>
+          <div>
+            <Button variant="primary" onClick={handleAddShow}>
+              Ajouter un avis
+              <img src="../../../../assets/plus-symbole-noir.png" alt="" />
+            </Button>
+          </div>
+        </div>
 
         {etat === "Annulé" && (
           <Title text="Liste des avis d'incident / d'information annulés" />
@@ -502,6 +535,27 @@ function GestionIncident() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={handleCloseDetails}>
+              Fermer
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={showAddModal}
+          onHide={handleAddClose}
+          dialogClassName="custom-modal"
+          size="xl"
+          style={{ width: "100%", textAlign: "" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ textAlign: "center" }}>
+              Ajouter un avis incident
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AddIncident />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleAddClose}>
               Fermer
             </Button>
           </Modal.Footer>
