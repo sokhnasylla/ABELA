@@ -20,6 +20,7 @@ import axios from "axios";
 import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
 import addAvis from "../../../../assets/search.png";
+import DetailsIncident from "./DetailsIncident";
 
 function GestionIncident() {
   useAuth();
@@ -29,6 +30,7 @@ function GestionIncident() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [etat, setEtat] = useState("");
   const [dataUrl, setDataUrl] = useState(
@@ -57,12 +59,13 @@ function GestionIncident() {
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
-    setEtat("")
+    setEtat("");
     setDataUrl(
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
     );
     setShowModal(false);
   };
+  const [selectedAvis, setSelectedAvis] = useState(null);
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
   const [tauxNotificationAvis, setTauxNotificationAvis] = useState(null);
@@ -105,7 +108,6 @@ function GestionIncident() {
         const response = await axios.get(dataUrl, config);
         setData(response.data);
         setFilteredData(response.data);
-        console.log(response.data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
@@ -116,11 +118,19 @@ function GestionIncident() {
 
   const handleRowClick = (id) => {
     console.log(`Row with id ${id} was clicked`);
+
     navigate(`/mysmc/gestionincident/details/${id}`);
   };
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+
+  const handleShowDetails = (avis) => {
+    console.log(`Avis with id ${avis.id} was double-clicked`);
+    setShowDetailsModal(true);
+    setSelectedAvis(avis);
+  };
+  const handleCloseDetails = () => setShowDetailsModal(false);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -279,52 +289,59 @@ function GestionIncident() {
                 </Button>
               </Modal.Footer>
             </Modal>
-            <p >
-              {histo === "Aucune recherche récente." && (
-                <div >
-                  <Button variant="primary" onClick={handleShow} className="btn">
-                    Recherche
-                  </Button>
-                  <p className="alert alert-info mt-3 d-flex align-items-center"
-                    style={{
-                      fontSize: "14px",
-                      fontFamily: "inherit",
-                      fontWeight: "500",
-                      color: "#31708F",
-                      textAlign: "center",
-                    }}
-                  >
-                    {/* Case avec le texte ou historique */}
-                    Aucune recherche récente.
-                  </p>
+            {histo === "Aucune recherche récente." && (
+              <div>
+                <Button variant="primary" onClick={handleShow} className="btn">
+                  Recherche
+                </Button>
+                <div
+                  className="alert alert-info mt-3 d-flex align-items-center"
+                  style={{
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    fontWeight: "500",
+                    color: "#31708F",
+                    textAlign: "center",
+                  }}
+                >
+                  Aucune recherche récente.
                 </div>
-              )}
+              </div>
+            )}
 
-              {histo !== "Aucune recherche récente." && (
-                <div >
-                  <Button variant="primary" onClick={handleShow} className="btn">
+            {histo !== "Aucune recherche récente." && (
+              <div>
+                <div className="">
+                  <Button
+                    variant="primary"
+                    onClick={handleShow}
+                    className="btn mr-3"
+                  >
                     Recherche
                   </Button>
-                  <Button variant="secondary" onClick={reinitHisto} className="btn">
+                  <Button
+                    variant="danger"
+                    onClick={reinitHisto}
+                    className="btn pl-3"
+                  >
                     Supprimer filtre
                   </Button>
-                  <div className="alert alert-info mt-3 d-flex align-items-center"
-                    style={{
-                      fontSize: "14px",
-                      fontFamily: "inherit",
-                      fontWeight: "500",
-                      color: "#31708F",
-                      textAlign: "center",
-                      marginRight: "10px", // Espacement entre la case d'historique et le bouton
-                    }}
-                  >
-                    {histo}
-                  </div>
-
                 </div>
-              )}
-            </p>
-
+                <div
+                  className="alert alert-info mt-3 d-flex align-items-center"
+                  style={{
+                    fontSize: "14px",
+                    fontFamily: "inherit",
+                    fontWeight: "500",
+                    color: "#31708F",
+                    textAlign: "center",
+                    marginRight: "10px", // Espacement entre la case d'historique et le bouton
+                  }}
+                >
+                  {histo}
+                </div>
+              </div>
+            )}
           </Col>
         </Row>
 
@@ -368,7 +385,7 @@ function GestionIncident() {
                 key={item.id}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onDoubleClick={() => handleRowClick(item.id)}
+                onDoubleClick={() => handleShowDetails(item)}
               >
                 <td>
                   {item.dateCreation
@@ -441,6 +458,27 @@ function GestionIncident() {
             </Pagination.Item>
           )}
         </Pagination>
+        <Modal
+          show={showDetailsModal}
+          onHide={handleCloseDetails}
+          dialogClassName="custom-modal"
+          size="xl"
+          style={{ width: "100%", textAlign: "" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ textAlign: "center" }}>
+              Details de l'avis
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <DetailsIncident avis={selectedAvis} />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleCloseDetails}>
+              Fermer
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </div>
   );
