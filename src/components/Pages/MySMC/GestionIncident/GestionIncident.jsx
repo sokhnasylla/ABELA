@@ -24,7 +24,6 @@ import RechercheAvis from "./RechercheAvis";
 import RechercheStatistiques from "./RechercheStatistiques";
 import addAvis from "../../../../assets/search.png";
 import DetailsIncident from "./DetailsIncident";
-import StatistiqueIncident from "./StatistiqueIncident";
 
 function GestionIncident() {
   useAuth();
@@ -35,6 +34,7 @@ function GestionIncident() {
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [etat, setEtat] = useState("");
@@ -125,6 +125,8 @@ function GestionIncident() {
     fetchData();
   }, [token]);
 
+  const handleAddAvis = () => {};
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -149,6 +151,8 @@ function GestionIncident() {
   const handleClose = () => setShowModal(false);
   const handleStatShow = () => setShowStatModal(true);
   const handleStatClose = () => setShowStatModal(false);
+  const handleAddShow = () => setShowAddModal(true);
+  const handleAddClose = () => setShowAddModal(false);
 
   const handleShowDetails = (avis) => {
     console.log(`Avis with id ${avis.id} was double-clicked`);
@@ -163,14 +167,6 @@ function GestionIncident() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-   const disp = [
-    { name: "Avis Incidents", value: 200 },
-    { name: "Avis Fermés", value: 278 },
-    { name: "Avis Ouverts", value: 492 },
-    { name: "Avis Annulés", value: 102 },
-    { name: "detection dans les délais", value: 43 },
-    { name: "notifications dans les délais", value: 3 },
-  ];
 
   return (
     <div>      
@@ -178,28 +174,6 @@ function GestionIncident() {
       <StatistiqueIncident/>
       <Container className="body" style={{ marginLeft: "5%" }}>
         <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
-        <Col>
-          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
-              Stats      
-              </Button>
-              <Modal
-              show={showStatModal}
-              onHide={handleStatClose}
-              dialogClassName="custom-modal"
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Statistiques</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <RechercheStatistiques onSearch={handleSearchSubmit} />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="danger" onClick={handleStatClose}>
-                  Fermer
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </Col>
         <Row className="mb-4">
          
           <Col
@@ -326,7 +300,28 @@ function GestionIncident() {
               <div>Traitement 24H</div>
             </Grid>
           </Col>
-          
+          <Col>
+          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
+              Stats      
+              </Button>
+              <Modal
+              show={showStatModal}
+              onHide={handleStatClose}
+              dialogClassName="custom-modal"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Statistiques</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <RechercheStatistiques onSearch={handleSearchSubmit} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="danger" onClick={handleStatClose}>
+                  Fermer
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </Col>
         </Row>
         <div className="dashboard">
         <ResponsiveContainer width="100%" height={400}>
@@ -382,13 +377,6 @@ function GestionIncident() {
               <div>
                 <div className="">
                   <Button
-                    variant="primary"
-                    onClick={handleShow}
-                    className="btn mr-3"
-                  >
-                    Recherche
-                  </Button>
-                  <Button
                     variant="danger"
                     onClick={reinitHisto}
                     className="btn pl-3"
@@ -413,13 +401,22 @@ function GestionIncident() {
             )}
           </Col>
         </Row>
-
-        <Button variant="secondary" style={{ marginLeft: "10px" }}>
-          Exporter Reporting incident
-        </Button>
-        <Button variant="secondary" style={{ marginLeft: "10px" }}>
-          Exporter Plan d'action incident
-        </Button>
+        <div className="d-flex justify-content-between">
+          <div>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Reporting incident
+            </Button>
+            <Button variant="secondary" style={{ marginLeft: "10px" }}>
+              Exporter Plan d'action incident
+            </Button>
+          </div>
+          <div>
+            <Button variant="primary" onClick={handleAddShow}>
+              Ajouter un avis
+              <img src="../../../../assets/plus-symbole-noir.png" alt="" />
+            </Button>
+          </div>
+        </div>
 
         {etat === "Annulé" && (
           <Title text="Liste des avis d'incident / d'information annulés" />
@@ -544,6 +541,27 @@ function GestionIncident() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={handleCloseDetails}>
+              Fermer
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={showAddModal}
+          onHide={handleAddClose}
+          dialogClassName="custom-modal"
+          size="xl"
+          style={{ width: "100%", textAlign: "" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ textAlign: "center" }}>
+              Ajouter un avis incident
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AddIncident />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleAddClose}>
               Fermer
             </Button>
           </Modal.Footer>
