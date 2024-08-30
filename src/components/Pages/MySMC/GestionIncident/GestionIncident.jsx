@@ -24,6 +24,7 @@ import RechercheAvis from "./RechercheAvis";
 import RechercheStatistiques from "./RechercheStatistiques";
 import addAvis from "../../../../assets/search.png";
 import DetailsIncident from "./DetailsIncident";
+import AddIncident from "./AddIncident";
 
 function GestionIncident() {
   useAuth();
@@ -167,11 +168,18 @@ function GestionIncident() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  const disp = [
+    { name: "Incidents", value: totalAvisIncidents },
+    { name: "Fermés", value: totalAvisFermes },
+    { name: "Ouverts", value: totalAvisOuverts },
+    { name: "Annulés", value: totalAvisAnnules },
+    { name: "Détection", value: totalAvisClosDetectionDelai },
+    { name: "Notification", value: totalAvisClosNotificationOnDelayCustom },
+  ];
 
   return (
     <div>      
       <MenuMysmc />
-      <StatistiqueIncident/>
       <Container className="body" style={{ marginLeft: "5%" }}>
         <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
         <Row className="mb-4">
