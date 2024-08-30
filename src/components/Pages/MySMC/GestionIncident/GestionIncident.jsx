@@ -10,6 +10,8 @@ import {
 } from "react-bootstrap";
 import MenuMysmc from "../Menu/MenuMysmc";
 import Get from "../../../API/Get";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts";
+import "./StatistiqueIncident.css";
 import Title from "../../../Card/Title/Title";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
@@ -22,6 +24,7 @@ import RechercheAvis from "./RechercheAvis";
 import RechercheStatistiques from "./RechercheStatistiques";
 import addAvis from "../../../../assets/search.png";
 import DetailsIncident from "./DetailsIncident";
+import StatistiqueIncident from "./StatistiqueIncident";
 
 function GestionIncident() {
   useAuth();
@@ -38,7 +41,18 @@ function GestionIncident() {
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
-
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip" style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+          <p className="label">{`${label}`}</p>
+          <p className="intro">{`${payload[0].value} incidents`}</p>
+        </div>
+      );
+    }
+  
+    return null;
+  };
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,7 +89,12 @@ function GestionIncident() {
   const [tauxDetectionAvis, setTauxDetectionAvis] = useState(null);
   const [tauxTraitement4H, setTauxTraitement4H] = useState(null);
   const [tauxTraitement24H, setTauxTraitement24H] = useState(null);
-
+  const[totalAvisIncidents,setTotalAvisIncidents] = useState(null);
+  const [totalAvisFermes,setTotalAvisFermes] = useState(null);
+  const[totalAvisOuverts,setTotalAvisOuverts] = useState(null);
+  const[totalAvisAnnules,setTotalAvisAnnules] = useState(null);
+  const[totalAvisClosDetectionDelai,setTotalAvisClosDetectionDelai] = useState(null);
+  const [totalAvisClosNotificationOnDelayCustom,setTotalAvisClosNotificationOnDelayCustom] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -92,6 +111,12 @@ function GestionIncident() {
         setTauxDetectionAvis(response.data.tauxDetectionAvis);
         setTauxTraitement4H(response.data.tauxTraitement4H);
         setTauxTraitement24H(response.data.tauxTraitement24H);
+        setTotalAvisIncidents(response.data.totalAvisIncidents);
+        setTotalAvisFermes(response.data.totalAvisFermes);
+        setTotalAvisOuverts(response.data.totalAvisOuverts);
+        setTotalAvisAnnules(response.data.totalAvisAnnules);
+        setTotalAvisClosDetectionDelai(response.data.totalAvisClosDetectionDelai);
+        setTotalAvisClosNotificationOnDelayCustom(response.data.totalAvisClosNotificationOnDelayCustom);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
@@ -119,11 +144,6 @@ function GestionIncident() {
     fetchData();
   }, [dataUrl, token]);
 
-  const handleRowClick = (id) => {
-    console.log(`Row with id ${id} was clicked`);
-
-    navigate(`/mysmc/gestionincident/details/${id}`);
-  };
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -143,13 +163,45 @@ function GestionIncident() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+   const disp = [
+    { name: "Avis Incidents", value: 200 },
+    { name: "Avis Fermés", value: 278 },
+    { name: "Avis Ouverts", value: 492 },
+    { name: "Avis Annulés", value: 102 },
+    { name: "detection dans les délais", value: 43 },
+    { name: "notifications dans les délais", value: 3 },
+  ];
 
   return (
-    <div>
+    <div>      
       <MenuMysmc />
+      <StatistiqueIncident/>
       <Container className="body" style={{ marginLeft: "5%" }}>
         <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
+        <Col>
+          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
+              Stats      
+              </Button>
+              <Modal
+              show={showStatModal}
+              onHide={handleStatClose}
+              dialogClassName="custom-modal"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Statistiques</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <RechercheStatistiques onSearch={handleSearchSubmit} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="danger" onClick={handleStatClose}>
+                  Fermer
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </Col>
         <Row className="mb-4">
+         
           <Col
             xs={12}
             sm={6}
@@ -274,29 +326,19 @@ function GestionIncident() {
               <div>Traitement 24H</div>
             </Grid>
           </Col>
-          <Col>
-          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
-              Stats      
-              </Button>
-              <Modal
-              show={showStatModal}
-              onHide={handleStatClose}
-              dialogClassName="custom-modal"
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Statistiques</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <RechercheStatistiques onSearch={handleSearchSubmit} />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="danger" onClick={handleStatClose}>
-                  Fermer
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </Col>
+          
         </Row>
+        <div className="dashboard">
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart data={disp}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip content={<CustomTooltip />}/>
+            <Bar dataKey="value" fill="#FFA500" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
         <Row>
           <Col sm={8} className="content">
             <Modal
