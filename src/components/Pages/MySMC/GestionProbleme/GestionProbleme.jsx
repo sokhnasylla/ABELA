@@ -140,6 +140,22 @@ function GestionProbleme() {
     </div>
   );
 
+  const filterData = () => {
+    const filtered = data.filter((item) => {
+      const search = searchTerm.toLowerCase();
+      return (
+        item.application.toLowerCase().includes(search) ||
+        item.numProbleme.toLowerCase().includes(search) ||
+        item.etat.toLowerCase().includes(search)
+      );
+    });
+    setFilteredData(filtered);
+  };
+
+  useEffect(() => {
+    filterData();
+  }, [searchTerm, data]);
+
   const columns = [
     {
       name: "N°Probleme",
@@ -213,7 +229,7 @@ function GestionProbleme() {
               </InputGroup>
             </div>
 
-            {scannedResults ? (
+            {/* {scannedResults ? (
               <Get
                 data={scannedResults} // Utiliser les résultats scannés
                 columns={columns}
@@ -225,7 +241,7 @@ function GestionProbleme() {
                 columns={columns}
                 searchTerm={searchTerm}
               />
-            )}
+            )} */}
             <table className="table table-hover">
               <thead>
                 <tr>
@@ -237,6 +253,43 @@ function GestionProbleme() {
                 </tr>
               </thead>
               <tbody>
+                {/* {scannedResults ? (
+                  scannedResults.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.numProbleme}</td>
+                      <td>{item.application}</td>
+                      <td>
+                        {item.dateCreation
+
+                          ? new Date(item.dateCreation).toLocaleDateString(
+
+                              "fr-FR"
+                            )
+                          : "N/A"}
+                      </td>
+                      <td>{item.etat}</td>
+                      <td>
+                        <Button
+
+                          style={{
+                            backgroundColor: "#FF6600",
+                          }}
+                          className="btn"
+                          title="Voir les détails du problème"
+                          onClick={() => handleShowDetailsModal(item.id)}
+                        >
+                          <FaEye />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center">
+                      Chargement...
+                    </td>
+                  </tr>
+                )} */}
                 {currentItems.map((item) => (
                   <tr
                     key={item.id}
@@ -366,3 +419,4 @@ function GestionProbleme() {
 }
 
 export default GestionProbleme;
+

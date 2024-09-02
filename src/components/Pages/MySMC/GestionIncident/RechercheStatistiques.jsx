@@ -38,13 +38,14 @@ function RechercheStatistiques({ onSearch }) {
     
         try {
             if (dateDebut && dateFin) {
-                newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`;
+                newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`;
                 newHisto = `Résultat de la dernière recherche, Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
                 errorMessage = "Aucun avis trouvé pour la période spécifiée";
             } else {
                 throw new Error("Veuillez remplir au moins un champ de recherche");
             }
     
+            console.log(newUrl);
             await fetchData(newUrl, errorMessage);
             setError("");
             onSearch(newUrl, newHisto);
@@ -62,11 +63,11 @@ function RechercheStatistiques({ onSearch }) {
                     <Col sm={12} style={{ marginTop: "10px" }}>
                         <form onSubmit={handleSearch} style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                             <div className='mb-3' style={{ flex: "1 1 200px" }}>
-                                <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Date début</InputLabel>&nbsp;
+                                <InputLabel sx={{ marginLeft: "6%" }}>Date début</InputLabel>&nbsp;
                                 <TextField id='dateDebut' variant='outlined' size='small' type='date' sx={{ width: "100%" }} />
                             </div>
                             <div className='mb-3' style={{ flex: "1 1 200px" }}>
-                                <InputLabel sx={{ marginLeft: "6%" }} id="demo-simple-select-label">Date Fin</InputLabel>&nbsp;
+                                <InputLabel sx={{ marginLeft: "6%" }}>Date Fin</InputLabel>&nbsp;
                                 <TextField id='dateFin' variant='outlined' size='small' type='date' sx={{ width: "100%" }} />
                             </div>
                             <div className='mb-3' style={{ flex: "1 1 100px" }}>

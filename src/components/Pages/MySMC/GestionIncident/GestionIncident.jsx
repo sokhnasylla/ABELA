@@ -10,7 +10,15 @@ import {
 } from "react-bootstrap";
 import MenuMysmc from "../Menu/MenuMysmc";
 import Get from "../../../API/Get";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import "./StatistiqueIncident.css";
 import Title from "../../../Card/Title/Title";
 import { useNavigate } from "react-router-dom";
@@ -43,6 +51,7 @@ function GestionIncident() {
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleMouseEnter = (event) => {
     setOverlayTarget(event.target);
@@ -71,7 +80,6 @@ function GestionIncident() {
   const [selectedAvis, setSelectedAvis] = useState(null);
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,13 +92,14 @@ function GestionIncident() {
         const response = await axios.get(dataUrl, config);
         setData(response.data);
         setFilteredData(response.data);
+        setIsLoading(false);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
     };
 
     fetchData();
-  }, [dataUrl, token]);
+  }, [dataUrl, token]);l
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -116,42 +125,99 @@ function GestionIncident() {
   const getCurrentMonthAndYear = () => {
     const date = new Date();
     const mois = [
-      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
     ];
     const moisActuel = mois[date.getMonth()];
     const anneeActuelle = date.getFullYear();
     return `${moisActuel} ${anneeActuelle}`;
   };
 
+  const getPeriode = (dateDebut, dateFin) => {
+    const dateDebutSplit = dateDebut.split("-");
+    const dateFinSplit = dateFin.split("-");
+    const mois = [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
+    ];
+    const moisDebut = mois[parseInt(dateDebutSplit[1]) - 1];
+    const moisFin = mois[parseInt(dateFinSplit[1]) - 1];
+    return `Du ${dateDebutSplit[2]} ${moisDebut} ${dateDebutSplit[0]} au ${dateFinSplit[2]} ${moisFin} ${dateFinSplit[0]}`;
+  };
+
   return (
-    <div>      
+    <div>
       <MenuMysmc />
-      <Container className="body" style={{ marginLeft: "5%" }}>
-        <Title text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`} />
-          <Col>
-          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
-              Stats      
+      {/* Rendre la page responsive */}
+      <Container style={{ marginLeft: "5%" }} className="mt-5 container">
+        {/* Afficher le mois en cours par defaut mais si une periode a etait rentre dans le modal de recherche, afficher cette periode  */}
+        {histo === "Aucune recherche récente." ? (
+          <Title
+            lg={12}
+            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`}
+          />
+        ) : histo.includes("Date Début : ") && histo.includes("Date Fin : ") ? (
+          // Si les dates de début et de fin sont présentes dans l'historique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs de la période : ${getPeriode(
+              histo.split("Date Début : ")[1].split(" | Date Fin : ")[0],
+              histo.split("Date Fin : ")[1]
+            )}`}
+          />
+        ) : (
+          // Si aucune date n'a été choisie, afficher un titre générique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
+          />
+        )}
+
+        <Col>
+          <Button
+            variant="primary"
+            onClick={handleStatShow}
+            className="mt-5 ml-5 mb-2"
+          >
+            Stats
+          </Button>
+          <Modal
+            show={showStatModal}
+            onHide={handleStatClose}
+            dialogClassName="custom-modal"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Statistiques</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <RechercheStatistiques onSearch={handleSearchSubmit} />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="danger" onClick={handleStatClose}>
+                Fermer
               </Button>
-              <Modal
-              show={showStatModal}
-              onHide={handleStatClose}
-              dialogClassName="custom-modal"
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Statistiques</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <RechercheStatistiques onSearch={handleSearchSubmit} />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="danger" onClick={handleStatClose}>
-                  Fermer
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </Col>
-          <StatistiqueIncident/>
+            </Modal.Footer>
+          </Modal>
+        </Col>
+        <StatistiqueIncident />
         <Row>
           <Col sm={8} className="content">
             <Modal
@@ -248,36 +314,41 @@ function GestionIncident() {
         {etat !== "Annulé" && etat !== "Cloturé" && etat !== "Fermé" && (
           <Title text="Liste des avis d'incidents / d'information en cours" />
         )}
-
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th>Date Création</th>
-              <th>N°Avis</th>
-              <th>Titre</th>
-              <th>Etat</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((item) => (
-              <tr
-                key={item.id}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onDoubleClick={() => handleShowDetails(item)}
-              >
-                <td>
-                  {item.dateCreation
-                    ? new Date(item.dateCreation).toLocaleDateString("fr-FR")
-                    : "N/A"}
-                </td>
-                <td>{item.numAvis}</td>
-                <td>{item.titre}</td>
-                <td>{item.etat}</td>
+        {isLoading ? (
+          <div className="d-flex justify-content-center mt-2">
+            <div className="spinner-border text-center" style={{color: "#148C8A"}}></div>
+          </div>
+        ) : (
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>Date Création</th>
+                <th>N°Avis</th>
+                <th>Titre</th>
+                <th>Etat</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentItems.map((item) => (
+                <tr
+                  key={item.id}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                  onDoubleClick={() => handleShowDetails(item)}
+                >
+                  <td>
+                    {item.dateCreation
+                      ? new Date(item.dateCreation).toLocaleDateString("fr-FR")
+                      : "N/A"}
+                  </td>
+                  <td>{item.numAvis}</td>
+                  <td>{item.titre}</td>
+                  <td>{item.etat}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
         <Overlay
           show={showOverlay}
           target={overlayTarget}
@@ -290,7 +361,7 @@ function GestionIncident() {
             </Tooltip>
           )}
         </Overlay>
-        <Pagination className="d-flex justify-content-center">
+        <Pagination className="d-flex justify-content-center mt-4">
           <Pagination.Item
             active={currentPage === 1}
             onClick={() => handlePageChange(1)}

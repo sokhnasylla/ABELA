@@ -86,7 +86,6 @@ function RechercheAvis({ onSearch }) {
                 <div className="mb-3" style={{ flex: "1 1 200px" }}>
                   <InputLabel
                     sx={{ marginLeft: "6%" }}
-                    id="demo-simple-select-label"
                   >
                     Numéro avis
                   </InputLabel>
@@ -104,7 +103,6 @@ function RechercheAvis({ onSearch }) {
                 <div className="mb-3" style={{ flex: "1 1 200px" }}>
                   <InputLabel
                     sx={{ marginLeft: "6%" }}
-                    id="demo-simple-select-label"
                   >
                     Application
                   </InputLabel>
@@ -122,7 +120,6 @@ function RechercheAvis({ onSearch }) {
                 <div className="mb-3" style={{ flex: "1 1 200px" }}>
                   <InputLabel
                     sx={{ marginLeft: "6%" }}
-                    id="demo-simple-select-label"
                   >
                     Date début
                   </InputLabel>
@@ -140,7 +137,6 @@ function RechercheAvis({ onSearch }) {
                 <div className="mb-3" style={{ flex: "1 1 200px" }}>
                   <InputLabel
                     sx={{ marginLeft: "6%" }}
-                    id="demo-simple-select-label"
                   >
                     Date Fin
                   </InputLabel>
@@ -158,7 +154,6 @@ function RechercheAvis({ onSearch }) {
                 <div className="mb-3" style={{ flex: "1 1 200px" }}>
                   <InputLabel
                     sx={{ marginLeft: "6%" }}
-                    id="demo-simple-select-label"
                   >
                     Etat
                   </InputLabel>
