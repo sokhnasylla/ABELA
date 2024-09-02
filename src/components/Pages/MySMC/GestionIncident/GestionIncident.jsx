@@ -42,14 +42,26 @@ function GestionIncident() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
+  const [histoStat, setHistoStat] = useState("");
   const [etat, setEtat] = useState("");
 
   const getCurrentMonthAndYear = () => {
     const date = new Date();
     const mois = [
-      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
     ];
+    console.log(histo);
     const moisActuel = mois[date.getMonth()];
     const anneeActuelle = date.getFullYear();
     return `${moisActuel} ${anneeActuelle}`;
@@ -78,11 +90,6 @@ function GestionIncident() {
     setShowModal(false);
     setHisto(histo);
     setEtat(etat);
-  };
-  const handleStatsSubmit = (url, histo) => {
-    setDataUrl(url)
-    setHisto(histo);
-    setShowStatModal(false);
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
@@ -114,7 +121,7 @@ function GestionIncident() {
     };
 
     fetchData();
-  }, [dataUrl, token]);l
+  }, [dataUrl, token]);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -137,8 +144,6 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  
-
   const getPeriode = (dateDebut, dateFin) => {
     const dateDebutSplit = dateDebut.split("-");
     const dateFinSplit = dateFin.split("-");
@@ -156,6 +161,7 @@ function GestionIncident() {
       "Novembre",
       "Décembre",
     ];
+    console.log(histo);
     const moisDebut = mois[parseInt(dateDebutSplit[1]) - 1];
     const moisFin = mois[parseInt(dateFinSplit[1]) - 1];
     return `Du ${dateDebutSplit[2]} ${moisDebut} ${dateDebutSplit[0]} au ${dateFinSplit[2]} ${moisFin} ${dateFinSplit[0]}`;
@@ -165,10 +171,28 @@ function GestionIncident() {
     <div>
       <MenuMysmc />
       <Container className="body" style={{ marginLeft: "5%" }}>
-        <Title text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`} />
-          <Col>
-            <StatistiqueIncident/>
-          </Col>
+        {histo === "Aucune recherche récente." ? (
+          <Title
+            lg={12}
+            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`}
+          />
+        ) : histoStat !== "" ? (
+          // Si les dates de début et de fin sont présentes dans l'historique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs de la période : ${getPeriode(
+              histo.split("Début : ")[1].split(" | Fin : ")[0],
+              histo.split(" Fin : ")[1]
+            )}`}
+          />
+        ) : (
+          // Si aucune date n'a été choisie, afficher un titre générique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
+          />
+        )}
+        <Col>
+          <StatistiqueIncident />
+        </Col>
         <Row>
           <Col sm={8} className="content">
             <Modal
@@ -267,7 +291,10 @@ function GestionIncident() {
         )}
         {isLoading ? (
           <div className="d-flex justify-content-center mt-2">
-            <div className="spinner-border text-center" style={{color: "#148C8A"}}></div>
+            <div
+              className="spinner-border text-center"
+              style={{ color: "#148C8A" }}
+            ></div>
           </div>
         ) : (
           <table className="table table-hover">

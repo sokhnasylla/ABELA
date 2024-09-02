@@ -22,6 +22,7 @@ import {
 import "./StatistiqueIncident.css";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
+import RechercheStatistiques from "./RechercheStatistiques";
 
 const ajoutAvisItemsMenu = [
   {
@@ -170,7 +171,7 @@ function StatistiqueIncident() {
 
   return (
     <div className="dashboard">
-      <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
+      <Button  variant="primary" onClick={handleStatShow} className="mt-5 ml-5 mb-2">
               Stats      
               </Button>
        <Modal

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Container, Row, Table } from "react-bootstrap";
 import { FaArrowAltCircleDown, FaBars, FaThumbsDown } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
@@ -284,8 +284,7 @@ function DetailsIncident({ avis }) {
             </Row>
           </Col>
           <Col md={3} sm={12} sx={{ marginTop: "5px" }}>
-            {/* <MenuDetailsIncident/> */}
-            {/* <NavigateMysmc/> */}
+            <Button></Button>
           </Col>
         </Row>
       </Container>
