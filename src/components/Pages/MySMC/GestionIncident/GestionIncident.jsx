@@ -27,7 +27,6 @@ import StatistiqueIncident from "./StatistiqueIncident";
 
 function GestionIncident() {
   useAuth();
-  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +35,18 @@ function GestionIncident() {
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [etat, setEtat] = useState("");
+
+  const getCurrentMonthAndYear = () => {
+    const date = new Date();
+    const mois = [
+      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    ];
+    const moisActuel = mois[date.getMonth()];
+    const anneeActuelle = date.getFullYear();
+    return `${moisActuel} ${anneeActuelle}`;
+  };
+  const [CurrentMonthAndYear, setCurrentMonthAndYear] = useState("");
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
@@ -56,9 +67,13 @@ function GestionIncident() {
   const handleSearchSubmit = (url, histo, etat) => {
     setDataUrl(url);
     setShowModal(false);
-    setShowStatModal(false);
     setHisto(histo);
     setEtat(etat);
+  };
+  const handleStatsSubmit = (url, histo) => {
+    setDataUrl(url)
+    setHisto(histo);
+    setShowStatModal(false);
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
@@ -113,16 +128,7 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const getCurrentMonthAndYear = () => {
-    const date = new Date();
-    const mois = [
-      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-    ];
-    const moisActuel = mois[date.getMonth()];
-    const anneeActuelle = date.getFullYear();
-    return `${moisActuel} ${anneeActuelle}`;
-  };
+  
 
   return (
     <div>      
@@ -130,28 +136,8 @@ function GestionIncident() {
       <Container className="body" style={{ marginLeft: "5%" }}>
         <Title text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`} />
           <Col>
-          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
-              Stats      
-              </Button>
-              <Modal
-              show={showStatModal}
-              onHide={handleStatClose}
-              dialogClassName="custom-modal"
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Statistiques</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <RechercheStatistiques onSearch={handleSearchSubmit} />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="danger" onClick={handleStatClose}>
-                  Fermer
-                </Button>
-              </Modal.Footer>
-            </Modal>
+            <StatistiqueIncident/>
           </Col>
-          <StatistiqueIncident/>
         <Row>
           <Col sm={8} className="content">
             <Modal
