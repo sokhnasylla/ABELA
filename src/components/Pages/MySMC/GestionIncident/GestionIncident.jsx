@@ -180,6 +180,9 @@ function GestionIncident() {
             {histo !== "Aucune recherche récente." && (
               <div>
                 <div className="">
+                <Button variant="primary" onClick={handleShow} className="btn">
+                  Recherche
+                </Button>
                   <Button
                     variant="danger"
                     onClick={reinitHisto}
@@ -188,6 +191,7 @@ function GestionIncident() {
                     Supprimer filtre
                   </Button>
                 </div>
+                
                 <div
                   className="alert alert-info mt-3 d-flex align-items-center"
                   style={{
