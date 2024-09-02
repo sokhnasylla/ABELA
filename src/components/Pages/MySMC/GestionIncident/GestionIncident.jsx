@@ -9,6 +9,9 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import MenuMysmc from "../Menu/MenuMysmc";
+import Get from "../../../API/Get";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts";
+import "./StatistiqueIncident.css";
 import Title from "../../../Card/Title/Title";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -20,6 +23,7 @@ import RechercheAvis from "./RechercheAvis";
 import RechercheStatistiques from "./RechercheStatistiques";
 import DetailsIncident from "./DetailsIncident";
 import AddIncident from "./AddIncident";
+import StatistiqueIncident from "./StatistiqueIncident";
 
 function GestionIncident() {
   useAuth();
@@ -35,7 +39,6 @@ function GestionIncident() {
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
-
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,36 +71,7 @@ function GestionIncident() {
   const [selectedAvis, setSelectedAvis] = useState(null);
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
-  const [tauxNotificationAvis, setTauxNotificationAvis] = useState(null);
-  const [tauxDetectionAvis, setTauxDetectionAvis] = useState(null);
-  const [tauxTraitement4H, setTauxTraitement4H] = useState(null);
-  const [tauxTraitement24H, setTauxTraitement24H] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        };
-        const response = await axios.get(
-          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/taux-notification",
-          config
-        );
-        setTauxNotificationAvis(response.data.tauxNotificationAvis);
-        setTauxDetectionAvis(response.data.tauxDetectionAvis);
-        setTauxTraitement4H(response.data.tauxTraitement4H);
-        setTauxTraitement24H(response.data.tauxTraitement24H);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-
-    fetchData();
-  }, [token]);
-
-  const handleAddAvis = () => {};
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,166 +113,16 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const getCurrentMonthAndYear = () => {
-    const date = new Date();
-    const month = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-    const currentMonth = month[date.getMonth()];
-    const currentYear = date.getFullYear();
-    return `${currentMonth} ${currentYear}`;
-  };
-
   return (
-    <div>
+    <div>      
       <MenuMysmc />
       <Container className="body" style={{ marginLeft: "5%" }}>
-        <Title text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`} />
-        <Row className="mb-4">
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#F2DEDE",
-                border: "1px solid #F2DEDE",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#a94442",
-                }}
-              >
-                {tauxNotificationAvis !== null
-                  ? `${tauxNotificationAvis.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Notification Avis</div>
-            </Grid>
-          </Col>
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#D9EDF7",
-                border: "1px solid #D9EDF7",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#31708F",
-                }}
-              >
-                {tauxDetectionAvis !== null
-                  ? `${tauxDetectionAvis.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Détection Avis</div>
-            </Grid>
-          </Col>
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#DFF0D8",
-                border: "1px solid #DFF0D8",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#3C763D",
-                }}
-              >
-                {tauxTraitement4H !== null
-                  ? `${tauxTraitement4H.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Traitement 4H</div>
-            </Grid>
-          </Col>
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#DFF0D8",
-                border: "1px solid #DFF0D8",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#3C763D",
-                }}
-              >
-                {tauxTraitement24H !== null
-                  ? `${tauxTraitement24H.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Traitement 24H</div>
-            </Grid>
-          </Col>
+        <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
           <Col>
-            <Button
-              variant="primary"
-              onClick={handleStatShow}
-              style={{ marginLeft: "10px" }}
-            >
-              Stats
-            </Button>
-            <Modal
+          <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
+              Stats      
+              </Button>
+              <Modal
               show={showStatModal}
               onHide={handleStatClose}
               dialogClassName="custom-modal"
@@ -316,7 +140,7 @@ function GestionIncident() {
               </Modal.Footer>
             </Modal>
           </Col>
-        </Row>
+          <StatistiqueIncident/>
         <Row>
           <Col sm={8} className="content">
             <Modal
@@ -414,11 +238,6 @@ function GestionIncident() {
           <Title text="Liste des avis d'incidents / d'information en cours" />
         )}
 
-        {/* <Row>
-          <Col sm={8} className="content">
-            <Get url={dataUrl} columns={columns} />
-          </Col>
-        </Row> */}
         <table className="table table-hover">
           <thead>
             <tr>
