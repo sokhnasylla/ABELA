@@ -37,9 +37,9 @@ function DetailsIncident({ avis }) {
     <div>
       <Container className="body" style={{ fontSize: "14px" }}>
         <Row>
-          <Col md={12} sm={12}>
+          <Col md={8} sm={8}>
             <Row>
-              <Col sm={12}>
+              <Col sm={8}>
                 <Card
                   style={{
                     display: "flex",

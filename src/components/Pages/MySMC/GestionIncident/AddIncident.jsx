@@ -1,74 +1,17 @@
 import React, { useState, useEffect } from "react";
-import useAuth from "../../Auth/useAuth";
-import Header from "../../../Header/Header";
 import { Container, Row, Col, Table } from "react-bootstrap";
 import "./ajoutavis.css";
-import { FaList, FaSearch, FaHome, FaPaperclip } from "react-icons/fa";
-import StackedLineChartTwoToneIcon from "@mui/icons-material/StackedLineChartTwoTone";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import { RiDashboard3Line } from "react-icons/ri";
-import { IoStatsChart } from "react-icons/io5";
 import "../../../Pages/MySMC/Menu/menumysmc.css";
-import {
-  Card,
-  CardContent,
-  TextField,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { TextField, InputLabel, Select, MenuItem } from "@mui/material";
 import { TextareaAutosize } from "@mui/base";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { Title } from "@mui/icons-material";
-import HeaderWithNavigate from "../../../Header/Header";
+import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 
 function AddIncident() {
-  const ajoutAvisItemsMenu = [
-    {
-      label: " Lister les avis d'incidents",
-      link: "/mysmc/gestionincident",
-      icon: FaList,
-    },
-    {
-      label: " Rechercher avis",
-      link: "/gestionincident/rechercheavis",
-      icon: FaSearch,
-    },
-    {
-      label: " Statistique avis d'incidents",
-      link: "/gestionincident/statistique",
-      icon: StackedLineChartTwoToneIcon,
-    },
-  ];
-  const gestionIncidentItemsNavigate = [
-    {
-      label: " Gestion incidents",
-      link: "/mysmc/gestionincident",
-      icon: ReportProblemIcon,
-    },
-    {
-      label: " Gestion Probleme",
-      link: "/mysmc/gestionprobleme",
-      icon: ReportProblemIcon,
-    },
-    {
-      label: " Etat Supervision",
-      link: "/mysmc/etatsupervision",
-      icon: RiDashboard3Line,
-    },
-    { label: " Consignes Orchestrées", link: "#", icon: FaPaperclip },
-    {
-      label: " Suivi Activités ",
-      link: "/mysmc/suivisactivites",
-      icon: IoStatsChart,
-    },
-    { label: " Page d'acceuil", link: "/mysmc", icon: FaHome },
-  ];
-
   const [nature, setNature] = useState("SI");
-  const [type, setType] = useState("choisir le type d'avis");
-  const [service, setService] = useState("Application Test");
   const [valide, setValide] = useState("choisir la liste validation");
   const [diffusion, setDiffusion] = useState("choisir la liste diffusion");
   const [causeRetard, setCauseRetard] = useState("Cause Retard Notification");
@@ -84,100 +27,122 @@ function AddIncident() {
   const [selectedDiffusion, setSelectedDiffusion] = useState("");
   const [typeCause, setTypeCause] = useState([]);
   const [selectedCause, setSelectedCause] = useState("");
+  const token = getTokenFromLocalStorage();
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    axios
-      .get(
-        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents"
-      )
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(
+          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents",
+          config
+        );
         // Récupérez les données des types d'avis depuis la réponse de l'API
         const data = response.data;
         // Mettez à jour le state avec les types d'avis récupérés depuis l'API
         setTypesAvis(data);
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des types d'avis depuis l'API",
-          error
-        );
-      });
-  }, []);
+      } catch (error) {
+        setError(`Erreur: ${error.message}`);
+      }
+    };
+    fetchData();
+  }, [token]);
+
   useEffect(() => {
-    axios
-      .get(
-        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list"
-      )
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(
+          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list"
+        );
         // Récupérez les données des types d'avis depuis la réponse de l'API
         const data = response.data;
-        // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+        // Mettez à jour le state avec les services impactés récupérés depuis l'API
         setServiceImpacte(data);
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des types d'avis depuis l'API",
-          error
-        );
-      });
-  }, []);
+      } catch (error) {
+        setError(`Erreur: ${error.message}`);
+      }
+    };
+    fetchData();
+  }, [token]);
 
   useEffect(() => {
-    axios
-      .get(
-        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations"
-      )
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(
+          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations",
+          config
+        );
         // Récupérez les données des types d'avis depuis la réponse de l'API
         const data = response.data;
-        // Mettez à jour le state avec les types d'avis récupérés depuis l'API
+        // Mettez à jour le state avec la liste de validation récupérés depuis l'API
         setListValidation(data);
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des types d'avis depuis l'API",
-          error
-        );
-      });
-  }, []);
+      } catch (error) {
+        setError(`Erreur: ${error.message}`);
+      }
+    };
+    fetchData();
+  }, [token]);
 
   useEffect(() => {
-    axios
-      .get(
-        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions"
-      )
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(
+          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions",
+          config
+        );
         // Récupérez les données des types d'avis depuis la réponse de l'API
         const data = response.data;
         // Mettez à jour le state avec les types d'avis récupérés depuis l'API
         setListDiffusion(data);
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des types d'avis depuis l'API",
-          error
-        );
-      });
-  }, []);
+      } catch (error) {
+        setError(`Erreur: ${error.message}`);
+      }
+    };
+    fetchData();
+  }, [token]);
 
   useEffect(() => {
-    axios
-      .get(
-        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis"
-      )
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(
+          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis",
+          config
+        );
         // Récupérez les données des types d'avis depuis la réponse de l'API
         const data = response.data;
         // Mettez à jour le state avec les types d'avis récupérés depuis l'API
         setTypeCause(data);
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des types d'avis depuis l'API",
-          error
-        );
-      });
-  }, []);
+      } catch (error) {
+        setError(`Erreur: ${error.message}`);
+      }
+    };
+    fetchData();
+  }, [token]);
 
   const handleMenuClick = (link) => {
     setCurrentForm(link);
@@ -406,7 +371,7 @@ function AddIncident() {
                       labelId="demo-simple-select-label"
                       className="textfield"
                       onChange={handleChangeService}
-                      small
+                      size="small"
                       value={selectedService}
                       required
                     >
@@ -446,7 +411,7 @@ function AddIncident() {
                       labelId="demo-simple-select-label"
                       id="textfield"
                       onChange={handleChangeDiffusion}
-                      small
+                      size="small"
                       value={selectedDiffusion}
                       required
                     >

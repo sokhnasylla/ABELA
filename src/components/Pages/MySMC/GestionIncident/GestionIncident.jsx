@@ -9,26 +9,21 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import MenuMysmc from "../Menu/MenuMysmc";
-import Get from "../../../API/Get";
 import Title from "../../../Card/Title/Title";
-import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
-import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../Auth/useAuth";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
 import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
 import RechercheStatistiques from "./RechercheStatistiques";
-import addAvis from "../../../../assets/search.png";
 import DetailsIncident from "./DetailsIncident";
 import AddIncident from "./AddIncident";
 
 function GestionIncident() {
   useAuth();
   const navigate = useNavigate();
-  const [nombre, setNombre] = React.useState("10");
-  const [currentForm, setCurrentForm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -83,7 +78,7 @@ function GestionIncident() {
       try {
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
           },
         };
         const response = await axios.get(
@@ -122,12 +117,6 @@ function GestionIncident() {
 
     fetchData();
   }, [dataUrl, token]);
-
-  const handleRowClick = (id) => {
-    console.log(`Row with id ${id} was clicked`);
-
-    navigate(`/mysmc/gestionincident/details/${id}`);
-  };
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
