@@ -110,7 +110,7 @@ function StatistiqueIncident() {
   
   const [dateDebut, setDateDebut] = useState(start);
   const [dateFin, setDateFin] = useState(end);
-   const [dataUrl, setDataUrl] = useState(`http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`);
+  const [dataUrl, setDataUrl] = useState(`http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`);
 
   
   const handleStatsSubmit = (url, histo) => {
@@ -132,6 +132,12 @@ function StatistiqueIncident() {
   const [totalAvisClosNotificationOnDelayCustom, setTotalAvisClosNotificationOnDelayCustom] = useState(0);
   const handleStatClose = () => setShowStatModal(false);
   const handleStatShow = () => setShowStatModal(true);
+  const reinitHisto = () => {
+    setDateDebut (start);
+    setDateFin (end);
+    setDataUrl (`http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`);
+    setShowStatModal(false);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -191,6 +197,16 @@ function StatistiqueIncident() {
                 </Button>
               </Modal.Footer>
             </Modal>
+            {(dataUrl !== `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` ) && (
+  <Button
+    variant="danger"
+    onClick={reinitHisto}
+    className="btn pl-3"
+  >
+    Default
+  </Button>
+)}
+
        <Row className="mb-4">
          
          <Col
