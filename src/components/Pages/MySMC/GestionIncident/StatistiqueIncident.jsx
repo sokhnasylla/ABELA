@@ -56,7 +56,11 @@ function StatistiqueIncident() {
     console.log(link);
   };
 
-  const [totalAvisIncidents, setTotalAvisIncidents] = useState(null);
+  const [tauxNotificationAvis, setTauxNotificationAvis] = useState(null);
+  const [tauxDetectionAvis, setTauxDetectionAvis] = useState(null);
+  const [tauxTraitement4H, setTauxTraitement4H] = useState(null);
+  const [tauxTraitement24H, setTauxTraitement24H] = useState(null);
+  const[totalAvisIncidents,setTotalAvisIncidents] = useState(null);
   const [totalAvisFermes, setTotalAvisFermes] = useState(null);
   const [totalAvisOuverts, setTotalAvisOuverts] = useState(null);
   const [totalAvisAnnules, setTotalAvisAnnules] = useState(null);
@@ -73,6 +77,10 @@ function StatistiqueIncident() {
         };
 
         const response = await axios.get(`http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`, config);
+        setTauxNotificationAvis(response.data.tauxNotificationAvis);
+        setTauxDetectionAvis(response.data.tauxDetectionAvis);
+        setTauxTraitement4H(response.data.tauxTraitement4H);
+        setTauxTraitement24H(response.data.tauxTraitement24H);
         setTotalAvisIncidents(response.data.totalAvisIncidents);
         setTotalAvisFermes(response.data.totalAvisFermes);
         setTotalAvisOuverts(response.data.totalAvisOuverts);
@@ -100,16 +108,143 @@ function StatistiqueIncident() {
   };
 
   const data = [
-    { name: "Incidents", value: 43 },
-    { name: "Fermés", value: 10 },
-    { name: "Ouverts", value: 36 },
-    { name: "Annulés", value: 479 },
-    { name: "Détection", value: 263 },
-    { name: "Notification", value: 200 },
+    { name: "Incidents", value: totalAvisIncidents },
+    { name: "Fermés", value: totalAvisFermes },
+    { name: "Ouverts", value: totalAvisOuverts },
+    { name: "Annulés", value: totalAvisAnnules },
+    { name: "Détection", value: totalAvisClosDetectionDelai },
+    { name: "Notification", value: totalAvisClosNotificationOnDelayCustom },
   ];
 
   return (
     <div className="dashboard">
+       <Row className="mb-4">
+         
+         <Col
+           xs={12}
+           sm={6}
+           md={3}
+           className="d-flex justify-content-center mb-3"
+         >
+           <Grid
+             container
+             direction="column"
+             alignItems="center"
+             style={{
+               backgroundColor: "#F2DEDE",
+               border: "1px solid #F2DEDE",
+               borderRadius: "10px",
+               padding: "10px",
+             }}
+           >
+             <div
+               style={{
+                 fontSize: "24px",
+                 fontWeight: "bold",
+                 color: "#a94442",
+               }}
+             >
+               {tauxNotificationAvis !== null
+                 ? `${tauxNotificationAvis.toFixed(2)} %`
+                 : "0 %"}
+             </div>
+             <div>Notification Avis</div>
+           </Grid>
+         </Col>
+         <Col
+           xs={12}
+           sm={6}
+           md={3}
+           className="d-flex justify-content-center mb-3"
+         >
+           <Grid
+             container
+             direction="column"
+             alignItems="center"
+             style={{
+               backgroundColor: "#D9EDF7",
+               border: "1px solid #D9EDF7",
+               borderRadius: "10px",
+               padding: "10px",
+             }}
+           >
+             <div
+               style={{
+                 fontSize: "24px",
+                 fontWeight: "bold",
+                 color: "#31708F",
+               }}
+             >
+               {tauxDetectionAvis !== null
+                 ? `${tauxDetectionAvis.toFixed(2)} %`
+                 : "0 %"}
+             </div>
+             <div>Détection Avis</div>
+           </Grid>
+         </Col>
+         <Col
+           xs={12}
+           sm={6}
+           md={3}
+           className="d-flex justify-content-center mb-3"
+         >
+           <Grid
+             container
+             direction="column"
+             alignItems="center"
+             style={{
+               backgroundColor: "#DFF0D8",
+               border: "1px solid #DFF0D8",
+               borderRadius: "10px",
+               padding: "10px",
+             }}
+           >
+             <div
+               style={{
+                 fontSize: "24px",
+                 fontWeight: "bold",
+                 color: "#3C763D",
+               }}
+             >
+               {tauxTraitement4H !== null
+                 ? `${tauxTraitement4H.toFixed(2)} %`
+                 : "0 %"}
+             </div>
+             <div>Traitement 4H</div>
+           </Grid>
+         </Col>
+         <Col
+           xs={12}
+           sm={6}
+           md={3}
+           className="d-flex justify-content-center mb-3"
+         >
+           <Grid
+             container
+             direction="column"
+             alignItems="center"
+             style={{
+               backgroundColor: "#DFF0D8",
+               border: "1px solid #DFF0D8",
+               borderRadius: "10px",
+               padding: "10px",
+             }}
+           >
+             <div
+               style={{
+                 fontSize: "24px",
+                 fontWeight: "bold",
+                 color: "#3C763D",
+               }}
+             >
+               {tauxTraitement24H !== null
+                 ? `${tauxTraitement24H.toFixed(2)} %`
+                 : "0 %"}
+             </div>
+             <div>Traitement 24H</div>
+           </Grid>
+         </Col>
+         </Row>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />

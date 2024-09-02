@@ -25,6 +25,7 @@ import RechercheStatistiques from "./RechercheStatistiques";
 import addAvis from "../../../../assets/search.png";
 import DetailsIncident from "./DetailsIncident";
 import AddIncident from "./AddIncident";
+import StatistiqueIncident from "./StatistiqueIncident";
 
 function GestionIncident() {
   useAuth();
@@ -42,18 +43,6 @@ function GestionIncident() {
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip" style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc' }}>
-          <p className="label">{`${label}`}</p>
-          <p className="intro">{`${payload[0].value} incidents`}</p>
-        </div>
-      );
-    }
-  
-    return null;
-  };
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,47 +75,7 @@ function GestionIncident() {
   const [selectedAvis, setSelectedAvis] = useState(null);
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
-  const [tauxNotificationAvis, setTauxNotificationAvis] = useState(null);
-  const [tauxDetectionAvis, setTauxDetectionAvis] = useState(null);
-  const [tauxTraitement4H, setTauxTraitement4H] = useState(null);
-  const [tauxTraitement24H, setTauxTraitement24H] = useState(null);
-  const[totalAvisIncidents,setTotalAvisIncidents] = useState(null);
-  const [totalAvisFermes,setTotalAvisFermes] = useState(null);
-  const[totalAvisOuverts,setTotalAvisOuverts] = useState(null);
-  const[totalAvisAnnules,setTotalAvisAnnules] = useState(null);
-  const[totalAvisClosDetectionDelai,setTotalAvisClosDetectionDelai] = useState(null);
-  const [totalAvisClosNotificationOnDelayCustom,setTotalAvisClosNotificationOnDelayCustom] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(
-          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/taux-notification",
-          config
-        );
-        setTauxNotificationAvis(response.data.tauxNotificationAvis);
-        setTauxDetectionAvis(response.data.tauxDetectionAvis);
-        setTauxTraitement4H(response.data.tauxTraitement4H);
-        setTauxTraitement24H(response.data.tauxTraitement24H);
-        setTotalAvisIncidents(response.data.totalAvisIncidents);
-        setTotalAvisFermes(response.data.totalAvisFermes);
-        setTotalAvisOuverts(response.data.totalAvisOuverts);
-        setTotalAvisAnnules(response.data.totalAvisAnnules);
-        setTotalAvisClosDetectionDelai(response.data.totalAvisClosDetectionDelai);
-        setTotalAvisClosNotificationOnDelayCustom(response.data.totalAvisClosNotificationOnDelayCustom);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-
-    fetchData();
-  }, [token]);
-
-  const handleAddAvis = () => {};
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,146 +117,12 @@ function GestionIncident() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-  const disp = [
-    { name: "Incidents", value: totalAvisIncidents },
-    { name: "Fermés", value: totalAvisFermes },
-    { name: "Ouverts", value: totalAvisOuverts },
-    { name: "Annulés", value: totalAvisAnnules },
-    { name: "Détection", value: totalAvisClosDetectionDelai },
-    { name: "Notification", value: totalAvisClosNotificationOnDelayCustom },
-  ];
 
   return (
     <div>      
       <MenuMysmc />
       <Container className="body" style={{ marginLeft: "5%" }}>
         <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
-        <Row className="mb-4">
-         
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#F2DEDE",
-                border: "1px solid #F2DEDE",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#a94442",
-                }}
-              >
-                {tauxNotificationAvis !== null
-                  ? `${tauxNotificationAvis.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Notification Avis</div>
-            </Grid>
-          </Col>
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#D9EDF7",
-                border: "1px solid #D9EDF7",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#31708F",
-                }}
-              >
-                {tauxDetectionAvis !== null
-                  ? `${tauxDetectionAvis.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Détection Avis</div>
-            </Grid>
-          </Col>
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#DFF0D8",
-                border: "1px solid #DFF0D8",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#3C763D",
-                }}
-              >
-                {tauxTraitement4H !== null
-                  ? `${tauxTraitement4H.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Traitement 4H</div>
-            </Grid>
-          </Col>
-          <Col
-            xs={12}
-            sm={6}
-            md={3}
-            className="d-flex justify-content-center mb-3"
-          >
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-              style={{
-                backgroundColor: "#DFF0D8",
-                border: "1px solid #DFF0D8",
-                borderRadius: "10px",
-                padding: "10px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "#3C763D",
-                }}
-              >
-                {tauxTraitement24H !== null
-                  ? `${tauxTraitement24H.toFixed(2)} %`
-                  : "0 %"}
-              </div>
-              <div>Traitement 24H</div>
-            </Grid>
-          </Col>
           <Col>
           <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
               Stats      
@@ -330,18 +145,7 @@ function GestionIncident() {
               </Modal.Footer>
             </Modal>
           </Col>
-        </Row>
-        <div className="dashboard">
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={disp}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />}/>
-            <Bar dataKey="value" fill="#FFA500" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+          <StatistiqueIncident/>
         <Row>
           <Col sm={8} className="content">
             <Modal
@@ -439,11 +243,6 @@ function GestionIncident() {
           <Title text="Liste des avis d'incidents / d'information en cours" />
         )}
 
-        {/* <Row>
-          <Col sm={8} className="content">
-            <Get url={dataUrl} columns={columns} />
-          </Col>
-        </Row> */}
         <table className="table table-hover">
           <thead>
             <tr>
