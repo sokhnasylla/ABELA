@@ -113,11 +113,22 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
+  const getCurrentMonthAndYear = () => {
+    const date = new Date();
+    const mois = [
+      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    ];
+    const moisActuel = mois[date.getMonth()];
+    const anneeActuelle = date.getFullYear();
+    return `${moisActuel} ${anneeActuelle}`;
+  };
+
   return (
     <div>      
       <MenuMysmc />
       <Container className="body" style={{ marginLeft: "5%" }}>
-        <Title text="Gestion des avis d'incidents - Indicateurs du mois en cours : Janvier 2024" />
+        <Title text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`} />
           <Col>
           <Button  variant="primary" onClick={handleStatShow} style={{ marginLeft: "10px" }}>
               Stats      
