@@ -35,7 +35,6 @@ import StatistiqueIncident from "./StatistiqueIncident";
 
 function GestionIncident() {
   useAuth();
-  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -44,6 +43,18 @@ function GestionIncident() {
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const [etat, setEtat] = useState("");
+
+  const getCurrentMonthAndYear = () => {
+    const date = new Date();
+    const mois = [
+      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    ];
+    const moisActuel = mois[date.getMonth()];
+    const anneeActuelle = date.getFullYear();
+    return `${moisActuel} ${anneeActuelle}`;
+  };
+  const [CurrentMonthAndYear, setCurrentMonthAndYear] = useState("");
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
@@ -65,9 +76,13 @@ function GestionIncident() {
   const handleSearchSubmit = (url, histo, etat) => {
     setDataUrl(url);
     setShowModal(false);
-    setShowStatModal(false);
     setHisto(histo);
     setEtat(etat);
+  };
+  const handleStatsSubmit = (url, histo) => {
+    setDataUrl(url)
+    setHisto(histo);
+    setShowStatModal(false);
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
@@ -122,26 +137,7 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const getCurrentMonthAndYear = () => {
-    const date = new Date();
-    const mois = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-    const moisActuel = mois[date.getMonth()];
-    const anneeActuelle = date.getFullYear();
-    return `${moisActuel} ${anneeActuelle}`;
-  };
+  
 
   const getPeriode = (dateDebut, dateFin) => {
     const dateDebutSplit = dateDebut.split("-");
@@ -168,56 +164,11 @@ function GestionIncident() {
   return (
     <div>
       <MenuMysmc />
-      {/* Rendre la page responsive */}
-      <Container style={{ marginLeft: "5%" }} className="mt-5 container">
-        {/* Afficher le mois en cours par defaut mais si une periode a etait rentre dans le modal de recherche, afficher cette periode  */}
-        {histo === "Aucune recherche récente." ? (
-          <Title
-            lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`}
-          />
-        ) : histo.includes("Date Début : ") && histo.includes("Date Fin : ") ? (
-          // Si les dates de début et de fin sont présentes dans l'historique
-          <Title
-            text={`Gestion des avis d'incidents - Indicateurs de la période : ${getPeriode(
-              histo.split("Date Début : ")[1].split(" | Date Fin : ")[0],
-              histo.split("Date Fin : ")[1]
-            )}`}
-          />
-        ) : (
-          // Si aucune date n'a été choisie, afficher un titre générique
-          <Title
-            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
-          />
-        )}
-
-        <Col>
-          <Button
-            variant="primary"
-            onClick={handleStatShow}
-            className="mt-5 ml-5 mb-2"
-          >
-            Stats
-          </Button>
-          <Modal
-            show={showStatModal}
-            onHide={handleStatClose}
-            dialogClassName="custom-modal"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Statistiques</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <RechercheStatistiques onSearch={handleSearchSubmit} />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="danger" onClick={handleStatClose}>
-                Fermer
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </Col>
-        <StatistiqueIncident />
+      <Container className="body" style={{ marginLeft: "5%" }}>
+        <Title text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`} />
+          <Col>
+            <StatistiqueIncident/>
+          </Col>
         <Row>
           <Col sm={8} className="content">
             <Modal
