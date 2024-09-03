@@ -110,6 +110,7 @@ function StatistiqueIncident() {
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const now = new Date();
+  const period = now.toLocaleDateString('FR', { month: 'long', year: 'numeric' });
   const start = new Date(now.getFullYear(), now.getMonth(), 1)
     .toISOString()
     .split("T")[0];
@@ -238,60 +239,51 @@ function StatistiqueIncident() {
 
   return (
     <div className="dashboard">
-      <Row>
-        {histo === "Aucune recherche récente." ? (
+            {histo === "Aucune recherche récente." ? (
           <Title
             lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`}
+            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${period}`}
           />
-        ) : histo.includes("Début : ") && histo.includes("Fin : ") ? (
+        ) : histo !== "" ? (
+          // Si les dates de début et de fin sont présentes dans l'historique
           <Title
-            lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs de la période : ${getPeriode(
-              histo.split("Début : ")[1].split(" | ")[0],
-              histo.split(" Fin : ")[1]
-            )}`}
+            text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
           />
         ) : (
-          <Title lg={12} text="Gestion des avis d'incidents" />
+          // Si aucune date n'a été choisie, afficher un titre générique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
+          />
         )}
-      </Row>
-
-      <Button
-        variant="primary"
-        onClick={handleStatShow}
-        className="mt-5 ml-5 mb-2"
-      >
-        Stats
-      </Button>
-      <Modal
-        show={showStatModal}
-        onHide={handleStatClose}
-        dialogClassName="custom-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Statistiques</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <RechercheStatistiques onSearch={handleStatsSubmit} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleStatClose}>
-            Fermer
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      {dataUrl !==
-        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` && (
-        <Button
-          variant="danger"
-          onClick={reinitHisto}
-          className="btn mt-5 ml-5 mb-2"
-        >
-          Default
-        </Button>
-      )}
-
+      <Button  variant="primary" onClick={handleStatShow} className="mt-5 ml-5 mb-2">
+              Stats      
+              </Button>
+       <Modal
+              show={showStatModal}
+              onHide={handleStatClose}
+              dialogClassName="custom-modal"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Statistiques</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <RechercheStatistiques onSearch={handleStatsSubmit} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="danger" onClick={handleStatClose}>
+                  Fermer
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            {(dataUrl !== `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` ) && (
+  <Button
+    variant="danger"
+    onClick={reinitHisto}
+    className="mt-5 ml-5 mb-2"
+  >
+    Default
+  </Button>
+)}
       <Row className="mb-4">
         <Col
           xs={12}
