@@ -240,6 +240,22 @@ function StatistiqueIncident() {
 
   return (
     <div className="dashboard">
+            {histo === "Aucune recherche récente." ? (
+          <Title
+            lg={12}
+            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${period}`}
+          />
+        ) : histo !== "" ? (
+          // Si les dates de début et de fin sont présentes dans l'historique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
+          />
+        ) : (
+          // Si aucune date n'a été choisie, afficher un titre générique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
+          />
+        )}
       <Button  variant="primary" onClick={handleStatShow} className="mt-5 ml-5 mb-2">
               Stats      
               </Button>
@@ -264,12 +280,11 @@ function StatistiqueIncident() {
   <Button
     variant="danger"
     onClick={reinitHisto}
-    className="btn pl-3"
+    className="mt-5 ml-5 mb-2"
   >
     Default
   </Button>
 )}
-
       <Row className="mb-4">
         <Col
           xs={12}
