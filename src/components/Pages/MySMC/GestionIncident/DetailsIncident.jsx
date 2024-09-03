@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row, Table } from "react-bootstrap";
+import { Card, Col, Container, Row, Table } from "react-bootstrap";
 import { FaArrowAltCircleDown, FaBars, FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 import { useLocation, useParams } from "react-router-dom";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
-import { Title } from "@mui/icons-material";
+import Title from "../../../Card/Title/Title";
 import MenuMysmc from "../Menu/MenuMysmc";
 
 function DetailsIncident() {
