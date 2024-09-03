@@ -41,7 +41,7 @@ function RechercheStatistiques({ onSearch }) {
     try {
       if (dateDebut && dateFin) {
         newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`;
-        newHisto = `Période en cours,  Début : ${dateDebut} |  Fin : ${dateFin}`;
+        newHisto = `Début : ${dateDebut} |  Fin : ${dateFin}`;
         errorMessage = "Aucune donnée disponible pour la période spécifiée";
       } else {
         throw new Error("Veuillez remplir au moins un champ de recherche");
