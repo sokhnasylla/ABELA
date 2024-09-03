@@ -28,7 +28,6 @@ function GestionIncident() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
-  const [histoStat, setHistoStat] = useState("");
   const [etat, setEtat] = useState("");
 
   const getCurrentMonthAndYear = () => {
@@ -126,29 +125,6 @@ function GestionIncident() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
-  const getPeriode = (dateDebut, dateFin) => {
-    const dateDebutSplit = dateDebut.split("-");
-    const dateFinSplit = dateFin.split("-");
-    const mois = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-    console.log(histo);
-    const moisDebut = mois[parseInt(dateDebutSplit[1]) - 1];
-    const moisFin = mois[parseInt(dateFinSplit[1]) - 1];
-    return `Du ${dateDebutSplit[2]} ${moisDebut} ${dateDebutSplit[0]} au ${dateFinSplit[2]} ${moisFin} ${dateFinSplit[0]}`;
-  };
 
   return (
     <div>
@@ -258,11 +234,13 @@ function GestionIncident() {
           <Title text="Liste des avis d'incidents / d'information en cours" />
         )}
         {isLoading ? (
-          <div className="d-flex justify-content-center mt-2">
+          <div className="d-flex justify-content-center align-item-center mt-2">
+            Chargement...
             <div
               className="spinner-border text-center"
               style={{ color: "#148C8A" }}
-            ></div>
+            >
+            </div>
           </div>
         ) : (
           <table className="table table-hover">
