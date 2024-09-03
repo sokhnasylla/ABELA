@@ -210,7 +210,6 @@ function StatistiqueIncident() {
       "Novembre",
       "Décembre",
     ];
-    console.log(histo);
     const moisDebut = mois[parseInt(dateDebutSplit[1]) - 1];
     const moisFin = mois[parseInt(dateFinSplit[1]) - 1];
     return `Du ${dateDebutSplit[2]} ${moisDebut} ${dateDebutSplit[0]} au ${dateFinSplit[2]} ${moisFin} ${dateFinSplit[0]}`;
@@ -428,7 +427,12 @@ function StatistiqueIncident() {
           <Bar dataKey="value" fill="#FFA500" />
         </BarChart>
       </ResponsiveContainer>
-      {histo}
+      {/* <div className="text-center">
+        {getPeriode(
+          histo.split("Début : ")[1].split(" | ")[0],
+          histo.split(" Fin : ")[1]
+        )}
+      </div> */}
     </div>
   );
 }

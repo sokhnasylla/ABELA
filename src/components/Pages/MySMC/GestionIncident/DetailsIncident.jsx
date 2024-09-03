@@ -1,14 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row, Table } from "react-bootstrap";
-import { FaArrowAltCircleDown, FaBars, FaThumbsDown } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { FaArrowAltCircleDown, FaBars, FaThumbsDown, FaThumbsUp } from "react-icons/fa";
+import { useLocation, useParams } from "react-router-dom";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import { Title } from "@mui/icons-material";
+import MenuMysmc from "../Menu/MenuMysmc";
 
-function DetailsIncident({ avis }) {
+function DetailsIncident() {
   const [incident, setIncident] = useState(null);
   const token = getTokenFromLocalStorage();
+  const location = useLocation();
+  const avis = location.state?.avis;
 
   useEffect(() => {
     const fetchIncident = async () => {
@@ -35,11 +38,12 @@ function DetailsIncident({ avis }) {
 
   return (
     <div>
+      <MenuMysmc />
       <Container className="body" style={{ fontSize: "14px" }}>
         <Row>
           <Col md={8} sm={8}>
             <Row>
-              <Col sm={8}>
+              <Col sm={12}>
                 <Card
                   style={{
                     display: "flex",
@@ -174,9 +178,18 @@ function DetailsIncident({ avis }) {
                     <tbody>
                       <tr>
                         <th>Diffusion</th>
-                        <th className="m-0 p-0">
-                          {incident.delaiDetection}
-                          <FaThumbsDown />{" "}
+                        <th className="">
+                          {incident.delaiDetection == "Hors Delai" ? (
+                            <span className="d-flex align-items-center">
+                              {incident.delaiDetection} &nbsp;
+                              <FaThumbsDown style={{ color: "red" }} />
+                            </span>
+                          ) : (
+                            <span className="d-flex align-items-center">
+                              {incident.delaiDetection} &nbsp;
+                              <FaThumbsUp style={{ color: "green" }} />
+                            </span>
+                          )}
                         </th>
                       </tr>
                       <tr>
@@ -270,7 +283,7 @@ function DetailsIncident({ avis }) {
                       {incident.demandeFermeturePar && (
                         <tr>
                           <th style={{ backgroundColor: "#D6EAF8" }}>
-                            Demande  Fermeture
+                            Demande Fermeture
                           </th>
                           <th style={{ backgroundColor: "#D6EAF8" }}>
                             {incident.demandeFermeturePar}
@@ -283,8 +296,27 @@ function DetailsIncident({ avis }) {
               </Col>
             </Row>
           </Col>
-          <Col md={3} sm={12} sx={{ marginTop: "5px" }}>
-            <Button></Button>
+          <Col md={4} sm={4}>
+            
+          </Col>
+        </Row>
+        <Row>
+          <Col
+            md={12}
+            sm={12}
+            sx={{ marginTop: "5px" }}
+            className="text-center"
+          >
+            {/* <Button
+              style={{
+                backgroundColor: "#C9302C",
+                borderColor: "#C9302C",
+                width: "100px",
+              }}
+              onClick={() => window.history.back()}
+            >
+              Retour
+            </Button> */}
           </Col>
         </Row>
       </Container>

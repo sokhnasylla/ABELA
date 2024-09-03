@@ -7,15 +7,15 @@ import { TextField, InputLabel, Select, MenuItem } from "@mui/material";
 import { TextareaAutosize } from "@mui/base";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { Title } from "@mui/icons-material";
+import Title from "../../../Card/Title/Title";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 
 function AddIncident() {
-  const [nature, setNature] = useState("SI");
-  const [valide, setValide] = useState("choisir la liste validation");
-  const [diffusion, setDiffusion] = useState("choisir la liste diffusion");
-  const [causeRetard, setCauseRetard] = useState("Cause Retard Notification");
-  const [origine, setOrigine] = useState("Définir une origine");
+  const [nature, setNature] = useState("");
+  const [valide, setValide] = useState("");
+  const [diffusion, setDiffusion] = useState("");
+  const [causeRetard, setCauseRetard] = useState("");
+  const [origine, setOrigine] = useState("");
   const [currentForm, setCurrentForm] = useState("");
   const [typesAvis, setTypesAvis] = useState([]); // State pour stocker les types d'avis récupérés depuis l'API
   const [selectedType, setSelectedType] = useState(""); // State pour stocker le type d'avis sélectionné dans le Select
@@ -98,6 +98,29 @@ function AddIncident() {
     fetchData();
   }, [token]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const config = {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       };
+  //       const response = await axios.get(
+  //         "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listOrigines",
+  //         config
+  //       );
+  //       // Récupérez les données des types d'avis depuis la réponse de l'API
+  //       const data = response.data;
+  //       // Mettez à jour le state avec la liste des origines récupérés depuis l'API
+  //       setListeOrigine(data);
+  //     } catch (error) {
+  //       setError(`Erreur: ${error.message}`);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [token]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -144,10 +167,6 @@ function AddIncident() {
     fetchData();
   }, [token]);
 
-  const handleMenuClick = (link) => {
-    setCurrentForm(link);
-    console.log(link);
-  };
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = () => {
     const objet = document.getElementById("objet").value;
@@ -160,23 +179,23 @@ function AddIncident() {
     const observations = document.getElementById("observation").value;
     // const natures= document.getElementById("natures").value
 
-    const typeAvisIncident = [
-      {
-        id: selectedType,
-      },
-    ];
+    // const typeAvisIncident = [
+    //   {
+    //     id: selectedType,
+    //   },
+    // ];
 
-    const applicationSis = [
-      {
-        id: selectedService,
-      },
-    ];
+    // const applicationSis = [
+    //   {
+    //     id: selectedService,
+    //   },
+    // ];
 
-    const typeCauseIncident = [
-      {
-        id: selectedCause,
-      },
-    ];
+    // const typeCauseIncident = [
+    //   {
+    //     id: selectedCause,
+    //   },
+    // ];
 
     const formData = {
       objet,
@@ -187,14 +206,14 @@ function AddIncident() {
       ticketEzv,
       ticketOceane,
       nature,
-      typeAvisIncident,
-      applicationSis,
+      typesAvis,
+      serviceImpact,
       valide,
       diffusion,
       origine,
       causeRetard,
       causeProbable,
-      typeCauseIncident,
+      typeCause,
 
       // Ajoutez d'autres champs du formulaire si nécessaire
     };
@@ -202,30 +221,51 @@ function AddIncident() {
     console.log(formData);
 
     // Effectuez la requête vers l'API ici en utilisant fetch ou Axios
-    fetch(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents",
-      {
-        method: "POST",
+    // fetch(
+    //   "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       // Ajoutez des headers supplémentaires si nécessaire
+    //     },
+    //     body: JSON.stringify(formData),
+    //   }
+    // )
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       // Gérez la réponse en cas de succès
+    //       console.log("Avis créé avec succès");
+    //     } else {
+    //       // Gérez la réponse en cas d'erreur
+    //       console.error("Erreur lors de la création de l'avis");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     // Gérez les erreurs de requête
+    //     console.error("Erreur lors de la requête", error);
+    //   });
+    createAvis(formData);
+  };
+
+  // Methode pour la création d'un avis
+  const createAvis = async (formData) => {
+    try {
+      const config = {
         headers: {
           "Content-Type": "application/json",
-          // Ajoutez des headers supplémentaires si nécessaire
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          // Gérez la réponse en cas de succès
-          console.log("Avis créé avec succès");
-        } else {
-          // Gérez la réponse en cas d'erreur
-          console.error("Erreur lors de la création de l'avis");
-        }
-      })
-      .catch((error) => {
-        // Gérez les erreurs de requête
-        console.error("Erreur lors de la requête", error);
-      });
+      };
+      const response = await axios.post(
+        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents",
+        formData,
+        config
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(`Erreur lors de la création de l'avis: ${error.message}`);
+    }
   };
 
   const handleChangeNature = (event) => {
@@ -298,7 +338,7 @@ function AddIncident() {
             <Row>
               <Col>
                 <Title text="Correspondance avis" />
-                <form>
+                <form className="mt-5">
                   <div className="mb-4 align-right">
                     <InputLabel
                       sx={{
@@ -321,7 +361,14 @@ function AddIncident() {
                     />
                   </div>
                   <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
+                    <InputLabel
+                      sx={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                      className="demo-simple-select-label"
+                    >
                       Nature
                     </InputLabel>
                     &nbsp;
@@ -332,10 +379,9 @@ function AddIncident() {
                       label="TYPE DE TRANSACTION"
                       onChange={handleChangeNature}
                       size="small"
-                      value={nature}
                       required
                     >
-                      <MenuItem value="SI">{nature}</MenuItem>
+                      <MenuItem value="SI">SI</MenuItem>
                       <MenuItem value="DATA">DATA</MenuItem>
                       <MenuItem value="CONTENU">CONTENU</MenuItem>
                     </Select>
@@ -480,15 +526,14 @@ function AddIncident() {
               </Col>
               <Col>
                 <Title text="Causes et impacts" />
-                <form>
-                  <div className="mb-4 align-right" style={{ display: "flex" }}>
+                <form className="mt-5">
+                  <div style={{ display: "flex" }} className="form-group">
                     <InputLabel className="demo-simple-select-label">
                       Impacts
                     </InputLabel>
-                    &nbsp;
                     <TextareaAutosize
                       id="impact"
-                      className="textfield"
+                      className="textfield form-control"
                       variant="outlined"
                       size="small"
                       placeholder="Comment les utisateurs perçoivent le dysfonctionnement"
@@ -509,7 +554,7 @@ function AddIncident() {
                       required
                     >
                       <MenuItem value="Cause Retard Notification">
-                        {causeRetard}
+                        Cause Retard Notification
                       </MenuItem>
                       <MenuItem value="Non Supervisé">Non Supervisé</MenuItem>
                       <MenuItem value="Retard Diffusion">
