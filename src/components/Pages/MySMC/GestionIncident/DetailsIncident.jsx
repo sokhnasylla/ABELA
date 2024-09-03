@@ -270,7 +270,7 @@ function DetailsIncident({ avis }) {
                       {incident.demandeFermeturePar && (
                         <tr>
                           <th style={{ backgroundColor: "#D6EAF8" }}>
-                            Demande Demande Fermeture
+                            Demande  Fermeture
                           </th>
                           <th style={{ backgroundColor: "#D6EAF8" }}>
                             {incident.demandeFermeturePar}

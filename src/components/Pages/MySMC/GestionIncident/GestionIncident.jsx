@@ -9,26 +9,13 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import MenuMysmc from "../Menu/MenuMysmc";
-import Get from "../../../API/Get";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 import "./StatistiqueIncident.css";
 import Title from "../../../Card/Title/Title";
-import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import useAuth from "../../Auth/useAuth";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
-import { Grid } from "@mui/material";
 import RechercheAvis from "./RechercheAvis";
-import RechercheStatistiques from "./RechercheStatistiques";
 import DetailsIncident from "./DetailsIncident";
 import AddIncident from "./AddIncident";
 import StatistiqueIncident from "./StatistiqueIncident";
@@ -40,9 +27,7 @@ function GestionIncident() {
   const [showModal, setShowModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
-  const [histoStat, setHistoStat] = useState("");
   const [etat, setEtat] = useState("");
 
   const getCurrentMonthAndYear = () => {
@@ -66,7 +51,6 @@ function GestionIncident() {
     const anneeActuelle = date.getFullYear();
     return `${moisActuel} ${anneeActuelle}`;
   };
-  const [CurrentMonthAndYear, setCurrentMonthAndYear] = useState("");
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
@@ -125,8 +109,6 @@ function GestionIncident() {
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
-  const handleStatShow = () => setShowStatModal(true);
-  const handleStatClose = () => setShowStatModal(false);
   const handleAddShow = () => setShowAddModal(true);
   const handleAddClose = () => setShowAddModal(false);
 
@@ -144,52 +126,10 @@ function GestionIncident() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const getPeriode = (dateDebut, dateFin) => {
-    const dateDebutSplit = dateDebut.split("-");
-    const dateFinSplit = dateFin.split("-");
-    const mois = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-    console.log(histo);
-    const moisDebut = mois[parseInt(dateDebutSplit[1]) - 1];
-    const moisFin = mois[parseInt(dateFinSplit[1]) - 1];
-    return `Du ${dateDebutSplit[2]} ${moisDebut} ${dateDebutSplit[0]} au ${dateFinSplit[2]} ${moisFin} ${dateFinSplit[0]}`;
-  };
-
   return (
     <div>
       <MenuMysmc />
       <Container className="body" style={{ marginLeft: "5%" }}>
-        {histo === "Aucune recherche récente." ? (
-          <Title
-            lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`}
-          />
-        ) : histoStat !== "" ? (
-          // Si les dates de début et de fin sont présentes dans l'historique
-          <Title
-            text={`Gestion des avis d'incidents - Indicateurs de la période : ${getPeriode(
-              histo.split("Début : ")[1].split(" | Fin : ")[0],
-              histo.split(" Fin : ")[1]
-            )}`}
-          />
-        ) : (
-          // Si aucune date n'a été choisie, afficher un titre générique
-          <Title
-            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
-          />
-        )}
         <Col>
           <StatistiqueIncident />
         </Col>
@@ -294,11 +234,13 @@ function GestionIncident() {
           <Title text="Liste des avis d'incidents / d'information en cours" />
         )}
         {isLoading ? (
-          <div className="d-flex justify-content-center mt-2">
+          <div className="d-flex justify-content-center align-item-center mt-2">
+            Chargement...
             <div
               className="spinner-border text-center"
               style={{ color: "#148C8A" }}
-            ></div>
+            >
+            </div>
           </div>
         ) : (
           <table className="table table-hover">
