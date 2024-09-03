@@ -19,7 +19,7 @@ function AddIncident() {
   const [currentForm, setCurrentForm] = useState("");
   const [typesAvis, setTypesAvis] = useState([]); // State pour stocker les types d'avis récupérés depuis l'API
   const [selectedType, setSelectedType] = useState(""); // State pour stocker le type d'avis sélectionné dans le Select
-  const [serviceImpact, setServiceImpacte] = useState([]);
+  const [serviceImpacte, setServiceImpacte] = useState([]);
   const [selectedService, setSelectedService] = useState("");
   const [listValidation, setListValidation] = useState([]);
   const [selectedValide, setSelectedValide] = useState("");
@@ -95,7 +95,7 @@ function AddIncident() {
       ticketOceane,
       nature,
       typesAvis,
-      serviceImpact,
+      serviceImpacte,
       valide,
       diffusion,
       origine,
@@ -287,7 +287,7 @@ function AddIncident() {
                   </div>
                   <div className="mb-3 form-group">
                     <label
-                      htmlFor="serviceImpact"
+                      htmlFor="serviceImpacte"
                       style={{
                         fontSize: "14",
                         fontFamily: "fantasy",
@@ -303,7 +303,7 @@ function AddIncident() {
                       value={selectedService}
                       required
                     >
-                      {serviceImpact.map((service) => (
+                      {serviceImpacte.map((service) => (
                         <option key={service.id} value={service.id}>
                           {service.nom}
                         </option>

@@ -31,27 +31,6 @@ function GestionIncident() {
   const [etat, setEtat] = useState("");
   const navigate = useNavigate();
 
-  const getCurrentMonthAndYear = () => {
-    const date = new Date();
-    const mois = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-    console.log(histo);
-    const moisActuel = mois[date.getMonth()];
-    const anneeActuelle = date.getFullYear();
-    return `${moisActuel} ${anneeActuelle}`;
-  };
   const [dataUrl, setDataUrl] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
   );
@@ -79,12 +58,9 @@ function GestionIncident() {
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
     setEtat("");
-    setDataUrl(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
-    );
+    setDataUrl(dataUrl);
     setShowModal(false);
   };
-  const [selectedAvis, setSelectedAvis] = useState(null);
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
 
@@ -130,36 +106,6 @@ function GestionIncident() {
       <MenuMysmc />
       <Container className="body" style={{ marginLeft: "5%" }}>
         <Col sm={12} className="content">
-          <Row>
-            {etat === "Annulé" && (
-              <Title
-                text={`Liste des avis d'incident / d'information annulés (${filteredData.length})`}
-              />
-            )}
-            {etat === "Cloturé" && (
-              <Title
-                text={`Liste des avis d'incident / d'information clôturés (${filteredData.length})`}
-              />
-            )}
-            {etat === "Fermé" && (
-              <Title
-                text={`Liste des avis d'incident / d'information fermés (${filteredData.length})`}
-              />
-            )}
-            {etat === "Encours" && (
-              <Title
-                text={`Liste des avis d'incident / d'information en cours (${filteredData.length})`}
-              />
-            )}
-            {etat !== "Annulé" &&
-              etat !== "Cloturé" &&
-              etat !== "Fermé" &&
-              etat != "Encours" && (
-                <Title
-                  text={`Liste des avis d'incidents / d'information (${filteredData.length})`}
-                />
-              )}
-          </Row>
           <Row sm={6}>
             <Col sm={6} className="content">
               <Modal
@@ -249,6 +195,7 @@ function GestionIncident() {
             <div className="d-flex justify-content-between">
               <div className="d-flex justify-content-between">
                 <Button variant="secondary">Exporter Reporting incident</Button>
+                &nbsp;
                 <Button variant="secondary">
                   Exporter Plan d'action incident
                 </Button>
@@ -260,6 +207,36 @@ function GestionIncident() {
                 </Button>
               </div>
             </div>
+          </Row>
+          <Row className="mt-3">
+            {etat === "Annulé" && (
+              <Title
+                text={`Liste des avis d'incident / d'information annulés (${filteredData.length})`}
+              />
+            )}
+            {etat === "Cloturé" && (
+              <Title
+                text={`Liste des avis d'incident / d'information clôturés (${filteredData.length})`}
+              />
+            )}
+            {etat === "Fermé" && (
+              <Title
+                text={`Liste des avis d'incident / d'information fermés (${filteredData.length})`}
+              />
+            )}
+            {etat === "Encours" && (
+              <Title
+                text={`Liste des avis d'incident / d'information en cours (${filteredData.length})`}
+              />
+            )}
+            {etat !== "Annulé" &&
+              etat !== "Cloturé" &&
+              etat !== "Fermé" &&
+              etat != "Encours" && (
+                <Title
+                  text={`Liste des avis d'incidents / d'information (${filteredData.length})`}
+                />
+              )}
           </Row>
           {isLoading ? (
             <div className="d-flex justify-content-center align-item-center mt-2">
