@@ -13,7 +13,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import "./StatistiqueIncident.css";
@@ -21,60 +20,8 @@ import axios from "axios";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import RechercheStatistiques from "./RechercheStatistiques";
 
-const ajoutAvisItemsMenu = [
-  {
-    label: "Lister les avis d'incidents",
-    link: "/mysmc/gestionincident",
-    icon: FaList,
-  },
-  {
-    label: "Rechercher avis",
-    link: "/gestionincident/rechercheavis",
-    icon: FaSearch,
-  },
-];
-const gestionIncidentItemsNavigate = [
-  {
-    label: "Gestion incidents",
-    link: "/mysmc/gestionincident",
-    icon: ReportProblemIcon,
-  },
-  {
-    label: "Gestion Probleme",
-    link: "/mysmc/gestionprobleme",
-    icon: ReportProblemIcon,
-  },
-  {
-    label: "Etat Supervision",
-    link: "/mysmc/etatsupervision",
-    icon: RiDashboard3Line,
-  },
-  { label: "Consignes Orchestrées", link: "#", icon: FaPaperclip },
-  {
-    label: "Suivi Activités ",
-    link: "/mysmc/suivisactivites",
-    icon: IoStatsChart,
-  },
-  { label: "Page d'accueil", link: "/mysmc", icon: FaHome },
-];
 
 // a partir du mois en cours prendre la comme date de debut le dernier jour du mois en cours et comme date de fin le premier jour du mois en cours
-const getCurrentMonthDates = () => {
-  const date = new Date();
-  const annee = date.getFullYear();
-  const mois = date.getMonth() + 1;
-  const premierJour = new Date(annee, mois - 1, 1);
-  const dernierJour = new Date(annee, mois, 0);
-  const dateDebut = `${dernierJour.getFullYear()}-${
-    dernierJour.getMonth() + 1
-  }-${dernierJour.getDate()}`;
-  const dateFin = `${premierJour.getFullYear()}-${
-    premierJour.getMonth() + 1
-  }-${premierJour.getDate()}`;
-  // const dateDebut = "2022-01-01";
-  // const dateFin = "2024-09-02";
-  return { dateDebut, dateFin };
-};
 
 // Composant CustomTooltip
 const CustomTooltip = ({ active, payload, label }) => {

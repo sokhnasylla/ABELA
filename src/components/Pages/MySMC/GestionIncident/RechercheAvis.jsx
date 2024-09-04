@@ -168,6 +168,7 @@ function RechercheAvis({ onSearch }) {
                     <MenuItem value="Fermé">Fermé</MenuItem>
                     <MenuItem value="Annulé">Annulé</MenuItem>
                     <MenuItem value="Cloturé">Cloturé</MenuItem>
+                    <MenuItem value="Encours">En cours</MenuItem>
                   </Select>
                 </div>
               </div>

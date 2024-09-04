@@ -52,7 +52,7 @@ function App() {
             <Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<Layout><RechercheProbleme /></Layout>} />
             <Route path="/mysmc/gestionprobleme/scannerprobleme" element={<Layout><ScannerProbleme /></Layout>} /> */}
             {/* <Route path="/mysmc/gestionprobleme/details/:id" element={<Layout><DetailsProbleme /></Layout>} /> */}
-            {/* <Route path="/mysmc/gestionincident/details/:id" element={<Layout><DetailsIncident /></Layout>} /> */}
+            <Route path="/mysmc/gestionincident/details/:id" element={<Layout><DetailsIncident /></Layout>} />
             {/* <Route path="/mysmc/etatsupervision" element={<Layout><EtatSupervision /></Layout>} /> */}
             {/* <Route path="/etatsupervision/alarmesok" element={<Layout><AlarmeOk /></Layout>} />
             <Route path="/etatsupervision/vr04service" element={<Layout><VR04Service /></Layout>} />
