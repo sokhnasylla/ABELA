@@ -87,21 +87,21 @@ function AddIncident() {
 
     const formData = {
       objet,
-      dateDebut,
-      dateDetection,
-      impact,
-      observations,
-      ticketEzv,
-      ticketOceane,
       nature,
       typesAvis,
       serviceImpacte,
       valide,
       diffusion,
-      origine,
+      dateDebut,
+      dateDetection,
+      ticketEzv,
+      ticketOceane,
+      impact,
       causeRetard,
+      origine,
       causeProbable,
-      typeCause,
+      observations,
+      // typeCause,
 
       // Ajoutez d'autres champs du formulaire si nécessaire
     };
