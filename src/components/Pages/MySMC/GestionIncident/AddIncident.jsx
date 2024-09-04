@@ -3,23 +3,23 @@ import { Container, Row, Col, Table } from "react-bootstrap";
 import "./ajoutavis.css";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import "../../../Pages/MySMC/Menu/menumysmc.css";
-import { TextField, InputLabel, Select, MenuItem } from "@mui/material";
+import { TextField } from "@mui/material";
 import { TextareaAutosize } from "@mui/base";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { Title } from "@mui/icons-material";
+import Title from "../../../Card/Title/Title";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 
 function AddIncident() {
-  const [nature, setNature] = useState("SI");
-  const [valide, setValide] = useState("choisir la liste validation");
-  const [diffusion, setDiffusion] = useState("choisir la liste diffusion");
-  const [causeRetard, setCauseRetard] = useState("Cause Retard Notification");
-  const [origine, setOrigine] = useState("Définir une origine");
+  const [nature, setNature] = useState("");
+  const [valide, setValide] = useState("");
+  const [diffusion, setDiffusion] = useState("");
+  const [causeRetard, setCauseRetard] = useState("");
+  const [origine, setOrigine] = useState("");
   const [currentForm, setCurrentForm] = useState("");
   const [typesAvis, setTypesAvis] = useState([]); // State pour stocker les types d'avis récupérés depuis l'API
   const [selectedType, setSelectedType] = useState(""); // State pour stocker le type d'avis sélectionné dans le Select
-  const [serviceImpact, setServiceImpacte] = useState([]);
+  const [serviceImpacte, setServiceImpacte] = useState([]);
   const [selectedService, setSelectedService] = useState("");
   const [listValidation, setListValidation] = useState([]);
   const [selectedValide, setSelectedValide] = useState("");
@@ -31,123 +31,28 @@ function AddIncident() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (url, setter) => {
       try {
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axios.get(
-          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents",
-          config
-        );
-        // Récupérez les données des types d'avis depuis la réponse de l'API
-        const data = response.data;
-        // Mettez à jour le state avec les types d'avis récupérés depuis l'API
-        setTypesAvis(data);
+        const response = await axios.get(url, config);
+        setter(response.data);
       } catch (error) {
         setError(`Erreur: ${error.message}`);
       }
     };
-    fetchData();
+  
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents", setTypesAvis);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list", setServiceImpacte);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations", setListValidation);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions", setListDiffusion);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis", setTypeCause);
   }, [token]);
+  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(
-          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list"
-        );
-        // Récupérez les données des types d'avis depuis la réponse de l'API
-        const data = response.data;
-        // Mettez à jour le state avec les services impactés récupérés depuis l'API
-        setServiceImpacte(data);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-    fetchData();
-  }, [token]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(
-          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations",
-          config
-        );
-        // Récupérez les données des types d'avis depuis la réponse de l'API
-        const data = response.data;
-        // Mettez à jour le state avec la liste de validation récupérés depuis l'API
-        setListValidation(data);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-    fetchData();
-  }, [token]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(
-          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions",
-          config
-        );
-        // Récupérez les données des types d'avis depuis la réponse de l'API
-        const data = response.data;
-        // Mettez à jour le state avec les types d'avis récupérés depuis l'API
-        setListDiffusion(data);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-    fetchData();
-  }, [token]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(
-          "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis",
-          config
-        );
-        // Récupérez les données des types d'avis depuis la réponse de l'API
-        const data = response.data;
-        // Mettez à jour le state avec les types d'avis récupérés depuis l'API
-        setTypeCause(data);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-    fetchData();
-  }, [token]);
-
-  const handleMenuClick = (link) => {
-    setCurrentForm(link);
-    console.log(link);
-  };
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = () => {
     const objet = document.getElementById("objet").value;
@@ -160,23 +65,25 @@ function AddIncident() {
     const observations = document.getElementById("observation").value;
     // const natures= document.getElementById("natures").value
 
-    const typeAvisIncident = [
-      {
-        id: selectedType,
-      },
-    ];
+    
 
-    const applicationSis = [
-      {
-        id: selectedService,
-      },
-    ];
+    // const typeAvisIncident = [
+    //   {
+    //     id: selectedType,
+    //   },
+    // ];
 
-    const typeCauseIncident = [
-      {
-        id: selectedCause,
-      },
-    ];
+    // const applicationSis = [
+    //   {
+    //     id: selectedService,
+    //   },
+    // ];
+
+    // const typeCauseIncident = [
+    //   {
+    //     id: selectedCause,
+    //   },
+    // ];
 
     const formData = {
       objet,
@@ -187,14 +94,14 @@ function AddIncident() {
       ticketEzv,
       ticketOceane,
       nature,
-      typeAvisIncident,
-      applicationSis,
+      typesAvis,
+      serviceImpacte,
       valide,
       diffusion,
       origine,
       causeRetard,
       causeProbable,
-      typeCauseIncident,
+      typeCause,
 
       // Ajoutez d'autres champs du formulaire si nécessaire
     };
@@ -226,7 +133,28 @@ function AddIncident() {
         // Gérez les erreurs de requête
         console.error("Erreur lors de la requête", error);
       });
+   
   };
+
+  // // Methode pour la création d'un avis
+  // const createAvis = async (formData) => {
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     };
+  //     const response = await axios.post(
+  //       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents",
+  //       formData,
+  //       config
+  //     );
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error(`Erreur lors de la création de l'avis: ${error.message}`);
+  //   }
+  // };
 
   const handleChangeNature = (event) => {
     setNature(event.target.value);
@@ -285,150 +213,168 @@ function AddIncident() {
               </tbody>
             </Table>
           </Col>
-          <Col sm={4} style={{ marginTop: "3%" }}>
-            {/* <MenuPersoGesIncident
-              propsMenuItems={ajoutAvisItemsMenu}
-              onItemClick={handleMenuClick}
-            /> */}
-          </Col>
         </Row>
-        <br />
         <Row>
           <Col sm={12}>
             <Row>
               <Col>
                 <Title text="Correspondance avis" />
-                <form>
-                  <div className="mb-4 align-right">
-                    <InputLabel
-                      sx={{
+                <form className="mt-5">
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="objet"
+                      style={{
                         fontSize: "14",
                         fontFamily: "fantasy",
                         color: "#000",
                       }}
-                      className="demo-simple-select-label"
                     >
-                      Objet
-                    </InputLabel>
-                    &nbsp;
-                    <TextField
-                      className="textfield"
+                      Objet :
+                    </label>
+                    <input
+                      type="text"
+                      name="objet"
                       id="objet"
-                      variant="outlined"
-                      size="small"
-                      placeholder="objet avis"
-                      required
+                      className="form-control"
                     />
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Nature
-                    </InputLabel>
-                    &nbsp;
-                    <Select
-                      id="natures"
-                      labelId="demo-simple-select-label"
-                      className="textfield"
-                      label="TYPE DE TRANSACTION"
-                      onChange={handleChangeNature}
-                      size="small"
-                      value={nature}
-                      required
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="natures"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
                     >
-                      <MenuItem value="SI">{nature}</MenuItem>
-                      <MenuItem value="DATA">DATA</MenuItem>
-                      <MenuItem value="CONTENU">CONTENU</MenuItem>
-                    </Select>
+                      Nature :
+                    </label>
+                    <select
+                      name="natures"
+                      id="natures"
+                      className="form-control"
+                    >
+                      <option value="SI">SI</option>
+                      <option value="DATA">DATA</option>
+                      <option value="CONTENU">CONTENU</option>
+                    </select>
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      {" "}
-                      Type avis
-                    </InputLabel>
-                    &nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      className="textfield"
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="typeAvis"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Type avis :
+                    </label>
+                    <select
+                      className="form-control"
                       onChange={handleChangeType}
                       size="small"
                       value={selectedType}
                       required
                     >
-                      {/* Mappez les types d'avis dans des éléments MenuItem */}
+                      {/* Mappez les types d'avis dans des éléments option */}
                       {typesAvis.map((type) => (
-                        <MenuItem key={type.id} value={type.id}>
+                        <option key={type.id} value={type.id}>
                           {type.nom}
-                        </MenuItem>
+                        </option>
                       ))}
-                    </Select>
+                    </select>
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Services impactés
-                    </InputLabel>
-                    &nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      className="textfield"
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="serviceImpacte"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Services impactés :
+                    </label>
+                    <select
+                      className="form-control"
                       onChange={handleChangeService}
                       size="small"
                       value={selectedService}
                       required
                     >
-                      {serviceImpact.map((service) => (
-                        <MenuItem key={service.id} value={service.id}>
+                      {serviceImpacte.map((service) => (
+                        <option key={service.id} value={service.id}>
                           {service.nom}
-                        </MenuItem>
+                        </option>
                       ))}
-                    </Select>
+                    </select>
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Liste Validation
-                    </InputLabel>
-                    &nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="valide"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Liste Validation :
+                    </label>
+                    <select
                       id="textfield"
+                      className="form-control"
                       onChange={handleChangeValide}
                       size="small"
                       value={selectedValide}
                       required
                     >
                       {listValidation.map((valide) => (
-                        <MenuItem key={valide.id} value={valide.id}>
+                        <option key={valide.id} value={valide.id}>
                           {valide.nom}
-                        </MenuItem>
+                        </option>
                       ))}
-                    </Select>
+                    </select>
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Liste Diffusion
-                    </InputLabel>
-                    &nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="diffusion"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Liste Diffusion :
+                    </label>
+                    <select
                       id="textfield"
+                      className="form-control"
                       onChange={handleChangeDiffusion}
                       size="small"
                       value={selectedDiffusion}
                       required
                     >
                       {listDiffusion.map((diffusion) => (
-                        <MenuItem key={diffusion.id} value={diffusion.id}>
+                        <option key={diffusion.id} value={diffusion.id}>
                           {diffusion.nom}
-                        </MenuItem>
+                        </option>
                       ))}
-                    </Select>
+                    </select>
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Date Début
-                    </InputLabel>
-                    &nbsp;
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="dateDebut"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Date Début :
+                    </label>
                     <TextField
-                      className="textfield"
+                      className="form-control"
                       id="dateDebut"
                       variant="outlined"
                       size="small"
@@ -436,13 +382,19 @@ function AddIncident() {
                       required
                     />
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Date Détection
-                    </InputLabel>
-                    &nbsp;
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="dateDetection"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Date Détection :
+                    </label>
                     <TextField
-                      className="textfield"
+                      className="form-control"
                       id="dateDetection"
                       variant="outlined"
                       size="small"
@@ -450,26 +402,38 @@ function AddIncident() {
                       required
                     />
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Ticket EZV
-                    </InputLabel>
-                    &nbsp;
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="ticketEzv"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Ticket EZV :
+                    </label>
                     <TextField
-                      className="textfield"
+                      className="form-control"
                       id="ticketEzv"
                       variant="outlined"
                       size="small"
                       placeholder="Numero ticket EasyVista"
                     />
                   </div>
-                  <div className="mb-4 align-right">
-                    <InputLabel className="demo-simple-select-label">
-                      Ticket Oceane
-                    </InputLabel>
-                    &nbsp;
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="ticketOceane"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Ticket Oceane :
+                    </label>
                     <TextField
-                      className="textfield"
+                      className="form-control"
                       id="ticketOceane"
                       variant="outlined"
                       size="small"
@@ -480,74 +444,82 @@ function AddIncident() {
               </Col>
               <Col>
                 <Title text="Causes et impacts" />
-                <form>
-                  <div className="mb-4 align-right" style={{ display: "flex" }}>
-                    <InputLabel className="demo-simple-select-label">
-                      Impacts
-                    </InputLabel>
-                    &nbsp;
-                    <TextareaAutosize
+                <form className="mt-5">
+                  <div className="form-group">
+                    <label
+                      htmlFor="impact"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Impacts :
+                    </label>
+                    <textarea
                       id="impact"
-                      className="textfield"
+                      className="form-control"
                       variant="outlined"
                       size="small"
                       placeholder="Comment les utisateurs perçoivent le dysfonctionnement"
                       required
                     />
                   </div>
-                  <div className="mb-4 align-right" style={{ display: "flex" }}>
-                    <InputLabel className="demo-simple-select-label">
-                      Cause Retard Notif.
-                    </InputLabel>
-                    &nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      className="textfield"
+                  <div className="mb-3 form-group">
+                    <label>Cause Retard Notif :</label>
+                    <select
+                      className="form-control"
                       onChange={handleChangeCause}
                       size="small"
                       value={causeRetard}
                       required
                     >
-                      <MenuItem value="Cause Retard Notification">
-                        {causeRetard}
-                      </MenuItem>
-                      <MenuItem value="Non Supervisé">Non Supervisé</MenuItem>
-                      <MenuItem value="Retard Diffusion">
-                        Retard Diffusion
-                      </MenuItem>
-                    </Select>
+                      <option value="Cause Retard Notification">
+                        Cause Retard Notification
+                      </option>
+                      <option value="Non Supervisé">Non Supervisé</option>
+                      <option value="Retard Diffusion">Retard Diffusion</option>
+                    </select>
                   </div>
-                  <div className="mb-4 align-right" style={{ display: "flex" }}>
-                    <InputLabel
-                      className="demo-simple-select-label"
+                  <div className="mb-3 form-group">
+                    <label
+                      htmlFor="origine"
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
                       value={origine}
                     >
-                      Origine Cause
-                    </InputLabel>
-                    &nbsp;
-                    <Select
-                      labelId="demo-simple-select-label"
-                      className="textfield"
+                      Origine Cause :
+                    </label>
+                    <select
+                      className="form-control"
                       onChange={handleChangeOrigine}
                       size="small"
                       value={selectedCause}
                       required
                     >
                       {typeCause.map((cause) => (
-                        <MenuItem key={cause.id} value={cause.id}>
+                        <option key={cause.id} value={cause.id}>
                           {cause.intitule}
-                        </MenuItem>
+                        </option>
                       ))}
-                    </Select>
+                    </select>
                   </div>
-                  <div className="mb-4 align-right" style={{ display: "flex" }}>
-                    <InputLabel className="demo-simple-select-label">
-                      Causes Problables
-                    </InputLabel>
-                    &nbsp;
-                    <TextareaAutosize
+                  <div className="mb-3 form-group">
+                    <label
+                      style={{
+                        fontSize: "14",
+                        fontFamily: "fantasy",
+                        color: "#000",
+                      }}
+                    >
+                      Causes Problables :
+                    </label>
+                    <textarea
                       id="causeProbable"
-                      className="textfield"
+                      className="form-control"
                       variant="outlined"
                       size="small"
                       placeholder="(*) Demander systématiquement aux TMC(s) les causes probables
@@ -555,14 +527,11 @@ function AddIncident() {
                       required
                     />
                   </div>
-                  <div className="mb-4 align-right" style={{ display: "flex" }}>
-                    <InputLabel className="demo-simple-select-label">
-                      Observations
-                    </InputLabel>
-                    &nbsp;
+                  <div className="mb-3 form-group">
+                    <label>Observations :</label>
                     <TextareaAutosize
                       id="observation"
-                      className="textfield"
+                      className="form-control"
                       variant="outlined"
                       size="small"
                       placeholder="Renseigner les observations"
@@ -575,7 +544,7 @@ function AddIncident() {
           </Col>
           <Col sm={4}>
             {/* <NavigatePerso
-              propsMenuItems={gestionIncidentItemsNavigate}
+              propsoptions={gestionIncidentItemsNavigate}
               onItemClick={handleMenuClick}
             /> */}
           </Col>
@@ -595,6 +564,7 @@ function AddIncident() {
           >
             Creation avis
           </Button>
+          {error && <div className="error-message">{error}</div>}
         </div>
       </Container>
     </div>

@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
-import useAuth from "../../Auth/useAuth";
-import Header from "../../../Header/Header";
-import { FaList, FaSearch, FaHome, FaPaperclip } from "react-icons/fa";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import { RiDashboard3Line } from "react-icons/ri";
-import { IoStatsChart } from "react-icons/io5";
 import Title from "../../../Card/Title/Title";
-import { Container, Row, Col, Button, Modal } from "react-bootstrap";
-import { InputLabel, TextField, Grid } from "@mui/material";
-import Taux from "../../../Card/Taux";
+import { Row, Col, Button, Modal } from "react-bootstrap";
+import { Grid } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -16,7 +9,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import "./StatistiqueIncident.css";
@@ -24,60 +16,8 @@ import axios from "axios";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import RechercheStatistiques from "./RechercheStatistiques";
 
-const ajoutAvisItemsMenu = [
-  {
-    label: "Lister les avis d'incidents",
-    link: "/mysmc/gestionincident",
-    icon: FaList,
-  },
-  {
-    label: "Rechercher avis",
-    link: "/gestionincident/rechercheavis",
-    icon: FaSearch,
-  },
-];
-const gestionIncidentItemsNavigate = [
-  {
-    label: "Gestion incidents",
-    link: "/mysmc/gestionincident",
-    icon: ReportProblemIcon,
-  },
-  {
-    label: "Gestion Probleme",
-    link: "/mysmc/gestionprobleme",
-    icon: ReportProblemIcon,
-  },
-  {
-    label: "Etat Supervision",
-    link: "/mysmc/etatsupervision",
-    icon: RiDashboard3Line,
-  },
-  { label: "Consignes Orchestrées", link: "#", icon: FaPaperclip },
-  {
-    label: "Suivi Activités ",
-    link: "/mysmc/suivisactivites",
-    icon: IoStatsChart,
-  },
-  { label: "Page d'accueil", link: "/mysmc", icon: FaHome },
-];
 
 // a partir du mois en cours prendre la comme date de debut le dernier jour du mois en cours et comme date de fin le premier jour du mois en cours
-const getCurrentMonthDates = () => {
-  const date = new Date();
-  const annee = date.getFullYear();
-  const mois = date.getMonth() + 1;
-  const premierJour = new Date(annee, mois - 1, 1);
-  const dernierJour = new Date(annee, mois, 0);
-  const dateDebut = `${dernierJour.getFullYear()}-${
-    dernierJour.getMonth() + 1
-  }-${dernierJour.getDate()}`;
-  const dateFin = `${premierJour.getFullYear()}-${
-    premierJour.getMonth() + 1
-  }-${premierJour.getDate()}`;
-  // const dateDebut = "2022-01-01";
-  // const dateFin = "2024-09-02";
-  return { dateDebut, dateFin };
-};
 
 // Composant CustomTooltip
 const CustomTooltip = ({ active, payload, label }) => {
@@ -110,6 +50,7 @@ function StatistiqueIncident() {
   const [showStatModal, setShowStatModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
   const now = new Date();
+  const period = now.toLocaleDateString('FR', { month: 'long', year: 'numeric' });
   const start = new Date(now.getFullYear(), now.getMonth(), 1)
     .toISOString()
     .split("T")[0];
@@ -193,106 +134,55 @@ function StatistiqueIncident() {
     { name: "Notification", value: totalAvisClosNotificationOnDelayCustom },
   ];
 
-  const getPeriode = (dateDebut, dateFin) => {
-    const dateDebutSplit = dateDebut.split("-");
-    const dateFinSplit = dateFin.split("-");
-    const mois = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-    console.log(histo);
-    const moisDebut = mois[parseInt(dateDebutSplit[1]) - 1];
-    const moisFin = mois[parseInt(dateFinSplit[1]) - 1];
-    return `Du ${dateDebutSplit[2]} ${moisDebut} ${dateDebutSplit[0]} au ${dateFinSplit[2]} ${moisFin} ${dateFinSplit[0]}`;
-  };
 
-  const getCurrentMonthAndYear = () => {
-    const date = new Date();
-    const mois = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-    const moisActuel = mois[date.getMonth()];
-    const anneeActuelle = date.getFullYear();
-    return `${moisActuel} ${anneeActuelle}`;
-  };
 
   return (
     <div className="dashboard">
-      <Row>
-        {histo === "Aucune recherche récente." ? (
+            {histo === "Aucune recherche récente." ? (
           <Title
             lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${getCurrentMonthAndYear()}`}
+            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${period}`}
           />
-        ) : histo.includes("Début : ") && histo.includes("Fin : ") ? (
+        ) : histo !== "" ? (
+          // Si les dates de début et de fin sont présentes dans l'historique
           <Title
-            lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs de la période : ${getPeriode(
-              histo.split("Début : ")[1].split(" | ")[0],
-              histo.split(" Fin : ")[1]
-            )}`}
+            text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
           />
         ) : (
-          <Title lg={12} text="Gestion des avis d'incidents" />
+          // Si aucune date n'a été choisie, afficher un titre générique
+          <Title
+            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
+          />
         )}
-      </Row>
-
-      <Button
-        variant="primary"
-        onClick={handleStatShow}
-        className="mt-5 ml-5 mb-2"
-      >
-        Stats
-      </Button>
-      <Modal
-        show={showStatModal}
-        onHide={handleStatClose}
-        dialogClassName="custom-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Statistiques</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <RechercheStatistiques onSearch={handleStatsSubmit} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleStatClose}>
-            Fermer
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      {dataUrl !==
-        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` && (
-        <Button
-          variant="danger"
-          onClick={reinitHisto}
-          className="btn mt-5 ml-5 mb-2"
-        >
-          Default
-        </Button>
-      )}
-
+      <Button  variant="primary" onClick={handleStatShow} className="mt-5 ml-5 mb-2">
+              Stats      
+              </Button>
+       <Modal
+              show={showStatModal}
+              onHide={handleStatClose}
+              dialogClassName="custom-modal"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Statistiques</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <RechercheStatistiques onSearch={handleStatsSubmit} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="danger" onClick={handleStatClose}>
+                  Fermer
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            {(dataUrl !== `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` ) && (
+  <Button
+    variant="danger"
+    onClick={reinitHisto}
+    className="mt-5 ml-5 mb-2"
+  >
+    Default
+  </Button>
+)}
       <Row className="mb-4">
         <Col
           xs={12}
@@ -428,7 +318,12 @@ function StatistiqueIncident() {
           <Bar dataKey="value" fill="#FFA500" />
         </BarChart>
       </ResponsiveContainer>
-      {histo}
+      {/* <div className="text-center">
+        {getPeriode(
+          histo.split("Début : ")[1].split(" | ")[0],
+          histo.split(" Fin : ")[1]
+        )}
+      </div> */}
     </div>
   );
 }
