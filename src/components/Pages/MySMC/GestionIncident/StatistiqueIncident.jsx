@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { FaList, FaSearch, FaHome, FaPaperclip } from "react-icons/fa";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { RiDashboard3Line } from "react-icons/ri";
+import { IoStatsChart } from "react-icons/io5";
 import Title from "../../../Card/Title/Title";
-import { Row, Col, Button, Modal } from "react-bootstrap";
-import { Grid } from "@mui/material";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
+import { InputLabel, TextField, Grid } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -48,16 +52,16 @@ function StatistiqueIncident() {
     "Information : Merci d'effectuer une recherche au préalable pour afficher les avis"
   );
   const [showStatModal, setShowStatModal] = useState(false);
-  const [histo, setHisto] = useState("Aucune recherche récente.");
   const now = new Date();
   const period = now.toLocaleDateString('FR', { month: 'long', year: 'numeric' });
   const start = new Date(now.getFullYear(), now.getMonth(), 1)
-    .toISOString()
-    .split("T")[0];
+  .toISOString()
+  .split("T")[0];
   const end = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-    .toISOString()
-    .split("T")[0];
-
+  .toISOString()
+  .split("T")[0];
+  
+  const [histo, setHisto] = useState(period);
   const [dateDebut, setDateDebut] = useState(start);
   const [dateFin, setDateFin] = useState(end);
   const [dataUrl, setDataUrl] = useState(
@@ -93,6 +97,7 @@ function StatistiqueIncident() {
       `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`
     );
     setShowStatModal(false);
+    setHisto(period);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -134,29 +139,14 @@ function StatistiqueIncident() {
     { name: "Notification", value: totalAvisClosNotificationOnDelayCustom },
   ];
 
-
-
   return (
     <div className="dashboard">
-            {histo === "Aucune recherche récente." ? (
-          <Title
-            lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${period}`}
-          />
-        ) : histo !== "" ? (
-          // Si les dates de début et de fin sont présentes dans l'historique
-          <Title
+         <Title
             text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
           />
-        ) : (
-          // Si aucune date n'a été choisie, afficher un titre générique
-          <Title
-            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
-          />
-        )}
       <Button  variant="primary" onClick={handleStatShow} className="mt-5 ml-5 mb-2">
               Stats      
-              </Button>
+      </Button>
        <Modal
               show={showStatModal}
               onHide={handleStatClose}
@@ -318,12 +308,6 @@ function StatistiqueIncident() {
           <Bar dataKey="value" fill="#FFA500" />
         </BarChart>
       </ResponsiveContainer>
-      {/* <div className="text-center">
-        {getPeriode(
-          histo.split("Début : ")[1].split(" | ")[0],
-          histo.split(" Fin : ")[1]
-        )}
-      </div> */}
     </div>
   );
 }

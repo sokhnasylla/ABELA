@@ -7,6 +7,7 @@ import status from "../../../../assets/status.png";
 import problem from "../../../../assets/problem.jpg";
 import analytic from "../../../../assets/analytics.png";
 import diagram from "../../../../assets/diagram.png";
+import homemysmc from "../../../../assets/homemysmc.png";
 
 function MenuMysmc() {
   return (
@@ -23,6 +24,9 @@ function MenuMysmc() {
         </Navbar.Brand>
         <Navbar.Brand as={Link} to="/mysmc/suivisactivites" className='Ad'>
           <SubMenu text="Suivi activités" image={diagram} />
+        </Navbar.Brand>
+         <Navbar.Brand as={Link} to="/mysmc/" className='Ad'>
+          <SubMenu text="HomeMysmc" image={homemysmc}/>
         </Navbar.Brand>
       </Container>
     </Navbar>
