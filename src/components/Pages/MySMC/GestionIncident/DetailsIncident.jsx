@@ -62,7 +62,7 @@ function DetailsIncident() {
                   <FaArrowAltCircleDown />
                 </Card>
               </Col>
-              <Col sm={8}>
+              <Col sm={7}>
                 <Title text="Prévisalusation de l'avis" />
                 <div className="table-responsive">
                   <Table className="styled-table">
@@ -171,7 +171,7 @@ function DetailsIncident() {
                   </Table>
                 </div>
               </Col>
-              <Col sm={4}>
+              <Col sm={5}>
                 <Title text="Indicateurs clés" />
                 <div className="table-responsive">
                   <Table className="table table-bordered table-striped">
