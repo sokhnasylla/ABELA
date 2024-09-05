@@ -66,6 +66,7 @@ function RechercheAvis({ onSearch }) {
 
       await fetchData(newUrl, errorMessage);
       setError("");
+      console.log(newUrl);
       onSearch(newUrl, newHisto, etat);
     } catch (error) {
       setError(error.message);
@@ -127,7 +128,7 @@ function RechercheAvis({ onSearch }) {
                     id="dateDebut"
                     variant="outlined"
                     size="small"
-                    type="date"
+                    type="datetime-local"
                     sx={{ width: "100%" }}
                     value={dateDebut}
                     onChange={(e) => setDateDebut(e.target.value)}
@@ -168,7 +169,6 @@ function RechercheAvis({ onSearch }) {
                     <MenuItem value="Fermé">Fermé</MenuItem>
                     <MenuItem value="Annulé">Annulé</MenuItem>
                     <MenuItem value="Cloturé">Cloturé</MenuItem>
-                    <MenuItem value="Encours">En cours</MenuItem>
                   </Select>
                 </div>
               </div>

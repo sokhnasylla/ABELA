@@ -16,15 +16,13 @@ import useAuth from "../../Auth/useAuth";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
 import RechercheAvis from "./RechercheAvis";
-import DetailsIncident from "./DetailsIncident";
 import AddIncident from "./AddIncident";
 import StatistiqueIncident from "./StatistiqueIncident";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaPlus, FaSearch, FaThumbsUp } from "react-icons/fa";
 
 function GestionIncident() {
   useAuth();
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [notOpenAvis, setNotOpenAvis] = useState([]);
   const [openAvis, setOpenAvis] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -34,6 +32,12 @@ function GestionIncident() {
   const navigate = useNavigate();
 
   const [dataUrl, setDataUrl] = useState("");
+  const [dataUrlEnCours, setDataUrlEnCours] = useState(
+    "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours"
+  );
+  const [dataUrlNotOpen, setDataUrlNotOpen] = useState(
+    "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule"
+  );
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,7 +65,8 @@ function GestionIncident() {
   };
 
   const handleSearchSubmit = (url, histo, etat) => {
-    setDataUrl(url);
+    setDataUrlNotOpen(url);
+    console.log(`Data URL: ${url}`);
     setShowModal(false);
     setHisto(histo);
     setEtat(etat);
@@ -70,10 +75,14 @@ function GestionIncident() {
     setHisto("Aucune recherche récente.");
     setEtat("");
     setDataUrl(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents"
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/enCours"
+    );
+    setDataUrlNotOpen(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule"
     );
     setShowModal(false);
   };
+
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
 
@@ -94,19 +103,9 @@ function GestionIncident() {
       }
     };
 
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents",
-      setData
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours",
-      setOpenAvis
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule",
-      setNotOpenAvis
-    );
-  }, [token]);
+    fetchData(dataUrlEnCours, setOpenAvis);
+    fetchData(dataUrlNotOpen, setNotOpenAvis);
+  }, [dataUrl, dataUrlNotOpen, token]);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -150,10 +149,10 @@ function GestionIncident() {
                   Exporter Plan d'action incident
                 </Button>
               </div>
-              <div>
+              <div className="d-flex align-items-center">
                 <Button variant="primary" onClick={handleAddShow}>
+                  <FaPlus /> &nbsp;
                   Ajouter un avis
-                  <img src="../../../../assets/plus-symbole-noir.png" alt="" />
                 </Button>
               </div>
             </div>
@@ -296,22 +295,17 @@ function GestionIncident() {
           <Row className="mt-3">
             {etat === "Annulé" && (
               <Title
-                text={`Liste des avis d'incident / d'information annulés (${filteredData.length})`}
+                text={`Liste des avis d'incident / d'information annulés (${notOpenAvis.length})`}
               />
             )}
             {etat === "Cloturé" && (
               <Title
-                text={`Liste des avis d'incident / d'information clôturés (${filteredData.length})`}
+                text={`Liste des avis d'incident / d'information clôturés (${notOpenAvis.length})`}
               />
             )}
             {etat === "Fermé" && (
               <Title
-                text={`Liste des avis d'incident / d'information fermés (${filteredData.length})`}
-              />
-            )}
-            {etat === "Encours" && (
-              <Title
-                text={`Liste des avis d'incident / d'information en cours (${filteredData.length})`}
+                text={`Liste des avis d'incident / d'information fermés (${notOpenAvis.length})`}
               />
             )}
             {etat !== "Annulé" &&
@@ -319,7 +313,7 @@ function GestionIncident() {
               etat !== "Fermé" &&
               etat != "Encours" && (
                 <Title
-                  text={`Liste des avis d'incidents / d'information (${notOpenAvis.length})`}
+                  text={`Liste des avis fermés, clotûrés ou annulés (${notOpenAvis.length})`}
                 />
               )}
           </Row>
@@ -370,7 +364,7 @@ function GestionIncident() {
                     }}
                   >
                     <button onClick={handleShow} className="btn btn-primary">
-                      Recherche
+                      <FaSearch />
                     </button>
                   </span>
 
@@ -439,15 +433,16 @@ function GestionIncident() {
                   <th>N°Avis</th>
                   <th>Titre</th>
                   <th>Etat</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItemsNotOpen.map((item) => (
                   <tr
                     key={item.id}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                    onDoubleClick={() => handleShowDetails(item)}
+                    // onMouseEnter={handleMouseEnter}
+                    // onMouseLeave={handleMouseLeave}
+                    // onDoubleClick={() => handleShowDetails(item)}
                   >
                     <td>
                       {item.dateCreation
@@ -459,12 +454,36 @@ function GestionIncident() {
                     <td>{item.numAvis}</td>
                     <td>{item.titre}</td>
                     <td>{item.etat}</td>
+                    <td>
+                      <Button
+                        style={{
+                          backgroundColor: "#FF6600",
+                          padding: "1px 5px",
+                          border: "#FF6600",
+                        }}
+                        onClick={() => handleShowDetails(item)}
+                      >
+                        <FaEye />
+                      </Button>
+                      &nbsp;
+                      {(item.etat == "Fermé" && (
+                        <Button variant="primary"></Button>
+                      )) ||
+                        (item.etat == "Cloturé" && (
+                          <FaThumbsUp color="green" />
+                        )) ||
+                        (item.etat == "Annulé" && (
+                          <Button variant="primary">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                          </Button>
+                        ))}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           )}
-          <Overlay
+          {/* <Overlay
             show={showOverlay}
             target={overlayTarget}
             placement="top"
@@ -475,7 +494,7 @@ function GestionIncident() {
                 Double-cliquez pour voir les détails
               </Tooltip>
             )}
-          </Overlay>
+          </Overlay> */}
           <Pagination className="d-flex justify-content-center mt-4">
             <Pagination.Item
               active={currentPageNotOpen === 1}
@@ -538,27 +557,6 @@ function GestionIncident() {
         <Col>
           <StatistiqueIncident />
         </Col>
-        {/* <Modal
-          show={showDetailsModal}
-          onHide={handleCloseDetails}
-          dialogClassName="custom-modal"
-          size="xl"
-          style={{ width: "100%", textAlign: "" }}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title style={{ textAlign: "center" }}>
-              Details de l'avis
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <DetailsIncident avis={selectedAvis} />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="danger" onClick={handleCloseDetails}>
-              Fermer
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
         <Modal
           show={showAddModal}
           onHide={handleAddClose}
