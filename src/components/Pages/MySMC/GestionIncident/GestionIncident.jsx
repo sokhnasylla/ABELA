@@ -219,7 +219,7 @@ function GestionIncident() {
                     </td>
                     <td>{item.numAvis}</td>
                     <td>{item.titre}</td>
-                    {item.etat == "ENCOURS" && <td>En Cours</td>}
+                    {item.etat === "ENCOURS" && <td>En Cours</td>}
                   </tr>
                 ))}
               </tbody>
@@ -311,7 +311,7 @@ function GestionIncident() {
             {etat !== "Annulé" &&
               etat !== "Cloturé" &&
               etat !== "Fermé" &&
-              etat != "Encours" && (
+              etat !== "Encours" && (
                 <Title
                   text={`Liste des avis fermés, clotûrés ou annulés (${notOpenAvis.length})`}
                 />
@@ -584,3 +584,5 @@ function GestionIncident() {
 }
 
 export default GestionIncident;
+
+
