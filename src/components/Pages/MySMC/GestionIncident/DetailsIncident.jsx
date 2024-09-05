@@ -302,7 +302,8 @@ function DetailsIncident() {
             </Row>
           </Col>
           <Col md={4} sm={4}>
-            <MenuDetailsIncident />
+          {/* Passer au composant MenuDetails le type d'etat pour personnaliser le menu selon l'etat */}
+            <MenuDetailsIncident etat= {incident.etat} />
           </Col>
         </Row>
         <Row>

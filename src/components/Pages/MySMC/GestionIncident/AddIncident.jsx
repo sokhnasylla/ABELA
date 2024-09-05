@@ -11,6 +11,8 @@ import Title from "../../../Card/Title/Title";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 
 function AddIncident() {
+  const token = getTokenFromLocalStorage();
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     objet: '',
     nature: '',
@@ -29,26 +31,24 @@ function AddIncident() {
     observations: ''
   });
 
-  const [nature, setNature] = useState("");
-  const [valide, setValide] = useState("");
-  const [diffusion, setDiffusion] = useState("");
-  const [causeRetard, setCauseRetard] = useState("");
-  const [origine, setOrigine] = useState("");
-  const [dateDebut, setDateDebut] = useState("");
-  const [dateDetection, setDateDetection] = useState("");
-  const [currentForm, setCurrentForm] = useState("");
+  const [nature, setNature] = useState('SI');
+  const [type, setType] = useState("choisir le type d'avis");
+  const [service, setService] = useState("Application Test");
+  const [valide, setValide] = useState("choisir la liste validation");
+  const [diffusion, setDiffusion] = useState("choisir la liste diffusion");
+  const [causeRetard, setCauseRetard] = useState("Cause Retard Notification");
+  const [origine,setOrigine]=useState("Définir une origine");
+  const [currentForm, setCurrentForm] = useState("")
   const [typesAvis, setTypesAvis] = useState([]); // State pour stocker les types d'avis récupérés depuis l'API
   const [selectedType, setSelectedType] = useState(""); // State pour stocker le type d'avis sélectionné dans le Select
-  const [serviceImpacte, setServiceImpacte] = useState([]);
+  const [serviceImpact,setServiceImpacte]=useState([])
   const [selectedService, setSelectedService] = useState("");
-  const [listValidation, setListValidation] = useState([]);
+  const [listValidation,setListValidation]=useState([])
   const [selectedValide, setSelectedValide] = useState("");
-  const [listDiffusion, setListDiffusion] = useState([]);
+  const [listDiffusion,setListDiffusion]=useState([])
   const [selectedDiffusion, setSelectedDiffusion] = useState("");
-  const [typeCause, setTypeCause] = useState([]);
+  const [typeCause,setTypeCause]=useState([])
   const [selectedCause, setSelectedCause] = useState("");
-  const token = getTokenFromLocalStorage();
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async (url, setter) => {
@@ -89,62 +89,82 @@ function AddIncident() {
 
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = () => {
-    const objet = document.getElementById("objet").value;
-    const dateDebut = document.getElementById("dateDebut").value;
-    const dateDetection = document.getElementById("dateDetection").value;
-    const ticketEzv = document.getElementById("ticketEzv").value;
-    const ticketOceane = document.getElementById("ticketOceane").value;
-    const impact = document.getElementById("impact").value;
-    const causeProbable = document.getElementById("causeProbable").value;
-    const observations = document.getElementById("observation").value;
+
+    const objet=document.getElementById("objet").value
+    const dateDebut=document.getElementById("dateDebut").value
+    const dateDetection=document.getElementById("dateDetection").value
+    const ticketEzv=document.getElementById("ticketEzv").value
+    const ticketOceane= document.getElementById("ticketOceane").value
+    const impact=document.getElementById("impact").value
+    const causeProbable= document.getElementById("causeProbable").value;
+    const observations=document.getElementById("observation").value
     // const natures= document.getElementById("natures").value
 
+    const typeAvisIncident=[
+      {
+        "id":selectedType
+      }
+    ]
+
+    const  applicationSis=[
+      {
+        "id":selectedService
+      }
+    ]
+
+    const typeCauseIncident =[
+      {
+        "id":selectedCause
+      }
+    ]
+
     const formData = {
-      objet,
-      nature,
-      typeAvisIncident: { id: selectedType },
-      serviceImpacte: { id: selectedService },
-      valide: selectedValide,
-      diffusion: selectedDiffusion,
-      dateDebut,
-      dateDetection,
-      ticketEzv,
-      ticketOceane,
-      impact,
-      causeRetard: { id: selectedCause },
-      origine: { id: selectedCause },
-      causeProbable,
-      observations,
+        objet,
+        dateDebut,
+        dateDetection,
+        impact,
+        observations,
+        ticketEzv,
+        ticketOceane,
+        nature,
+        typeAvisIncident,
+        applicationSis,
+        valide,
+        diffusion,
+        origine,
+        causeRetard,
+        causeProbable,
+        typeCauseIncident
+       
+        // Ajoutez d'autres champs du formulaire si nécessaire
     };
 
     console.log(formData);
 
+    
     // Effectuez la requête vers l'API ici en utilisant fetch ou Axios
-    fetch(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents",
-      {
-        method: "POST",
+    fetch('http://localhost:8082/ABELA-MYSMC/api/gestionIncidents/avisIncidents', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          // Ajoutez des headers supplémentaires si nécessaire
+            'Content-Type': 'application/json',
+            // Ajoutez des headers supplémentaires si nécessaire
         },
-        body: JSON.stringify(formData),
-      }
-    )
-      .then((response) => {
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
         if (response.ok) {
-          // Gérez la réponse en cas de succès
-          console.log("Avis créé avec succès");
+            // Gérez la réponse en cas de succès
+            console.log('Avis créé avec succès');
         } else {
-          // Gérez la réponse en cas d'erreur
-          console.error("Erreur lors de la création de l'avis");
+            // Gérez la réponse en cas d'erreur
+            console.error('Erreur lors de la création de l\'avis');
         }
-      })
-      .catch((error) => {
+    })
+    .catch(error => {
         // Gérez les erreurs de requête
-        console.error("Erreur lors de la requête", error);
-      });
-  };
+        console.error('Erreur lors de la requête', error);
+    });
+};
 
   const handleChangeNature = (event) => {
     setNature(event.target.value);
@@ -293,7 +313,7 @@ function AddIncident() {
                       value={selectedService}
                       required
                     >
-                      {serviceImpacte.map((service) => (
+                      {serviceImpact.map((service) => (
                         <option key={service.id} value={service.id}>
                           {service.nom}
                         </option>
@@ -369,8 +389,6 @@ function AddIncident() {
                       variant="outlined"
                       size="small"
                       type="date"
-                      value={dateDebut}
-                      onChange={(e) => setDateDebut(e.target.value)}
                       required
                     />
                   </div>
@@ -391,8 +409,6 @@ function AddIncident() {
                       variant="outlined"
                       size="small"
                       type="date"
-                      value={dateDetection}
-                      onChange={(e) => setDateDetection(e.target.value)}
                       required
                     />
                   </div>
