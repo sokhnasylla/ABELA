@@ -1,11 +1,11 @@
 import React from 'react'
-import { Button, Card ,Nav} from 'react-bootstrap'
+import { Button, Card ,Nav, Row} from 'react-bootstrap'
 import { FaArrowCircleDown, FaBars, FaInfoCircle, FaList, FaQuestionCircle, FaThumbsUp } from 'react-icons/fa'
 import GestionIncident from './GestionIncident'
 
 function MenuDetailsIncident() {
   return (
-    <div>
+    <Row>
         <Card 
             style={{ display: 'flex',
             flexDirection:"row",
@@ -13,7 +13,6 @@ function MenuDetailsIncident() {
             justifyContent: 'space-around' ,
             padding:"1Opx",color:"#148C8A",
             border:"2px solid #148C8A",
-            marginTop:"16%",
             }}
         >
             <FaBars/>
@@ -22,19 +21,25 @@ function MenuDetailsIncident() {
         </Card>
         <Nav className="flex-column justify-content-between navigation">
         <Nav className="flex-column justify-content-between navigation">
-        <Card>
+        <Card
+            style={{ display: 'flex',
+            flexDirection:"row",
+            alignItems: 'center',
+            justifyContent: 'space-around' ,
+            height:"60px"
+            }}>
           <Nav.Link className='text-white' 
                     href='/mysmc/gestionincident'
                     style={{ textAlign: "center",display:"flex",justifyContent:"space-around",alignItems:"center"}}>
             <FaList />
-            <Button onClick={GestionIncident}>Retour à la liste avis</Button>
+            <button className='btn' style={{backgroundColor: "#5cb85c", color:"#fff"}} onClick={GestionIncident}>Retour à la liste avis</button>
             <FaInfoCircle/>
           </Nav.Link>
         </Card>
       </Nav>
       
         </Nav>
-    </div>
+    </Row>
   )
 }
 

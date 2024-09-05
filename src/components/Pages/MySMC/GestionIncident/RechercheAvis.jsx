@@ -83,17 +83,18 @@ function RechercheAvis({ onSearch }) {
               style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
             >
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-                <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                  <InputLabel
+                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
+                  <label htmlFor="numeroAvis"
                     sx={{ marginLeft: "6%" }}
                   >
-                    Numéro avis
-                  </InputLabel>
+                    Numéro avis :
+                  </label>
                   &nbsp;
                   <TextField
                     id="numeroAvis"
                     variant="outlined"
                     size="small"
+                    className="form-control"
                     placeholder="Ex:XXX"
                     sx={{ width: "100%" }}
                     value={numeroAvis}
@@ -101,75 +102,79 @@ function RechercheAvis({ onSearch }) {
                   />
                 </div>
                 <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                  <InputLabel
+                  <label htmlFor="application"
                     sx={{ marginLeft: "6%" }}
                   >
-                    Application
-                  </InputLabel>
+                    Application :
+                  </label>
                   &nbsp;
                   <TextField
                     id="application"
                     variant="outlined"
                     size="small"
+                    className="form-control"
                     placeholder="Ex:OrangeMoney"
                     sx={{ width: "100%" }}
                     value={application}
                     onChange={(e) => setApplication(e.target.value)}
                   />
                 </div>
-                <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                  <InputLabel
+                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
+                  <label htmlFor="dateDebut"
                     sx={{ marginLeft: "6%" }}
                   >
-                    Date début
-                  </InputLabel>
+                    Date début :
+                  </label>
                   &nbsp;
                   <TextField
                     id="dateDebut"
                     variant="outlined"
                     size="small"
+                    className="form-control"
                     type="datetime-local"
                     sx={{ width: "100%" }}
                     value={dateDebut}
                     onChange={(e) => setDateDebut(e.target.value)}
                   />
                 </div>
-                <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                  <InputLabel
+                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
+                  <label htmlFor="dateFin"
                     sx={{ marginLeft: "6%" }}
                   >
-                    Date Fin
-                  </InputLabel>
+                    Date Fin :
+                  </label>
                   &nbsp;
                   <TextField
                     id="dateFin"
                     variant="outlined"
                     size="small"
-                    type="date"
+                    className="form-control"
+                    type="datetime-local"
                     sx={{ width: "100%" }}
                     value={dateFin}
                     onChange={(e) => setDateFin(e.target.value)}
                   />
                 </div>
-                <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                  <InputLabel
+                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
+                  <label htmlFor="etat"
                     sx={{ marginLeft: "6%" }}
                   >
-                    Etat
-                  </InputLabel>
+                    Etat : 
+                  </label>
                   &nbsp;
-                  <Select
+                  <select
                     id="etat"
                     variant="outlined"
+                    className="form-select"
                     size="small"
                     sx={{ width: "100%" }}
                     value={etat}
                     onChange={(e) => setEtat(e.target.value)}
                   >
-                    <MenuItem value="Fermé">Fermé</MenuItem>
-                    <MenuItem value="Annulé">Annulé</MenuItem>
-                    <MenuItem value="Cloturé">Cloturé</MenuItem>
-                  </Select>
+                    <option value="Fermé">Fermé</option>
+                    <option value="Annulé">Annulé</option>
+                    <option value="Cloturé">Cloturé</option>
+                  </select>
                 </div>
               </div>
               <div className="mb-3" style={{ flex: "1 1 100px" }}>

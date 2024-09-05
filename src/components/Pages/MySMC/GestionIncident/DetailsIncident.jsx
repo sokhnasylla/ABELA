@@ -1,7 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Table } from "react-bootstrap";
-import { FaArrowAltCircleDown, FaBars, FaThumbsDown, FaThumbsUp } from "react-icons/fa";
+import {
+  FaArrowAltCircleDown,
+  FaBars,
+  FaThumbsDown,
+  FaThumbsUp,
+} from "react-icons/fa";
 import { useLocation, useParams } from "react-router-dom";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import Title from "../../../Card/Title/Title";
@@ -40,7 +45,6 @@ function DetailsIncident() {
   return (
     <div>
       <MenuMysmc />
-      <MenuDetailsIncident/>
       <Container className="body" style={{ fontSize: "14px" }}>
         <Row>
           <Col md={8} sm={8}>
@@ -53,8 +57,7 @@ function DetailsIncident() {
                     alignItems: "center",
                     justifyContent: "space-around",
                     color: "#148C8A",
-                    border: "2px solid #148C8A",
-                    marginTop: "5%",
+                    border: "2px solid #148C8A"
                   }}
                 >
                   <FaBars />
@@ -299,7 +302,7 @@ function DetailsIncident() {
             </Row>
           </Col>
           <Col md={4} sm={4}>
-            
+            <MenuDetailsIncident />
           </Col>
         </Row>
         <Row>

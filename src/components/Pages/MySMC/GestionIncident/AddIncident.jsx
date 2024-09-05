@@ -11,11 +11,31 @@ import Title from "../../../Card/Title/Title";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 
 function AddIncident() {
+  const [formData, setFormData] = useState({
+    objet: '',
+    nature: '',
+    typeAvisIncident: { id: 0 },
+    serviceImpacte: '',
+    valide: '',
+    diffusion: '',
+    dateDebut: '',
+    dateDetection: '',
+    ticketEzv: '',
+    ticketOceane: '',
+    impact: '',
+    causeRetard: { id: 0 },
+    origine: { id: 0 },
+    causeProbable: '',
+    observations: ''
+  });
+
   const [nature, setNature] = useState("");
   const [valide, setValide] = useState("");
   const [diffusion, setDiffusion] = useState("");
   const [causeRetard, setCauseRetard] = useState("");
   const [origine, setOrigine] = useState("");
+  const [dateDebut, setDateDebut] = useState("");
+  const [dateDetection, setDateDetection] = useState("");
   const [currentForm, setCurrentForm] = useState("");
   const [typesAvis, setTypesAvis] = useState([]); // State pour stocker les types d'avis récupérés depuis l'API
   const [selectedType, setSelectedType] = useState(""); // State pour stocker le type d'avis sélectionné dans le Select
@@ -44,14 +64,28 @@ function AddIncident() {
         setError(`Erreur: ${error.message}`);
       }
     };
-  
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents", setTypesAvis);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list", setServiceImpacte);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations", setListValidation);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions", setListDiffusion);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis", setTypeCause);
+
+    fetchData(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents",
+      setTypesAvis
+    );
+    fetchData(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list",
+      setServiceImpacte
+    );
+    fetchData(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations",
+      setListValidation
+    );
+    fetchData(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions",
+      setListDiffusion
+    );
+    fetchData(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis",
+      setTypeCause
+    );
   }, [token]);
-  
 
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = () => {
@@ -65,45 +99,22 @@ function AddIncident() {
     const observations = document.getElementById("observation").value;
     // const natures= document.getElementById("natures").value
 
-    
-
-    // const typeAvisIncident = [
-    //   {
-    //     id: selectedType,
-    //   },
-    // ];
-
-    // const applicationSis = [
-    //   {
-    //     id: selectedService,
-    //   },
-    // ];
-
-    // const typeCauseIncident = [
-    //   {
-    //     id: selectedCause,
-    //   },
-    // ];
-
     const formData = {
       objet,
       nature,
-      typesAvis,
-      serviceImpacte,
-      valide,
-      diffusion,
+      typeAvisIncident: { id: selectedType },
+      serviceImpacte: { id: selectedService },
+      valide: selectedValide,
+      diffusion: selectedDiffusion,
       dateDebut,
       dateDetection,
       ticketEzv,
       ticketOceane,
       impact,
-      causeRetard,
-      origine,
+      causeRetard: { id: selectedCause },
+      origine: { id: selectedCause },
       causeProbable,
       observations,
-      // typeCause,
-
-      // Ajoutez d'autres champs du formulaire si nécessaire
     };
 
     console.log(formData);
@@ -133,28 +144,7 @@ function AddIncident() {
         // Gérez les erreurs de requête
         console.error("Erreur lors de la requête", error);
       });
-   
   };
-
-  // // Methode pour la création d'un avis
-  // const createAvis = async (formData) => {
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     };
-  //     const response = await axios.post(
-  //       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents",
-  //       formData,
-  //       config
-  //     );
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.error(`Erreur lors de la création de l'avis: ${error.message}`);
-  //   }
-  // };
 
   const handleChangeNature = (event) => {
     setNature(event.target.value);
@@ -379,6 +369,8 @@ function AddIncident() {
                       variant="outlined"
                       size="small"
                       type="date"
+                      value={dateDebut}
+                      onChange={(e) => setDateDebut(e.target.value)}
                       required
                     />
                   </div>
@@ -399,6 +391,8 @@ function AddIncident() {
                       variant="outlined"
                       size="small"
                       type="date"
+                      value={dateDetection}
+                      onChange={(e) => setDateDetection(e.target.value)}
                       required
                     />
                   </div>
