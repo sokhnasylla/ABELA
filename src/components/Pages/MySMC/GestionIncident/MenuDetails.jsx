@@ -1,7 +1,7 @@
 import React from 'react'
-import { Card ,Nav} from 'react-bootstrap'
+import { Button, Card ,Nav} from 'react-bootstrap'
 import { FaArrowCircleDown, FaBars, FaInfoCircle, FaList, FaQuestionCircle, FaThumbsUp } from 'react-icons/fa'
-
+import GestionIncident from './GestionIncident'
 
 function MenuDetailsIncident() {
   return (
@@ -27,7 +27,7 @@ function MenuDetailsIncident() {
                     href='/mysmc/gestionincident'
                     style={{ textAlign: "center",display:"flex",justifyContent:"space-around",alignItems:"center"}}>
             <FaList />
-            Retour à la liste avis
+            <Button onClick={GestionIncident}>Retour à la liste avis</Button>
             <FaInfoCircle/>
           </Nav.Link>
         </Card>

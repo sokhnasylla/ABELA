@@ -6,6 +6,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import Title from "../../../Card/Title/Title";
 import MenuMysmc from "../Menu/MenuMysmc";
+import MenuDetailsIncident from "./MenuDetails";
 
 function DetailsIncident() {
   const [incident, setIncident] = useState(null);
@@ -39,6 +40,7 @@ function DetailsIncident() {
   return (
     <div>
       <MenuMysmc />
+      <MenuDetailsIncident/>
       <Container className="body" style={{ fontSize: "14px" }}>
         <Row>
           <Col md={8} sm={8}>
