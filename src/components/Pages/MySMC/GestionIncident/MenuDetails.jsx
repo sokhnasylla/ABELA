@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Nav, Row } from "react-bootstrap";
 import {
   FaArrowCircleDown,
@@ -12,8 +12,32 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import GestionIncident from "./GestionIncident";
+import axios from "axios";
+import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 
-function MenuDetailsIncident({ etat }) {
+function MenuDetailsIncident({ avis }) {
+  const token = getTokenFromLocalStorage();
+
+const deleteAvis = async () => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Traitez la réponse, par exemple, montrez un message de succès
+    console.log('Incident supprimé:', response.data);
+    alert('Incident supprimé avec succès');
+  } catch (error) {
+    console.error("Erreur lors de la suppression de l'incident:", error);
+    alert('Erreur lors de la suppression');
+  }
+};
+
   return (
     <Row>
       {/* Main Menu */}
@@ -40,7 +64,7 @@ function MenuDetailsIncident({ etat }) {
         <FaArrowCircleDown />
       </Card>
 
-      {etat === "ENCOURS" && (
+      {avis.etat === "ENCOURS" && (
         <>
           <Nav className="flex-column justify-content-between navigation">
             <Card
@@ -82,7 +106,7 @@ function MenuDetailsIncident({ etat }) {
             </Card>
           </Nav>
 
-          {/* Additional cards follow the same structure */}
+        
           <Nav className="flex-column justify-content-between navigation">
             <Card
               style={{
@@ -245,7 +269,7 @@ function MenuDetailsIncident({ etat }) {
             <button
               className="btn"
               style={{ backgroundColor: "#d9534f", color: "#fff", flexGrow: 1, textAlign: "center" }}
-              onClick={GestionIncident}
+              onClick={deleteAvis}
             >
               Suppression de l'avis
             </button>

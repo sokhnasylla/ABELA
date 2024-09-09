@@ -303,7 +303,7 @@ function DetailsIncident() {
           </Col>
           <Col md={4} sm={4}>
           {/* Passer au composant MenuDetails le type d'etat pour personnaliser le menu selon l'etat */}
-            <MenuDetailsIncident etat= {incident.etat} />
+            <MenuDetailsIncident avis= {incident} />
           </Col>
         </Row>
         <Row>
