@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Nav, Row } from "react-bootstrap";
+import { Button,  Modal , Card, Nav, Row } from "react-bootstrap";
 import {
   FaArrowCircleDown,
   FaBars,
@@ -14,10 +14,13 @@ import {
 import GestionIncident from "./GestionIncident";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
+import AddIncident from "./AddIncident";
 
 function MenuDetailsIncident({ avis }) {
   const token = getTokenFromLocalStorage();
-
+  const [showAddModal, setShowAddModal] = useState(false);
+  const handleAddShow = () => setShowAddModal(true);
+  const handleAddClose = () => setShowAddModal(false);
   const [incidents, setIncidents] = useState([]);
 
   const deleteAvis = async (event) => {
@@ -262,8 +265,29 @@ const validerAvis = async (event) => {
                 <button
                   className="btn"
                   style={{ backgroundColor: "#f0ad4e", color: "#fff", flexGrow: 1, textAlign: "center" }}
-                  onClick={GestionIncident}
+                  onClick={handleAddShow}
                 >
+                     <Modal
+      show={showAddModal}
+      onHide={handleAddClose}
+      dialogClassName="custom-modal"
+      size="xl"
+      style={{ width: "100%", textAlign: "" }}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title style={{ textAlign: "center" }}>
+          Ajouter un avis incident
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <AddIncident />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="danger" onClick={handleAddClose}>
+          Fermer
+        </Button>
+      </Modal.Footer>
+    </Modal>
                   Edition de l'avis
                 </button>
                 <FaInfoCircle />
@@ -375,6 +399,9 @@ const validerAvis = async (event) => {
         </Card>
       </Nav>
     </Row>
+   
+
+    
   );
 }
 
