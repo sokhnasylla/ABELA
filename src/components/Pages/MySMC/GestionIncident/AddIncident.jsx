@@ -270,14 +270,7 @@ function AddIncident() {
                   className="form-control"
                 />
               </div>
-              <Button variant="primary" onClick={handleSubmit}  type="submit"
-                  style={{
-                    backgroundColor: "#C9302C",
-                    borderColor: "#C9302C",
-                    width: "100%",
-                  }}>
-                Submit
-              </Button>
+            
             </form>
           </Col>
 
@@ -325,6 +318,9 @@ function AddIncident() {
                   rows="5"
                 ></textarea>
               </div>
+              <Button variant="primary" onClick={handleSubmit}  type="submit">
+                Submit
+              </Button>
             </form>
           </Col>
 

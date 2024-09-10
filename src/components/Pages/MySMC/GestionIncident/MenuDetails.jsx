@@ -18,10 +18,32 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 function MenuDetailsIncident({ avis }) {
   const token = getTokenFromLocalStorage();
 
-const deleteAvis = async () => {
+  const [incidents, setIncidents] = useState([]);
+
+  const deleteAvis = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.delete(
+        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log('Incident supprimé:', response.data);
+      alert('Incident supprimé avec succès');
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'incident:", error);
+      alert('Erreur lors de la suppression');
+    }
+  };
+
+const cancelAvis = async () => {
   try {
-    const response = await axios.delete(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
+    const response = await axios.put(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/canceled`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -30,13 +52,15 @@ const deleteAvis = async () => {
     );
 
     // Traitez la réponse, par exemple, montrez un message de succès
-    console.log('Incident supprimé:', response.data);
-    alert('Incident supprimé avec succès');
+    console.log('Incident annulé:', response.data);
+    alert('Incident annulé avec succès');
   } catch (error) {
-    console.error("Erreur lors de la suppression de l'incident:", error);
-    alert('Erreur lors de la suppression');
+    console.error("Erreur lors de l'annulation de l'incident:", error);
+    alert("Erreur lors de l'annulation");
   }
 };
+
+
 
   return (
     <Row>
