@@ -40,23 +40,60 @@ function MenuDetailsIncident({ avis }) {
     }
   };
 
-const cancelAvis = async () => {
+const fermerAvis = async (event) => {
+  event.preventDefault();
   try {
     const response = await axios.put(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/canceled`,
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/closed`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-
-    // Traitez la réponse, par exemple, montrez un message de succès
-    console.log('Incident annulé:', response.data);
-    alert('Incident annulé avec succès');
+    console.log('Incident fermé:', response.data);
+    alert('Incident fermé avec succès');
   } catch (error) {
-    console.error("Erreur lors de l'annulation de l'incident:", error);
-    alert("Erreur lors de l'annulation");
+    console.error("Erreur lors de la fermerture de l'incident:", error);
+    alert("Erreur lors de la fermerture");
+  }
+};
+
+const cloturerAvis = async (event) => {
+  event.preventDefault();
+  try {
+    const response = await axios.put(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/cloture`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Incident cloturé:', response.data);
+    alert('Incident cloturé avec succès');
+  } catch (error) {
+    console.error("Erreur lors de la cloture de l'incident:", error);
+    alert("Erreur lors de la cloture");
+  }
+};
+
+const validerAvis = async (event) => {
+  event.preventDefault();
+  try {
+    const response = await axios.put(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/etat-avancement`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Incident validé:', response.data);
+    alert('Incident validé avec succès');
+  } catch (error) {
+    console.error("Erreur lors de la validation de l'incident:", error);
+    alert("Erreur lors de la validation");
   }
 };
 
@@ -157,7 +194,7 @@ const cancelAvis = async () => {
                 <button
                   className="btn"
                   style={{ backgroundColor: "#5cb85c", color: "#fff", flexGrow: 1, textAlign: "center" }}
-                  onClick={GestionIncident}
+                  onClick={validerAvis}
                 >
                   Validation de l'avis
                 </button>
@@ -259,7 +296,7 @@ const cancelAvis = async () => {
             <button
               className="btn"
               style={{ backgroundColor: "#d9534f", color: "#fff", flexGrow: 1, textAlign: "center" }}
-              onClick={GestionIncident}
+              onClick={fermerAvis}
             >
               Fermeture de l'avis
             </button>
