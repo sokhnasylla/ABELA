@@ -12,7 +12,6 @@ export const getTokenFromLocalStorage = () => {
 
 export const getTokenDecode = () => {
   const decodedToken = jwtDecode(localStorage.getItem('userToken'));
-  console.log("TOKEN", decodedToken);
   return decodedToken;
 };
 

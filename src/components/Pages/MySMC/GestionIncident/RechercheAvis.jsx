@@ -171,7 +171,7 @@ function RechercheAvis({ onSearch }) {
                     value={etat}
                     onChange={(e) => setEtat(e.target.value)}
                   >
-                    <option value="Fermé">Fermé</option>
+                    <option value="FERME">Fermé</option>
                     <option value="Annulé">Annulé</option>
                     <option value="Cloturé">Cloturé</option>
                   </select>

@@ -7,7 +7,7 @@ import {
   FaThumbsDown,
   FaThumbsUp,
 } from "react-icons/fa";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import Title from "../../../Card/Title/Title";
 import MenuMysmc from "../Menu/MenuMysmc";
@@ -70,8 +70,15 @@ function DetailsIncident() {
               <Col sm={7}>
                 <Title text="Prévisalusation de l'avis" />
                 <div className="table-responsive">
-                  <Table className="styled-table">
+                  <Table className="table table-bordered table-striped">
                     <tbody>
+                      <tr style={{textAlign: "center"}}>
+                        <th colSpan={2}
+                        style={{ backgroundColor: "#EA7714", color: "white" }}
+                        >
+                            {incident.titre}
+                        </th>
+                      </tr>
                       <tr>
                         <th className="styled-table-td">Date</th>
                         <th>
@@ -303,7 +310,7 @@ function DetailsIncident() {
           </Col>
           <Col md={4} sm={4}>
           {/* Passer au composant MenuDetails le type d'etat pour personnaliser le menu selon l'etat */}
-            <MenuDetailsIncident etat= {incident.etat} />
+            <MenuDetailsIncident avis= {incident} />
           </Col>
         </Row>
         <Row>
