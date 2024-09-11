@@ -91,7 +91,6 @@ function RechercheStatistiques({ onSearch }) {
                 <Button
                   type="submit"
                   style={{
-                    backgroundColor: "#C9302C",
                     borderColor: "#C9302C",
                     width: "100%",
                   }}

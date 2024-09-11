@@ -77,7 +77,8 @@ function MenuDetailsIncident({ avis }) {
         console.log(result); // Log or display the plain text response
       }
   
-      navigate(`/mysmc/gestionincident`);
+      // Refresh the page
+      window.location.reload();
       return result;
     } catch (err) {
       console.error("Error:", err.message);
@@ -170,7 +171,7 @@ function MenuDetailsIncident({ avis }) {
             </Card>
           </Nav>
 
-          {/* Additional cards follow the same structure */}
+        
           <Nav className="flex-column justify-content-between navigation">
             <Card
               style={{
@@ -460,6 +461,9 @@ function MenuDetailsIncident({ avis }) {
         </Modal.Footer>
       </Modal>
     </Row>
+   
+
+    
   );
 }
 

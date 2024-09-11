@@ -34,35 +34,20 @@ function AddIncident({ formData, handleChange }) {
       }
     };
 
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents",
-      setTypesAvis
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list",
-      setServiceImpacte
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations",
-      setListValidation
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions",
-      setListDiffusion
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis",
-      setTypeCause
-    );
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents", setTypesAvis);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list", setServiceImpacte);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations", setListValidation);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions", setListDiffusion);
+    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis", setTypeCause);
   }, [token]);
 
   return (
     <div id="home">
       <Container className="body">
+        {/* Gestion des avis section */}
         <Row>
-          <Col sm={12} className="content">
+          <Col sm={12}>
             <Title text="Gestion des avis d'incidents - Formulaire de déclaration d'avis" />
-            <br />
             <Table className="custom-table" bordered striped id="ajoutavis">
               <thead>
                 <tr>
