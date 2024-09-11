@@ -30,8 +30,68 @@ function AddIncident() {
     observations: ''
   });
 
+
+  
+  /*id
+  objet
+  nature
+  type_avis_incident_id
+  liste_validation_id
+  liste_diffusion_id
+  date_debut
+  date_detection
+  num_ticketezv
+  num_ticket_oceane
+  impact
+  cause_retard_notification
+  causes
+  observations
+  num_avis
+  
+  indication_etat_avancement_par
+  auto_datefp
+  cloture_by
+  commentaire 	
+  commentaire_demande_annulation
+  commentaire_demande_fermeture
+  date_annulation
+  date_cloture
+  date_creation
+  date_demande_annulation
+  date_demande_fermeture
+  date_demande_validation
+  date_dernier_etat_avancement
+  date_diffusion
+  date_fermeture
+  date_fin_previsionnelle
+  date_indication_etat_avancement
+  date_last_update
+  date_reopen
+  date_validation
+  delai_detection
+  delai_diffusion
+  delai_traitement
+  demande_annulation_par
+  demande_fermeture_par
+  diffuse_par
+  duree_incident
+  est_valide
+  etat
+  modepa
+  nbre_relance
+ 
+  titre
+  troubleshooting
+  update_by
+  user
+  validation_envoye_par
+  valide_par
+  probleme_id
+  tmc_releve_id
+  tmc_id 	
+  type_cause_incident_id 	*/
+
   const [nature, setNature] = useState('SI');
-  const [type, setType] = useState("choisir le type d'avis");
   const [service, setService] = useState("Application Test");
   const [valide, setValide] = useState("choisir la liste validation");
   const [diffusion, setDiffusion] = useState("choisir la liste diffusion");
