@@ -11,15 +11,37 @@ import {
   FaThumbsUp,
   FaTimes,
 } from "react-icons/fa";
-import GestionIncident from "./GestionIncident";
-import { getTokenFromLocalStorage } from "../../Auth/authUtils";
+import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import { useNavigate } from "react-router-dom";
+import EditIncident from "./EditIncident";
+import axios from "axios";
 
 function MenuDetailsIncident({ avis }) {
   const [showFermetureModal, setShowFermetureModal] = useState(false);
   const [showAnnulerModal, setShowAnnulerModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const token = getTokenFromLocalStorage();
   const navigate = useNavigate();
+  const decode = getTokenDecode();
+  const updateBy = decode.sub;
+  const [formData, setFormData] = useState({
+    objet: "",
+    nature: "",
+    typeAvisIncident: { id: "" },
+    serviceImpacte: "",
+    valide: "",
+    diffusion: "",
+    dateDebut: "",
+    dateDetection: "",
+    ticketEzv: "",
+    ticketOceane: "",
+    impact: "",
+    causeRetard: { id: "" },
+    typeCauseIncident: { id: "" },
+    causeProbable: "",
+    observations: "",
+    updateBy
+  });
 
   const handleFermertureAvis = async (id) => {
     try {
@@ -35,17 +57,16 @@ function MenuDetailsIncident({ avis }) {
         }
       );
       if (!response.ok) throw new Error("Erreur lors de la recherche");
+
       const contentType = response.headers.get("content-type");
       let result;
       if (contentType && contentType.includes("application/json")) {
         result = await response.json();
       } else {
         result = await response.text();
-        throw new Error(`Response is not in JSON format: ${result}`);
+        console.log(result);
       }
-
-      if (result.length === 0)
-        throw new Error("Aucun avis trouvé pour le numéro spécifié");
+      window.location.reload();
       return result;
     } catch (err) {
       throw new Error(err.message || "Erreur réseau");
@@ -64,20 +85,18 @@ function MenuDetailsIncident({ avis }) {
           },
         }
       );
-  
+
       if (!response.ok) throw new Error("Erreur lors de la suppression");
-  
+
       // Check if the response is plain text
       const contentType = response.headers.get("content-type");
       let result;
       if (contentType && contentType.includes("application/json")) {
         result = await response.json();
       } else {
-        result = await response.text(); // Handle plain text response
-        console.log(result); // Log or display the plain text response
+        result = await response.text();
+        console.log(result);
       }
-  
-      // Refresh the page
       window.location.reload();
       return result;
     } catch (err) {
@@ -100,29 +119,70 @@ function MenuDetailsIncident({ avis }) {
     setShowAnnulerModal(false);
   };
 
+  const handleEditClose = () => setShowEditModal(false);
+  const handleEditShow = () => setShowEditModal(true);
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    if (name.includes("id")) {
+      const [parentKey, childKey] = name.split(".");
+      setFormData((prevState) => ({
+        ...prevState,
+        [parentKey]: {
+          ...prevState[parentKey],
+          [childKey]: value,
+        },
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await axios.put(
+        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
+        formData,
+        config
+      );
+
+      if (response.status === 200) {
+        console.log("Avis modifié avec succès");
+        setShowEditModal(false);
+        navigate("/mysmc/gestionincident");
+      } else {
+        console.error("Erreur lors de la création de l'avis");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête", error);
+    }
+  };
+
   return (
     <Row>
-      {/* Main Menu */}
       <Card
         style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between", // Ensures proper placement of items
-          padding: "10px",
+          justifyContent: "space-between",
           color: "#148C8A",
           border: "2px solid #148C8A",
         }}
       >
-        {/* Icon on the left */}
         <FaBars />
-
-        {/* Text centered */}
         <p style={{ marginBottom: "0", textAlign: "center", flexGrow: 1 }}>
           Menu Personnalisé
         </p>
-
-        {/* Icon on the right */}
         <FaArrowCircleDown />
       </Card>
 
@@ -134,8 +194,8 @@ function MenuDetailsIncident({ avis }) {
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between", // Proper spacing for icons and text
-                height: "60px",
+                justifyContent: "space-between",
+                height: "40px",
                 backgroundColor: "#337ab7",
               }}
             >
@@ -143,16 +203,14 @@ function MenuDetailsIncident({ avis }) {
                 className="text-white"
                 style={{
                   display: "flex",
-                  justifyContent: "space-between", // Ensures items are spaced correctly
+                  justifyContent: "space-between",
                   alignItems: "center",
                   width: "100%",
-                  padding: "0 10px", // Adds padding inside the card
+                  padding: "0 10px",
                 }}
               >
-                {/* Icon on the left */}
                 <FaQuestion />
 
-                {/* Button in the center */}
                 <button
                   className="btn"
                   style={{
@@ -165,13 +223,11 @@ function MenuDetailsIncident({ avis }) {
                   Demande validation avis
                 </button>
 
-                {/* Icon on the right */}
                 <FaInfoCircle />
               </Nav.Link>
             </Card>
           </Nav>
 
-        
           <Nav className="flex-column justify-content-between navigation">
             <Card
               style={{
@@ -179,7 +235,7 @@ function MenuDetailsIncident({ avis }) {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                height: "60px",
+                height: "40px",
                 backgroundColor: "#5cb85c",
               }}
             >
@@ -216,7 +272,7 @@ function MenuDetailsIncident({ avis }) {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                height: "60px",
+                height: "40px",
                 backgroundColor: "#5cb85c",
               }}
             >
@@ -253,7 +309,7 @@ function MenuDetailsIncident({ avis }) {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                height: "60px",
+                height: "40px",
                 backgroundColor: "#f0ad4e",
               }}
             >
@@ -276,6 +332,7 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
+                  onClick={handleEditShow}
                 >
                   Edition de l'avis
                 </button>
@@ -290,7 +347,7 @@ function MenuDetailsIncident({ avis }) {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                height: "60px",
+                height: "40px",
                 backgroundColor: "#d9534f",
               }}
             >
@@ -328,7 +385,7 @@ function MenuDetailsIncident({ avis }) {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                height: "60px",
+                height: "40px",
                 backgroundColor: "#d9534f",
               }}
             >
@@ -369,7 +426,7 @@ function MenuDetailsIncident({ avis }) {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            height: "60px",
+            height: "40px",
           }}
         >
           <Nav.Link
@@ -460,10 +517,31 @@ function MenuDetailsIncident({ avis }) {
           </Button>
         </Modal.Footer>
       </Modal>
+      <Modal
+          show={showEditModal}
+          onHide={handleEditClose}
+          dialogClassName="custom-modal"
+          size="xl"
+          style={{ width: "100%", textAlign: "" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ textAlign: "center" }}>
+              Modifier un avis incident
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EditIncident avis={avis} formData={formData} handleEditChange={handleEditChange} />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleEditClose}>
+              Fermer
+            </Button>
+            <Button variant="primary" onClick={handleEditSubmit}>
+              Modifier
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </Row>
-   
-
-    
   );
 }
 

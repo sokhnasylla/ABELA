@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 
 function RechercheAvis({ onSearch }) {
   const [error, setError] = useState("");

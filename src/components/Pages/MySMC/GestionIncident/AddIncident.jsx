@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Button } from "react-bootstrap";
+import { Container, Row, Col, Table, } from "react-bootstrap";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import "../../../Pages/MySMC/Menu/menumysmc.css";
 import axios from "axios";
 import Title from "../../../Card/Title/Title";
-import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
-import { useNavigate } from "react-router-dom";
+import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 
 function AddIncident({ formData, handleChange }) {
-  const tokenDecode = getTokenDecode();
   const token = getTokenFromLocalStorage();
-  const user = tokenDecode.sub;
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
   const [serviceImpact, setServiceImpacte] = useState([]);
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async (url, setter) => {
@@ -171,7 +167,7 @@ function AddIncident({ formData, handleChange }) {
               <div className="mb-3 form-group">
                 <label htmlFor="dateDebut">Date de début :</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   name="dateDebut"
                   id="dateDebut"
                   className="form-control"
@@ -182,7 +178,7 @@ function AddIncident({ formData, handleChange }) {
               <div className="mb-3 form-group">
                 <label htmlFor="dateDetection">Date de détection :</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   name="dateDetection"
                   id="dateDetection"
                   className="form-control"
@@ -191,24 +187,24 @@ function AddIncident({ formData, handleChange }) {
                 />
               </div>
               <div className="mb-3 form-group">
-                <label htmlFor="ticketEzv">Ticket EZV :</label>
+                <label htmlFor="numTicketEZV">Ticket EZV :</label>
                 <input
                   type="text"
-                  name="ticketEzv"
-                  id="ticketEzv"
+                  name="numTicketEZV"
+                  id="numTicketEZV"
                   className="form-control"
-                  value={formData.ticketEzv}
+                  value={formData.numTicketEZV}
                   onChange={handleChange}
                 />
               </div>
               <div className="mb-3 form-group">
-                <label htmlFor="ticketOceane">Ticket Océane :</label>
+                <label htmlFor="numTicketOceane">Ticket Océane :</label>
                 <input
                   type="text"
-                  name="ticketOceane"
-                  id="ticketOceane"
+                  name="numTicketOceane"
+                  id="numTicketOceane"
                   className="form-control"
-                  value={formData.ticketOceane}
+                  value={formData.numTicketOceane}
                   onChange={handleChange}
                 />
               </div>
@@ -263,7 +259,7 @@ function AddIncident({ formData, handleChange }) {
                   id="causeProbable"
                   className="form-control"
                   name="causeProbable"
-                  value={formData.causeProbable}
+                  value={formData.causes}
                   onChange={handleChange}
                   placeholder="(*) Demander systématiquement aux TMC(s) les causes probables
                       (*) Eviter les expressions « Investigations en Cours » ; « causes inconnues » et préférer mettre « constat : xxxxxxxx »"
