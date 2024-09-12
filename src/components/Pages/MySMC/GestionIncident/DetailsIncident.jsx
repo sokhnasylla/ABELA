@@ -57,7 +57,7 @@ function DetailsIncident() {
                     alignItems: "center",
                     justifyContent: "space-around",
                     color: "#148C8A",
-                    border: "2px solid #148C8A"
+                    border: "2px solid #148C8A",
                   }}
                 >
                   <FaBars />
@@ -72,11 +72,12 @@ function DetailsIncident() {
                 <div className="table-responsive">
                   <Table className="table table-bordered table-striped">
                     <tbody>
-                      <tr style={{textAlign: "center"}}>
-                        <th colSpan={2}
-                        style={{ backgroundColor: "#EA7714", color: "white" }}
+                      <tr style={{ textAlign: "center" }}>
+                        <th
+                          colSpan={2}
+                          style={{ backgroundColor: "#EA7714", color: "white" }}
                         >
-                            {incident.titre}
+                          {incident.titre}
                         </th>
                       </tr>
                       <tr>
@@ -191,17 +192,18 @@ function DetailsIncident() {
                       <tr>
                         <th>Diffusion</th>
                         <th className="">
-                          {incident.delaiDetection == "Hors Delai" ? (
-                            <span className="d-flex align-items-center">
-                              {incident.delaiDetection} &nbsp;
-                              <FaThumbsDown style={{ color: "red" }} />
-                            </span>
-                          ) : (
-                            <span className="d-flex align-items-center">
-                              {incident.delaiDetection} &nbsp;
-                              <FaThumbsUp style={{ color: "green" }} />
-                            </span>
-                          )}
+                          <span className="d-flex align-items-center">
+                                {incident.delaiDetection} &nbsp;
+                            {incident.delaiDetection === "Hors Delai" ? (
+                              <>
+                                <FaThumbsDown style={{ color: "red" }} />
+                              </>
+                            ) : (
+                              <>
+                                <FaThumbsUp style={{ color: "green" }} />
+                              </>
+                            )}
+                          </span>
                         </th>
                       </tr>
                       <tr>
@@ -309,8 +311,8 @@ function DetailsIncident() {
             </Row>
           </Col>
           <Col md={4} sm={4}>
-          {/* Passer au composant MenuDetails le type d'etat pour personnaliser le menu selon l'etat */}
-            <MenuDetailsIncident avis= {incident} />
+            {/* Passer au composant MenuDetails le type d'etat pour personnaliser le menu selon l'etat */}
+            <MenuDetailsIncident avis={incident} />
           </Col>
         </Row>
         <Row>
