@@ -171,7 +171,7 @@ function AddIncident({ formData, handleChange }) {
               <div className="mb-3 form-group">
                 <label htmlFor="dateDebut">Date de début :</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   name="dateDebut"
                   id="dateDebut"
                   className="form-control"
@@ -182,7 +182,7 @@ function AddIncident({ formData, handleChange }) {
               <div className="mb-3 form-group">
                 <label htmlFor="dateDetection">Date de détection :</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   name="dateDetection"
                   id="dateDetection"
                   className="form-control"
@@ -228,15 +228,17 @@ function AddIncident({ formData, handleChange }) {
               </div>
               <div className="mb-3 form-group">
                 <label htmlFor="causeRetard.id">Cause du retard :</label>
+              
+                  
                 <select
                   name="causeRetard.id"
                   className="form-control"
                   value={formData.causeRetard.id}
                   onChange={handleChange}
                 >
-                  <option value="">Sélectionnez la cause</option>
-                  {/* Add options here based on fetched causeRetard list */}
-                  {/* {list} */}
+                  <option value="">Sélectionnez la cause</option>            
+                  <option value="SI">Retard détecton</option>
+                  <option value="DATA">Non supervisé</option>
                 </select>
               </div> 
               <div className="mb-3 form-group">

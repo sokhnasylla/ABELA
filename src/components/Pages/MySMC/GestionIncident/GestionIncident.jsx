@@ -720,10 +720,10 @@ function GestionIncident() {
             <AddIncident formData={formData} handleChange={handleChange} />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={handleAddClose}>
+            <Button variant="danger" onClick={()=>{handleAddClose();window.location.reload();}}>
               Fermer
             </Button>
-            <Button variant="primary" onClick={handleSubmit}>
+            <Button variant="primary" onClick={()=>{handleSubmit();window.location.reload();}}>
               Ajouter l'avis
             </Button>
           </Modal.Footer>
