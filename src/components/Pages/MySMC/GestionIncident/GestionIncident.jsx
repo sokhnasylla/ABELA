@@ -720,7 +720,7 @@ function GestionIncident() {
             <AddIncident formData={formData} handleChange={handleChange} />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={()=>{handleAddClose();window.location.reload();}}>
+            <Button variant="danger" onClick={handleAddClose}>
               Fermer
             </Button>
             <Button variant="primary" onClick={()=>{handleSubmit();window.location.reload();}}>
