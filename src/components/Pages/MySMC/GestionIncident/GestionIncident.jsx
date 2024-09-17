@@ -770,7 +770,7 @@ function GestionIncident() {
             <Button variant="danger" onClick={handleAddClose}>
               Fermer
             </Button>
-            <Button variant="primary" onClick={handleSubmit}>
+            <Button variant="primary" onClick={()=>{handleSubmit();window.location.reload();}}>
               Ajouter l'avis
             </Button>
           </Modal.Footer>
