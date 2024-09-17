@@ -24,25 +24,24 @@ function MenuDetailsIncident({ avis }) {
   const navigate = useNavigate();
   const decode = getTokenDecode();
   const updateBy = decode.sub;
-  const [formData, setFormData] = useState({
-    objet: "",
-    nature: "",
-    typeAvisIncident: { id: "" },
-    serviceImpacte: "",
-    valide: "",
-    diffusion: "",
-    dateDebut: "",
-    dateDetection: "",
-    ticketEzv: "",
-    ticketOceane: "",
-    impact: "",
-    causeRetard: { id: "" },
-    typeCauseIncident: { id: "" },
-    causeProbable: "",
-    observations: "",
-    updateBy
+  
+  const [formData, setFormData] =    useState({
+    objet: avis.objet || "",
+    nature: avis.nature || "",
+    typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
+    serviceImpacte: avis.serviceImpacte || "",
+    valide: avis.valide || "",
+    diffusion: avis.diffusion || "",
+    dateDebut: avis.dateDebut || "",
+    dateDetection: avis.dateDetection || "",
+    numTicketEZV: avis.numTicketEZV || "",
+    numTicketOceane: avis.numTicketOceane || "",
+    impact: avis.impact || "",
+    causeRetard: { id: avis.causeRetard?.id || "" },
+    typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
+    causeProbable: avis.causeProbable || "",
+    observations: avis.observations || "",
   });
-
   const handleFermertureAvis = async (id) => {
     try {
       console.log(id);

@@ -18,7 +18,7 @@ function DetailsIncident() {
   const token = getTokenFromLocalStorage();
   const location = useLocation();
   const avis = location.state?.avis;
-
+  
   useEffect(() => {
     const fetchIncident = async () => {
       try {
@@ -37,7 +37,7 @@ function DetailsIncident() {
     };
     fetchIncident();
   }, [avis, token]);
-
+  console.log(incident);
   if (!incident) {
     return <div>Aucun Incident</div>;
   }

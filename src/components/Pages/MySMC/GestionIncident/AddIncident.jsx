@@ -10,7 +10,7 @@ function AddIncident({ formData, handleChange }) {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
-  const [serviceImpact, setServiceImpacte] = useState([]);
+  const [serviceImpacte, setServiceImpacte] = useState([]);
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
@@ -85,6 +85,7 @@ function AddIncident({ formData, handleChange }) {
                   onChange={handleChange}
                 />
               </div>
+
               <div className="mb-3 form-group">
                 <label htmlFor="nature">Nature :</label>
                 <select
@@ -125,7 +126,7 @@ function AddIncident({ formData, handleChange }) {
                   onChange={handleChange}
                 >
                   <option value="">Sélectionnez le service</option>
-                  {serviceImpact.map((service) => (
+                  {serviceImpacte.map((service) => (
                     <option key={service.id} value={service.id}>
                       {service.nom}
                     </option>
