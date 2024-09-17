@@ -1,6 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Row, Table } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Container,
+  Row,
+  Table,
+  Alert,
+  Pagination,
+} from "react-bootstrap";
 import {
   FaArrowAltCircleDown,
   FaBars,
@@ -15,29 +23,90 @@ import MenuDetailsIncident from "./MenuDetails";
 
 function DetailsIncident() {
   const [incident, setIncident] = useState(null);
+  const [historique, setHistorique] = useState([]);
   const token = getTokenFromLocalStorage();
   const location = useLocation();
   const avis = location.state?.avis;
-  
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  const handleItemsChange = (event) => {
+    setItemsPerPage(Number(event.target.value));
+  };
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
   useEffect(() => {
-    const fetchIncident = async () => {
+    const fetchIncident = async (url, setter) => {
       try {
-        const response = await axios.get(
-          `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setIncident(response.data);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.get(url, config);
+        setter(response.data);
       } catch (error) {
         console.error("Erreur:", error);
       }
     };
-    fetchIncident();
-  }, [avis, token]);
-  console.log(incident);
+    fetchIncident(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
+      setIncident
+    );
+  }, [token, avis.id]);
+
+  useEffect(() => {
+    const fetchHistorique = async (url, setter) => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.get(url, config);
+        console.log(response.data);
+        setter(response.data);
+      } catch (error) {
+        console.error("Erreur:", error);
+      }
+    };
+    fetchHistorique(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique`,
+      setHistorique
+    );
+  }, [token, avis.id]);
+
+  useEffect(() => {
+    const message = localStorage.getItem("alertMessage");
+    const type = localStorage.getItem("alertType");
+
+    if (message) {
+      setAlertMessage(message);
+      setAlertType(type);
+      setShowAlert(true);
+
+      localStorage.removeItem("alertMessage");
+      localStorage.removeItem("alertType");
+
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = historique.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(historique.length / itemsPerPage);
+
   if (!incident) {
     return <div>Aucun Incident</div>;
   }
@@ -45,6 +114,17 @@ function DetailsIncident() {
   return (
     <div>
       <MenuMysmc />
+      <div className="container mt-3">
+        {showAlert && (
+          <Alert
+            variant={alertType}
+            onClose={() => setShowAlert(false)}
+            dismissible
+          >
+            {alertMessage}
+          </Alert>
+        )}
+      </div>
       <Container className="body" style={{ fontSize: "14px" }}>
         <Row>
           <Col md={8} sm={8}>
@@ -183,6 +263,94 @@ function DetailsIncident() {
                     </tbody>
                   </Table>
                 </div>
+                <Row>
+                  <Title text={"Historique des opérations sur l'avis"}></Title>
+                  <table className="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Date Action</th>
+                        <th>Action</th>
+                        <th>Utilisateur</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentItems.map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            {new Date(item.dateAction).toLocaleDateString(
+                              "fr-FR",
+                              {
+                                day: "numeric",
+                                month: "numeric",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "numeric",
+                                second: "numeric",
+                              }
+                            )}
+                          </td>
+                          <td>{item.action}</td>
+                          <td>{item.user}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <Pagination className="d-flex justify-content-center mt-4">
+                    <Pagination.Item
+                      active={currentPage === 1}
+                      onClick={() => handlePageChange(1)}
+                    >
+                      1
+                    </Pagination.Item>
+
+                    {currentPage > 4 && <Pagination.Ellipsis />}
+
+                    {currentPage > 3 && (
+                      <Pagination.Item
+                        onClick={() => handlePageChange(currentPage - 2)}
+                      >
+                        {currentPage - 2}
+                      </Pagination.Item>
+                    )}
+                    {currentPage > 2 && (
+                      <Pagination.Item
+                        onClick={() => handlePageChange(currentPage - 1)}
+                      >
+                        {currentPage - 1}
+                      </Pagination.Item>
+                    )}
+
+                    {currentPage !== 1 && currentPage !== totalPages && (
+                      <Pagination.Item active>{currentPage}</Pagination.Item>
+                    )}
+
+                    {currentPage < totalPages - 1 && (
+                      <Pagination.Item
+                        onClick={() => handlePageChange(currentPage + 1)}
+                      >
+                        {currentPage + 1}
+                      </Pagination.Item>
+                    )}
+                    {currentPage < totalPages - 2 && (
+                      <Pagination.Item
+                        onClick={() => handlePageChange(currentPage + 2)}
+                      >
+                        {currentPage + 2}
+                      </Pagination.Item>
+                    )}
+
+                    {currentPage < totalPages - 3 && <Pagination.Ellipsis />}
+
+                    {totalPages > 1 && (
+                      <Pagination.Item
+                        active={currentPage === totalPages}
+                        onClick={() => handlePageChange(totalPages)}
+                      >
+                        {totalPages}
+                      </Pagination.Item>
+                    )}
+                  </Pagination>
+                </Row>
               </Col>
               <Col sm={5}>
                 <Title text="Indicateurs clés" />
@@ -193,7 +361,7 @@ function DetailsIncident() {
                         <th>Diffusion</th>
                         <th className="">
                           <span className="d-flex align-items-center">
-                                {incident.delaiDetection} &nbsp;
+                            {incident.delaiDetection} &nbsp;
                             {incident.delaiDetection === "Hors Delai" ? (
                               <>
                                 <FaThumbsDown style={{ color: "red" }} />
@@ -253,37 +421,42 @@ function DetailsIncident() {
                         <th>Crée par</th>
                         <th>{incident.user}</th>
                       </tr>
-                      <tr>
-                        <th>Modifié par</th>
-                        <th>{incident.updateBy}</th>
-                      </tr>
-                      <tr>
-                        <th style={{ backgroundColor: "#FADBD8" }}>
-                          Date diffusion
-                        </th>
-                        <th style={{ backgroundColor: "#FADBD8" }}>
-                          {incident.dateDiffusion &&
-                            new Date(incident.dateDiffusion).toLocaleDateString(
-                              "fr-FR",
-                              {
+                      {incident.updateBy && (
+                        <tr>
+                          <th>Modifié par</th>
+                          <th>{incident.updateBy}</th>
+                        </tr>
+                      )}
+                      {incident.dateDiffusion && (
+                        <tr>
+                          <th style={{ backgroundColor: "#FADBD8" }}>
+                            Date diffusion
+                          </th>
+                          <th style={{ backgroundColor: "#FADBD8" }}>
+                            {incident.dateDiffusion &&
+                              new Date(
+                                incident.dateDiffusion
+                              ).toLocaleDateString("fr-FR", {
                                 day: "numeric",
                                 month: "numeric",
                                 year: "numeric",
                                 hour: "numeric",
                                 minute: "numeric",
                                 second: "numeric",
-                              }
-                            )}
-                        </th>
-                      </tr>
-                      <tr>
-                        <th style={{ backgroundColor: "#FADBD8" }}>
-                          Diffusé par
-                        </th>
-                        <th style={{ backgroundColor: "#FADBD8" }}>
-                          {incident.diffusePar}
-                        </th>
-                      </tr>
+                              })}
+                          </th>
+                        </tr>
+                      )}
+                      {incident.diffusePar && (
+                        <tr>
+                          <th style={{ backgroundColor: "#FADBD8" }}>
+                            Diffusé par
+                          </th>
+                          <th style={{ backgroundColor: "#FADBD8" }}>
+                            {incident.diffusePar}
+                          </th>
+                        </tr>
+                      )}
                       {incident.dateDemandeFermeture && (
                         <tr>
                           <th style={{ backgroundColor: "#D6EAF8" }}>
@@ -312,7 +485,12 @@ function DetailsIncident() {
           </Col>
           <Col md={4} sm={4}>
             {/* Passer au composant MenuDetails le type d'etat pour personnaliser le menu selon l'etat */}
-            <MenuDetailsIncident avis={incident} />
+            <MenuDetailsIncident
+              avis={incident}
+              setAlertMessage={setAlertMessage}
+              setAlertType={setAlertType}
+              setShowAlert={setShowAlert}
+            />
           </Col>
         </Row>
         <Row>

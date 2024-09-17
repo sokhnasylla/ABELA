@@ -24,24 +24,25 @@ function MenuDetailsIncident({ avis }) {
   const navigate = useNavigate();
   const decode = getTokenDecode();
   const updateBy = decode.sub;
-  
-  const [formData, setFormData] =    useState({
+  const [formData, setFormData] = useState({
     objet: avis.objet || "",
     nature: avis.nature || "",
     typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
-    serviceImpacte: avis.serviceImpacte || "",
+    applicationSis: avis.applicationSis || [],
     valide: avis.valide || "",
     diffusion: avis.diffusion || "",
     dateDebut: avis.dateDebut || "",
     dateDetection: avis.dateDetection || "",
-    numTicketEZV: avis.numTicketEZV || "",
-    numTicketOceane: avis.numTicketOceane || "",
+    ticketEzv: avis.ticketEzv || "",
+    ticketOceane: avis.ticketOceane || "",
     impact: avis.impact || "",
     causeRetard: { id: avis.causeRetard?.id || "" },
     typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
     causeProbable: avis.causeProbable || "",
     observations: avis.observations || "",
-  });
+    updateBy,
+  });  
+
   const handleFermertureAvis = async (id) => {
     try {
       console.log(id);
@@ -65,10 +66,14 @@ function MenuDetailsIncident({ avis }) {
         result = await response.text();
         console.log(result);
       }
+      localStorage.setItem("alertMessage", "Avis fermé avec succès");
+      localStorage.setItem("alertType", "success");
+      setShowFermetureModal(false);
       window.location.reload();
       return result;
     } catch (err) {
-      throw new Error(err.message || "Erreur réseau");
+      localStorage.setItem("alertMessage", "Erreur lors de la fermeture de l'avis");
+      localStorage.setItem("alertType", "danger");
     }
   };
 
@@ -96,11 +101,14 @@ function MenuDetailsIncident({ avis }) {
         result = await response.text();
         console.log(result);
       }
+      setShowAnnulerModal(false);
+      localStorage.setItem("alertMessage", "Avis supprimé avec succès");
+      localStorage.setItem("alertType", "success");
       window.location.reload();
       return result;
     } catch (err) {
-      console.error("Error:", err.message);
-      alert(err.message || "Erreur réseau");
+      localStorage.setItem("alertMessage", "Erreur lors de la suppression de l'avis");
+      localStorage.setItem("alertType", "danger");
     }
   };
 
@@ -148,6 +156,7 @@ function MenuDetailsIncident({ avis }) {
           "Content-Type": "application/json",
         },
       };
+      console.log(formData);
       const response = await axios.put(
         `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
         formData,
@@ -157,7 +166,9 @@ function MenuDetailsIncident({ avis }) {
       if (response.status === 200) {
         console.log("Avis modifié avec succès");
         setShowEditModal(false);
-        navigate("/mysmc/gestionincident");
+        localStorage.setItem("alertMessage", "Avis modifié avec succès");
+        localStorage.setItem("alertType", "success");
+        // window.location.reload();
       } else {
         console.error("Erreur lors de la création de l'avis");
       }
@@ -517,29 +528,33 @@ function MenuDetailsIncident({ avis }) {
         </Modal.Footer>
       </Modal>
       <Modal
-          show={showEditModal}
-          onHide={handleEditClose}
-          dialogClassName="custom-modal"
-          size="xl"
-          style={{ width: "100%", textAlign: "" }}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title style={{ textAlign: "center" }}>
-              Modifier un avis incident
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <EditIncident avis={avis} formData={formData} handleEditChange={handleEditChange} />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="danger" onClick={handleEditClose}>
-              Fermer
-            </Button>
-            <Button variant="primary" onClick={handleEditSubmit}>
-              Modifier
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        show={showEditModal}
+        onHide={handleEditClose}
+        dialogClassName="custom-modal"
+        size="xl"
+        style={{ width: "100%", textAlign: "" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ textAlign: "center" }}>
+            Modifier un avis incident
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditIncident
+            avis={avis}
+            formData={formData}
+            handleEditChange={handleEditChange}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleEditClose}>
+            Fermer
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Modifier
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

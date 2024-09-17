@@ -4,6 +4,7 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import "../../../Pages/MySMC/Menu/menumysmc.css";
 import axios from "axios";
 import Title from "../../../Card/Title/Title";
+import "./ajoutavis.css";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import { useLocation } from "react-router-dom";
 
@@ -11,11 +12,31 @@ function EditIncident({avis, formData, handleEditChange }) {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
-  const [serviceImpacte, setServiceImpacte] = useState([]);
+  const [serviceImpact, setServiceImpacte] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
-   console.log(avis);
+  const [serviceSup, setServiceSup] = useState([]);
+  console.log(avis);
+
+  const handleServiceChange = (e) => {
+    const selectedValue = e.target.value;
+    if (selectedValue && !selectedServices.includes(selectedValue)) {
+      const selectedServiceObject = serviceImpact.find(
+        (service) => service.id === parseInt(selectedValue)
+      );
+      if (selectedServiceObject) {
+        setSelectedServices([...selectedServices, selectedServiceObject]);
+      }
+    }
+  };
+
+  const handleRemoveService = (serviceId) => {
+    setSelectedServices(
+      selectedServices.filter((service) => service.id !== serviceId)
+    );
+  };
 
   useEffect(() => {
     const fetchData = async (url, setter) => {
@@ -52,13 +73,16 @@ function EditIncident({avis, formData, handleEditChange }) {
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis",
       setTypeCause
     );
-    
+    fetchData(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/services",
+      setServiceSup
+    );
   }, [token]);
 
   const formatDateForInput = (dateString) => {
-    if (!dateString) return '';
+    if (!dateString) return "";
     const date = new Date(dateString);
-    
+
     const formattedDate = date.toISOString().slice(0, 16);
     return formattedDate;
   };
@@ -67,7 +91,6 @@ function EditIncident({avis, formData, handleEditChange }) {
     <div id="home">
      
       <Container className="body">
-        {/* Gestion des avis section */}
         <Row>
           <Col sm={12}>
             <Title text="Gestion des avis d'incidents - Formulaire de déclaration d'avis" />
@@ -102,25 +125,27 @@ function EditIncident({avis, formData, handleEditChange }) {
           <Col sm={6}>
             <Title text="Correspondance avis" />
             <div className="mb-3 form-group">
-              <label htmlFor="objet">Objet :</label>
+              <label htmlFor="objet">
+                Objet <strong className="text-danger">*</strong> :
+              </label>
               <input
                 type="text"
                 name="objet"
                 id="objet"
                 className="form-control"
-                defaultValue={formData.objet}
-                // value={formData.objet}
+                value={formData.objet}
                 onChange={handleEditChange}
               />
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="nature">Nature :</label>
+              <label htmlFor="nature">
+                Nature <strong className="text-danger">*</strong> :
+              </label>
               <select
                 name="nature"
                 id="nature"
                 className="form-control"
-                defaultValue={avis.nature}
-                // value={formData.nature}
+                value={formData.nature}
                 onChange={handleEditChange}
               >
                 <option>{avis.nature}</option>
@@ -130,14 +155,18 @@ function EditIncident({avis, formData, handleEditChange }) {
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="typeAvisIncident">Type avis :</label>
+              <label htmlFor="typeAvisIncident.id">
+                Type avis <strong className="text-danger">*</strong> :
+              </label>
               <select
-                name="typeAvisIncident"
+                name="typeAvisIncident.id"
                 className="form-control"
-                // value={formData.typeAvisIncident || ""}
+                value={formData.typeAvisIncident.id}
                 onChange={handleEditChange}
               >
-                <option value={avis.typeAvisIncident.nom}>{avis.typeAvisIncident.nom}</option>
+                <option value={avis.typeAvisIncident.id}>
+                  {avis.typeAvisIncident.nom}
+                </option>
                 {typesAvis.map((type) => (
                   <option key={type.id} value={type.id}>
                     {type.nom}
@@ -146,29 +175,46 @@ function EditIncident({avis, formData, handleEditChange }) {
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="serviceImpacte">Services impactés :</label>
-              <select
-                name="serviceImpacte"
-                className="form-control"
-                defaultValue={avis.serviceImpacte}
-                // value={formData.serviceImpacte}
-                onChange={handleEditChange}
-              >
-                <option>{avis.serviceImpacte}</option>
-                {serviceImpacte.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.nom}
-                  </option>
+              <div>
+                <label htmlFor="applicationSis">
+                  Services impactés <strong className="text-danger">*</strong> :
+                </label>
+                <select
+                  name="applicationSis"
+                  className="form-control"
+                  value={formData.applicationSis || []}
+                  onChange={handleServiceChange}
+                >
+                  <option value="">Sélectionnez le service</option>
+                  {serviceImpact.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.nom}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mt-2 selected-services">
+                {selectedServices.map((service) => (
+                  <span key={service.id} className="badge bg-primary me-2">
+                    {service.nom}{" "}
+                    <button
+                      type="button"
+                      className="btn-close btn-close-white"
+                      aria-label="Close"
+                      onClick={() => handleRemoveService(service.id)}
+                    ></button>
+                  </span>
                 ))}
-              </select>
+              </div>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="valide">Validation :</label>
+              <label htmlFor="valide">
+                Liste Validation <strong className="text-danger">*</strong> :
+              </label>
               <select
                 name="valide"
                 className="form-control"
-                defaultValue={avis.validation}
-                // value={formData.valide}
+                value={formData.valide}
                 onChange={handleEditChange}
               >
                 <option>{avis.valide}</option>
@@ -180,12 +226,13 @@ function EditIncident({avis, formData, handleEditChange }) {
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="diffusion">Diffusion :</label>
+              <label htmlFor="diffusion">
+                Liste Diffusion <strong className="text-danger">*</strong> :
+              </label>
               <select
                 name="diffusion"
                 className="form-control"
-                defaultValue={avis.diffusion}
-                // value={formData.diffusion}
+                value={formData.diffusion}
                 onChange={handleEditChange}
               >
                 <option >{avis.diffusion}</option>
@@ -197,26 +244,67 @@ function EditIncident({avis, formData, handleEditChange }) {
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="dateDebut">Date de début :</label>
+              <label htmlFor="dateDebut">
+                Date de début <strong className="text-danger">*</strong> :
+              </label>
               <input
                 type="datetime-local"
                 name="dateDebut"
                 id="dateDebut"
                 className="form-control"
-                defaultValue={formatDateForInput(avis.dateDebut)}
-                // value={formData.dateDebut}
+                value={formatDateForInput(avis.dateDebut)}
                 onChange={handleEditChange}
               />
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="dateDetection">Date de détection :</label>
+              <label htmlFor="dateDetection">
+                Date de détection <strong className="text-danger">*</strong> :
+              </label>
               <input
                 type="datetime-local"
                 name="dateDetection"
                 id="dateDetection"
                 className="form-control"
-                defaultValue={formatDateForInput(avis.dateDetection)}
-                // value={formData.dateDetection}
+                value={formatDateForInput(avis.dateDetection)}
+                onChange={handleEditChange}
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="autoDateFP">
+                Calcul Date FP <strong className="text-danger">*</strong> :
+              </label>
+              <select
+                name="autoDateFP"
+                className="form-control"
+                value={formData.autoDateFP}
+                onChange={handleEditChange}
+              >
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+              </select>
+            </div>
+
+            <div className="mb-3 form-group">
+              <label htmlFor="dateFinPrevisionnelle">
+                Date Fin Previsionnelle :
+              </label>
+              <input
+                type="datetime-local"
+                name="dateFinPrevisionnelle"
+                id="dateFinPrevisionnelle"
+                className="form-control"
+                value={formatDateForInput(avis.dateFinPrevisionnelle)}
+                onChange={handleEditChange}
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="dateFermeture">Date Fermeture :</label>
+              <input
+                type="datetime-local"
+                name="dateFermeture"
+                id="dateFermeture"
+                className="form-control"
+                value={formData.dateFermeture}
                 onChange={handleEditChange}
               />
             </div>
@@ -227,8 +315,7 @@ function EditIncident({avis, formData, handleEditChange }) {
                 name="ticketEzv"
                 id="ticketEzv"
                 className="form-control"
-                defaultValue={avis.numTicketEZV}
-                // value={formData.ticketEzv}
+                value={formData.numTicketEZV}
                 onChange={handleEditChange}
               />
             </div>
@@ -239,8 +326,18 @@ function EditIncident({avis, formData, handleEditChange }) {
                 name="ticketOceane"
                 id="ticketOceane"
                 className="form-control"
-                defaultValue={avis.numTicketOceane}
-                // value={formData.ticketOceane}
+                value={formData.numTicketOceane}
+                onChange={handleEditChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="commentaire">Commentaires :</label>
+              <textarea
+                id="commentaire"
+                className="form-control"
+                name="commentaire"
+                placeholder="Indiquer le message en cas d'annulation ou de renvoi de l'avis"
+                value={formData.commentaire}
                 onChange={handleEditChange}
               />
             </div>
@@ -249,43 +346,46 @@ function EditIncident({avis, formData, handleEditChange }) {
           <Col sm={6}>
             <Title text="Causes et impacts" />
             <div className="form-group">
-              <label htmlFor="impact">Impacts :</label>
+              <label htmlFor="impact">
+                Impacts <strong className="text-danger">*</strong> :
+              </label>
               <textarea
                 id="impact"
                 className="form-control"
                 name="impact"
-                defaultValue={avis.impact}
+                value={formData.impact}
                 // value={formData.impact}
                 onChange={handleEditChange}
               />
             </div>
             <div className="mb-3 form-group">
-                <label htmlFor="causeRetard.id">Cause du retard :</label>
-              
-                  
-                <select
-                  name="causeRetard.id"
-                  className="form-control"
-                  value={formData.causeRetard.id}
-                  onChange={handleEditChange}
-                >
-                  <option value="">{avis.causeProbable}</option>            
-                  <option value="SI">Retard détecton</option>
-                  <option value="DATA">Non supervisé</option>
-                </select>
-              </div> 
+              <label htmlFor="causeRetardNotification">
+                Cause Retard Notification :
+              </label>
+              <select
+                name="causeRetardNotification"
+                className="form-control"
+                value={formData.causeRetardNotification}
+                onChange={handleEditChange}
+              >
+                <option value="">Sélectionnez la cause</option>
+                <option value="Non Supervisé">Non Supervisé</option>
+                <option value="Retard Diffusion">Retard Diffusion</option>
+              </select>
+            </div>
             <div className="mb-3 form-group">
               <label htmlFor="typeCauseIncident.id">
-                Type de cause incident :
+                Origine cause <strong className="text-danger">*</strong> :
               </label>
               <select
                 name="typeCauseIncident.id"
                 className="form-control"
-                defaultValue={avis.typeCauseIncident.id}
-                // value={formData.
+                value={formData.typeCauseIncident.id}
                 onChange={handleEditChange}
               >
-                <option value="">{avis.typeCauseIncident.nom}</option>   
+                <option value={avis.typeCauseIncident.id}>
+                  {avis.typeCauseIncident.intitule}
+                </option>
                 {typeCause.map((cause) => (
                   <option key={cause.id} value={cause.id}>
                     {cause.intitule}
@@ -294,27 +394,75 @@ function EditIncident({avis, formData, handleEditChange }) {
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="causeProbable">Cause probable :</label>
+              <label htmlFor="causeProbable">
+                Causes probables <strong className="text-danger">*</strong> :
+              </label>
               <textarea
                 id="causeProbable"
                 className="form-control"
                 name="causeProbable"
-                defaultValue={avis.causes}
+                value={formData.causes}
                 onChange={handleEditChange}
                 placeholder="(*) Demander systématiquement aux TMC(s) les causes probables
                           (*) Eviter les expressions « Investigations en Cours » ; « causes inconnues » et préférer mettre « constat : xxxxxxxx »"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="observations">Observations :</label>
+              <label htmlFor="observations">
+                Observations <strong className="text-danger">*</strong> :
+              </label>
               <textarea
                 id="observations"
                 className="form-control"
                 name="observations"
-                defaultValue={avis.observations}
+                value={formData.observations}
                 onChange={handleEditChange}
                 placeholder="Renseigner les observations"
               />
+            </div>
+            <div className="form-group">
+              <label htmlFor="troubleshooting">Actions de relève :</label>
+              <textarea
+                id="troubleshooting"
+                className="form-control"
+                name="troubleshooting"
+                value={formData.troubleshooting}
+                onChange={handleEditChange}
+                placeholder="Decrire les actions de relève"
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="entite">Entité Responsable :</label>
+              <select
+                name="entite"
+                className="form-control"
+                value={formData.entite?.id || ""}
+                // value={formData.
+                onChange={handleEditChange}
+              >
+                <option value="">Sélectionnez l'entité</option>
+                {serviceSup.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="tcm">TMC qui a relevé :</label>
+              <select
+                name="tmc"
+                className="form-control"
+                value={formData.tmc?.id || ""}
+                onChange={handleEditChange}
+              >
+                <option value="">Sélectionnez le TMC</option>
+                {serviceSup.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.nom}
+                  </option>
+                ))}
+              </select>
             </div>
           </Col>
         </Row>
