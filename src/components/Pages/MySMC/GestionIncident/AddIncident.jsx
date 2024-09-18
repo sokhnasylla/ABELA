@@ -14,11 +14,12 @@ function AddIncident({ formData, handleChange }) {
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
 
   const handleServiceChange = (e) => {
     const selectedValue = e.target.value;
     if (selectedValue && !selectedServices.includes(selectedValue)) {
-      const selectedServiceObject = serviceImpact.find(
+      const selectedServiceObject = serviceImpacte.find(
         (service) => service.id === parseInt(selectedValue)
       );
       if (selectedServiceObject) {
