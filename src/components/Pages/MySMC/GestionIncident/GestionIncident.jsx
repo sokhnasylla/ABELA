@@ -39,7 +39,7 @@ function GestionIncident() {
     nature: "",
     typeAvisIncident: { id: "" },
     applicationSis: [],
-    valide: "",
+    valide: { id: "" },
     diffusion: { id: "" },
     dateDebut: "",
     dateDetection: "",
@@ -116,16 +116,19 @@ function GestionIncident() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes("id")) {
+  
+    // Check if the field is nested (contains a dot)
+    if (name.includes(".")) {
       const [parentKey, childKey] = name.split(".");
       setFormData((prevState) => ({
         ...prevState,
         [parentKey]: {
-          ...prevState[parentKey],
-          [childKey]: value,
+          ...prevState[parentKey], // Preserve other keys in the parent object
+          [childKey]: value,       // Update the specific child key
         },
       }));
     } else {
+      // If it's a top-level field, update normally
       setFormData((prevState) => ({
         ...prevState,
         [name]: value,

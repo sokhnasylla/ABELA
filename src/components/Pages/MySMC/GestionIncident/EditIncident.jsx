@@ -6,8 +6,9 @@ import axios from "axios";
 import Title from "../../../Card/Title/Title";
 import "./ajoutavis.css";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
+import { useLocation } from "react-router-dom";
 
-function EditIncident({ avis, formData, handleEditChange }) {
+function EditIncident({avis, formData, handleEditChange }) {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
@@ -97,6 +98,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
 
   return (
     <div id="home">
+     
       <Container className="body">
         <Row>
           <Col sm={12}>
@@ -155,7 +157,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 value={formData.nature}
                 onChange={handleEditChange}
               >
-                <option value="">Sélectionnez la nature</option>
+                <option>{avis.nature}</option>
                 <option value="SI">SI</option>
                 <option value="DATA">DATA</option>
                 <option value="CONTENU">CONTENU</option>
@@ -224,7 +226,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 value={formData.valide}
                 onChange={handleEditChange}
               >
-                <option value="">Sélectionnez la validation</option>
+                <option>{avis.valide}</option>
                 {listValidation.map((validation) => (
                   <option key={validation.id} value={validation.id}>
                     {validation.nom}
@@ -242,7 +244,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 value={formData.diffusion}
                 onChange={handleEditChange}
               >
-                <option value="">Sélectionnez la diffusion</option>
+                <option >{avis.diffusion}</option>
                 {listDiffusion.map((diff) => (
                   <option key={diff.id} value={diff.id}>
                     {diff.nom}
