@@ -15,6 +15,34 @@ function AddIncident({ formData, handleChange }) {
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
 
+  const handleServiceChange = (e) => {
+    const selectedValue = e.target.value;
+    if (selectedValue && !selectedServices.includes(selectedValue)) {
+      const selectedServiceObject = serviceImpact.find(
+        (service) => service.id === parseInt(selectedValue)
+      );
+      if (selectedServiceObject) {
+        setSelectedServices([...selectedServices, selectedServiceObject]);
+        handleChange({
+          target: {
+            name: "applicationSis",
+            value: [...selectedServices, selectedServiceObject],
+          },
+        });
+      }
+    }
+  };
+
+  const handleRemoveService = (id) => {
+    const updatedServices = selectedServices.filter(
+      (service) => service.id !== id
+    );
+    setSelectedServices(updatedServices);
+    handleChange({
+      target: { name: "applicationSis", value: updatedServices },
+    });
+  };
+
   useEffect(() => {
     const fetchData = async (url, setter) => {
       try {

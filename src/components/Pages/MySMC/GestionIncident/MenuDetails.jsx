@@ -10,9 +10,10 @@ import {
   FaQuestion,
   FaThumbsUp,
   FaTimes,
+  FaTrash,
+  FaTrashAlt,
 } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
-import { useNavigate } from "react-router-dom";
 import EditIncident from "./EditIncident";
 import axios from "axios";
 
@@ -20,8 +21,11 @@ function MenuDetailsIncident({ avis }) {
   const [showFermetureModal, setShowFermetureModal] = useState(false);
   const [showAnnulerModal, setShowAnnulerModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showValidationModal, setShowValidationModal] = useState(false);
+  const [showDemandeValidationModal, setShowDemandeValidationModal] =
+    useState(false);
+  const [showDiffusionModal, setShowDiffusionModal] = useState(false);
   const token = getTokenFromLocalStorage();
-  const navigate = useNavigate();
   const decode = getTokenDecode();
   const updateBy = decode.sub;
   const [formData, setFormData] = useState({
@@ -36,12 +40,13 @@ function MenuDetailsIncident({ avis }) {
     ticketEzv: avis.ticketEzv || "",
     ticketOceane: avis.ticketOceane || "",
     impact: avis.impact || "",
-    causeRetard: { id: avis.causeRetard?.id || "" },
+    causeRetardNotification: avis.causeRetardNotification || "",
     typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
     causeProbable: avis.causeProbable || "",
     observations: avis.observations || "",
+    dateFermeture: avis.dateFermeture || "",
     updateBy,
-  });  
+  });
 
   const handleFermertureAvis = async (id) => {
     try {
@@ -72,7 +77,10 @@ function MenuDetailsIncident({ avis }) {
       window.location.reload();
       return result;
     } catch (err) {
-      localStorage.setItem("alertMessage", "Erreur lors de la fermeture de l'avis");
+      localStorage.setItem(
+        "alertMessage",
+        "Erreur lors de la fermeture de l'avis"
+      );
       localStorage.setItem("alertType", "danger");
     }
   };
@@ -107,7 +115,48 @@ function MenuDetailsIncident({ avis }) {
       window.location.reload();
       return result;
     } catch (err) {
-      localStorage.setItem("alertMessage", "Erreur lors de la suppression de l'avis");
+      localStorage.setItem(
+        "alertMessage",
+        "Erreur lors de la suppression de l'avis"
+      );
+      localStorage.setItem("alertType", "danger");
+    }
+  };
+
+  const handleValiderSubmit = async (id) => {
+    try {
+      const response = await fetch(
+        // `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${id}/validated`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Erreur lors de la validation");
+
+      // Check if the response is plain text
+      const contentType = response.headers.get("content-type");
+      let result;
+      if (contentType && contentType.includes("application/json")) {
+        result = await response.json();
+      } else {
+        result = await response.text();
+        console.log(result);
+      }
+      setShowValidationModal(false);
+      localStorage.setItem("alertMessage", "Avis validé avec succès");
+      localStorage.setItem("alertType", "success");
+      window.location.reload();
+      return result;
+    } catch (err) {
+      localStorage.setItem(
+        "alertMessage",
+        "Erreur lors de la validation de l'avis"
+      );
       localStorage.setItem("alertType", "danger");
     }
   };
@@ -128,6 +177,23 @@ function MenuDetailsIncident({ avis }) {
 
   const handleEditClose = () => setShowEditModal(false);
   const handleEditShow = () => setShowEditModal(true);
+
+  const handleValidationShow = () => {
+    setShowValidationModal(true);
+  };
+  const handleValidationClose = () => {
+    setShowValidationModal(false);
+  };
+
+  const handleDemandeValidationShow = () => {
+    setShowDemandeValidationModal(true);
+  };
+  const handleDemandeValidationClose = () => {
+    setShowDemandeValidationModal(false);
+  };
+
+  const handleDiffusionShow = () => setShowDiffusionModal(true);
+  const handleDiffusionClose = () => setShowDiffusionModal(false);
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -168,7 +234,7 @@ function MenuDetailsIncident({ avis }) {
         setShowEditModal(false);
         localStorage.setItem("alertMessage", "Avis modifié avec succès");
         localStorage.setItem("alertType", "success");
-        // window.location.reload();
+        window.location.reload();
       } else {
         console.error("Erreur lors de la création de l'avis");
       }
@@ -229,6 +295,7 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
+                  onClick={handleDemandeValidationShow}
                 >
                   Demande validation avis
                 </button>
@@ -268,6 +335,7 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
+                  onClick={handleValidationShow}
                 >
                   Validation de l'avis
                 </button>
@@ -305,6 +373,7 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
+                  onClick={handleDiffusionShow}
                 >
                   Diffusion de l'avis
                 </button>
@@ -409,7 +478,7 @@ function MenuDetailsIncident({ avis }) {
                   padding: "0 10px",
                 }}
               >
-                <FaTimes />
+                <FaTrashAlt />
                 <button
                   className="btn"
                   style={{
@@ -466,6 +535,8 @@ function MenuDetailsIncident({ avis }) {
           </Nav.Link>
         </Card>
       </Nav>
+
+      {/* Suppression Modal */}
       <Modal
         show={showAnnulerModal}
         onHide={handleAnnulerClose}
@@ -496,6 +567,7 @@ function MenuDetailsIncident({ avis }) {
         </Modal.Footer>
       </Modal>
 
+      {/* Fermeture Modal */}
       <Modal
         show={showFermetureModal}
         onHide={handleFermetureClose}
@@ -527,6 +599,8 @@ function MenuDetailsIncident({ avis }) {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Edit Modal */}
       <Modal
         show={showEditModal}
         onHide={handleEditClose}
@@ -548,6 +622,78 @@ function MenuDetailsIncident({ avis }) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleEditClose}>
+            Fermer
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Modifier
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Validation Modal */}
+      <Modal
+        show={showValidationModal}
+        onHide={handleValidationClose}
+        dialogClassName="custom-modal"
+        size="xl"
+        style={{ width: "100%", textAlign: "" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ textAlign: "center" }}>
+            Validation d'un avis incident
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body></Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleValidationClose}>
+            Fermer
+          </Button>
+          <Button variant="primary" onClick={handleValiderSubmit}>
+            Valider
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Diffusion Modal */}
+      <Modal
+        show={showDiffusionModal}
+        onHide={handleDiffusionClose}
+        dialogClassName="custom-modal"
+        size="xl"
+        style={{ width: "100%", textAlign: "" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ textAlign: "center" }}>
+            Diffusion d'un avis incident
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body></Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleDiffusionClose}>
+            Fermer
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Modifier
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Demande validation Modal */}
+      <Modal
+        show={showDemandeValidationModal}
+        onHide={handleDemandeValidationClose}
+        dialogClassName="custom-modal"
+        size="xl"
+        style={{ width: "100%", textAlign: "" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ textAlign: "center" }}>
+            Demande de validation d'un avis incident
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body></Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleDemandeValidationClose}>
             Fermer
           </Button>
           <Button variant="primary" onClick={handleEditSubmit}>

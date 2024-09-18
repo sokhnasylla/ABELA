@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button,  } from "react-bootstrap";
 import { TextField } from "@mui/material";
 
 function RechercheAvis({ onSearch }) {
@@ -57,7 +57,7 @@ function RechercheAvis({ onSearch }) {
         newHisto = `Résultat de la dernière recherche, Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
         errorMessage = "Aucun avis trouvé pour la période spécifiée";
       } else if (etat) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByState?etat=${etat}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByState?etat=${etat}`;
         newHisto = `Résultat de la dernière recherche, Etat : ${etat}`;
         errorMessage = "Aucun avis trouvé pour l'état spécifié";
       } else {
@@ -171,8 +171,9 @@ function RechercheAvis({ onSearch }) {
                     value={etat}
                     onChange={(e) => setEtat(e.target.value)}
                   >
-                    <option value="FERME">Fermé</option>
-                    <option value="Annulé">Annulé</option>
+                    <option value="">Sélectionner un état</option>
+                    <option value="Ferme">Fermé</option>
+                    <option value="Annule">Annulé</option>
                     <option value="Cloturé">Cloturé</option>
                   </select>
                 </div>
