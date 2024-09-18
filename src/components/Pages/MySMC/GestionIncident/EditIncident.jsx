@@ -235,7 +235,7 @@ function EditIncident({avis, formData, handleEditChange }) {
                 value={formData.diffusion}
                 onChange={handleEditChange}
               >
-                <option >{avis.diffusion}</option>
+                <option >{avis.listDiffusion.nom}</option>
                 {listDiffusion.map((diff) => (
                   <option key={diff.id} value={diff.id}>
                     {diff.nom}

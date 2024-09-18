@@ -224,17 +224,17 @@ function AddIncident({ formData, handleChange }) {
                 />
               </div>
               <div className="mb-3 form-group">
-                <label htmlFor="causeRetard.id">Cause du retard :</label>
+                <label htmlFor="causeRetardid">Cause du retard :</label>
               
                   
                 <select
-                  name="causeRetard.id"
+                  name="causeRetardid"
                   className="form-control"
-                  value={formData.causeRetard.id}
+                  value={formData.causeRetard}
                   onChange={handleChange}
                 >
                   <option value="">Sélectionnez la cause</option>            
-                  <option value="SI">Retard détecton</option>
+                  <option value="SI">Retard détection</option>
                   <option value="DATA">Non supervisé</option>
                 </select>
               </div> 
