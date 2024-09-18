@@ -40,13 +40,13 @@ function GestionIncident() {
     typeAvisIncident: { id: "" },
     applicationSis: [],
     valide: "",
-    diffusion: "",
+    diffusion: { id: "" },
     dateDebut: "",
     dateDetection: "",
     numTicketEZV: "",
     numTicketOceane: "",
     impact: "",
-    causeRetardNotification: "" ,
+    causeRetardNotification: "",
     typeCauseIncident: { id: "" },
     causeProbable: "",
     observations: "",
@@ -378,61 +378,81 @@ function GestionIncident() {
               </Tooltip>
             )}
           </Overlay>
-          <Pagination className="d-flex justify-content-center mt-4">
-            <Pagination.Item
-              active={currentPage === 1}
-              onClick={() => handlePageChange(1)}
-            >
-              1
-            </Pagination.Item>
+          <div>
+            <div>
+              <span>
+                Affichage de l'element {indexOfFirstItem + 1} à{" "}
+                {indexOfLastItem} sur {openAvis.length} éléments
+              </span>
+            </div>
+            <div>
+              <Pagination className="d-flex justify-content-center mt-4">
+                {currentPage > 1 && (
+                  <Pagination.Prev
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    Précédent
+                  </Pagination.Prev>
+                )}
+                <Pagination.Item
+                  active={currentPage === 1}
+                  onClick={() => handlePageChange(1)}
+                >
+                  1
+                </Pagination.Item>
 
-            {currentPage > 4 && <Pagination.Ellipsis />}
+                {currentPage > 4 && <Pagination.Ellipsis />}
 
-            {currentPage > 3 && (
-              <Pagination.Item
-                onClick={() => handlePageChange(currentPage - 2)}
-              >
-                {currentPage - 2}
-              </Pagination.Item>
-            )}
-            {currentPage > 2 && (
-              <Pagination.Item
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                {currentPage - 1}
-              </Pagination.Item>
-            )}
+                {currentPage > 3 && (
+                  <Pagination.Item
+                    onClick={() => handlePageChange(currentPage - 2)}
+                  >
+                    {currentPage - 2}
+                  </Pagination.Item>
+                )}
+                {currentPage > 2 && (
+                  <Pagination.Item
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    {currentPage - 1}
+                  </Pagination.Item>
+                )}
 
-            {currentPage !== 1 && currentPage !== totalPages && (
-              <Pagination.Item active>{currentPage}</Pagination.Item>
-            )}
+                {currentPage !== 1 && currentPage !== totalPages && (
+                  <Pagination.Item active>{currentPage}</Pagination.Item>
+                )}
 
-            {currentPage < totalPages - 1 && (
-              <Pagination.Item
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                {currentPage + 1}
-              </Pagination.Item>
-            )}
-            {currentPage < totalPages - 2 && (
-              <Pagination.Item
-                onClick={() => handlePageChange(currentPage + 2)}
-              >
-                {currentPage + 2}
-              </Pagination.Item>
-            )}
+                {currentPage < totalPages - 1 && (
+                  <Pagination.Item
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    {currentPage + 1}
+                  </Pagination.Item>
+                )}
+                {currentPage < totalPages - 2 && (
+                  <Pagination.Item
+                    onClick={() => handlePageChange(currentPage + 2)}
+                  >
+                    {currentPage + 2}
+                  </Pagination.Item>
+                )}
 
-            {currentPage < totalPages - 3 && <Pagination.Ellipsis />}
+                {currentPage < totalPages - 3 && <Pagination.Ellipsis />}
 
-            {totalPages > 1 && (
-              <Pagination.Item
-                active={currentPage === totalPages}
-                onClick={() => handlePageChange(totalPages)}
-              >
-                {totalPages}
-              </Pagination.Item>
-            )}
-          </Pagination>
+                {totalPages > 1 && (
+                  <Pagination.Item
+                    active={currentPage === totalPages}
+                    onClick={() => handlePageChange(totalPages)}
+                  >
+                    {totalPages}
+                  </Pagination.Item>
+                )}
+                {currentPage < totalPages && (
+                  <Pagination.Next>Suivant</Pagination.Next>
+                )}
+              </Pagination>
+            </div>
+          </div>
           <Row className="mt-3">
             {etat === "Annulé" && (
               <Title
@@ -525,24 +545,26 @@ function GestionIncident() {
                     </div>
                   ) : (
                     <div className="d-flex align-items-center">
-                      <span
-                        style={{
-                          fontSize: "14px",
-                          fontFamily: "inherit",
-                          fontWeight: "500",
-                          textAlign: "center",
-                        }}
-                      >
-                        <button
-                          onClick={reinitHisto}
-                          className="btn btn-danger pl-3"
-                          style={{ marginRight: "10px" }} // Space between history and button
+                      <div>
+                        <span
+                          style={{
+                            fontSize: "14px",
+                            fontFamily: "inherit",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
                         >
-                          Supprimer filtre
-                        </button>
-                      </span>
+                          <button
+                            onClick={reinitHisto}
+                            className="btn btn-danger pl-3"
+                            style={{ marginRight: "10px" }} // Space between history and button
+                          >
+                            &times;
+                          </button>
+                        </span>
+                      </div>
                       <div
-                        className="alert alert-info d-flex align-items-center"
+                        className="alert alert-info mt-3 d-flex align-items-center"
                         style={{
                           fontSize: "14px",
                           fontFamily: "inherit",
@@ -689,64 +711,103 @@ function GestionIncident() {
               </tbody>
             </table>
           )}
-          <Pagination className="d-flex justify-content-center mt-4">
-            <Pagination.Item
-              active={currentPageNotOpen === 1}
-              onClick={() => handlePageChangeNotOpen(1)}
-            >
-              1
-            </Pagination.Item>
+          <div>
+            <div>
+              <span>
+                Affichage de l'element {indexOfFirstItemNotOpen + 1} à{" "}
+                {indexOfLastItemNotOpen} sur {notOpenAvis.length} éléments
+              </span>
+            </div>
+            <div>
+              <Pagination className="d-flex justify-content-center mt-4">
+                {currentPageNotOpen > 1 && (
+                  <Pagination.Prev
+                    onClick={() =>
+                      handlePageChangeNotOpen(currentPageNotOpen - 1)
+                    }
+                  >
+                    Précédent
+                  </Pagination.Prev>
+                )}
 
-            {currentPageNotOpen > 4 && <Pagination.Ellipsis />}
+                <Pagination.Item
+                  active={currentPageNotOpen === 1}
+                  onClick={() => handlePageChangeNotOpen(1)}
+                >
+                  1
+                </Pagination.Item>
 
-            {currentPageNotOpen > 3 && (
-              <Pagination.Item
-                onClick={() => handlePageChangeNotOpen(currentPageNotOpen - 2)}
-              >
-                {currentPageNotOpen - 2}
-              </Pagination.Item>
-            )}
-            {currentPageNotOpen > 2 && (
-              <Pagination.Item
-                onClick={() => handlePageChangeNotOpen(currentPageNotOpen - 1)}
-              >
-                {currentPageNotOpen - 1}
-              </Pagination.Item>
-            )}
+                {currentPageNotOpen > 4 && <Pagination.Ellipsis />}
 
-            {currentPageNotOpen !== 1 &&
-              currentPageNotOpen !== totalPagesNotOpen && (
-                <Pagination.Item active>{currentPageNotOpen}</Pagination.Item>
-              )}
+                {currentPageNotOpen > 3 && (
+                  <Pagination.Item
+                    onClick={() =>
+                      handlePageChangeNotOpen(currentPageNotOpen - 2)
+                    }
+                  >
+                    {currentPageNotOpen - 2}
+                  </Pagination.Item>
+                )}
+                {currentPageNotOpen > 2 && (
+                  <Pagination.Item
+                    onClick={() =>
+                      handlePageChangeNotOpen(currentPageNotOpen - 1)
+                    }
+                  >
+                    {currentPageNotOpen - 1}
+                  </Pagination.Item>
+                )}
 
-            {currentPageNotOpen < totalPagesNotOpen - 1 && (
-              <Pagination.Item
-                onClick={() => handlePageChangeNotOpen(currentPageNotOpen + 1)}
-              >
-                {currentPageNotOpen + 1}
-              </Pagination.Item>
-            )}
-            {currentPageNotOpen < totalPagesNotOpen - 2 && (
-              <Pagination.Item
-                onClick={() => handlePageChangeNotOpen(currentPageNotOpen + 2)}
-              >
-                {currentPageNotOpen + 2}
-              </Pagination.Item>
-            )}
+                {currentPageNotOpen !== 1 &&
+                  currentPageNotOpen !== totalPagesNotOpen && (
+                    <Pagination.Item active>
+                      {currentPageNotOpen}
+                    </Pagination.Item>
+                  )}
 
-            {currentPageNotOpen < totalPagesNotOpen - 3 && (
-              <Pagination.Ellipsis />
-            )}
+                {currentPageNotOpen < totalPagesNotOpen - 1 && (
+                  <Pagination.Item
+                    onClick={() =>
+                      handlePageChangeNotOpen(currentPageNotOpen + 1)
+                    }
+                  >
+                    {currentPageNotOpen + 1}
+                  </Pagination.Item>
+                )}
+                {currentPageNotOpen < totalPagesNotOpen - 2 && (
+                  <Pagination.Item
+                    onClick={() =>
+                      handlePageChangeNotOpen(currentPageNotOpen + 2)
+                    }
+                  >
+                    {currentPageNotOpen + 2}
+                  </Pagination.Item>
+                )}
 
-            {totalPagesNotOpen > 1 && (
-              <Pagination.Item
-                active={currentPageNotOpen === totalPagesNotOpen}
-                onClick={() => handlePageChangeNotOpen(totalPagesNotOpen)}
-              >
-                {totalPagesNotOpen}
-              </Pagination.Item>
-            )}
-          </Pagination>
+                {currentPageNotOpen < totalPagesNotOpen - 3 && (
+                  <Pagination.Ellipsis />
+                )}
+
+                {totalPagesNotOpen > 1 && (
+                  <Pagination.Item
+                    active={currentPageNotOpen === totalPagesNotOpen}
+                    onClick={() => handlePageChangeNotOpen(totalPagesNotOpen)}
+                  >
+                    {totalPagesNotOpen}
+                  </Pagination.Item>
+                )}
+                {currentPageNotOpen < totalPagesNotOpen && (
+                  <Pagination.Next
+                    onClick={() =>
+                      handlePageChangeNotOpen(currentPageNotOpen + 1)
+                    }
+                  >
+                    Suivant
+                  </Pagination.Next>
+                )}
+              </Pagination>
+            </div>
+          </div>
         </Col>
         <Col>
           <StatistiqueIncident />
@@ -759,9 +820,7 @@ function GestionIncident() {
           style={{ width: "100%", textAlign: "" }}
         >
           <Modal.Header closeButton>
-            <Modal.Title>
-              Ajouter un avis incident
-            </Modal.Title>
+            <Modal.Title>Ajouter un avis incident</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <AddIncident formData={formData} handleChange={handleChange} />
@@ -770,7 +829,13 @@ function GestionIncident() {
             <Button variant="danger" onClick={handleAddClose}>
               Fermer
             </Button>
-            <Button variant="primary" onClick={()=>{handleSubmit();window.location.reload();}}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                handleSubmit();
+                window.location.reload();
+              }}
+            >
               Ajouter l'avis
             </Button>
           </Modal.Footer>

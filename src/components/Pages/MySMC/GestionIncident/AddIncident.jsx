@@ -11,9 +11,38 @@ function AddIncident({ formData, handleChange }) {
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
   const [serviceImpact, setServiceImpacte] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
+
+  const handleServiceChange = (e) => {
+    const selectedValue = e.target.value;
+    if (selectedValue && !selectedServices.includes(selectedValue)) {
+      const selectedServiceObject = serviceImpact.find(
+        (service) => service.id === parseInt(selectedValue)
+      );
+      if (selectedServiceObject) {
+        setSelectedServices([...selectedServices, selectedServiceObject]);
+        handleChange({
+          target: {
+            name: "applicationSis",
+            value: [...selectedServices, selectedServiceObject],
+          },
+        });
+      }
+    }
+  };
+
+  const handleRemoveService = (id) => {
+    const updatedServices = selectedServices.filter(
+      (service) => service.id !== id
+    );
+    setSelectedServices(updatedServices);
+    handleChange({
+      target: { name: "applicationSis", value: updatedServices },
+    });
+  };
 
   useEffect(() => {
     const fetchData = async (url, setter) => {
@@ -138,22 +167,37 @@ function AddIncident({ formData, handleChange }) {
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="serviceImpacte">
-                Services impactés <strong className="text-danger">*</strong> :
-              </label>
-              <select
-                name="serviceImpacte"
-                className="form-control"
-                value={formData.serviceImpacte}
-                onChange={handleChange}
-              >
-                <option value="">Sélectionnez le service</option>
-                {serviceImpact.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.nom}
-                  </option>
+              <div>
+                <label htmlFor="applicationSis">
+                  Services impactés <strong className="text-danger">*</strong> :
+                </label>
+                <select
+                  name="applicationSis"
+                  className="form-control"
+                  // value={formData.applicationSis || []}
+                  onChange={handleServiceChange}
+                >
+                  <option value="">Sélectionnez le service</option>
+                  {serviceImpact.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.nom}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mt-2 selected-services">
+                {selectedServices.map((service) => (
+                  <span key={service.id} className="badge bg-primary me-2">
+                    {service.nom}{" "}
+                    <button
+                      type="button"
+                      className="btn-close btn-close-white"
+                      aria-label="Close"
+                      onClick={() => handleRemoveService(service.id)}
+                    ></button>
+                  </span>
                 ))}
-              </select>
+              </div>
             </div>
             <div className="mb-3 form-group">
               <label htmlFor="valide">
@@ -163,7 +207,10 @@ function AddIncident({ formData, handleChange }) {
                 name="valide"
                 className="form-control"
                 value={formData.valide}
-                onChange={handleChange}
+                onChange={(e) => {
+                  console.log("Selected Validation ID:", e.target.value); // Debug log
+                  handleChange(e); // Ensure this correctly updates formData.valide
+                }}
               >
                 <option value="">Sélectionnez la validation</option>
                 {listValidation.map((validation) => (
@@ -280,6 +327,7 @@ function AddIncident({ formData, handleChange }) {
                 value={formData.typeCauseIncident.id}
                 onChange={handleChange}
               >
+                <option value="">Séléctionnez l'origine</option>
                 {typeCause.map((cause) => (
                   <option key={cause.id} value={cause.id}>
                     {cause.intitule}

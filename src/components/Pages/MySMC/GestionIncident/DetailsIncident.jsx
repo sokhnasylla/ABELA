@@ -31,11 +31,7 @@ function DetailsIncident() {
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
-
-  const handleItemsChange = (event) => {
-    setItemsPerPage(Number(event.target.value));
-  };
+  const itemsPerPage = 5;
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -70,7 +66,6 @@ function DetailsIncident() {
         };
 
         const response = await axios.get(url, config);
-        console.log(response.data);
         setter(response.data);
       } catch (error) {
         console.error("Erreur:", error);
@@ -127,7 +122,7 @@ function DetailsIncident() {
       </div>
       <Container className="body" style={{ fontSize: "14px" }}>
         <Row>
-          <Col md={8} sm={8}>
+          <Col md={9} sm={9}>
             <Row>
               <Col sm={12}>
                 <Card
@@ -483,7 +478,7 @@ function DetailsIncident() {
               </Col>
             </Row>
           </Col>
-          <Col md={4} sm={4}>
+          <Col md={3} sm={3}>
             {/* Passer au composant MenuDetails le type d'etat pour personnaliser le menu selon l'etat */}
             <MenuDetailsIncident
               avis={incident}

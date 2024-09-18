@@ -16,20 +16,19 @@ function EditIncident({ avis, formData, handleEditChange }) {
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
-  const [serviceSup, setServiceSup] = useState([]);
-  console.log(avis);
+  const [serviceSup, setServiceSup] = useState([]); 
 
   const handleServiceChange = (e) => {
-    const selectedValue = e.target.value;
-    if (selectedValue && !selectedServices.includes(selectedValue)) {
-      const selectedServiceObject = serviceImpact.find(
-        (service) => service.id === parseInt(selectedValue)
-      );
-      if (selectedServiceObject) {
-        setSelectedServices([...selectedServices, selectedServiceObject]);
-      }
-    }
+    const selectedOptions = Array.from(e.target.selectedOptions); // Get all selected options
+    const selectedValues = selectedOptions.map(option => option.value); // Map them to an array of values (IDs)
+    
+    const selectedServiceObjects = selectedValues
+      .map((selectedValue) => serviceImpact.find(service => service.id === parseInt(selectedValue))) // Find corresponding service objects
+      .filter(Boolean); // Ensure no undefined services
+  
+    setSelectedServices(selectedServiceObjects); // Update selected services
   };
+  
 
   const handleRemoveService = (serviceId) => {
     setSelectedServices(
@@ -60,6 +59,16 @@ function EditIncident({ avis, formData, handleEditChange }) {
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list",
       setServiceImpacte
     );
+
+    if (avis.applicationSis && avis.applicationSis.length > 0) {
+      const selectedServiceObjects = avis.applicationSis
+        .map((serviceId) => {
+          return serviceImpact.find((service) => service.id === serviceId);
+        })
+        .filter(Boolean);
+      setSelectedServices(selectedServiceObjects);
+    }
+
     fetchData(
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations",
       setListValidation
@@ -76,7 +85,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/services",
       setServiceSup
     );
-  }, [token]);
+  }, [avis, token, serviceImpact]);
 
   const formatDateForInput = (dateString) => {
     if (!dateString) return "";
@@ -180,7 +189,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 <select
                   name="applicationSis"
                   className="form-control"
-                  value={formData.applicationSis || []}
+                //   value={selectedServices.map((service) => service.id)}
                   onChange={handleServiceChange}
                 >
                   <option value="">Sélectionnez le service</option>
