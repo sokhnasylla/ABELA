@@ -14,35 +14,7 @@ function AddIncident({ formData, handleChange }) {
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
-
-  const handleServiceChange = (e) => {
-    const selectedValue = e.target.value;
-    if (selectedValue && !selectedServices.includes(selectedValue)) {
-      const selectedServiceObject = serviceImpact.find(
-        (service) => service.id === parseInt(selectedValue)
-      );
-      if (selectedServiceObject) {
-        setSelectedServices([...selectedServices, selectedServiceObject]);
-        handleChange({
-          target: {
-            name: "applicationSis",
-            value: [...selectedServices, selectedServiceObject],
-          },
-        });
-      }
-    }
-  };
-
-  const handleRemoveService = (id) => {
-    const updatedServices = selectedServices.filter(
-      (service) => service.id !== id
-    );
-    setSelectedServices(updatedServices);
-    handleChange({
-      target: { name: "applicationSis", value: updatedServices },
-    });
-  };
-
+  
   useEffect(() => {
     const fetchData = async (url, setter) => {
       try {
@@ -103,7 +75,7 @@ function AddIncident({ formData, handleChange }) {
             <Col sm={6}>
               <Title text="Correspondance avis" />
               <div className="mb-3 form-group">
-                <label htmlFor="objet">Objet :</label>
+                <label htmlFor="objet">Objet <strong className="text-danger">*</strong> :</label>
                 <input
                   type="text"
                   name="objet"
@@ -115,7 +87,7 @@ function AddIncident({ formData, handleChange }) {
               </div>
 
               <div className="mb-3 form-group">
-                <label htmlFor="nature">Nature :</label>
+                <label htmlFor="nature">Nature <strong className="text-danger">*</strong> :</label>
                 <select
                   name="nature"
                   id="nature"
@@ -130,11 +102,11 @@ function AddIncident({ formData, handleChange }) {
                 </select>
               </div>
               <div className="mb-3 form-group">
-                <label htmlFor="typeAvisIncident.id">Type avis :</label>
+                <label htmlFor="typeAvisIncident.id">Type avis <strong className="text-danger">*</strong> :</label>
                 <select
                   name="typeAvisIncident.id"
                   className="form-control"
-                  value={formData.typeAvisIncident.id}
+                  value={formData.typeAvisIncident?.id}
                   onChange={handleChange}
                 >
                   <option value="">Sélectionnez le type</option>
@@ -146,7 +118,7 @@ function AddIncident({ formData, handleChange }) {
                 </select>
               </div>
               <div className="mb-3 form-group">
-                <label htmlFor="serviceImpacte">Services impactés :</label>
+                <label htmlFor="serviceImpacte">Services impactés <strong className="text-danger">*</strong> :</label>
                 <select
                   name="serviceImpacte"
                   className="form-control"
@@ -162,11 +134,11 @@ function AddIncident({ formData, handleChange }) {
                 </select>
               </div>
               <div className="mb-3 form-group">
-                <label htmlFor="valide">Validation :</label>
+                <label htmlFor="listeValidation.id">Validation <strong className="text-danger">*</strong> :</label>
                 <select
-                  name="valide"
+                  name="listeValidation.id"
                   className="form-control"
-                  value={formData.valide}
+                  value={formData.listeValidation?.id}
                   onChange={handleChange}
                 >
                   <option value="">Sélectionnez la validation</option>
@@ -178,11 +150,11 @@ function AddIncident({ formData, handleChange }) {
                 </select>
               </div>
               <div className="mb-3 form-group">
-                <label htmlFor="diffusion">Diffusion :</label>
+                <label htmlFor="listeDiffusion.id">Diffusion <strong className="text-danger">*</strong> :</label>
                 <select
-                  name="diffusion"
+                  name="listeDiffusion.id"
                   className="form-control"
-                  value={formData.diffusion}
+                  value={formData.listeDiffusion?.id}
                   onChange={handleChange}
                 >
                   <option value="">Sélectionnez la diffusion</option>
@@ -242,7 +214,7 @@ function AddIncident({ formData, handleChange }) {
             <Col sm={6}>
               <Title text="Causes et impacts" />
               <div className="form-group">
-                <label htmlFor="impact">Impacts :</label>
+                <label htmlFor="impact">Impacts <strong className="text-danger">*</strong> :</label>
                 <textarea
                   id="impact"
                   className="form-control"
@@ -258,7 +230,7 @@ function AddIncident({ formData, handleChange }) {
                 <select
                   name="causeRetard.id"
                   className="form-control"
-                  value={formData.causeRetard.id}
+                  value={formData.causeRetard?.id}
                   onChange={handleChange}
                 >
                   <option value="">Sélectionnez la cause</option>            
@@ -268,12 +240,12 @@ function AddIncident({ formData, handleChange }) {
               </div> 
               <div className="mb-3 form-group">
                 <label htmlFor="typeCauseIncident.id">
-                  Type de cause incident :
+                  Origine Cause <strong className="text-danger">*</strong> :
                 </label>
                 <select
                   name="typeCauseIncident.id"
                   className="form-control"
-                  value={formData.typeCauseIncident.id}
+                  value={formData.typeCauseIncident?.id}
                   onChange={handleChange}
                 >
 
@@ -285,7 +257,7 @@ function AddIncident({ formData, handleChange }) {
                 </select>
               </div>
               <div className="form-group">
-                <label htmlFor="causeProbable">Cause probable :</label>
+                <label htmlFor="causeProbable">Cause probable <strong className="text-danger">*</strong> :</label>
                 <textarea
                   id="causeProbable"
                   className="form-control"
