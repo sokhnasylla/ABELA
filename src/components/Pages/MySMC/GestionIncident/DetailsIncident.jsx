@@ -34,7 +34,7 @@ function DetailsIncident() {
   const itemsPerPage = 5;
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
+  
   useEffect(() => {
     const fetchIncident = async (url, setter) => {
       try {
@@ -80,7 +80,7 @@ function DetailsIncident() {
   useEffect(() => {
     const message = localStorage.getItem("alertMessage");
     const type = localStorage.getItem("alertType");
-
+    
     if (message) {
       setAlertMessage(message);
       setAlertType(type);
@@ -88,7 +88,7 @@ function DetailsIncident() {
 
       localStorage.removeItem("alertMessage");
       localStorage.removeItem("alertType");
-
+      
       const timer = setTimeout(() => {
         setShowAlert(false);
       }, 5000);
@@ -96,7 +96,7 @@ function DetailsIncident() {
       return () => clearTimeout(timer);
     }
   }, []);
-
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = historique.slice(indexOfFirstItem, indexOfLastItem);
