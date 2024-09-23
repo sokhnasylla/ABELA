@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { FaList, FaSearch, FaHome, FaPaperclip } from "react-icons/fa";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { RiDashboard3Line } from "react-icons/ri";
+import { IoStatsChart } from "react-icons/io5";
 import Title from "../../../Card/Title/Title";
-import { Row, Col, Button, Modal } from "react-bootstrap";
-import { Grid } from "@mui/material";
+import { Container, Row, Col, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
+import { InputLabel, TextField, Grid } from "@mui/material";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip, // Rename Recharts Tooltip to avoid conflict
   ResponsiveContainer,
 } from "recharts";
 import "./StatistiqueIncident.css";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import RechercheStatistiques from "./RechercheStatistiques";
-
-
-// a partir du mois en cours prendre la comme date de debut le dernier jour du mois en cours et comme date de fin le premier jour du mois en cours
 
 // Composant CustomTooltip
 const CustomTooltip = ({ active, payload, label }) => {
@@ -48,9 +49,8 @@ function StatistiqueIncident() {
     "Information : Merci d'effectuer une recherche au préalable pour afficher les avis"
   );
   const [showStatModal, setShowStatModal] = useState(false);
-  const [histo, setHisto] = useState("Aucune recherche récente.");
   const now = new Date();
-  const period = now.toLocaleDateString('FR', { month: 'long', year: 'numeric' });
+  const period = now.toLocaleDateString("FR", { month: "long", year: "numeric" });
   const start = new Date(now.getFullYear(), now.getMonth(), 1)
     .toISOString()
     .split("T")[0];
@@ -58,6 +58,7 @@ function StatistiqueIncident() {
     .toISOString()
     .split("T")[0];
 
+  const [histo, setHisto] = useState(period);
   const [dateDebut, setDateDebut] = useState(start);
   const [dateFin, setDateFin] = useState(end);
   const [dataUrl, setDataUrl] = useState(
@@ -93,6 +94,7 @@ function StatistiqueIncident() {
       `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`
     );
     setShowStatModal(false);
+    setHisto(period);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -134,62 +136,45 @@ function StatistiqueIncident() {
     { name: "Notification", value: totalAvisClosNotificationOnDelayCustom },
   ];
 
-
-
   return (
     <div className="dashboard">
-            {histo === "Aucune recherche récente." ? (
-          <Title
-            lg={12}
-            text={`Gestion des avis d'incidents - Indicateurs du mois en cours : ${period}`}
-          />
-        ) : histo !== "" ? (
-          // Si les dates de début et de fin sont présentes dans l'historique
-          <Title
-            text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
-          />
-        ) : (
-          // Si aucune date n'a été choisie, afficher un titre générique
-          <Title
-            text={`Gestion des avis d'incidents - Indicateurs sans période définie`}
-          />
-        )}
-      <Button  variant="primary" onClick={handleStatShow} className="mt-5 ml-5 mb-2">
-              Stats      
-              </Button>
-       <Modal
-              show={showStatModal}
-              onHide={handleStatClose}
-              dialogClassName="custom-modal"
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Statistiques</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <RechercheStatistiques onSearch={handleStatsSubmit} />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="danger" onClick={handleStatClose}>
-                  Fermer
-                </Button>
-              </Modal.Footer>
-            </Modal>
-            {(dataUrl !== `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` ) && (
-  <Button
-    variant="danger"
-    onClick={reinitHisto}
-    className="mt-5 ml-5 mb-2"
-  >
-    Default
-  </Button>
-)}
-      <Row className="mb-4">
-        <Col
-          xs={12}
-          sm={6}
-          md={3}
-          className="d-flex justify-content-center mb-3"
+      <Title text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`} />
+      
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip>Sélectionnez une période pour afficher les statistiques d'incidents</Tooltip>}
+      >
+        <Button
+          variant="primary"
+          onClick={handleStatShow}
+          className="mt-5 ml-5 mb-2"
         >
+          Stats
+        </Button>
+      </OverlayTrigger>
+      
+      <Modal show={showStatModal} onHide={handleStatClose} dialogClassName="custom-modal">
+        <Modal.Header closeButton>
+          <Modal.Title>Statistiques</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <RechercheStatistiques onSearch={handleStatsSubmit} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleStatClose}>
+            Fermer
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      {(dataUrl !== `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}`) && (
+        <Button variant="danger" onClick={reinitHisto} className="mt-5 ml-5 mb-2">
+          Default
+        </Button>
+      )}
+
+      <Row className="mb-4">
+        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
           <Grid
             container
             direction="column"
@@ -201,26 +186,14 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                color: "#a94442",
-              }}
-            >
-              {tauxNotificationAvis !== null
-                ? `${tauxNotificationAvis.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#a94442" }}>
+              {tauxNotificationAvis !== null ? `${tauxNotificationAvis.toFixed(2)} %` : "0 %"}
             </div>
             <div>Notification Avis</div>
           </Grid>
         </Col>
-        <Col
-          xs={12}
-          sm={6}
-          md={3}
-          className="d-flex justify-content-center mb-3"
-        >
+        
+        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
           <Grid
             container
             direction="column"
@@ -232,57 +205,33 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                color: "#31708F",
-              }}
-            >
-              {tauxDetectionAvis !== null
-                ? `${tauxDetectionAvis.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#31708f" }}>
+              {tauxDetectionAvis !== null ? `${tauxDetectionAvis.toFixed(2)} %` : "0 %"}
             </div>
             <div>Détection Avis</div>
           </Grid>
         </Col>
-        <Col
-          xs={12}
-          sm={6}
-          md={3}
-          className="d-flex justify-content-center mb-3"
-        >
+
+        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
           <Grid
             container
             direction="column"
             alignItems="center"
             style={{
-              backgroundColor: "#DFF0D8",
-              border: "1px solid #DFF0D8",
+              backgroundColor: "#FCF8E3",
+              border: "1px solid #FCF8E3",
               borderRadius: "10px",
               padding: "10px",
             }}
           >
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                color: "#3C763D",
-              }}
-            >
-              {tauxTraitement4H !== null
-                ? `${tauxTraitement4H.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#8a6d3b" }}>
+              {tauxTraitement4H !== null ? `${tauxTraitement4H.toFixed(2)} %` : "0 %"}
             </div>
-            <div>Traitement 4H</div>
+            <div>Traitement  4H</div>
           </Grid>
         </Col>
-        <Col
-          xs={12}
-          sm={6}
-          md={3}
-          className="d-flex justify-content-center mb-3"
-        >
+
+        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
           <Grid
             container
             direction="column"
@@ -294,36 +243,23 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                color: "#3C763D",
-              }}
-            >
-              {tauxTraitement24H !== null
-                ? `${tauxTraitement24H.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#3c763d" }}>
+              {tauxTraitement24H !== null ? `${tauxTraitement24H.toFixed(2)} %` : "0 %"}
             </div>
-            <div>Traitement 24H</div>
+            <div>Traitement  24H</div>
           </Grid>
         </Col>
       </Row>
+      
       <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={data}>
+        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip content={<CustomTooltip />} />
+          <RechartsTooltip content={<CustomTooltip />} />
           <Bar dataKey="value" fill="#FFA500" />
         </BarChart>
       </ResponsiveContainer>
-      {/* <div className="text-center">
-        {getPeriode(
-          histo.split("Début : ")[1].split(" | ")[0],
-          histo.split(" Fin : ")[1]
-        )}
-      </div> */}
     </div>
   );
 }

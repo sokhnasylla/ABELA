@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useAuth from "../../Auth/useAuth";
 import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { InputLabel, TextField } from "@mui/material";
@@ -91,7 +90,6 @@ function RechercheStatistiques({ onSearch }) {
                 <Button
                   type="submit"
                   style={{
-                    backgroundColor: "#C9302C",
                     borderColor: "#C9302C",
                     width: "100%",
                   }}
