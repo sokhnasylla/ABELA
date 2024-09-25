@@ -30,7 +30,6 @@ function GestionIncident() {
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
-  const [etat, setEtat] = useState("");
   const navigate = useNavigate();
   const token = getTokenFromLocalStorage();
   const user = getTokenDecode().sub;
@@ -89,16 +88,14 @@ function GestionIncident() {
     setShowOverlay(false);
   };
 
-  const handleSearchSubmit = (url, histo, etat) => {
+  const handleSearchSubmit = (url, histo) => {
     setDataUrlNotOpen(url);
     console.log(`Data URL: ${url}`);
     setShowModal(false);
     setHisto(histo);
-    setEtat(etat);
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente.");
-    setEtat("");
     setDataUrlEnCours(
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/enCours"
     );
@@ -457,29 +454,7 @@ function GestionIncident() {
             </div>
           </div>
           <Row className="mt-3">
-            {etat === "Annulé" && (
-              <Title
-                text={`Liste des avis d'incident / d'information annulés (${notOpenAvis.length})`}
-              />
-            )}
-            {etat === "Cloturé" && (
-              <Title
-                text={`Liste des avis d'incident / d'information clôturés (${notOpenAvis.length})`}
-              />
-            )}
-            {etat === "FERME" && (
-              <Title
-                text={`Liste des avis d'incident / d'information fermés (${notOpenAvis.length})`}
-              />
-            )}
-            {etat !== "Annulé" &&
-              etat !== "Cloturé" &&
-              etat !== "FERME" &&
-              etat !== "Encours" && (
-                <Title
-                  text={`Liste des avis fermés, clotûrés ou annulés (${notOpenAvis.length})`}
-                />
-              )}
+          <Title text={`Liste des avis fermés, clotûrés ou annulés (${notOpenAvis.length})`}/>
           </Row>
           <Row sm={12}>
             <Col sm={12} className="content">

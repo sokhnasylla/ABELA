@@ -12,7 +12,7 @@ function RechercheAvis({ onSearch }) {
   const [etat, setEtat] = useState("");
 
   // Helper function to handle API requests
-  const fetchData = async (url, errorMessage) => {
+  const fetchData = async (url, errorMessage) => {  
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error("Erreur lors de la recherche");
@@ -56,10 +56,6 @@ function RechercheAvis({ onSearch }) {
         newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`;
         newHisto = `Résultat de la dernière recherche, Date Début : ${dateDebut} | Date Fin : ${dateFin}`;
         errorMessage = "Aucun avis trouvé pour la période spécifiée";
-      } else if (etat) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByState?etat=${etat}`;
-        newHisto = `Résultat de la dernière recherche, Etat : ${etat}`;
-        errorMessage = "Aucun avis trouvé pour l'état spécifié";
       } else {
         throw new Error("Veuillez remplir au moins un champ de recherche");
       }
@@ -67,7 +63,7 @@ function RechercheAvis({ onSearch }) {
       await fetchData(newUrl, errorMessage);
       setError("");
       console.log(newUrl);
-      onSearch(newUrl, newHisto, etat);
+      onSearch(newUrl, newHisto);
     } catch (error) {
       setError(error.message);
     }
@@ -154,28 +150,6 @@ function RechercheAvis({ onSearch }) {
                     value={dateFin}
                     onChange={(e) => setDateFin(e.target.value)}
                   />
-                </div>
-                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
-                  <label htmlFor="etat"
-                    sx={{ marginLeft: "6%" }}
-                  >
-                    Etat : 
-                  </label>
-                  &nbsp;
-                  <select
-                    id="etat"
-                    variant="outlined"
-                    className="form-select"
-                    size="small"
-                    sx={{ width: "100%" }}
-                    value={etat}
-                    onChange={(e) => setEtat(e.target.value)}
-                  >
-                    <option value="">Sélectionner un état</option>
-                    <option value="Ferme">Fermé</option>
-                    <option value="Annule">Annulé</option>
-                    <option value="Cloturé">Cloturé</option>
-                  </select>
                 </div>
               </div>
               <div className="mb-3" style={{ flex: "1 1 100px" }}>

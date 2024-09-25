@@ -226,7 +226,7 @@ function EditIncident({avis, formData, handleEditChange }) {
                 value={formData.valide}
                 onChange={handleEditChange}
               >
-                <option>{avis.valide}</option>
+                <option>{avis.listValidation.nom}</option>
                 {listValidation.map((validation) => (
                   <option key={validation.id} value={validation.id}>
                     {validation.nom}
@@ -241,10 +241,10 @@ function EditIncident({avis, formData, handleEditChange }) {
               <select
                 name="diffusion"
                 className="form-control"
-                value={formData.diffusion}
+                value={formData.listDiffusion.id}
                 onChange={handleEditChange}
               >
-                <option >{avis.listDiffusion.nom}</option>
+                <option value={formData.listDiffusion.id} >{formData.listDiffusion.nom}</option>
                 {listDiffusion.map((diff) => (
                   <option key={diff.id} value={diff.id}>
                     {diff.nom}

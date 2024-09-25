@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
       {/* <Menu /> */}
       <div className="content">
         {children}
-      </div>
+      </div> 
       <Footer />
     </div>
   );

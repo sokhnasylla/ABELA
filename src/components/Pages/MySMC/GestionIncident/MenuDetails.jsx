@@ -10,8 +10,7 @@ import {
   FaQuestion,
   FaThumbsUp,
   FaTimes,
-  FaTrash,
-  FaTrashAlt,
+  FaTrashAlt
 } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import EditIncident from "./EditIncident";
@@ -33,8 +32,8 @@ function MenuDetailsIncident({ avis }) {
     nature: avis.nature || "",
     typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
     applicationSis: avis.applicationSis || [],
-    listValidation: avis.listValidation ? { id: avis.listValidation.id || "" } : {},
-    listDiffusion: { id: avis.listDiffusion?.id || "" } ,
+    listValidation:{ id: avis.listValidation?.id || "" },
+    listDiffusion: { id: avis.listDiffusion.id || "" } ,
     dateDebut: avis.dateDebut || "",
     dateDetection: avis.dateDetection || "",
     ticketEzv: avis.ticketEzv || "",
@@ -297,7 +296,7 @@ function MenuDetailsIncident({ avis }) {
                   }}
                   onClick={handleDemandeValidationShow}
                 >
-                  Demande validation avis
+                  Demande validation
                 </button>
 
                 <FaInfoCircle />

@@ -55,7 +55,9 @@ function DetailsIncident() {
       setIncident
     );
   }, [token, avis.id]);
-
+console.log(avis);
+console.log(avis.listValidation.nom);
+//console.log(incident.listDiffusion);
   useEffect(() => {
     const fetchHistorique = async (url, setter) => {
       try {
