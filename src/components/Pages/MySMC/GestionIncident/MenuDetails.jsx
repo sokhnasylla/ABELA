@@ -8,22 +8,21 @@ import {
   FaList,
   FaPencilAlt,
   FaQuestion,
+  FaSync,
   FaThumbsUp,
   FaTimes,
-  FaTrashAlt
+  FaTrash,
+  FaTrashAlt,
 } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import EditIncident from "./EditIncident";
 import axios from "axios";
 
 function MenuDetailsIncident({ avis }) {
-  const [showFermetureModal, setShowFermetureModal] = useState(false);
-  const [showAnnulerModal, setShowAnnulerModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showValidationModal, setShowValidationModal] = useState(false);
-  const [showDemandeValidationModal, setShowDemandeValidationModal] =
-    useState(false);
-  const [showDiffusionModal, setShowDiffusionModal] = useState(false);
+  const [contenu, setContenu] = useState("");
+  const [titre, setTitre] = useState("");
+  const [typeTraitement, setTypeTraitement] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const token = getTokenFromLocalStorage();
   const decode = getTokenDecode();
   const updateBy = decode.sub;
@@ -32,55 +31,75 @@ function MenuDetailsIncident({ avis }) {
     nature: avis.nature || "",
     typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
     applicationSis: avis.applicationSis || [],
-    listValidation:{ id: avis.listValidation?.id || "" },
-    listDiffusion: { id: avis.listDiffusion.id || "" } ,
+    listValidation: avis.listValidation ? { id: avis.listValidation.id || "" } : {},
+    listDiffusion: { id: avis.listDiffusion?.id || "" } ,
     dateDebut: avis.dateDebut || "",
     dateDetection: avis.dateDetection || "",
-    ticketEzv: avis.ticketEzv || "",
-    ticketOceane: avis.ticketOceane || "",
+    numTicketEZV: avis.numTicketEZV || "",
+    numTicketOceane: avis.numTicketOceane || "",
     impact: avis.impact || "",
     causeRetardNotification: avis.causeRetardNotification || "",
     typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
     causeProbable: avis.causeProbable || "",
     observations: avis.observations || "",
+    dateFinPrevisionnelle: avis.dateFinPrevisionnelle || "",
     dateFermeture: avis.dateFermeture || "",
+    commentaire: avis.commentaire || "",
     updateBy,
   });
+  console.log(avis);
 
-  const handleFermertureAvis = async (id) => {
-    try {
-      console.log(id);
-      const response = await fetch(
-        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${id}/closed`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Erreur lors de la recherche");
+  const handleShowModal = (titre, contenu, typeTraitement) => {
+    setTitre(titre);
+    setContenu(contenu);
+    setTypeTraitement(typeTraitement);
+    setShowModal(true);
+  };
+  const handleHideModal = () => setShowModal(false);
 
-      const contentType = response.headers.get("content-type");
-      let result;
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
-      } else {
-        result = await response.text();
-        console.log(result);
-      }
-      localStorage.setItem("alertMessage", "Avis fermé avec succès");
-      localStorage.setItem("alertType", "success");
-      setShowFermetureModal(false);
-      window.location.reload();
-      return result;
-    } catch (err) {
+  const handleFermertureAvis = async (avis) => {
+    if (!avis.dateFermeture) {
       localStorage.setItem(
         "alertMessage",
-        "Erreur lors de la fermeture de l'avis"
+        "Veuillez renseigner la date de fermeture"
       );
       localStorage.setItem("alertType", "danger");
+      window.location.reload();
+    } else {
+      try {
+        console.log(avis);
+        const response = await fetch(
+          `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/closed`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) throw new Error("Erreur lors de la recherche");
+
+        const contentType = response.headers.get("content-type");
+        let result;
+        if (contentType && contentType.includes("application/json")) {
+          result = await response.json();
+        } else {
+          result = await response.text();
+          console.log(result);
+        }
+        localStorage.setItem("alertMessage", "Avis fermé avec succès");
+        localStorage.setItem("alertType", "success");
+        setShowModal(false);
+        window.location.reload();
+        return result;
+      } catch (err) {
+        localStorage.setItem(
+          "alertMessage",
+          "Erreur lors de la fermeture de l'avis"
+        );
+        localStorage.setItem("alertType", "danger");
+      }
     }
   };
 
@@ -108,7 +127,7 @@ function MenuDetailsIncident({ avis }) {
         result = await response.text();
         console.log(result);
       }
-      setShowAnnulerModal(false);
+      setShowModal(false);
       localStorage.setItem("alertMessage", "Avis supprimé avec succès");
       localStorage.setItem("alertType", "success");
       window.location.reload();
@@ -146,7 +165,7 @@ function MenuDetailsIncident({ avis }) {
         result = await response.text();
         console.log(result);
       }
-      setShowValidationModal(false);
+      setShowModal(false);
       localStorage.setItem("alertMessage", "Avis validé avec succès");
       localStorage.setItem("alertType", "success");
       window.location.reload();
@@ -159,40 +178,6 @@ function MenuDetailsIncident({ avis }) {
       localStorage.setItem("alertType", "danger");
     }
   };
-
-  const handleFermetureShow = () => {
-    setShowFermetureModal(true);
-  };
-  const handleFermetureClose = () => {
-    setShowFermetureModal(false);
-  };
-
-  const handleAnnulerShow = () => {
-    setShowAnnulerModal(true);
-  };
-  const handleAnnulerClose = () => {
-    setShowAnnulerModal(false);
-  };
-
-  const handleEditClose = () => setShowEditModal(false);
-  const handleEditShow = () => setShowEditModal(true);
-
-  const handleValidationShow = () => {
-    setShowValidationModal(true);
-  };
-  const handleValidationClose = () => {
-    setShowValidationModal(false);
-  };
-
-  const handleDemandeValidationShow = () => {
-    setShowDemandeValidationModal(true);
-  };
-  const handleDemandeValidationClose = () => {
-    setShowDemandeValidationModal(false);
-  };
-
-  const handleDiffusionShow = () => setShowDiffusionModal(true);
-  const handleDiffusionClose = () => setShowDiffusionModal(false);
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -230,7 +215,7 @@ function MenuDetailsIncident({ avis }) {
 
       if (response.status === 200) {
         console.log("Avis modifié avec succès");
-        setShowEditModal(false);
+        setShowModal(false);
         localStorage.setItem("alertMessage", "Avis modifié avec succès");
         localStorage.setItem("alertType", "success");
         window.location.reload();
@@ -261,7 +246,7 @@ function MenuDetailsIncident({ avis }) {
         <FaArrowCircleDown />
       </Card>
 
-      {avis.etat === "ENCOURS" && (
+      {(avis.etat === "ENCOURS" || avis.etat === "REOPEN") && (
         <>
           <Nav className="flex-column justify-content-between navigation">
             <Card
@@ -294,7 +279,13 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
-                  onClick={handleDemandeValidationShow}
+                  onClick={() =>
+                    handleShowModal(
+                      "Demande validation avis",
+                      "",
+                      "Demande validation"
+                    )
+                  }
                 >
                   Demande validation
                 </button>
@@ -334,7 +325,9 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
-                  onClick={handleValidationShow}
+                  onClick={() =>
+                    handleShowModal("Validation de l'avis", "", "Validation")
+                  }
                 >
                   Validation de l'avis
                 </button>
@@ -372,7 +365,9 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
-                  onClick={handleDiffusionShow}
+                  onClick={() =>
+                    handleShowModal("Diffusion de l'avis", "", "Diffusion")
+                  }
                 >
                   Diffusion de l'avis
                 </button>
@@ -380,6 +375,94 @@ function MenuDetailsIncident({ avis }) {
               </Nav.Link>
             </Card>
           </Nav>
+          {avis.etat === "REOPEN" && (
+            <>
+              <Nav className="flex-column justify-content-between navigation">
+                <Card
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    height: "40px",
+                    backgroundColor: "#5bc0de",
+                  }}
+                >
+                  <Nav.Link
+                    className="text-white"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                      padding: "0 10px",
+                    }}
+                  >
+                    <FaSync />
+                    <button
+                      className="btn"
+                      style={{
+                        backgroundColor: "#5bc0de",
+                        color: "#fff",
+                        flexGrow: 1,
+                        textAlign: "center",
+                      }}
+                      onClick={() =>
+                        handleShowModal("Relance TMC", "", "Relance")
+                      }
+                    >
+                      Relance TMC
+                    </button>
+                    <FaInfoCircle />
+                  </Nav.Link>
+                </Card>
+              </Nav>
+              <Nav className="flex-column justify-content-between navigation">
+                <Card
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    height: "40px",
+                    backgroundColor: "#5bc0de",
+                  }}
+                >
+                  <Nav.Link
+                    className="text-white"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                      padding: "0 10px",
+                    }}
+                  >
+                    <FaSync />
+                    <button
+                      className="btn"
+                      style={{
+                        backgroundColor: "#5bc0de",
+                        color: "#fff",
+                        flexGrow: 1,
+                        textAlign: "center",
+                      }}
+                      onClick={() =>
+                        handleShowModal(
+                          "Etat d'avancement",
+                          "",
+                          "Etat d'avancement"
+                        )
+                      }
+                    >
+                      Etat d'avancement
+                    </button>
+                    <FaInfoCircle />
+                  </Nav.Link>
+                </Card>
+              </Nav>
+            </>
+          )}
           <Nav className="flex-column justify-content-between navigation">
             <Card
               style={{
@@ -410,7 +493,19 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
-                  onClick={handleEditShow}
+                  onClick={() =>
+                    handleShowModal(
+                      "Edition de l'avis",
+                      <>
+                        <EditIncident
+                          avis={avis}
+                          formData={formData}
+                          handleEditChange={handleEditChange}
+                        />
+                      </>,
+                      "Edition"
+                    )
+                  }
                 >
                   Edition de l'avis
                 </button>
@@ -448,7 +543,17 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
-                  onClick={handleFermetureShow}
+                  onClick={() =>
+                    handleShowModal(
+                      "Fermeture de l'avis",
+                      <>
+                        Vous êtes vous êtes sur le point de fermer l'avis avec
+                        l'id <strong className="text-danger">{avis.id}</strong>.
+                        Êtes-vous sûr de bien vouloir effectuer cette opération?{" "}
+                      </>,
+                      "Fermeture"
+                    )
+                  }
                 >
                   Fermeture de l'avis
                 </button>
@@ -486,7 +591,18 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
-                  onClick={handleAnnulerShow}
+                  onClick={() =>
+                    handleShowModal(
+                      "Suppression de l'avis",
+                      <>
+                        Vous êtes vous êtes sur le point de supprimer l'avis
+                        avec l'id{" "}
+                        <strong className="text-danger">{avis.id}</strong>.
+                        Êtes-vous sûr de bien vouloir effectuer cette opération?{" "}
+                      </>,
+                      "Suppression"
+                    )
+                  }
                 >
                   Suppression de l'avis
                 </button>
@@ -535,169 +651,69 @@ function MenuDetailsIncident({ avis }) {
         </Card>
       </Nav>
 
-      {/* Suppression Modal */}
       <Modal
-        show={showAnnulerModal}
-        onHide={handleAnnulerClose}
+        show={showModal}
+        onHide={handleHideModal}
         dialogClassName="custom-modal"
-        size="lg"
+        size="xl"
         style={{ width: "100%", textAlign: "" }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Confirmation de la suppression</Modal.Title>
+          <Modal.Title style={{ textAlign: "center" }}>{titre}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
-            Vous êtes vous êtes sur le point de supprimer l'avis avec l'id{" "}
-            <strong className="text-danger">{avis.id}</strong>. Êtes-vous sûr de
-            bien vouloir effectuer cette opération?
-          </p>
+          <p>{contenu}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={handleAnnulerClose}>
-            Non
-          </Button>
-          <Button
-            variant="success"
-            onClick={() => handleSuppressionAvis(avis.id)}
-          >
-            Oui
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Fermeture Modal */}
-      <Modal
-        show={showFermetureModal}
-        onHide={handleFermetureClose}
-        dialogClassName="custom-modal"
-        size="lg"
-        style={{ width: "100%", textAlign: "" }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title style={{ textAlign: "center" }}>
-            Confirmation de la fermeture
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Vous êtes vous êtes sur le point de fermer l'avis avec l'id{" "}
-            <strong className="text-danger">{avis.id}</strong>. Êtes-vous sûr de
-            bien vouloir effectuer cette opération?
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleFermetureClose}>
-            Non
-          </Button>
-          <Button
-            variant="success"
-            onClick={() => handleFermertureAvis(avis.id)}
-          >
-            Oui
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Edit Modal */}
-      <Modal
-        show={showEditModal}
-        onHide={handleEditClose}
-        dialogClassName="custom-modal"
-        size="xl"
-        style={{ width: "100%", textAlign: "" }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title style={{ textAlign: "center" }}>
-            Modifier un avis incident
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <EditIncident
-            avis={avis}
-            formData={formData}
-            handleEditChange={handleEditChange}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleEditClose}>
+          <Button variant="danger" onClick={handleHideModal}>
             Fermer
           </Button>
-          <Button variant="primary" onClick={handleEditSubmit}>
-            Modifier
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Validation Modal */}
-      <Modal
-        show={showValidationModal}
-        onHide={handleValidationClose}
-        dialogClassName="custom-modal"
-        size="xl"
-        style={{ width: "100%", textAlign: "" }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title style={{ textAlign: "center" }}>
-            Validation d'un avis incident
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body></Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleValidationClose}>
-            Fermer
-          </Button>
-          <Button variant="primary" onClick={handleValiderSubmit}>
-            Valider
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Diffusion Modal */}
-      <Modal
-        show={showDiffusionModal}
-        onHide={handleDiffusionClose}
-        dialogClassName="custom-modal"
-        size="xl"
-        style={{ width: "100%", textAlign: "" }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title style={{ textAlign: "center" }}>
-            Diffusion d'un avis incident
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body></Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleDiffusionClose}>
-            Fermer
-          </Button>
-          <Button variant="primary" onClick={handleEditSubmit}>
-            Modifier
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Demande validation Modal */}
-      <Modal
-        show={showDemandeValidationModal}
-        onHide={handleDemandeValidationClose}
-        dialogClassName="custom-modal"
-        size="xl"
-        style={{ width: "100%", textAlign: "" }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title style={{ textAlign: "center" }}>
-            Demande de validation d'un avis incident
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body></Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleDemandeValidationClose}>
-            Fermer
-          </Button>
-          <Button variant="primary" onClick={handleEditSubmit}>
-            Modifier
-          </Button>
+          {typeTraitement === "Fermeture" && (
+            <Button
+              variant="primary"
+              onClick={() => handleFermertureAvis(avis)}
+            >
+              Fermeture
+            </Button>
+          )}
+          {typeTraitement === "Suppression" && (
+            <Button
+              variant="primary"
+              onClick={() => handleSuppressionAvis(avis.id)}
+            >
+              Supprimer
+            </Button>
+          )}
+          {typeTraitement === "Validation" && (
+            <Button variant="primary" onClick={handleValiderSubmit}>
+              Valider
+            </Button>
+          )}
+          {typeTraitement === "Diffusion" && (
+            <Button variant="primary">
+              Diffuser
+            </Button>
+          )}
+          {typeTraitement === "Relance" && (
+            <Button variant="primary">
+              Relancer
+            </Button>
+          )}
+          {typeTraitement === "Etat d'avancement" && (
+            <Button variant="primary">
+              Relancer
+            </Button>
+          )}
+          {typeTraitement === "Demande validation" && (
+            <Button variant="primary">
+              Relancer
+            </Button>
+          )}
+          {typeTraitement === "Edition" && (
+            <Button variant="primary" onClick={handleEditSubmit}>
+              Modifier
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </Row>

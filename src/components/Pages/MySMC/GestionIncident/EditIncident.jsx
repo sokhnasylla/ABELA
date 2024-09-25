@@ -8,7 +8,7 @@ import "./ajoutavis.css";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import { useLocation } from "react-router-dom";
 
-function EditIncident({avis, formData, handleEditChange }) {
+function EditIncident({ avis, formData, handleEditChange }) {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
@@ -17,19 +17,20 @@ function EditIncident({avis, formData, handleEditChange }) {
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
-  const [serviceSup, setServiceSup] = useState([]); 
+  const [serviceSup, setServiceSup] = useState([]);
 
   const handleServiceChange = (e) => {
     const selectedOptions = Array.from(e.target.selectedOptions); // Get all selected options
-    const selectedValues = selectedOptions.map(option => option.value); // Map them to an array of values (IDs)
-    
+    const selectedValues = selectedOptions.map((option) => option.value); // Map them to an array of values (IDs)
+
     const selectedServiceObjects = selectedValues
-      .map((selectedValue) => serviceImpact.find(service => service.id === parseInt(selectedValue))) // Find corresponding service objects
+      .map((selectedValue) =>
+        serviceImpact.find((service) => service.id === parseInt(selectedValue))
+      ) // Find corresponding service objects
       .filter(Boolean); // Ensure no undefined services
-  
+
     setSelectedServices(selectedServiceObjects); // Update selected services
   };
-  
 
   const handleRemoveService = (serviceId) => {
     setSelectedServices(
@@ -63,11 +64,12 @@ function EditIncident({avis, formData, handleEditChange }) {
 
     if (avis.applicationSis && avis.applicationSis.length > 0) {
       const selectedServiceObjects = avis.applicationSis
-        .map((serviceId) => {
-          return serviceImpact.find((service) => service.id === serviceId);
+        .map((service) => {
+          return serviceImpact.find((s) => s.id === service.id);
         })
-        .filter(Boolean);
-      setSelectedServices(selectedServiceObjects);
+        .filter(Boolean); // S'assurer qu'on ne récupère que des services valides
+
+      setSelectedServices(selectedServiceObjects); // Mettre à jour les services sélectionnés
     }
 
     fetchData(
@@ -98,7 +100,6 @@ function EditIncident({avis, formData, handleEditChange }) {
 
   return (
     <div id="home">
-     
       <Container className="body">
         <Row>
           <Col sm={12}>
@@ -183,15 +184,15 @@ function EditIncident({avis, formData, handleEditChange }) {
                 ))}
               </select>
             </div>
-            <div className="mb-3 form-group">
-              <div>
+           {/* <div className="mb-3 form-group">
+               <div>
                 <label htmlFor="applicationSis">
                   Services impactés <strong className="text-danger">*</strong> :
                 </label>
                 <select
                   name="applicationSis"
                   className="form-control"
-                //   value={selectedServices.map((service) => service.id)}
+                  value={formData.applicationSis}
                   onChange={handleServiceChange}
                 >
                   <option value="">Sélectionnez le service</option>
@@ -215,18 +216,18 @@ function EditIncident({avis, formData, handleEditChange }) {
                   </span>
                 ))}
               </div>
-            </div>
+            </div> */}
             <div className="mb-3 form-group">
-              <label htmlFor="valide">
+              <label htmlFor="listeValidation.id">
                 Liste Validation <strong className="text-danger">*</strong> :
               </label>
               <select
-                name="valide"
+                name="listeValidation.id"
                 className="form-control"
-                value={formData.valide}
+                value={formData.listeValidation?.id}
                 onChange={handleEditChange}
               >
-                <option>{avis.listValidation.nom}</option>
+                <option value={avis.listValidation?.id}>{avis.listeValidation?.nom}</option>
                 {listValidation.map((validation) => (
                   <option key={validation.id} value={validation.id}>
                     {validation.nom}
@@ -235,16 +236,16 @@ function EditIncident({avis, formData, handleEditChange }) {
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="diffusion">
+              <label htmlFor="listeDiffusion.id">
                 Liste Diffusion <strong className="text-danger">*</strong> :
               </label>
               <select
-                name="diffusion"
+                name="listeDiffusion.id"
                 className="form-control"
-                value={formData.listDiffusion.id}
+                value={formData.listeDiffusion?.id}
                 onChange={handleEditChange}
               >
-                <option value={formData.listDiffusion.id} >{formData.listDiffusion.nom}</option>
+                <option value={avis.listeDiffusion?.id}>{avis.listeDiffusion?.nom}</option>
                 {listDiffusion.map((diff) => (
                   <option key={diff.id} value={diff.id}>
                     {diff.nom}
@@ -261,7 +262,7 @@ function EditIncident({avis, formData, handleEditChange }) {
                 name="dateDebut"
                 id="dateDebut"
                 className="form-control"
-                value={formatDateForInput(avis.dateDebut)}
+                value={formatDateForInput(formData.dateDebut)}
                 onChange={handleEditChange}
               />
             </div>
@@ -274,7 +275,7 @@ function EditIncident({avis, formData, handleEditChange }) {
                 name="dateDetection"
                 id="dateDetection"
                 className="form-control"
-                value={formatDateForInput(avis.dateDetection)}
+                value={formatDateForInput(formData.dateDetection)}
                 onChange={handleEditChange}
               />
             </div>
@@ -302,7 +303,7 @@ function EditIncident({avis, formData, handleEditChange }) {
                 name="dateFinPrevisionnelle"
                 id="dateFinPrevisionnelle"
                 className="form-control"
-                value={formatDateForInput(avis.dateFinPrevisionnelle)}
+                value={formatDateForInput(formData.dateFinPrevisionnelle)}
                 onChange={handleEditChange}
               />
             </div>
@@ -313,27 +314,27 @@ function EditIncident({avis, formData, handleEditChange }) {
                 name="dateFermeture"
                 id="dateFermeture"
                 className="form-control"
-                value={formData.dateFermeture}
+                value={formatDateForInput(formData.dateFermeture)}
                 onChange={handleEditChange}
               />
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="ticketEzv">Ticket EZV :</label>
+              <label htmlFor="numTicketEZV">Ticket EZV :</label>
               <input
                 type="text"
-                name="ticketEzv"
-                id="ticketEzv"
+                name="numTicketEZV"
+                id="numTicketEZV"
                 className="form-control"
                 value={formData.numTicketEZV}
                 onChange={handleEditChange}
               />
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="ticketOceane">Ticket Océane :</label>
+              <label htmlFor="numTicketOceane">Ticket Océane :</label>
               <input
                 type="text"
-                name="ticketOceane"
-                id="ticketOceane"
+                name="numTicketOceane"
+                id="numTicketOceane"
                 className="form-control"
                 value={formData.numTicketOceane}
                 onChange={handleEditChange}
