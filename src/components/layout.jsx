@@ -14,9 +14,18 @@ const Layout = ({ children }) => {
 
   return (
     <div>
+         <style>
+        {`
+        div.myContent {
+          position: relative;
+          top:20px;
+          width: 100%
+          }`}
+        </style>
       <Header />
-      {/* <Menu /> */}
-      <div className="content">
+     
+      <div className="myContent">
+     
         {children}
       </div> 
       <Footer />

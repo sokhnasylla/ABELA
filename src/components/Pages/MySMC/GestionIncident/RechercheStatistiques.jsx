@@ -90,7 +90,6 @@ function RechercheStatistiques({ onSearch }) {
                 <Button
                   type="submit"
                   style={{
-                    borderColor: "#C9302C",
                     width: "100%",
                   }}
                 >

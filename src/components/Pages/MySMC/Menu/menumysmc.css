@@ -1,31 +1,58 @@
-.menusmc{
+/* Sidebar styles */
+.sidebar {
+    position: fixed; /* Utilisez fixed pour garder la sidebar en place lors du scroll */
+    top: 50px; /* Ajustez selon la hauteur de votre header */
+    left: 0; /* Alignez à gauche */
+    width: 250px; /* Largeur de la sidebar */
+    height: calc(100% - 40px); /* Prendre toute la hauteur de la page moins la hauteur du header */
+    background-color: #fff;
+    transition: width 0.5s linear;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 10;
+}
+
+.sidebar.closed {
+    width: 70px; /* Mode réduit */
+}
+
+/* Conteneur des éléments du menu */
+.menusmc {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    margin-left: 30px;
-}
-.panel{
-    width: 170px;
-    display: flex;
-    padding: 7px 15px;
-    border-bottom: 1px solid transparent;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    border-color: #ebccd1;
-}
-.label,label{
-    font-size: .9em;
-    font-family: fantasy;
+    padding-top: 5px;
 }
 
- .Ad .text{
+/* Style des éléments individuels (Ad) */
+.Ad, .Ads{
     display: flex;
-    justify-content: center;
-    font-size: small;
-    color: white;
-    margin-top: 5px;
-    background-color: #148C8A;
-    width: 8.9rem;
-    height: 1.5rem;
-    border-radius: 5px;
-    text-align: center;
+    align-items: center;
+    padding: 15px 15px;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
 
-} 
+.Ad:hover,.Ads:hover {
+    background-color: #f0f0f0;
+}
+
+/* Style des icônes dans les items du menu */
+.Ad img {
+    width: 50px; /* Taille des icônes */
+    height: 50px;
+}
+
+/* Style du texte */
+.Ad .text {
+    font-size: 16px;
+    color: #333;
+    display: inline-block;
+}
+
+/* Masquer le texte lorsque la sidebar est réduite */
+.sidebar.closed .Ad .text {
+    display: none;
+}
