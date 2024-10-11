@@ -11,6 +11,7 @@ import {
   FaSync,
   FaThumbsUp,
   FaTimes,
+  FaTrash,
   FaTrashAlt,
 } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
@@ -31,8 +32,8 @@ function MenuDetailsIncident({ avis }) {
     nature: avis.nature || "",
     typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
     applicationSis: avis.applicationSis || [],
-    listeValidation: { id: avis.listeValidation?.id || "" },
-    listeDiffusion: { id: avis.listeDiffusion?.id || "" },
+    listValidation: avis.listValidation ? { id: avis.listValidation.id || "" } : {},
+    listDiffusion: { id: avis.listDiffusion?.id || "" } ,
     dateDebut: avis.dateDebut || "",
     dateDetection: avis.dateDetection || "",
     numTicketEZV: avis.numTicketEZV || "",
@@ -285,7 +286,7 @@ function MenuDetailsIncident({ avis }) {
                     )
                   }
                 >
-                  Demande validation avis
+                  Demande validation
                 </button>
 
                 <FaInfoCircle />

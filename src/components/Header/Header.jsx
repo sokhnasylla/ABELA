@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Navbar, Container, Nav, Button, Row, Col, Modal, OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { clearTokenFromLocalStorage, getTokenDecode, getTokenFromLocalStorage } from '../Pages/Auth/authUtils';
+import { clearTokenFromLocalStorage, getTokenDecode} from '../Pages/Auth/authUtils';
 import { MdOutlineManageHistory } from "react-icons/md";
 import { BsBrowserEdge } from "react-icons/bs";
 import { FaStreetView, FaChevronLeft, FaChevronRight, FaMobile, FaNetworkWired } from "react-icons/fa";
@@ -10,7 +10,6 @@ import { Dashboard } from '@mui/icons-material';
 import AppsIcon from '@mui/icons-material/Apps';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
-import { ProfilConstants } from '../../config/profil.constants';
 import { RoleConstants } from '../../config/role.constants';
 
 class Header extends Component {
