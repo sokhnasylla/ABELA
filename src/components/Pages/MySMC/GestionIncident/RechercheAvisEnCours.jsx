@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button,  } from "react-bootstrap";
 import { TextField } from "@mui/material";
 
-function RechercheAvis({ onSearch }) {
+function RechercheAvisEnCours({ onSearch }) {
   const [error, setError] = useState("");
   const [numeroAvis, setNumeroAvis] = useState("");
   const [application, setApplication] = useState("");
@@ -65,7 +65,7 @@ function RechercheAvis({ onSearch }) {
         newHisto = `Résultat de la dernière recherche, Application : ${application}`;
         errorMessage = "Aucun avis trouvé pour l'application spécifiée";
       } else if (dateDebut && dateFin) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisNotOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
         newHisto = `Résultat de la dernière recherche, Date Début : ${formatDate(dateDebut)} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = "Aucun avis trouvé pour la période spécifiée";
       } else if (etat) {
@@ -79,7 +79,7 @@ function RechercheAvis({ onSearch }) {
       await fetchData(newUrl, errorMessage);
       setError("");
       console.log(newUrl);
-      onSearch(newUrl, newHisto, etat);
+      onSearch(newUrl, newHisto);
     } catch (error) {
       setError(error.message);
     }
@@ -184,9 +184,8 @@ function RechercheAvis({ onSearch }) {
                     onChange={(e) => setEtat(e.target.value)}
                   >
                     <option value="">Sélectionner un état</option>
-                    <option value="Ferme">Fermé</option>
-                    <option value="Annule">Annulé</option>
-                    <option value="Cloturé">Cloturé</option>
+                    <option value="ENCOURS">En cours</option>
+                    <option value="REOPEN">Réouvert</option>
                   </select>
                 </div>
               </div>
@@ -204,7 +203,7 @@ function RechercheAvis({ onSearch }) {
               </div>
             </form>
             {error && (
-              <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
+              <div style={{ textAlign: "center", color: "red", marginTop: "10px" }}>{error}</div>
             )}
           </Col>
         </Row>
@@ -213,4 +212,4 @@ function RechercheAvis({ onSearch }) {
   );
 }
 
-export default RechercheAvis;
+export default RechercheAvisEnCours;

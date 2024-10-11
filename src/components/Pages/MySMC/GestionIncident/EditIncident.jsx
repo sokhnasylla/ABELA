@@ -184,26 +184,27 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 ))}
               </select>
             </div>
-           {/* <div className="mb-3 form-group">
-               <div>
-                <label htmlFor="applicationSis">
-                  Services impactés <strong className="text-danger">*</strong> :
-                </label>
-                <select
-                  name="applicationSis"
-                  className="form-control"
-                  value={formData.applicationSis}
-                  onChange={handleServiceChange}
-                >
-                  <option value="">Sélectionnez le service</option>
-                  {serviceImpact.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.nom}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mt-2 selected-services">
+            <div className="mb-3 form-group">
+              {/* <div> */}
+              <label htmlFor="applicationSis">
+                Services impactés <strong className="text-danger">*</strong> :
+              </label>
+              <select
+                name="applicationSis"
+                className="form-control"
+                multiple
+                value={formData.applicationSis}
+                onChange={handleServiceChange}
+              >
+                <option value="">Sélectionnez le service</option>
+                {serviceImpact.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* <div className="mt-2 selected-services">
                 {selectedServices.map((service) => (
                   <span key={service.id} className="badge bg-primary me-2">
                     {service.nom}{" "}
@@ -227,7 +228,9 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 value={formData.listeValidation?.id}
                 onChange={handleEditChange}
               >
-                <option value={avis.listValidation?.id}>{avis.listeValidation?.nom}</option>
+                <option value={avis.listValidation?.id}>
+                  {avis.listeValidation?.nom}
+                </option>
                 {listValidation.map((validation) => (
                   <option key={validation.id} value={validation.id}>
                     {validation.nom}
@@ -245,7 +248,9 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 value={formData.listeDiffusion?.id}
                 onChange={handleEditChange}
               >
-                <option value={avis.listeDiffusion?.id}>{avis.listeDiffusion?.nom}</option>
+                <option value={avis.listeDiffusion?.id}>
+                  {avis.listeDiffusion?.nom}
+                </option>
                 {listDiffusion.map((diff) => (
                   <option key={diff.id} value={diff.id}>
                     {diff.nom}
@@ -283,14 +288,15 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <label htmlFor="autoDateFP">
                 Calcul Date FP <strong className="text-danger">*</strong> :
               </label>
+              {/* if autoDateFP is true, then the value is "Oui" */}
               <select
                 name="autoDateFP"
                 className="form-control"
                 value={formData.autoDateFP}
                 onChange={handleEditChange}
               >
-                <option value="Oui">Oui</option>
-                <option value="Non">Non</option>
+                <option value="true">Oui</option>
+                <option value="false">Non</option>
               </select>
             </div>
 

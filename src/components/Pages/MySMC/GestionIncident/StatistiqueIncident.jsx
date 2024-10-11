@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaList, FaSearch, FaHome, FaPaperclip } from "react-icons/fa";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import { RiDashboard3Line } from "react-icons/ri";
-import { IoStatsChart } from "react-icons/io5";
 import Title from "../../../Card/Title/Title";
-import { Container, Row, Col, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
-import { InputLabel, TextField, Grid } from "@mui/material";
+import { Row, Col, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
+import { Grid } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -43,11 +39,6 @@ const CustomTooltip = ({ active, payload, label }) => {
 function StatistiqueIncident() {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
-  const [etat, setEtat] = useState(false);
-  const [loading, setLoding] = useState(false);
-  const [text, setText] = useState(
-    "Information : Merci d'effectuer une recherche au préalable pour afficher les avis"
-  );
   const [showStatModal, setShowStatModal] = useState(false);
   const now = new Date();
   const period = now.toLocaleDateString("FR", { month: "long", year: "numeric" });

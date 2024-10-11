@@ -21,6 +21,7 @@ function MenuDetailsIncident({ avis }) {
   const [contenu, setContenu] = useState("");
   const [titre, setTitre] = useState("");
   const [typeTraitement, setTypeTraitement] = useState("");
+  const [size, setSize] = useState("");
   const [showModal, setShowModal] = useState(false);
   const token = getTokenFromLocalStorage();
   const decode = getTokenDecode();
@@ -46,12 +47,12 @@ function MenuDetailsIncident({ avis }) {
     commentaire: avis.commentaire || "",
     updateBy,
   });
-  console.log(avis);
 
-  const handleShowModal = (titre, contenu, typeTraitement) => {
+  const handleShowModal = (titre, contenu, typeTraitement, size) => {
     setTitre(titre);
     setContenu(contenu);
     setTypeTraitement(typeTraitement);
+    setSize(size);
     setShowModal(true);
   };
   const handleHideModal = () => setShowModal(false);
@@ -230,13 +231,11 @@ function MenuDetailsIncident({ avis }) {
     <Row>
       <Card
         style={{
-          display: "flex",
           flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
           color: "#148C8A",
           border: "2px solid #148C8A",
         }}
+        className="d-flex justify-content-between align-items-center"
       >
         <FaBars />
         <p style={{ marginBottom: "0", textAlign: "center", flexGrow: 1 }}>
@@ -502,7 +501,8 @@ function MenuDetailsIncident({ avis }) {
                           handleEditChange={handleEditChange}
                         />
                       </>,
-                      "Edition"
+                      "Edition",
+                      "xl"
                     )
                   }
                 >
@@ -654,7 +654,7 @@ function MenuDetailsIncident({ avis }) {
         show={showModal}
         onHide={handleHideModal}
         dialogClassName="custom-modal"
-        size="xl"
+        size={size}
         style={{ width: "100%", textAlign: "" }}
       >
         <Modal.Header closeButton>

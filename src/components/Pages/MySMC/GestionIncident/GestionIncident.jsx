@@ -18,24 +18,46 @@ import useAuth from "../../Auth/useAuth";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import axios from "axios";
 import RechercheAvis from "./RechercheAvis";
+import RechercheAvisEnCours from "./RechercheAvisEnCours.jsx";
 import AddIncident from "./AddIncident";
 import StatistiqueIncident from "./StatistiqueIncident";
 import { useNavigate } from "react-router-dom";
-import { FaCog, FaEye, FaPlus, FaSearch, FaSync, FaThumbsUp } from "react-icons/fa";
+import { FaCog, FaPlus, FaSearch, FaSync, FaThumbsUp } from "react-icons/fa";
 
 function GestionIncident() {
   useAuth();
   const [notOpenAvis, setNotOpenAvis] = useState([]);
   const [openAvis, setOpenAvis] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingNotOpen, setIsLoadingNotOpen] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showReOpenModal, setShowReOpenModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContenu] = useState("");
+  const [operationType, setOperationType] = useState("");
+  const [size, setSize] = useState("");
   const [selectedAvis, setSelectedAvis] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente.");
+  const [histoOpen, setHistoOpen] = useState("Aucune recherche récente.");
+  const [etatOpen, setEtatOpen] = useState("");
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalPagesNotOpen, setTotalPagesNotOpen] = useState(1);
+  const [totalElementsOpen, setTotalElementsOpen] = useState(0);
+  const [totalElementsNotOpen, setTotalElementsNotOpen] = useState(0);
   const [etat, setEtat] = useState("");
   const navigate = useNavigate();
   const token = getTokenFromLocalStorage();
   const user = getTokenDecode().sub;
+  const [searchParams, setSearchParams] = useState(null);
+  const [searchParamsNotOpen, setSearchParamsNotOpen] = useState(null);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayTarget, setOverlayTarget] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPageOpen, setItemsPerPageOpen] = useState(10);
+  const [currentPageNotOpen, setCurrentPageNotOpen] = useState(1);
+  const [itemsPerPageNotOpen, setItemsPerPageNotOpen] = useState(10);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
   const [formData, setFormData] = useState({
     objet: "",
     nature: "",
@@ -54,37 +76,27 @@ function GestionIncident() {
     observations: "",
     user,
   });
-
   const [dataUrlEnCours, setDataUrlEnCours] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours"
   );
   const [dataUrlNotOpen, setDataUrlNotOpen] = useState(
     "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule"
   );
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [overlayTarget, setOverlayTarget] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageNotOpen, setCurrentPageNotOpen] = useState(1);
-  const [itemsPerPageOpen, setItemsPerPageOpen] = useState(10);
-  const [itemsPerPageNotOpen, setItemsPerPageNotOpen] = useState(10);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
 
   const handleItemsChangeOpen = (event) => {
+    fetchDataOpen(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours?page=1&limit=${event.target.value}`,
+      setOpenAvis
+    );
     setItemsPerPageOpen(Number(event.target.value));
   };
   const handleItemsChangeNotOpen = (event) => {
+    fetchDataNotOpen(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule?page=1&limit=${event.target.value}`,
+      setNotOpenAvis
+    );
     setItemsPerPageNotOpen(Number(event.target.value));
   };
-
-  const handleReOpen = (avis) => {
-    setSelectedAvis(avis);
-    setShowReOpenModal(true);
-  };
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingNotOpen, setIsLoadingNotOpen] = useState(true);
 
   const handleMouseEnter = (event, item) => {
     if (event.target.closest("td")?.classList.contains("text-center")) return;
@@ -96,30 +108,35 @@ function GestionIncident() {
     setShowOverlay(false);
   };
 
+  const handleSearchSubmitOpen = (url, histo, etat) => {
+    fetchDataOpen(url, setOpenAvis);
+    setShowModal(false);
+    setHistoOpen(histo);
+    setEtatOpen(etat);
+    setSearchParams({ url, histo, etat });
+  };
+
   const handleSearchSubmit = (url, histo, etat) => {
-    setDataUrlNotOpen(url);
-    console.log(`Data URL: ${url}`);
+    fetchDataNotOpen(url, setNotOpenAvis);
     setShowModal(false);
     setHisto(histo);
     setEtat(etat);
+    setSearchParamsNotOpen({ url, histo, etat });
   };
-  const reinitHisto = () => {
-    setHisto("Aucune recherche récente.");
-    setEtat("");
-    setDataUrlEnCours(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/enCours"
-    );
-    setDataUrlNotOpen(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule"
-    );
+
+  const reinitHistoOpen = () => {
+    setHistoOpen("Aucune recherche récente.");
+    setEtatOpen("");
+    fetchDataOpen(dataUrlEnCours, setOpenAvis);
     setShowModal(false);
   };
 
-  useEffect(() => {
-    if (selectedAvis) {
-      reouvertureAvis(selectedAvis.id);
-    }
-  }, [selectedAvis]);
+  const reinitHisto = () => {
+    setHisto("Aucune recherche récente.");
+    setEtat("");
+    fetchDataNotOpen(dataUrlNotOpen, setNotOpenAvis);
+    setShowModal(false);
+  };
 
   const reouvertureAvis = async (id) => {
     try {
@@ -130,29 +147,22 @@ function GestionIncident() {
       };
       const response = await axios.put(
         `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/reopen/${id}`,
-        { config }
+        {},
+        config
       );
 
-      if (!response.ok) throw new Error("Erreur lors de la reouverture");
-
-      // Check if the response is plain text
-      const contentType = response.headers.get("content-type");
-      let result;
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
-      } else {
-        result = await response.text();
-        console.log(result);
+      if (response.status !== 200) {
+        throw new Error("Erreur lors de la reouverture");
       }
-      setShowReOpenModal(false);
+      setShowModal(false);
       localStorage.setItem("alertMessage", "Avis re-ouvert avec succès");
       localStorage.setItem("alertType", "success");
       window.location.reload();
-      return result;
+      return response.data;
     } catch (err) {
       localStorage.setItem(
         "alertMessage",
-        "Erreur lors de la reouverture de l'avis"
+        { err } || "Erreur lors de la reouverture"
       );
       localStorage.setItem("alertType", "danger");
     }
@@ -216,8 +226,7 @@ function GestionIncident() {
       );
 
       if (response.status === 200) {
-        console.log("Avis créé avec succès");
-        setShowAddModal(false);
+        setShowModal(false);
         // window.location.reload();
         localStorage.setItem("alertMessage", "Avis créé avec succès");
         localStorage.setItem("alertType", "success");
@@ -235,71 +244,93 @@ function GestionIncident() {
   };
 
   useEffect(() => {
-    const fetchData = async (url, setter) => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(url, config);
-        setter(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
+    fetchDataOpen(dataUrlEnCours, setOpenAvis);
+    fetchDataNotOpen(dataUrlNotOpen, setNotOpenAvis);
+  }, []);
 
-    fetchData(dataUrlEnCours, setOpenAvis);
-  }, [dataUrlEnCours, token]);
+  const fetchDataOpen = async (url, setter) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(url, config);
+      setter(response.data.content);
+      setTotalPages(response.data.totalPages);
+      setTotalElementsOpen(response.data.totalElements);
+      setIsLoading(false);
+    } catch (error) {
+      setError(`Erreur: ${error.message}`);
+    }
+  };
 
-  useEffect(() => {
-    const fetchData = async (url, setter) => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(url, config);
-        setter(response.data);
-        setIsLoadingNotOpen(false);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
+  const fetchDataNotOpen = async (url, setter) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(url, config);
+      setter(response.data.content);
+      setTotalPagesNotOpen(response.data.totalPages);
+      setTotalElementsNotOpen(response.data.totalElements);
+      setIsLoadingNotOpen(false);
+    } catch (error) {
+      setError(`Erreur: ${error.message}`);
+    }
+  };
 
-    fetchData(dataUrlNotOpen, setNotOpenAvis);
-  }, [dataUrlNotOpen, token]);
-
-  const handleShow = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
-  const handleAddShow = () => setShowAddModal(true);
-  const handleAddClose = () => setShowAddModal(false);
-  const handleReOpenShow = () => setShowReOpenModal(true);
-  const handleReOpenClose = () => setShowReOpenModal(false);
+  const handleShowModal = (title, content, operationType, size, avis) => {
+    setTitle(title);
+    setContenu(content);
+    setOperationType(operationType);
+    setSize(size);
+    setSelectedAvis(avis);
+    setShowModal(true);
+  };
+  const handleHideModal = () => setShowModal(false);
 
   const handleShowDetails = (avis) => {
     navigate(`/mysmc/gestionincident/details/${avis.id}`, { state: { avis } });
   };
 
+  const handlePageChange = (pageNumber) => {
+    if (searchParams) {
+      const updatedUrl = `${searchParams.url}&page=${pageNumber}&limit=${itemsPerPageOpen}`;
+
+      fetchDataOpen(updatedUrl, setOpenAvis);
+      setCurrentPage(pageNumber);
+    } else {
+      fetchDataOpen(
+        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours?page=${pageNumber}&limit=${itemsPerPageOpen}`,
+        setOpenAvis
+      );
+      setCurrentPage(pageNumber);
+    }
+  };
+
   const indexOfLastItem = currentPage * itemsPerPageOpen;
   const indexOfFirstItem = indexOfLastItem - itemsPerPageOpen;
-  const currentItems = openAvis.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(openAvis.length / itemsPerPageOpen);
 
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  const handlePageChangeNotOpen = (pageNumber) => {
+    if (searchParamsNotOpen) {
+      const updatedUrl = `${searchParamsNotOpen.url}&page=${pageNumber}&limit=${itemsPerPageOpen}`;
+
+      fetchDataNotOpen(updatedUrl, setNotOpenAvis);
+      setCurrentPageNotOpen(pageNumber);
+    } else {
+      fetchDataNotOpen(
+        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule?page=${pageNumber}&limit=${itemsPerPageNotOpen}`,
+        setNotOpenAvis
+      );
+      setCurrentPageNotOpen(pageNumber);
+    }
+  };
 
   const indexOfLastItemNotOpen = currentPageNotOpen * itemsPerPageNotOpen;
   const indexOfFirstItemNotOpen = indexOfLastItemNotOpen - itemsPerPageNotOpen;
-  const currentItemsNotOpen = notOpenAvis.slice(
-    indexOfFirstItemNotOpen,
-    indexOfLastItemNotOpen
-  );
-  const totalPagesNotOpen = Math.ceil(notOpenAvis.length / itemsPerPageNotOpen);
-
-  const handlePageChangeNotOpen = (pageNumber) =>
-    setCurrentPageNotOpen(pageNumber);
 
   return (
     <div>
@@ -326,8 +357,25 @@ function GestionIncident() {
                   Exporter Plan d'action incident
                 </Button>
               </div>
-              <div className="d-flex align-items-center">
-                <Button variant="primary" onClick={handleAddShow}>
+              <div>
+                <Button
+                  variant="primary"
+                  onClick={() =>
+                    handleShowModal(
+                      "Ajouter un avis",
+                      <>
+                        <AddIncident
+                          formData={formData}
+                          handleChange={handleChange}
+                        />
+                      </>,
+
+                      "Ajouter",
+                      "xl"
+                    )
+                  }
+                  className="d-flex align-items-center"
+                >
                   <FaPlus /> &nbsp; Ajouter un avis
                 </Button>
               </div>
@@ -335,7 +383,7 @@ function GestionIncident() {
           </Row>
           <Row className="mt-3">
             <Title
-              text={`Liste des avis d'incident / d'information en cours (${openAvis.length})`}
+              text={`Liste des avis d'incident / d'information en cours (${totalElementsOpen})`}
             />
           </Row>
 
@@ -358,10 +406,85 @@ function GestionIncident() {
                   &nbsp;
                   <label>éléments</label>
                 </div>
+
+                <div className="d-flex align-items-center">
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontFamily: "inherit",
+                      fontWeight: "500",
+                      textAlign: "center",
+                    }}
+                  >
+                    <button
+                      className="btn btn-primary"
+                      onClick={() =>
+                        handleShowModal(
+                          "Recherche d'avis",
+                          <RechercheAvisEnCours
+                            onSearch={handleSearchSubmitOpen}
+                          />,
+                          "Recherche",
+                          "md"
+                        )
+                      }
+                    >
+                      <FaSearch />
+                    </button>
+                  </span>
+                  &nbsp;
+                  {histoOpen === "Aucune recherche récente." ? (
+                    <div
+                      className="alert alert-info mt-3 d-flex align-items-center"
+                      style={{
+                        fontSize: "14px",
+                        fontFamily: "inherit",
+                        fontWeight: "500",
+                        color: "#31708F",
+                        textAlign: "center",
+                      }}
+                    >
+                      <span>{histoOpen}</span>
+                    </div>
+                  ) : (
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <span
+                          style={{
+                            fontSize: "14px",
+                            fontFamily: "inherit",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          <button
+                            onClick={reinitHistoOpen}
+                            className="btn btn-danger pl-3"
+                            style={{ marginRight: "10px" }} // Space between history and button
+                          >
+                            &times;
+                          </button>
+                        </span>
+                      </div>
+                      <div
+                        className="alert alert-info mt-3 d-flex align-items-center"
+                        style={{
+                          fontSize: "14px",
+                          fontFamily: "inherit",
+                          fontWeight: "500",
+                          color: "#31708F",
+                          textAlign: "center",
+                        }}
+                      >
+                        {histoOpen}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </Col>
           </Row>
-          {isLoading ? (
+          {!error && isLoading ? (
             <div className="d-flex justify-content-center align-item-center mt-2">
               Chargement des données...
               <div
@@ -380,7 +503,7 @@ function GestionIncident() {
                 </tr>
               </thead>
               <tbody>
-                {currentItems.map((item) => (
+                {openAvis.map((item) => (
                   <tr
                     key={item.id}
                     onMouseEnter={handleMouseEnter}
@@ -396,7 +519,13 @@ function GestionIncident() {
                     </td>
                     <td>{item.numAvis}</td>
                     <td>{item.titre}</td>
-                    {item.etat === "ENCOURS" ? (<td>En Cours</td>) : item.etat === "REOPEN" ? (<td>REOPEN</td>) : (<td>{item.etat}</td>)}
+                    {item.etat === "ENCOURS" ? (
+                      <td>En Cours</td>
+                    ) : item.etat === "REOPEN" ? (
+                      <td>ReOpen</td>
+                    ) : (
+                      <td>{item.etat}</td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -430,22 +559,22 @@ function GestionIncident() {
           </Overlay>
           <div>
             <div>
-              {openAvis.length === 0 ? (
+              {totalElementsOpen === 0 ? (
                 <span>Aucun élément à afficher</span>
               ) : indexOfFirstItem === 0 ? (
                 <span>
                   Affichage de l'élément 1 à {itemsPerPageOpen} sur{" "}
-                  {openAvis.length} éléments
+                  {totalElementsOpen} éléments
                 </span>
-              ) : indexOfLastItem >= openAvis.length ? (
+              ) : indexOfLastItem >= totalElementsOpen ? (
                 <span>
                   Affichage de l'élément {indexOfFirstItem + 1} à{" "}
-                  {openAvis.length} sur {openAvis.length} éléments
+                  {totalElementsOpen} sur {totalElementsOpen} éléments
                 </span>
               ) : (
                 <span>
                   Affichage de l'élément {indexOfFirstItem + 1} à{" "}
-                  {indexOfLastItem} sur {openAvis.length} éléments
+                  {indexOfLastItem} sur {totalElementsOpen} éléments
                 </span>
               )}
             </div>
@@ -522,49 +651,32 @@ function GestionIncident() {
             </div>
           </div>
           <Row className="mt-3">
-            {etat === "Annulé" && (
+            {etat === "Annule" && (
               <Title
-                text={`Liste des avis d'incident / d'information annulés (${notOpenAvis.length})`}
+                text={`Liste des avis d'incident / d'information annulés (${totalElementsNotOpen})`}
               />
             )}
             {etat === "Cloturé" && (
               <Title
-                text={`Liste des avis d'incident / d'information clôturés (${notOpenAvis.length})`}
+                text={`Liste des avis d'incident / d'information clôturés (${totalElementsNotOpen})`}
               />
             )}
-            {etat === "FERME" && (
+            {etat === "Ferme" && (
               <Title
-                text={`Liste des avis d'incident / d'information fermés (${notOpenAvis.length})`}
+                text={`Liste des avis d'incident / d'information fermés (${totalElementsNotOpen})`}
               />
             )}
             {etat !== "Annulé" &&
               etat !== "Cloturé" &&
-              etat !== "FERME" &&
+              etat !== "Ferme" &&
               etat !== "Encours" && (
                 <Title
-                  text={`Liste des avis fermés, clotûrés ou annulés (${notOpenAvis.length})`}
+                  text={`Liste des avis fermés, clotûrés ou annulés (${totalElementsNotOpen})`}
                 />
               )}
           </Row>
           <Row sm={12}>
             <Col sm={12} className="content">
-              <Modal
-                show={showModal}
-                onHide={handleClose}
-                dialogClassName="custom-modal"
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Recherche d'avis</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <RechercheAvis onSearch={handleSearchSubmit} />
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="danger" onClick={handleClose}>
-                    Fermer
-                  </Button>
-                </Modal.Footer>
-              </Modal>
               <div className="mt-2 d-flex justify-content-between align-items-center">
                 <div>
                   {/* Un label affichant "Nombre d'items" suivi d'un select qui permet de choisir le nombre d'items */}
@@ -593,11 +705,21 @@ function GestionIncident() {
                       textAlign: "center",
                     }}
                   >
-                    <button onClick={handleShow} className="btn btn-primary">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() =>
+                        handleShowModal(
+                          "Recherche d'avis",
+                          <RechercheAvis onSearch={handleSearchSubmit} />,
+                          "Recherche",
+                          "md"
+                        )
+                      }
+                    >
                       <FaSearch />
                     </button>
                   </span>
-
+                  &nbsp;
                   {histo === "Aucune recherche récente." ? (
                     <div
                       className="alert alert-info mt-3 d-flex align-items-center"
@@ -669,7 +791,7 @@ function GestionIncident() {
                 </tr>
               </thead>
               <tbody>
-                {currentItemsNotOpen.map((item) => (
+                {notOpenAvis.map((item) => (
                   <tr
                     key={item.id}
                     onMouseEnter={(e) => handleMouseEnter(e, item)}
@@ -693,41 +815,64 @@ function GestionIncident() {
                     </td>
                     <td className="text-center">
                       {(item.etat === "FERME" && (
-                        <div className="">
-                          <div className="text-center d-flex align-items-center justify-content-center">
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={
-                                <Tooltip id="tooltip-2">
-                                  Reouverture de l'avis
-                                </Tooltip>
+                        <div className="text-center d-flex align-items-center justify-content-center">
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip id="tooltip-2">
+                                Reouverture de l'avis
+                              </Tooltip>
+                            }
+                          >
+                            <button
+                              className="btn d-flex align-items-center"
+                              style={{
+                                backgroundColor: "#d74f4a",
+                              }}
+                              onClick={() =>
+                                handleShowModal(
+                                  "Reouverture",
+                                  <p>
+                                    Etes vous sûr de vouloir re-ouvrir l'avis
+                                    avec l'id{" "}
+                                    <strong className="text-danger">
+                                      {item.id}
+                                    </strong>{" "}
+                                    ?
+                                  </p>,
+                                  "Reouverture",
+                                  "lg",
+                                  item
+                                )
                               }
                             >
-                              <Button
-                                style={{
-                                  backgroundColor: "#d74f4a",
-                                }}
-                                onClick={() => handleReOpen(item)}
-                              >
-                                <FaSync />
-                              </Button>
-                            </OverlayTrigger>
-                            &nbsp;
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={
-                                <Tooltip id="tooltip-2">Ajouter un P.A</Tooltip>
+                              <FaSync />
+                            </button>
+                          </OverlayTrigger>
+                          &nbsp;
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip id="tooltip-2">Ajouter un P.A</Tooltip>
+                            }
+                          >
+                            <button
+                              className="btn d-flex align-items-center"
+                              style={{
+                                backgroundColor: "#5ab65a",
+                              }}
+                              onClick={() =>
+                                handleShowModal(
+                                  "Ajouter un P.A",
+                                  <p>message</p>,
+                                  "AjouterPA",
+                                  "lg"
+                                )
                               }
                             >
-                              <Button
-                                style={{
-                                  backgroundColor: "#5ab65a",
-                                }}
-                              >
-                                <FaCog />
-                              </Button>
-                            </OverlayTrigger>
-                          </div>
+                              <FaCog />
+                            </button>
+                          </OverlayTrigger>
                         </div>
                       )) ||
                         (item.etat === "Cloturé" && (
@@ -744,22 +889,22 @@ function GestionIncident() {
           )}
           <div>
             <div>
-              {notOpenAvis.length === 0 ? (
+              {totalElementsNotOpen === 0 ? (
                 <span>Aucun élément à afficher</span>
               ) : indexOfFirstItemNotOpen === 0 ? (
                 <span>
                   Affichage de l'élément 1 à {itemsPerPageNotOpen} sur{" "}
-                  {notOpenAvis.length} éléments
+                  {totalElementsNotOpen} éléments
                 </span>
-              ) : indexOfLastItemNotOpen >= notOpenAvis.length ? (
+              ) : indexOfLastItemNotOpen >= totalElementsNotOpen ? (
                 <span>
                   Affichage de l'élément {indexOfFirstItemNotOpen + 1} à{" "}
-                  {notOpenAvis.length} sur {notOpenAvis.length} éléments
+                  {totalElementsNotOpen} sur {totalElementsNotOpen} éléments
                 </span>
               ) : (
                 <span>
                   Affichage de l'élément {indexOfFirstItemNotOpen + 1} à{" "}
-                  {indexOfLastItemNotOpen} sur {notOpenAvis.length} éléments
+                  {indexOfLastItemNotOpen} sur {totalElementsNotOpen} éléments
                 </span>
               )}
             </div>
@@ -858,60 +1003,38 @@ function GestionIncident() {
           <StatistiqueIncident />
         </Col>
         <Modal
-          show={showAddModal}
-          onHide={handleAddClose}
+          show={showModal}
+          onHide={handleHideModal}
           dialogClassName="custom-modal"
-          size="xl"
+          size={size}
           style={{ width: "100%", textAlign: "" }}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Ajouter un avis incident</Modal.Title>
+            <Modal.Title style={{ textAlign: "center" }}>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <AddIncident formData={formData} handleChange={handleChange} />
+            <p>{content}</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={handleAddClose}>
+            <Button variant="danger" onClick={handleHideModal}>
               Fermer
             </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              Ajouter l'avis
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal
-          show={showReOpenModal}
-          onHide={handleReOpenClose}
-          dialogClassName="custom-modal"
-          size="md"
-          style={{ width: "100%", textAlign: "" }}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Reouverture de l'avis incident</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              Etes vous sûr de vouloir re-ouvrir l'avis avec l'id{" "}
-              <strong className="text-danger">{selectedAvis.id}</strong> ?
-            </p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="danger" onClick={handleReOpenClose}>
-              Fermer
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                reouvertureAvis(selectedAvis.id);
-              }}
-            >
-              Reouvrir l'avis
-            </Button>
+            {operationType === "Ajouter" && (
+              <Button variant="primary" onClick={() => handleSubmit()}>
+                Ajouter
+              </Button>
+            )}
+            {operationType === "Reouverture" && (
+              <Button
+                variant="primary"
+                onClick={() => reouvertureAvis(selectedAvis.id)}
+              >
+                Reouvrir
+              </Button>
+            )}
+            {operationType === "AjouterPA" && (
+              <Button variant="primary">Ajouter P.A</Button>
+            )}
           </Modal.Footer>
         </Modal>
       </Container>
