@@ -21,6 +21,9 @@ import { FaCog, FaEye, FaPlus, FaSearch, FaSync, FaThumbsUp } from "react-icons/
 function GestionIncident() {
  
   useAuth();
+  const navigate = useNavigate();
+  const token = getTokenFromLocalStorage();
+  const user = getTokenDecode().sub;
   const [notOpenAvis, setNotOpenAvis] = useState([]);
   const [openAvis, setOpenAvis] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -28,9 +31,6 @@ function GestionIncident() {
   const [showReOpenModal, setShowReOpenModal] = useState(false);
   const [selectedAvis, setSelectedAvis] = useState(false);
   const [histo, setHisto] = useState("Aucune recherche récente");
-  const navigate = useNavigate();
-  const token = getTokenFromLocalStorage();
-  const user = getTokenDecode().sub;
   const [showOverlay, setShowOverlay] = useState(false); //tooltip d'indication
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -335,7 +335,8 @@ function GestionIncident() {
           background-color: #009999 !important;
         }
 
-      `}</style>
+      `}
+      </style>
       <MenuMysmc />
       <div className="container mt-3">
         {showAlert && (
@@ -349,95 +350,90 @@ function GestionIncident() {
         )}
       </div>
       <Container className="body">
-          
-         <div className="d-flex justify-content-end align-items-center">
-  <img height="40" width="40" style={{ cursor: 'pointer' }} src={addAvis} alt="" onClick={handleAddShow} />
-  
-  {/* <Button className="Button" variant="primary" onClick={handleReOpen}>
-  <FaPlus /> &nbsp; Reopen
-  </Button> */}
-</div>
-
-            <Tabs
-      id="incident-switcher"
-      activeKey={key}
-      onSelect={(k) => setKey(k)}
-      className="mb-3"
-      >
-      <Tab eventKey="actifs"   title={
-      <>
-       <img height="30" width="30"  src={avisActifs} alt=""  /><br />
-        Avis Actifs
-      </>
-    }>
-      <Row className="mt-3">
+        <div className="d-flex justify-content-end align-items-center">
+          <img height="40" width="40" style={{ cursor: 'pointer' }} src={addAvis} alt="" onClick={handleAddShow} />
+          {/* <Button className="Button" variant="primary" onClick={handleReOpen}>
+          <FaPlus /> &nbsp; Reopen
+          </Button> */}
+        </div>
+        <Tabs
+        id="incident-switcher"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+        className="mb-3"
+        >
+          <Tab eventKey="actifs"   title={
+          <>
+          <img height="30" width="30"  src={avisActifs} alt=""  /><br />
+          Avis Actifs
+          </>
+          }>
+            <Row className="mt-3">
             <Title 
-              text={`Liste des avis d'incident / d'information en cours (${openAvis.length})`}
+            text={`Liste des avis d'incident / d'information en cours (${openAvis.length})`}
             />
-          </Row>
-
-          <Row sm={12}>
-            <Col sm={12} className="content">
-              <div className="mt-2 d-flex justify-content-between align-items-center">
-                <div>
-                  <label htmlFor="items">Afficher </label> &nbsp;
-                  <select
-                    id="items"
-                    name="items"
-                    value={itemsPerPageOpen}
-                    onChange={handleItemsChangeOpen}
-                  >
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                  </select>
-                  &nbsp;
-                  <label>éléments</label>
+            </Row>
+            <Row sm={12}>
+              <Col sm={12} className="content">
+                <div className="mt-2 d-flex justify-content-between align-items-center">
+                  <div>
+                    <label htmlFor="items">Afficher </label> &nbsp;
+                      <select
+                        id="items"
+                        name="items"
+                        value={itemsPerPageOpen}
+                        onChange={handleItemsChangeOpen}
+                      >
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                      </select>
+                      &nbsp;
+                    <label>éléments</label>
+                  </div>
                 </div>
-              </div>
-           
-          {isLoading ? (
-            <div className="d-flex justify-content-center align-item-center mt-2">
-              Chargement des données...
-              <div
-                className="spinner-border text-center"
-                style={{ color: "#148C8A" }}
-              ></div>
-            </div>
-          ) : (
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Date Création</th>
-                  <th>N°Avis</th>
-                  <th>Titre</th>
-                  <th>Etat</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((item) => (
-                  <tr
-                    key={item.id}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                    onDoubleClick={() => handleShowDetails(item)}
-                  >
-                    <td>
-                      {item.dateCreation
-                        ? new Date(item.dateCreation).toLocaleDateString(
-                            "fr-FR"
-                          )
-                        : "N/A"}
-                    </td>
-                    <td>{item.numAvis}</td>
-                    <td>{item.titre}</td>
-                    {item.etat === "ENCOURS" ? (<td>En Cours</td>) : item.etat === "REOPEN" ? (<td>REOPEN</td>) : (<td>{item.etat}</td>)}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                {isLoading ? (
+                  <div className="d-flex justify-content-center align-item-center mt-2">
+                    Chargement des données...
+                    <div
+                      className="spinner-border text-center"
+                      style={{ color: "#148C8A" }}
+                    ></div>
+                  </div>
+                ) : (
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Date Création</th>
+                        <th>N°Avis</th>
+                        <th>Titre</th>
+                        <th>Etat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentItems.map((item) => (
+                        <tr
+                          key={item.id}
+                          onMouseEnter={handleMouseEnter}
+                          onMouseLeave={handleMouseLeave}
+                          onDoubleClick={() => handleShowDetails(item)}
+                        >
+                          <td>
+                            {item.dateCreation
+                              ? new Date(item.dateCreation).toLocaleDateString(
+                                  "fr-FR"
+                                )
+                              : "N/A"}
+                          </td>
+                          <td>{item.numAvis}</td>
+                          <td>{item.titre}</td>
+                          {item.etat === "ENCOURS" ? (<td>En Cours</td>) : item.etat === "REOPEN" ? (<td>REOPEN</td>) : (<td>{item.etat}</td>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
           <Overlay
             show={showOverlay}
             target={overlayTarget}
@@ -561,16 +557,15 @@ function GestionIncident() {
           </Row>
       </Tab>
       <Tab eventKey="inactifs"  title={
-      <>
-       <img height="30" width="30"  src={avisInactifs} alt=""  /><br />
-        Avis Inactifs
-      </>}>
-      <Row className="mt-3">
+        <>
+        <img height="30" width="30"  src={avisInactifs} alt=""  /><br />
+          Avis Inactifs
+        </>}>
+        <Row className="mt-3">
           <Title text={`Liste des avis fermés, clotûrés ou annulés (${notOpenAvis.length})`}/>
-          </Row>
-          <Row sm={12}>
+        </Row>
+        <Row sm={12}>
             <Col sm={12} className="content">
-             
               <div className="mt-2 d-flex justify-content-between align-items-center">
                 <div>
                   {/* Un label affichant "Nombre d'items" suivi d'un select qui permet de choisir le nombre d'items */}
@@ -591,99 +586,99 @@ function GestionIncident() {
                 </div>
               </div>
            
-          {isLoadingNotOpen ? (
-            <div className="d-flex justify-content-center align-item-center mt-2">
-              Chargement des données...
-              <div
-                className="spinner-border text-center"
-                style={{ color: "#148C8A" }}
-              ></div>
-            </div>
-          ) : (
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Date Création</th>
-                  <th>N°Avis</th>
-                  <th>Titre</th>
-                  <th>Etat</th>
-                  <th style={{ textAlign: "center" }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItemsNotOpen.map((item) => (
-                  <tr
-                    key={item.id}
-                    onMouseEnter={(e) => handleMouseEnter(e, item)}
-                    onMouseLeave={handleMouseLeave}
-                    onDoubleClick={() => handleShowDetails(item)}
-                  >
-                    <td>
-                      {item.dateCreation
-                        ? new Date(item.dateCreation).toLocaleDateString(
-                            "fr-FR"
-                          )
-                        : "N/A"}
-                    </td>
-                    <td>{item.numAvis}</td>
-                    <td>{item.titre}</td>
-                    <td>
-                      {(item.etat === "FERME" && "Fermé") ||
-                        ((item.etat === "Annule" || item.etat === "Annulé ") &&
-                          "Annulé") ||
-                        item.etat}
-                    </td>
-                    <td className="text-center">
-                      {(item.etat === "FERME" && (
-                        <div className="">
-                          <div className="text-center d-flex align-items-center justify-content-center">
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={
-                                <Tooltip id="tooltip-2">
-                                  Reouverture de l'avis
-                                </Tooltip>
-                              }
-                            >
-                              <Button className="Button"
-                                style={{
-                                  backgroundColor: "#d74f4a",
-                                }}
-                                onClick={() => handleReOpen(item)}
-                              >
-                                <FaSync />
-                              </Button>
-                            </OverlayTrigger>
-                            &nbsp;
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={
-                                <Tooltip id="tooltip-2">Ajouter un P.A</Tooltip>
-                              }
-                            >
-                              <Button className="Button"
-                                style={{
-                                  backgroundColor: "#5ab65a",
-                                }}
-                              >
-                                <FaCog />
-                              </Button>
-                            </OverlayTrigger>
-                          </div>
-                        </div>
-                      )) ||
-                        (item.etat === "Cloturé" && (
-                          <FaThumbsUp color="green" size={25} />
-                        )) ||
-                        ((item.etat === "Annulé" || item.etat === "Annule") && (
-                          <span>&nbsp;</span>
-                        ))}
-                    </td>
+              {isLoadingNotOpen ? (
+                <div className="d-flex justify-content-center align-item-center mt-2">
+                  Chargement des données...
+                  <div
+                    className="spinner-border text-center"
+                    style={{ color: "#148C8A" }}
+                  ></div>
+                </div>
+              ) : (
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Date Création</th>
+                    <th>N°Avis</th>
+                    <th>Titre</th>
+                    <th>Etat</th>
+                    <th style={{ textAlign: "center" }}>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody>
+                  {currentItemsNotOpen.map((item) => (
+                    <tr
+                      key={item.id}
+                      onMouseEnter={(e) => handleMouseEnter(e, item)}
+                      onMouseLeave={handleMouseLeave}
+                      onDoubleClick={() => handleShowDetails(item)}
+                    >
+                      <td>
+                        {item.dateCreation
+                          ? new Date(item.dateCreation).toLocaleDateString(
+                              "fr-FR"
+                            )
+                          : "N/A"}
+                      </td>
+                      <td>{item.numAvis}</td>
+                      <td>{item.titre}</td>
+                      <td>
+                        {(item.etat === "FERME" && "Fermé") ||
+                          ((item.etat === "Annule" || item.etat === "Annulé ") &&
+                            "Annulé") ||
+                          item.etat}
+                      </td>
+                      <td className="text-center">
+                        {(item.etat === "FERME" && (
+                          <div className="">
+                            <div className="text-center d-flex align-items-center justify-content-center">
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip id="tooltip-2">
+                                    Reouverture de l'avis
+                                  </Tooltip>
+                                }
+                              >
+                                <Button className="Button"
+                                  style={{
+                                    backgroundColor: "#d74f4a",
+                                  }}
+                                  onClick={() => handleReOpen(item)}
+                                >
+                                  <FaSync />
+                                </Button>
+                              </OverlayTrigger>
+                              &nbsp;
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip id="tooltip-2">Ajouter un P.A</Tooltip>
+                                }
+                              >
+                                <Button className="Button"
+                                  style={{
+                                    backgroundColor: "#5ab65a",
+                                  }}
+                                >
+                                  <FaCog />
+                                </Button>
+                              </OverlayTrigger>
+                            </div>
+                          </div>
+                        )) ||
+                          (item.etat === "Cloturé" && (
+                            <FaThumbsUp color="green" size={25} />
+                          )) ||
+                          ((item.etat === "Annulé" || item.etat === "Annule") && (
+                            <span>&nbsp;</span>
+                          ))}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           <div>
             <div>
               {notOpenAvis.length === 0 ? (
