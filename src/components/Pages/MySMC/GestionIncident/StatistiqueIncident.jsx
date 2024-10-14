@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../../Card/Title/Title";
-import { Row, Col, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
+import {
+  Row,
+  Col,
+  Button,
+  Modal,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap"; // Add OverlayTrigger and Tooltip
 import { Grid } from "@mui/material";
 import {
   BarChart,
@@ -41,7 +48,10 @@ function StatistiqueIncident() {
   const [error, setError] = useState(null);
   const [showStatModal, setShowStatModal] = useState(false);
   const now = new Date();
-  const period = now.toLocaleDateString("FR", { month: "long", year: "numeric" });
+  const period = now.toLocaleDateString("FR", {
+    month: "long",
+    year: "numeric",
+  });
   const start = new Date(now.getFullYear(), now.getMonth(), 1)
     .toISOString()
     .split("T")[0];
@@ -129,11 +139,17 @@ function StatistiqueIncident() {
 
   return (
     <div className="dashboard">
-      <Title text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`} />
-      
+      <Title
+        text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
+      />
+
       <OverlayTrigger
         placement="top"
-        overlay={<Tooltip>Sélectionnez une période pour afficher les statistiques d'incidents</Tooltip>}
+        overlay={
+          <Tooltip>
+            Sélectionnez une période pour afficher les statistiques d'incidents
+          </Tooltip>
+        }
       >
         <Button
           variant="primary"
@@ -143,8 +159,12 @@ function StatistiqueIncident() {
           Stats
         </Button>
       </OverlayTrigger>
-      
-      <Modal show={showStatModal} onHide={handleStatClose} dialogClassName="custom-modal">
+
+      <Modal
+        show={showStatModal}
+        onHide={handleStatClose}
+        dialogClassName="custom-modal"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Statistiques</Modal.Title>
         </Modal.Header>
@@ -157,15 +177,34 @@ function StatistiqueIncident() {
           </Button>
         </Modal.Footer>
       </Modal>
-      
-      {(dataUrl !== `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}`) && (
-        <Button variant="danger" onClick={reinitHisto} className="mt-5 ml-5 mb-2">
-          Default
-        </Button>
+        &nbsp;
+      {dataUrl !==
+        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` && (
+        <OverlayTrigger
+          placement="top"
+          overlay={
+            <Tooltip>
+              Réinitialiser la période pour afficher les statistiques par défaut
+            </Tooltip>
+          }
+        >
+          <Button
+            variant="danger"
+            onClick={reinitHisto}
+            className="mt-5 ml-5 mb-2"
+          >
+            Default
+          </Button>
+        </OverlayTrigger>
       )}
 
       <Row className="mb-4">
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"
@@ -177,14 +216,23 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#a94442" }}>
-              {tauxNotificationAvis !== null ? `${tauxNotificationAvis.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "24px", fontWeight: "bold", color: "#a94442" }}
+            >
+              {tauxNotificationAvis !== null
+                ? `${tauxNotificationAvis.toFixed(2)} %`
+                : "0 %"}
             </div>
             <div>Notification Avis</div>
           </Grid>
         </Col>
-        
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"
@@ -196,14 +244,23 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#31708f" }}>
-              {tauxDetectionAvis !== null ? `${tauxDetectionAvis.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "24px", fontWeight: "bold", color: "#31708f" }}
+            >
+              {tauxDetectionAvis !== null
+                ? `${tauxDetectionAvis.toFixed(2)} %`
+                : "0 %"}
             </div>
             <div>Détection Avis</div>
           </Grid>
         </Col>
 
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"
@@ -215,14 +272,23 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#8a6d3b" }}>
-              {tauxTraitement4H !== null ? `${tauxTraitement4H.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "24px", fontWeight: "bold", color: "#8a6d3b" }}
+            >
+              {tauxTraitement4H !== null
+                ? `${tauxTraitement4H.toFixed(2)} %`
+                : "0 %"}
             </div>
-            <div>Traitement  4H</div>
+            <div>Traitement 4H</div>
           </Grid>
         </Col>
 
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"
@@ -234,16 +300,23 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "24px", fontWeight: "bold", color: "#3c763d" }}>
-              {tauxTraitement24H !== null ? `${tauxTraitement24H.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "24px", fontWeight: "bold", color: "#3c763d" }}
+            >
+              {tauxTraitement24H !== null
+                ? `${tauxTraitement24H.toFixed(2)} %`
+                : "0 %"}
             </div>
-            <div>Traitement  24H</div>
+            <div>Traitement 24H</div>
           </Grid>
         </Col>
       </Row>
-      
+
       <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <BarChart
+          data={data}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />

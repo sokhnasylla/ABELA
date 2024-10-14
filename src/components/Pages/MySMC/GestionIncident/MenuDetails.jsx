@@ -11,7 +11,6 @@ import {
   FaSync,
   FaThumbsUp,
   FaTimes,
-  FaTrash,
   FaTrashAlt,
 } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
@@ -24,23 +23,24 @@ function MenuDetailsIncident({ avis }) {
   const [typeTraitement, setTypeTraitement] = useState("");
   const [size, setSize] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const token = getTokenFromLocalStorage();
   const decode = getTokenDecode();
   const updateBy = decode.sub;
   const [formData, setFormData] = useState({
     objet: avis.objet || "",
     nature: avis.nature || "",
-    typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
     applicationSis: avis.applicationSis || [],
-    listValidation: avis.listValidation ? { id: avis.listValidation.id || "" } : {},
-    listDiffusion: { id: avis.listDiffusion?.id || "" } ,
+    typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
+    listeValidation: { id: avis.listeValidation?.id || "" },
+    listeDiffusion: { id: avis.listeDiffusion?.id || "" },
+    typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
     dateDebut: avis.dateDebut || "",
     dateDetection: avis.dateDetection || "",
     numTicketEZV: avis.numTicketEZV || "",
     numTicketOceane: avis.numTicketOceane || "",
     impact: avis.impact || "",
     causeRetardNotification: avis.causeRetardNotification || "",
-    typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
     causeProbable: avis.causeProbable || "",
     observations: avis.observations || "",
     dateFinPrevisionnelle: avis.dateFinPrevisionnelle || "",
@@ -48,6 +48,14 @@ function MenuDetailsIncident({ avis }) {
     commentaire: avis.commentaire || "",
     updateBy,
   });
+
+  const handleShowEditModal = () => {
+    setShowEditModal(true);
+  };
+
+  const handleHideEditModal = () => {
+    setShowEditModal(false);
+  };
 
   const handleShowModal = (titre, contenu, typeTraitement, size) => {
     setTitre(titre);
@@ -493,18 +501,7 @@ function MenuDetailsIncident({ avis }) {
                     textAlign: "center",
                   }}
                   onClick={() =>
-                    handleShowModal(
-                      "Edition de l'avis",
-                      <>
-                        <EditIncident
-                          avis={avis}
-                          formData={formData}
-                          handleEditChange={handleEditChange}
-                        />
-                      </>,
-                      "Edition",
-                      "xl"
-                    )
+                    handleShowEditModal()
                   }
                 >
                   Edition de l'avis
@@ -690,30 +687,48 @@ function MenuDetailsIncident({ avis }) {
             </Button>
           )}
           {typeTraitement === "Diffusion" && (
-            <Button variant="primary">
-              Diffuser
-            </Button>
+            <Button variant="primary">Diffuser</Button>
           )}
           {typeTraitement === "Relance" && (
-            <Button variant="primary">
-              Relancer
-            </Button>
+            <Button variant="primary">Relancer</Button>
           )}
           {typeTraitement === "Etat d'avancement" && (
-            <Button variant="primary">
-              Relancer
-            </Button>
+            <Button variant="primary">Relancer</Button>
           )}
           {typeTraitement === "Demande validation" && (
-            <Button variant="primary">
-              Relancer
-            </Button>
+            <Button variant="primary">Relancer</Button>
           )}
           {typeTraitement === "Edition" && (
             <Button variant="primary" onClick={handleEditSubmit}>
               Modifier
             </Button>
           )}
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={showEditModal}
+        onHide={handleHideEditModal}
+        dialogClassName="custom-modal"
+        size="xl"
+        style={{ width: "100%", textAlign: "" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ textAlign: "center" }}>Edition de l'avis</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditIncident
+            avis={avis}
+            formData={formData}
+            handleEditChange={handleEditChange}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleHideEditModal}>
+            Fermer
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Modifier
+          </Button>
         </Modal.Footer>
       </Modal>
     </Row>

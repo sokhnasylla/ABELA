@@ -31,11 +31,15 @@ function DetailsIncident() {
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 5;
-  console.log(avis);
 
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-  
+  useEffect(() => {
+    console.log(avis);
+  }, [avis]);
+
+
   useEffect(() => {
     const fetchIncident = async (url, setter) => {
       try {
@@ -57,31 +61,35 @@ function DetailsIncident() {
     );
   }, [token, avis.id]);
 
-  useEffect(() => {
-    const fetchHistorique = async (url, setter) => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
+  const fetchHistorique = async (url, setter) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
-        const response = await axios.get(url, config);
-        setter(response.data);
-      } catch (error) {
-        console.error("Erreur:", error);
-      }
-    };
+      const response = await axios.get(url, config);
+      setter(response.data.content);
+      setTotalElements(response.data.totalElements);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
+  };
+  
+
+  useEffect(() => {
     fetchHistorique(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique`,
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique?page=${currentPage}&limit=${itemsPerPage}`,
       setHistorique
     );
-  }, [token, avis.id]);
+  }, [token, avis.id, currentPage]);
 
   useEffect(() => {
     const message = localStorage.getItem("alertMessage");
     const type = localStorage.getItem("alertType");
-    
+
     if (message) {
       setAlertMessage(message);
       setAlertType(type);
@@ -89,19 +97,26 @@ function DetailsIncident() {
 
       localStorage.removeItem("alertMessage");
       localStorage.removeItem("alertType");
-      
-      const timer = setTimeout(() => {
+
+      setTimeout(() => {
         setShowAlert(false);
       }, 5000);
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout();
     }
   }, []);
-  
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = historique.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(historique.length / itemsPerPage);
+
+  
+  const handlePageChange = (pageNumber) => {
+    fetchHistorique(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique?page=${pageNumber}&limit=${itemsPerPage}`,
+      setHistorique
+    );
+    setCurrentPage(pageNumber);
+  };
 
   if (!incident) {
     return <div>Aucun Incident</div>;
@@ -302,7 +317,7 @@ function DetailsIncident() {
                         </tr>
                       </thead>
                       <tbody>
-                        {currentItems.map((item) => (
+                        {historique.map((item) => (
                           <tr key={item.id}>
                             <td>
                               {new Date(item.dateAction).toLocaleDateString(
@@ -323,6 +338,33 @@ function DetailsIncident() {
                         ))}
                       </tbody>
                     </table>
+                    {totalElements === 0 ? (
+                      <span>Aucun élément à afficher</span>
+                    ) : totalElements < 5 ? (
+                      <span>
+                        Affichage de l'élément 1 à {totalElements} sur {totalElements} éléments
+                      </span>
+                    ) : indexOfFirstItem === 0 ? (
+                      <span>
+                        Affichage de l'élément 1 à {itemsPerPage} sur{" "}
+                        {totalElements} éléments
+                      </span>
+                    ) : indexOfLastItem >= totalElements ? (
+                      <span>
+                        Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                        {totalElements} sur {totalElements} éléments
+                      </span>
+                    ) : itemsPerPage >= totalElements ? (
+                      <span>
+                        Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                        {totalElements} sur {totalElements} éléments
+                      </span>
+                    ) : (
+                      <span>
+                        Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                        {indexOfLastItem} sur {totalElements} éléments
+                      </span>
+                    )}
                     <Pagination className="d-flex justify-content-center mt-4">
                       <Pagination.Item
                         active={currentPage === 1}
@@ -557,18 +599,7 @@ function DetailsIncident() {
             sm={12}
             sx={{ marginTop: "5px" }}
             className="text-center"
-          >
-            {/* <Button
-              style={{
-                backgroundColor: "#C9302C",
-                borderColor: "#C9302C",
-                width: "100px",
-              }}
-              onClick={() => window.history.back()}
-            >
-              Retour
-            </Button> */}
-          </Col>
+          ></Col>
         </Row>
       </Container>
     </div>

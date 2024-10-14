@@ -30,6 +30,7 @@ function GestionIncident() {
   const [openAvis, setOpenAvis] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingNotOpen, setIsLoadingNotOpen] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContenu] = useState("");
@@ -53,6 +54,8 @@ function GestionIncident() {
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPageOpen, setItemsPerPageOpen] = useState(10);
+  const [numberOfElements, setNumberOfElements] = useState(0);
+  const [numberOfElementsNotOpen, setNumberOfElementsNotOpen] = useState(0);
   const [currentPageNotOpen, setCurrentPageNotOpen] = useState(1);
   const [itemsPerPageNotOpen, setItemsPerPageNotOpen] = useState(10);
   const [alertMessage, setAlertMessage] = useState("");
@@ -61,27 +64,26 @@ function GestionIncident() {
   const [formData, setFormData] = useState({
     objet: "",
     nature: "",
-    typeAvisIncident: { id: "" },
     applicationSis: [],
+    typeAvisIncident: { id: "" },
     listeValidation: { id: "" },
     listeDiffusion: { id: "" },
+    typeCauseIncident: { id: "" },
     dateDebut: "",
     dateDetection: "",
     numTicketEZV: "",
     numTicketOceane: "",
     impact: "",
     causeRetardNotification: "",
-    typeCauseIncident: { id: "" },
     causeProbable: "",
     observations: "",
     user,
   });
-  const [dataUrlEnCours, setDataUrlEnCours] = useState(
-    "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours"
-  );
-  const [dataUrlNotOpen, setDataUrlNotOpen] = useState(
-    "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule"
-  );
+
+  const dataUrlEnCours =
+    "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours";
+  const dataUrlNotOpen =
+    "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule";
 
   const handleItemsChangeOpen = (event) => {
     fetchDataOpen(
@@ -90,6 +92,7 @@ function GestionIncident() {
     );
     setItemsPerPageOpen(Number(event.target.value));
   };
+
   const handleItemsChangeNotOpen = (event) => {
     fetchDataNotOpen(
       `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule?page=1&limit=${event.target.value}`,
@@ -202,11 +205,14 @@ function GestionIncident() {
       localStorage.removeItem("alertMessage");
       localStorage.removeItem("alertType");
 
-      const timer = setTimeout(() => {
+      // Remove alert after 5 seconds
+      setTimeout(() => {
         setShowAlert(false);
       }, 5000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout();
+      };
     }
   }, []);
 
@@ -227,7 +233,7 @@ function GestionIncident() {
 
       if (response.status === 200) {
         setShowModal(false);
-        // window.location.reload();
+        window.location.reload();
         localStorage.setItem("alertMessage", "Avis créé avec succès");
         localStorage.setItem("alertType", "success");
       } else {
@@ -243,11 +249,6 @@ function GestionIncident() {
     }
   };
 
-  useEffect(() => {
-    fetchDataOpen(dataUrlEnCours, setOpenAvis);
-    fetchDataNotOpen(dataUrlNotOpen, setNotOpenAvis);
-  }, []);
-
   const fetchDataOpen = async (url, setter) => {
     try {
       const config = {
@@ -259,6 +260,7 @@ function GestionIncident() {
       setter(response.data.content);
       setTotalPages(response.data.totalPages);
       setTotalElementsOpen(response.data.totalElements);
+      setNumberOfElements(response.data.numberOfElements);
       setIsLoading(false);
     } catch (error) {
       setError(`Erreur: ${error.message}`);
@@ -280,6 +282,21 @@ function GestionIncident() {
     } catch (error) {
       setError(`Erreur: ${error.message}`);
     }
+  };
+
+  //  eslint-disable
+  useEffect(() => {
+    fetchDataOpen(dataUrlEnCours, setOpenAvis);
+    fetchDataNotOpen(dataUrlNotOpen, setNotOpenAvis);
+  }, []);
+  // eslint-enable
+
+  const handleShowAddModal = () => {
+    setShowAddModal(true);
+  };
+
+  const handleHideAddModal = () => {
+    setShowAddModal(false);
   };
 
   const handleShowModal = (title, content, operationType, size, avis) => {
@@ -360,20 +377,7 @@ function GestionIncident() {
               <div>
                 <Button
                   variant="primary"
-                  onClick={() =>
-                    handleShowModal(
-                      "Ajouter un avis",
-                      <>
-                        <AddIncident
-                          formData={formData}
-                          handleChange={handleChange}
-                        />
-                      </>,
-
-                      "Ajouter",
-                      "xl"
-                    )
-                  }
+                  onClick={() => handleShowAddModal()}
                   className="d-flex align-items-center"
                 >
                   <FaPlus /> &nbsp; Ajouter un avis
@@ -381,13 +385,20 @@ function GestionIncident() {
               </div>
             </div>
           </Row>
-          <Row className="mt-3">
-            <Title
-              text={`Liste des avis d'incident / d'information en cours (${totalElementsOpen})`}
-            />
+          <Row className="mt-2">
+            {etatOpen === "REOPEN" && (
+              <Title
+                text={`Liste des avis d'incident / d'information réouverts (${totalElementsOpen})`}
+              />
+            )}
+            {etatOpen !== "REOPEN" && (
+              <Title
+                text={`Liste des avis d'incident / d'information en cours (${totalElementsOpen})`}
+              />
+            )}
           </Row>
 
-          <Row sm={12}>
+          <Row>
             <Col sm={12} className="content">
               <div className="mt-2 d-flex justify-content-between align-items-center">
                 <div>
@@ -420,7 +431,7 @@ function GestionIncident() {
                       className="btn btn-primary"
                       onClick={() =>
                         handleShowModal(
-                          "Recherche d'avis",
+                          "Recherche d'avis en cours",
                           <RechercheAvisEnCours
                             onSearch={handleSearchSubmitOpen}
                           />,
@@ -484,9 +495,9 @@ function GestionIncident() {
               </div>
             </Col>
           </Row>
-          {!error && isLoading ? (
+          {isLoading ? (
             <div className="d-flex justify-content-center align-item-center mt-2">
-              Chargement des données...
+              Chargement des données... &nbsp;
               <div
                 className="spinner-border text-center"
                 style={{ color: "#148C8A" }}
@@ -561,12 +572,22 @@ function GestionIncident() {
             <div>
               {totalElementsOpen === 0 ? (
                 <span>Aucun élément à afficher</span>
+              ) : totalElementsOpen < 10 ? (
+                <span>
+                  Affichage de l'élément 1 à {totalElementsOpen} sur{" "}
+                  {totalElementsOpen} éléments
+                </span>
               ) : indexOfFirstItem === 0 ? (
                 <span>
                   Affichage de l'élément 1 à {itemsPerPageOpen} sur{" "}
                   {totalElementsOpen} éléments
                 </span>
               ) : indexOfLastItem >= totalElementsOpen ? (
+                <span>
+                  Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                  {totalElementsOpen} sur {totalElementsOpen} éléments
+                </span>
+              ) : itemsPerPageOpen >= totalElementsOpen ? (
                 <span>
                   Affichage de l'élément {indexOfFirstItem + 1} à{" "}
                   {totalElementsOpen} sur {totalElementsOpen} éléments
@@ -651,29 +672,26 @@ function GestionIncident() {
             </div>
           </div>
           <Row className="mt-3">
-            {etat === "Annule" && (
+            {etat === "ANNULE" && (
               <Title
                 text={`Liste des avis d'incident / d'information annulés (${totalElementsNotOpen})`}
               />
             )}
-            {etat === "Cloturé" && (
+            {etat === "CLOTURE" && (
               <Title
                 text={`Liste des avis d'incident / d'information clôturés (${totalElementsNotOpen})`}
               />
             )}
-            {etat === "Ferme" && (
+            {etat === "FERME" && (
               <Title
                 text={`Liste des avis d'incident / d'information fermés (${totalElementsNotOpen})`}
               />
             )}
-            {etat !== "Annulé" &&
-              etat !== "Cloturé" &&
-              etat !== "Ferme" &&
-              etat !== "Encours" && (
-                <Title
-                  text={`Liste des avis fermés, clotûrés ou annulés (${totalElementsNotOpen})`}
-                />
-              )}
+            {etat !== "ANNULE" && etat !== "CLOTURE" && etat !== "FERME" && (
+              <Title
+                text={`Liste des avis fermés, clotûrés ou annulés (${totalElementsNotOpen})`}
+              />
+            )}
           </Row>
           <Row sm={12}>
             <Col sm={12} className="content">
@@ -709,7 +727,7 @@ function GestionIncident() {
                       className="btn btn-primary"
                       onClick={() =>
                         handleShowModal(
-                          "Recherche d'avis",
+                          "Recherche d'avis fermés, clôturés ou annulés",
                           <RechercheAvis onSearch={handleSearchSubmit} />,
                           "Recherche",
                           "md"
@@ -747,7 +765,7 @@ function GestionIncident() {
                           <button
                             onClick={reinitHisto}
                             className="btn btn-danger pl-3"
-                            style={{ marginRight: "10px" }} // Space between history and button
+                            style={{ marginRight: "10px" }}
                           >
                             &times;
                           </button>
@@ -773,7 +791,7 @@ function GestionIncident() {
           </Row>
           {isLoadingNotOpen ? (
             <div className="d-flex justify-content-center align-item-center mt-2">
-              Chargement des données...
+              Chargement des données... &nbsp;
               <div
                 className="spinner-border text-center"
                 style={{ color: "#148C8A" }}
@@ -809,8 +827,8 @@ function GestionIncident() {
                     <td>{item.titre}</td>
                     <td>
                       {(item.etat === "FERME" && "Fermé") ||
-                        ((item.etat === "Annule" || item.etat === "Annulé ") &&
-                          "Annulé") ||
+                        (item.etat === "Annule" && "Annulé") ||
+                        (item.etat === "CLOTURE" && "Clôturé") ||
                         item.etat}
                     </td>
                     <td className="text-center">
@@ -875,7 +893,7 @@ function GestionIncident() {
                           </OverlayTrigger>
                         </div>
                       )) ||
-                        (item.etat === "Cloturé" && (
+                        (item.etat === "CLOTURE" && (
                           <FaThumbsUp color="green" size={25} />
                         )) ||
                         ((item.etat === "Annulé" || item.etat === "Annule") && (
@@ -897,6 +915,11 @@ function GestionIncident() {
                   {totalElementsNotOpen} éléments
                 </span>
               ) : indexOfLastItemNotOpen >= totalElementsNotOpen ? (
+                <span>
+                  Affichage de l'élément {indexOfFirstItemNotOpen + 1} à{" "}
+                  {totalElementsNotOpen} sur {totalElementsNotOpen} éléments
+                </span>
+              ) : itemsPerPageNotOpen >= totalElementsNotOpen ? (
                 <span>
                   Affichage de l'élément {indexOfFirstItemNotOpen + 1} à{" "}
                   {totalElementsNotOpen} sur {totalElementsNotOpen} éléments
@@ -1019,11 +1042,6 @@ function GestionIncident() {
             <Button variant="danger" onClick={handleHideModal}>
               Fermer
             </Button>
-            {operationType === "Ajouter" && (
-              <Button variant="primary" onClick={() => handleSubmit()}>
-                Ajouter
-              </Button>
-            )}
             {operationType === "Reouverture" && (
               <Button
                 variant="primary"
@@ -1035,6 +1053,30 @@ function GestionIncident() {
             {operationType === "AjouterPA" && (
               <Button variant="primary">Ajouter P.A</Button>
             )}
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={showAddModal}
+          onHide={handleHideAddModal}
+          dialogClassName="custom-modal"
+          size="xl"
+          style={{ width: "100%", textAlign: "" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ textAlign: "center" }}>
+              Ajouter un avis
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AddIncident formData={formData} handleChange={handleChange} />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleHideAddModal}>
+              Fermer
+            </Button>
+            <Button variant="primary" onClick={() => handleSubmit()}>
+              Ajouter
+            </Button>
           </Modal.Footer>
         </Modal>
       </Container>

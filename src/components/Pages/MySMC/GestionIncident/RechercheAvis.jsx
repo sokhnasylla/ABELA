@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Container, Row, Col, Button,  } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { TextField } from "@mui/material";
 
 function RechercheAvis({ onSearch }) {
@@ -12,7 +12,7 @@ function RechercheAvis({ onSearch }) {
   const [etat, setEtat] = useState("");
 
   // Helper function to handle API requests
-  const fetchData = async (url, errorMessage) => {  
+  const fetchData = async (url, errorMessage) => {
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error("Erreur lors de la recherche");
@@ -53,21 +53,29 @@ function RechercheAvis({ onSearch }) {
 
     try {
       if (numeroAvis) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumberNotOpen?numAvis=${numeroAvis}`;
         newHisto = `Résultat de la dernière recherche, Numéro Avis : ${numeroAvis}`;
         errorMessage = "Aucun avis trouvé pour le numéro spécifié";
       } else if (application && dateDebut && dateFin) {
         newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
-        newHisto = `Résultat de la dernière recherche, Application : ${application} | Date Début : ${formatDate(dateDebut)} | Date Fin : ${formatDate(dateFin)}`;
+        newHisto = `Résultat de la dernière recherche, Application : ${application} | Date Début : ${formatDate(
+          dateDebut
+        )} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = `Aucun avis trouvé pour l'application ${application} sur la période spécifiées`;
       } else if (application) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName/notOpen?nom=${application}`;
         newHisto = `Résultat de la dernière recherche, Application : ${application}`;
         errorMessage = "Aucun avis trouvé pour l'application spécifiée";
       } else if (dateDebut && dateFin) {
         newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisNotOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
-        newHisto = `Résultat de la dernière recherche, Date Début : ${formatDate(dateDebut)} | Date Fin : ${formatDate(dateFin)}`;
+        newHisto = `Résultat de la dernière recherche, Date Début : ${formatDate(
+          dateDebut
+        )} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = "Aucun avis trouvé pour la période spécifiée";
+      } else if (etat) {
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByState?etat=${etat}`;
+        newHisto = `Résultat de la dernière recherche, Etat : ${etat}`;
+        errorMessage = "Aucun avis trouvé pour l'état spécifié";
       } else {
         throw new Error("Veuillez remplir au moins un champ de recherche");
       }
@@ -75,7 +83,7 @@ function RechercheAvis({ onSearch }) {
       await fetchData(newUrl, errorMessage);
       setError("");
       console.log(newUrl);
-      onSearch(newUrl, newHisto);
+      onSearch(newUrl, newHisto, etat);
     } catch (error) {
       setError(error.message);
     }
@@ -92,9 +100,7 @@ function RechercheAvis({ onSearch }) {
             >
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                 <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
-                  <label htmlFor="numeroAvis"
-                    sx={{ marginLeft: "6%" }}
-                  >
+                  <label htmlFor="numeroAvis" sx={{ marginLeft: "6%" }}>
                     Numéro avis :
                   </label>
                   &nbsp;
@@ -110,9 +116,7 @@ function RechercheAvis({ onSearch }) {
                   />
                 </div>
                 <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                  <label htmlFor="application"
-                    sx={{ marginLeft: "6%" }}
-                  >
+                  <label htmlFor="application" sx={{ marginLeft: "6%" }}>
                     Application :
                   </label>
                   &nbsp;
@@ -128,9 +132,7 @@ function RechercheAvis({ onSearch }) {
                   />
                 </div>
                 <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
-                  <label htmlFor="dateDebut"
-                    sx={{ marginLeft: "6%" }}
-                  >
+                  <label htmlFor="dateDebut" sx={{ marginLeft: "6%" }}>
                     Date début :
                   </label>
                   &nbsp;
@@ -146,9 +148,7 @@ function RechercheAvis({ onSearch }) {
                   />
                 </div>
                 <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
-                  <label htmlFor="dateFin"
-                    sx={{ marginLeft: "6%" }}
-                  >
+                  <label htmlFor="dateFin" sx={{ marginLeft: "6%" }}>
                     Date Fin :
                   </label>
                   &nbsp;
@@ -162,6 +162,26 @@ function RechercheAvis({ onSearch }) {
                     value={dateFin}
                     onChange={(e) => setDateFin(e.target.value)}
                   />
+                </div>
+                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
+                  <label htmlFor="etat" sx={{ marginLeft: "6%" }}>
+                    Etat :
+                  </label>
+                  &nbsp;
+                  <select
+                    id="etat"
+                    variant="outlined"
+                    className="form-select"
+                    size="small"
+                    sx={{ width: "100%" }}
+                    value={etat}
+                    onChange={(e) => setEtat(e.target.value)}
+                  >
+                    <option value="">Sélectionner un état</option>
+                    <option value="FERME">Fermé</option>
+                    <option value="CLOTURE">Clôturé</option>
+                    <option value="ANNULE">Annulé</option>
+                  </select>
                 </div>
               </div>
               <div className="mb-3" style={{ flex: "1 1 100px" }}>

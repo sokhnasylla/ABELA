@@ -80,6 +80,7 @@ function AddIncident({ formData, handleChange }) {
                   type="text"
                   name="objet"
                   id="objet"
+                  autoFocus
                   className="form-control"
                   value={formData.objet}
                   onChange={handleChange}

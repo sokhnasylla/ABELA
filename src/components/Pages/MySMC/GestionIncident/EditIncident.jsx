@@ -6,7 +6,6 @@ import axios from "axios";
 import Title from "../../../Card/Title/Title";
 import "./ajoutavis.css";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
-import { useLocation } from "react-router-dom";
 
 function EditIncident({ avis, formData, handleEditChange }) {
   const token = getTokenFromLocalStorage();
@@ -62,15 +61,15 @@ function EditIncident({ avis, formData, handleEditChange }) {
       setServiceImpacte
     );
 
-    if (avis.applicationSis && avis.applicationSis.length > 0) {
-      const selectedServiceObjects = avis.applicationSis
-        .map((service) => {
-          return serviceImpact.find((s) => s.id === service.id);
-        })
-        .filter(Boolean); // S'assurer qu'on ne récupère que des services valides
+    // if (avis.applicationSis && avis.applicationSis.length > 0) {
+    //   const selectedServiceObjects = avis.applicationSis
+    //     .map((service) => {
+    //       return serviceImpact.find((s) => s.id === service.id);
+    //     })
+    //     .filter(Boolean); // S'assurer qu'on ne récupère que des services valides
 
-      setSelectedServices(selectedServiceObjects); // Mettre à jour les services sélectionnés
-    }
+    //   setSelectedServices(selectedServiceObjects); // Mettre à jour les services sélectionnés
+    // }
 
     fetchData(
       "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations",
@@ -171,10 +170,10 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <select
                 name="typeAvisIncident.id"
                 className="form-control"
-                value={formData.typeAvisIncident.id}
+                value={formData.typeAvisIncident?.id}
                 onChange={handleEditChange}
               >
-                <option value={avis.typeAvisIncident.id}>
+                <option value={avis.typeAvisIncident?.id}>
                   {avis.typeAvisIncident.nom}
                 </option>
                 {typesAvis.map((type) => (
@@ -225,10 +224,10 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <select
                 name="listeValidation.id"
                 className="form-control"
-                value={formData.listeValidation?.id}
+                value={formData.listValidation?.id}
                 onChange={handleEditChange}
               >
-                <option value={avis.listValidation?.id}>
+                <option value={avis.listeValidation?.id}>
                   {avis.listeValidation?.nom}
                 </option>
                 {listValidation.map((validation) => (
@@ -245,7 +244,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <select
                 name="listeDiffusion.id"
                 className="form-control"
-                value={formData.listeDiffusion?.id}
+                value={formData.listDiffusion?.id}
                 onChange={handleEditChange}
               >
                 <option value={avis.listeDiffusion?.id}>
@@ -309,7 +308,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 name="dateFinPrevisionnelle"
                 id="dateFinPrevisionnelle"
                 className="form-control"
-                value={formatDateForInput(formData.dateFinPrevisionnelle)}
+                value={formData.dateFinPrevisionnelle}
                 onChange={handleEditChange}
               />
             </div>
@@ -320,7 +319,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 name="dateFermeture"
                 id="dateFermeture"
                 className="form-control"
-                value={formatDateForInput(formData.dateFermeture)}
+                value={formData.dateFermeture}
                 onChange={handleEditChange}
               />
             </div>
@@ -396,10 +395,10 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <select
                 name="typeCauseIncident.id"
                 className="form-control"
-                value={formData.typeCauseIncident.id}
+                value={formData.typeCauseIncident?.id}
                 onChange={handleEditChange}
               >
-                <option value={avis.typeCauseIncident.id}>
+                <option value={avis.typeCauseIncident?.id}>
                   {avis.typeCauseIncident.intitule}
                 </option>
                 {typeCause.map((cause) => (
@@ -453,7 +452,6 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 name="entite"
                 className="form-control"
                 value={formData.entite?.id || ""}
-                // value={formData.
                 onChange={handleEditChange}
               >
                 <option value="">Sélectionnez l'entité</option>

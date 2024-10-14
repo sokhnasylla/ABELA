@@ -53,7 +53,7 @@ function RechercheAvisEnCours({ onSearch }) {
 
     try {
       if (numeroAvis) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumberOpen?numAvis=${numeroAvis}`;
         newHisto = `Résultat de la dernière recherche, Numéro Avis : ${numeroAvis}`;
         errorMessage = "Aucun avis trouvé pour le numéro spécifié";
       } else if (application && dateDebut && dateFin) {
@@ -61,7 +61,7 @@ function RechercheAvisEnCours({ onSearch }) {
         newHisto = `Résultat de la dernière recherche, Application : ${application} | Date Début : ${formatDate(dateDebut)} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = `Aucun avis trouvé pour l'application ${application} sur la période spécifiées`;
       } else if (application) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName?nom=${application}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName/open?nom=${application}`;
         newHisto = `Résultat de la dernière recherche, Application : ${application}`;
         errorMessage = "Aucun avis trouvé pour l'application spécifiée";
       } else if (dateDebut && dateFin) {
@@ -79,7 +79,7 @@ function RechercheAvisEnCours({ onSearch }) {
       await fetchData(newUrl, errorMessage);
       setError("");
       console.log(newUrl);
-      onSearch(newUrl, newHisto);
+      onSearch(newUrl, newHisto, etat);
     } catch (error) {
       setError(error.message);
     }
