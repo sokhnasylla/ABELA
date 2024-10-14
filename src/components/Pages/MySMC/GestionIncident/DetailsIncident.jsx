@@ -20,6 +20,7 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import Title from "../../../Card/Title/Title";
 import MenuMysmc from "../Menu/MenuMysmc";
 import MenuDetailsIncident from "./MenuDetails";
+import "./detail.css";
 
 function DetailsIncident() {
   const [incident, setIncident] = useState(null);
@@ -38,7 +39,6 @@ function DetailsIncident() {
   useEffect(() => {
     console.log(avis);
   }, [avis]);
-
 
   useEffect(() => {
     const fetchIncident = async (url, setter) => {
@@ -77,7 +77,6 @@ function DetailsIncident() {
       console.error("Erreur:", error);
     }
   };
-  
 
   useEffect(() => {
     fetchHistorique(
@@ -109,7 +108,6 @@ function DetailsIncident() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  
   const handlePageChange = (pageNumber) => {
     fetchHistorique(
       `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique?page=${pageNumber}&limit=${itemsPerPage}`,
@@ -160,6 +158,14 @@ function DetailsIncident() {
               </Col>
               <Col sm={7}>
                 <Title text="Prévisalusation de l'avis" />
+                <div className="mt-2">
+                  {!incident.numTicketEZV && (
+                    <div className="alert alert-danger blink-alert">
+                      Aucune référence à un ticket EasyVista n'a été trouvée
+                    </div>
+                  )}
+                </div>
+
                 <div className="table-responsive">
                   <Table className="table table-bordered table-striped">
                     <tbody>
@@ -342,7 +348,8 @@ function DetailsIncident() {
                       <span>Aucun élément à afficher</span>
                     ) : totalElements < 5 ? (
                       <span>
-                        Affichage de l'élément 1 à {totalElements} sur {totalElements} éléments
+                        Affichage de l'élément 1 à {totalElements} sur{" "}
+                        {totalElements} éléments
                       </span>
                     ) : indexOfFirstItem === 0 ? (
                       <span>
