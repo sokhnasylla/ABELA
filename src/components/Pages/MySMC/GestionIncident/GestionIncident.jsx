@@ -54,8 +54,6 @@ function GestionIncident() {
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPageOpen, setItemsPerPageOpen] = useState(10);
-  const [numberOfElements, setNumberOfElements] = useState(0);
-  const [numberOfElementsNotOpen, setNumberOfElementsNotOpen] = useState(0);
   const [currentPageNotOpen, setCurrentPageNotOpen] = useState(1);
   const [itemsPerPageNotOpen, setItemsPerPageNotOpen] = useState(10);
   const [alertMessage, setAlertMessage] = useState("");
@@ -77,7 +75,7 @@ function GestionIncident() {
     causeRetardNotification: "",
     causeProbable: "",
     observations: "",
-    user,
+    user: user,
   });
 
   const dataUrlEnCours =
@@ -260,7 +258,6 @@ function GestionIncident() {
       setter(response.data.content);
       setTotalPages(response.data.totalPages);
       setTotalElementsOpen(response.data.totalElements);
-      setNumberOfElements(response.data.numberOfElements);
       setIsLoading(false);
     } catch (error) {
       setError(`Erreur: ${error.message}`);
