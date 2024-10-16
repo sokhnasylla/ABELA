@@ -152,9 +152,9 @@ function HomeSmc() {
                 fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
               }}
             >
-              <span style={{ float: "left", marginRight: "10px" }}>
+              {/* <span style={{ float: "left", marginRight: "10px" }}>
                 <img src={menupng} />
-              </span>{" "}
+              </span>{" "} */}
               Rubrique des informations utiles
             </legend>
           </fieldset>

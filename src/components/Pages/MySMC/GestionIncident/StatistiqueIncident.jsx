@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../../Card/Title/Title";
-import {
-  Row,
-  Col,
-  Button,
-  Modal,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap"; // Add OverlayTrigger and Tooltip
-import { Grid } from "@mui/material";
+import periode from "../../../../assets/periode.png";
+import { Container, Row, Col, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
+import { InputLabel, TextField, Grid } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -139,10 +133,7 @@ function StatistiqueIncident() {
 
   return (
     <div className="dashboard">
-      <Title
-        text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
-      />
-
+      <Title text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`} />
       <OverlayTrigger
         placement="top"
         overlay={
@@ -151,13 +142,8 @@ function StatistiqueIncident() {
           </Tooltip>
         }
       >
-        <Button
-          variant="primary"
-          onClick={handleStatShow}
-          className="mt-5 ml-5 mb-2"
-        >
-          Stats
-        </Button>
+        
+          <img height="40" width= "40" src={periode} style={{ cursor: 'pointer' }} alt="" onClick={handleStatShow}/>
       </OverlayTrigger>
 
       <Modal
@@ -216,14 +202,10 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div
-              style={{ fontSize: "24px", fontWeight: "bold", color: "#a94442" }}
-            >
-              {tauxNotificationAvis !== null
-                ? `${tauxNotificationAvis.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#a94442" }}>
+              {tauxNotificationAvis !== null ? `${tauxNotificationAvis.toFixed(2)} %` : "0 %"}
             </div>
-            <div>Notification Avis</div>
+            <div >Notification Avis</div>
           </Grid>
         </Col>
 
@@ -244,14 +226,10 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div
-              style={{ fontSize: "24px", fontWeight: "bold", color: "#31708f" }}
-            >
-              {tauxDetectionAvis !== null
-                ? `${tauxDetectionAvis.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#31708f" }}>
+              {tauxDetectionAvis !== null ? `${tauxDetectionAvis.toFixed(2)} %` : "0 %"}
             </div>
-            <div>Détection Avis</div>
+            <div >Détection Avis</div>
           </Grid>
         </Col>
 
@@ -272,14 +250,10 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div
-              style={{ fontSize: "24px", fontWeight: "bold", color: "#8a6d3b" }}
-            >
-              {tauxTraitement4H !== null
-                ? `${tauxTraitement4H.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#8a6d3b" }}>
+              {tauxTraitement4H !== null ? `${tauxTraitement4H.toFixed(2)} %` : "0 %"}
             </div>
-            <div>Traitement 4H</div>
+            <div >Traitement  4H</div>
           </Grid>
         </Col>
 
@@ -300,23 +274,16 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div
-              style={{ fontSize: "24px", fontWeight: "bold", color: "#3c763d" }}
-            >
-              {tauxTraitement24H !== null
-                ? `${tauxTraitement24H.toFixed(2)} %`
-                : "0 %"}
+            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#3c763d" }}>
+              {tauxTraitement24H !== null ? `${tauxTraitement24H.toFixed(2)} %` : "0 %"}
             </div>
-            <div>Traitement 24H</div>
+            <div >Traitement  24H</div>
           </Grid>
         </Col>
       </Row>
-
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
+      
+      <ResponsiveContainer   width="100%" height={400}>
+        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />

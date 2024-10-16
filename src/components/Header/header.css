@@ -1,13 +1,18 @@
 .myhead {
-    font-size: 12px !important;
-    background-color: #148C8A;
+    font-size: 10px !important;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background-color: #009999;
     color: white;
-    height: 64px;
+    height: 50px;
+    top: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* z-index: 1; */
+    z-index: 1000;
+    position: absolute;
+    position: fixed;
+    font-family: Arial, sans-serif; 
 }
 
 .myhead .nav-item {
