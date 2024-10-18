@@ -14,18 +14,7 @@ import { Modal } from "react-bootstrap";
 import "./homesmc.css";
 import useAuth from "../../Auth/useAuth";
 import axios from "axios";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: " 55%",
-  height: "70%",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+import { getTokenDecode } from "../../Auth/authUtils";
 
 const submenu = [
   { text: "Informations", icon: TfiBlackboard },
@@ -35,12 +24,18 @@ const submenu = [
 
 function HomeSmc() {
   useAuth();
-  const [mode, setMode] = React.useState("ATP");
-  const [type, setType] = React.useState("Faible");
   const [informations, setInformations] = useState([]);
   const [modalInfo, setModalInfo] = useState(false);
+  const [etat, setEtat] = useState([]);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
+  const user = getTokenDecode().sub;
+  const [formData, setFormData] = useState({
+    titre: "",
+    user: user,
+    message: "",
+    etat: "",
+  });
 
   const handleOpenModal = () => {
     setModalInfo(true);
@@ -50,13 +45,26 @@ function HomeSmc() {
     setModalInfo(false);
   };
 
-  const handleChange = (event) => {
-    setMode(event.target.value);
-  };
-  const handleChanges = (event) => {
-    setType(event.target.value);
-  };
-  const [open, setOpen] = React.useState(false);
+  useEffect(() => {
+    const fetchData = async (url, setter) => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(url, config);
+        setter(response.data);
+      } catch (error) {
+        setError(`Erreur: ${error.message}`);
+      }
+    };
+
+    fetchData(
+      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/infos/etat",
+      setEtat
+    );
+  }, [token]);
 
   useEffect(() => {
     const fetchData = async (url, setter) => {
@@ -90,6 +98,45 @@ function HomeSmc() {
       second: "2-digit",
     };
     return new Date(date).toLocaleDateString("fr-FR", options);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    if (name === "etat") {
+      setFormData({
+        ...formData,
+        etat: value,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      console.log(formData);
+
+      const response = await axios.post(
+        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/infos",
+        formData,
+        config
+      );
+      console.log(response.data);
+      handleCloseModal();
+    } catch (error) {
+      localStorage.setItem("error", error.message);
+      setError(`Erreur: ${error.message}`);
+    }
   };
 
   return (
@@ -135,8 +182,7 @@ function HomeSmc() {
               }}
               onClick={handleOpenModal}
             >
-              <FaPlusCircle /> &nbsp;
-              Partager une information
+              <FaPlusCircle /> &nbsp; Partager une information
             </Button>
             <Modal
               show={modalInfo}
@@ -152,24 +198,27 @@ function HomeSmc() {
                   <div className="form-group">
                     <label htmlFor="titre">Titre</label>
                     <input
+                      name="titre"
                       variant="outlined"
                       size="small"
                       className="form-control"
                       placeholder="minimum 3 caratéres"
                       required
+                      value={formData.titre}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group mt-3">
-                    <label>Type</label>
+                    <label htmlFor="type">Type</label>
                     <select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name="type"
                       onChange={handleChange}
                       className="form-control"
-                      value={mode}
+                      value={formData.type}
                       size="small"
                       required
                     >
+                      <option value="">Choisir le type</option>
                       <option value="ATP">ATP</option>
                       <option value="Supervision">Supervision</option>
                       <option value="Maintenance">Maintenance</option>
@@ -177,38 +226,49 @@ function HomeSmc() {
                     </select>
                   </div>
                   <div className="form-group mt-3">
-                    <label>Message</label>
+                    <label htmlFor="message">Message</label>
                     <input
+                      name="message"
                       variant="outlined"
                       size="small"
                       className="form-control"
                       placeholder="minimum 3 caratéres"
                       required
+                      value={formData.message}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group mt-3">
-                    <label>Criticité</label>
+                    <label htmlFor="etat">Criticité</label>
                     <select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      onChange={handleChanges}
+                      name="etat"
+                      onChange={handleChange}
                       className="form-control"
-                      value={type}
+                      value={formData.etat}
                       size="small"
                       required
                     >
-                      <option value="Faible">Faible</option>
-                      <option value="Moyen">Moyen</option>
-                      <option value="Haute">Haute</option>
+                      <option value="">Choisir la criticité</option>
+                      {etat.map((etat) => (
+                        <option key={etat} value={etat}>
+                          {etat}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </form>
+                {error && (
+                  <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
+                )}
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="danger" onClick={handleCloseModal}>
                   Annuler
                 </Button>
-                <Button variant="success">Valider</Button>
+                <Button variant="success" onClick={handleSubmit}>
+                  {" "}
+                  Enregistrer
+                </Button>
               </Modal.Footer>
             </Modal>
             <hr />
@@ -223,15 +283,15 @@ function HomeSmc() {
                 position: "relative",
               }}
             >
-              <TimelineItem>
-                <TimelineSeparator>
-                  <TimelineDot variant="outlined" color="primary" />
-                  <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent
-                  sx={{ fontSize: "14px", fontFamily: "inherit" }}
-                >
-                  {informations.map((info) => (
+              {informations.map((info) => (
+                <TimelineItem>
+                  <TimelineSeparator>
+                    <TimelineDot variant="outlined" color="primary" />
+                    <TimelineConnector />
+                  </TimelineSeparator>
+                  <TimelineContent
+                    sx={{ fontSize: "14px", fontFamily: "inherit" }}
+                  >
                     <div key={info.id}>
                       <b>{info.titre}</b>
                       &nbsp;
@@ -277,9 +337,9 @@ function HomeSmc() {
                       </h6>
                       <i> {info.message}</i>
                     </div>
-                  ))}
-                </TimelineContent>
-              </TimelineItem>
+                  </TimelineContent>
+                </TimelineItem>
+              ))}
               {/* <TimelineItem>
                 <TimelineSeparator>
                   <TimelineDot variant="outlined" color="primary" />

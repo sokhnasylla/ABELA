@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { TextField } from "@mui/material";
 
-function RechercheAvis({ onSearch }) {
+function RechercheAvisEnCours({ onSearch }) {
   const [error, setError] = useState("");
   const [numeroAvis, setNumeroAvis] = useState("");
   const [application, setApplication] = useState("");
@@ -53,28 +53,28 @@ function RechercheAvis({ onSearch }) {
 
     try {
       if (numeroAvis) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumberNotOpen?numAvis=${numeroAvis}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumberOpen?numAvis=${numeroAvis}`;
         newHisto = `Résultat de la dernière recherche, Numéro Avis : ${numeroAvis}`;
         errorMessage = "Aucun avis trouvé pour le numéro spécifié";
       } else if (application && dateDebut && dateFin) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/notOpen/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
-        newHisto = `Résultat de la dernière recherche, Application : ${application} | Date Début : ${formatDate(
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/open/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
+        newHisto = `Résultat de la dernière recherche, Application : ${application.toUpperCase()} | Date Début : ${formatDate(
           dateDebut
         )} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = `Aucun avis trouvé pour l'application ${application} sur la période spécifiées`;
       } else if (application) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName/notOpen?nom=${application}`;
-        newHisto = `Résultat de la dernière recherche, Application : ${application}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName/open?nom=${application}`;
+        newHisto = `Résultat de la dernière recherche, Application : ${application.toUpperCase()}`;
         errorMessage = "Aucun avis trouvé pour l'application spécifiée";
       } else if (dateDebut && dateFin) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisNotOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
+        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
         newHisto = `Résultat de la dernière recherche, Date Début : ${formatDate(
           dateDebut
         )} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = "Aucun avis trouvé pour la période spécifiée";
       } else if (etat) {
         newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByState?etat=${etat}`;
-        newHisto = `Résultat de la dernière recherche, Etat : ${etat}`;
+        newHisto = `Résultat de la dernière recherche, Etat : ${etat.toUpperCase()}`;
         errorMessage = "Aucun avis trouvé pour l'état spécifié";
       } else {
         throw new Error("Veuillez remplir au moins un champ de recherche");
@@ -178,9 +178,8 @@ function RechercheAvis({ onSearch }) {
                     onChange={(e) => setEtat(e.target.value)}
                   >
                     <option value="">Sélectionner un état</option>
-                    <option value="FERME">Fermé</option>
-                    <option value="CLOTURE">Clôturé</option>
-                    <option value="ANNULE">Annulé</option>
+                    <option value="ENCOURS">En cours</option>
+                    <option value="REOPEN">Réouvert</option>
                   </select>
                 </div>
               </div>
@@ -188,8 +187,8 @@ function RechercheAvis({ onSearch }) {
                 <Button
                   type="submit"
                   style={{
-                    backgroundColor: "#009999",
-                    borderColor: "#009999",
+                    backgroundColor: "#C9302C",
+                    borderColor: "#C9302C",
                     width: "100%",
                   }}
                 >
@@ -198,7 +197,11 @@ function RechercheAvis({ onSearch }) {
               </div>
             </form>
             {error && (
-              <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
+              <div
+                style={{ textAlign: "center", color: "red", marginTop: "10px" }}
+              >
+                {error}
+              </div>
             )}
           </Col>
         </Row>
@@ -207,4 +210,4 @@ function RechercheAvis({ onSearch }) {
   );
 }
 
-export default RechercheAvis;
+export default RechercheAvisEnCours;

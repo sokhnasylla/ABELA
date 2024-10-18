@@ -20,6 +20,7 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import Title from "../../../Card/Title/Title";
 import MenuMysmc from "../Menu/MenuMysmc";
 import MenuDetailsIncident from "./MenuDetails";
+import "./detail.css";
 
 function DetailsIncident() {
   const [incident, setIncident] = useState(null);
@@ -31,10 +32,14 @@ function DetailsIncident() {
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 5;
 
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-  
+  useEffect(() => {
+    console.log(avis);
+  }, [avis]);
+
   useEffect(() => {
     const fetchIncident = async (url, setter) => {
       try {
@@ -55,34 +60,35 @@ function DetailsIncident() {
       setIncident
     );
   }, [token, avis.id]);
-console.log(avis);
-console.log(avis.listValidation.nom);
-//console.log(incident.listDiffusion);
-  useEffect(() => {
-    const fetchHistorique = async (url, setter) => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
 
-        const response = await axios.get(url, config);
-        setter(response.data);
-      } catch (error) {
-        console.error("Erreur:", error);
-      }
-    };
+  const fetchHistorique = async (url, setter) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(url, config);
+      setter(response.data.content);
+      setTotalElements(response.data.totalElements);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchHistorique(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique`,
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique?page=${currentPage}&limit=${itemsPerPage}`,
       setHistorique
     );
-  }, [token, avis.id]);
+  }, [token, avis.id, currentPage]);
 
   useEffect(() => {
     const message = localStorage.getItem("alertMessage");
     const type = localStorage.getItem("alertType");
-    
+
     if (message) {
       setAlertMessage(message);
       setAlertType(type);
@@ -90,19 +96,25 @@ console.log(avis.listValidation.nom);
 
       localStorage.removeItem("alertMessage");
       localStorage.removeItem("alertType");
-      
-      const timer = setTimeout(() => {
+
+      setTimeout(() => {
         setShowAlert(false);
       }, 5000);
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout();
     }
   }, []);
-  
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = historique.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(historique.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    fetchHistorique(
+      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique?page=${pageNumber}&limit=${itemsPerPage}`,
+      setHistorique
+    );
+    setCurrentPage(pageNumber);
+  };
 
   if (!incident) {
     return <div>Aucun Incident</div>;
@@ -146,6 +158,14 @@ console.log(avis.listValidation.nom);
               </Col>
               <Col sm={7}>
                 <Title text="Prévisalusation de l'avis" />
+                <div className="mt-2">
+                  {!incident.numTicketEZV && (
+                    <div className="alert alert-danger blink-alert">
+                      Aucune référence à un ticket EasyVista n'a été trouvée
+                    </div>
+                  )}
+                </div>
+
                 <div className="table-responsive">
                   <Table className="table table-bordered table-striped">
                     <tbody>
@@ -303,7 +323,7 @@ console.log(avis.listValidation.nom);
                         </tr>
                       </thead>
                       <tbody>
-                        {currentItems.map((item) => (
+                        {historique.map((item) => (
                           <tr key={item.id}>
                             <td>
                               {new Date(item.dateAction).toLocaleDateString(
@@ -324,6 +344,34 @@ console.log(avis.listValidation.nom);
                         ))}
                       </tbody>
                     </table>
+                    {totalElements === 0 ? (
+                      <span>Aucun élément à afficher</span>
+                    ) : totalElements < 5 ? (
+                      <span>
+                        Affichage de l'élément 1 à {totalElements} sur{" "}
+                        {totalElements} éléments
+                      </span>
+                    ) : indexOfFirstItem === 0 ? (
+                      <span>
+                        Affichage de l'élément 1 à {itemsPerPage} sur{" "}
+                        {totalElements} éléments
+                      </span>
+                    ) : indexOfLastItem >= totalElements ? (
+                      <span>
+                        Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                        {totalElements} sur {totalElements} éléments
+                      </span>
+                    ) : itemsPerPage >= totalElements ? (
+                      <span>
+                        Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                        {totalElements} sur {totalElements} éléments
+                      </span>
+                    ) : (
+                      <span>
+                        Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                        {indexOfLastItem} sur {totalElements} éléments
+                      </span>
+                    )}
                     <Pagination className="d-flex justify-content-center mt-4">
                       <Pagination.Item
                         active={currentPage === 1}
@@ -558,18 +606,7 @@ console.log(avis.listValidation.nom);
             sm={12}
             sx={{ marginTop: "5px" }}
             className="text-center"
-          >
-            {/* <Button
-              style={{
-                backgroundColor: "#C9302C",
-                borderColor: "#C9302C",
-                width: "100px",
-              }}
-              onClick={() => window.history.back()}
-            >
-              Retour
-            </Button> */}
-          </Col>
+          ></Col>
         </Row>
       </Container>
     </div>

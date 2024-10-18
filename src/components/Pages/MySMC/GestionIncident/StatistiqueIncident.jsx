@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FaList, FaSearch, FaHome, FaPaperclip } from "react-icons/fa";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import { RiDashboard3Line } from "react-icons/ri";
-import { IoStatsChart } from "react-icons/io5";
 import Title from "../../../Card/Title/Title";
 import periode from "../../../../assets/periode.png";
 import { Container, Row, Col, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
@@ -44,14 +40,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 function StatistiqueIncident() {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState(null);
-  const [etat, setEtat] = useState(false);
-  const [loading, setLoding] = useState(false);
-  const [text, setText] = useState(
-    "Information : Merci d'effectuer une recherche au préalable pour afficher les avis"
-  );
   const [showStatModal, setShowStatModal] = useState(false);
   const now = new Date();
-  const period = now.toLocaleDateString("FR", { month: "long", year: "numeric" });
+  const period = now.toLocaleDateString("FR", {
+    month: "long",
+    year: "numeric",
+  });
   const start = new Date(now.getFullYear(), now.getMonth(), 1)
     .toISOString()
     .split("T")[0];
@@ -142,13 +136,21 @@ function StatistiqueIncident() {
       <Title text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`} />
       <OverlayTrigger
         placement="top"
-        overlay={<Tooltip>Sélectionnez une période pour afficher les statistiques d'incidents</Tooltip>}
+        overlay={
+          <Tooltip>
+            Sélectionnez une période pour afficher les statistiques d'incidents
+          </Tooltip>
+        }
       >
         
           <img height="40" width= "40" src={periode} style={{ cursor: 'pointer' }} alt="" onClick={handleStatShow}/>
       </OverlayTrigger>
-      
-      <Modal show={showStatModal} onHide={handleStatClose} dialogClassName="custom-modal">
+
+      <Modal
+        show={showStatModal}
+        onHide={handleStatClose}
+        dialogClassName="custom-modal"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Statistiques</Modal.Title>
         </Modal.Header>
@@ -161,15 +163,34 @@ function StatistiqueIncident() {
           </Button>
         </Modal.Footer>
       </Modal>
-      
-      {(dataUrl !== `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}`) && (
-        <Button variant="danger" onClick={reinitHisto} className="mt-5 ml-5 mb-2">
-          Default
-        </Button>
+        &nbsp;
+      {dataUrl !==
+        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` && (
+        <OverlayTrigger
+          placement="top"
+          overlay={
+            <Tooltip>
+              Réinitialiser la période pour afficher les statistiques par défaut
+            </Tooltip>
+          }
+        >
+          <Button
+            variant="danger"
+            onClick={reinitHisto}
+            className="mt-5 ml-5 mb-2"
+          >
+            Default
+          </Button>
+        </OverlayTrigger>
       )}
 
       <Row className="mb-4">
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"
@@ -187,8 +208,13 @@ function StatistiqueIncident() {
             <div >Notification Avis</div>
           </Grid>
         </Col>
-        
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"
@@ -207,7 +233,12 @@ function StatistiqueIncident() {
           </Grid>
         </Col>
 
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"
@@ -226,7 +257,12 @@ function StatistiqueIncident() {
           </Grid>
         </Col>
 
-        <Col xs={12} sm={6} md={3} className="d-flex justify-content-center mb-3">
+        <Col
+          xs={12}
+          sm={6}
+          md={3}
+          className="d-flex justify-content-center mb-3"
+        >
           <Grid
             container
             direction="column"

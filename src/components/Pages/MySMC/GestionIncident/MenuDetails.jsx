@@ -11,7 +11,6 @@ import {
   FaSync,
   FaThumbsUp,
   FaTimes,
-  FaTrash,
   FaTrashAlt,
 } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
@@ -22,24 +21,26 @@ function MenuDetailsIncident({ avis }) {
   const [contenu, setContenu] = useState("");
   const [titre, setTitre] = useState("");
   const [typeTraitement, setTypeTraitement] = useState("");
+  const [size, setSize] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const token = getTokenFromLocalStorage();
   const decode = getTokenDecode();
   const updateBy = decode.sub;
   const [formData, setFormData] = useState({
     objet: avis.objet || "",
     nature: avis.nature || "",
-    typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
     applicationSis: avis.applicationSis || [],
-    listValidation: avis.listValidation ? { id: avis.listValidation.id || "" } : {},
-    listDiffusion: { id: avis.listDiffusion?.id || "" } ,
+    typeAvisIncident: { id: avis.typeAvisIncident?.id || "" },
+    listeValidation: { id: avis.listeValidation?.id || "" },
+    listeDiffusion: { id: avis.listeDiffusion?.id || "" },
+    typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
     dateDebut: avis.dateDebut || "",
     dateDetection: avis.dateDetection || "",
     numTicketEZV: avis.numTicketEZV || "",
     numTicketOceane: avis.numTicketOceane || "",
     impact: avis.impact || "",
     causeRetardNotification: avis.causeRetardNotification || "",
-    typeCauseIncident: { id: avis.typeCauseIncident?.id || "" },
     causeProbable: avis.causeProbable || "",
     observations: avis.observations || "",
     dateFinPrevisionnelle: avis.dateFinPrevisionnelle || "",
@@ -47,12 +48,20 @@ function MenuDetailsIncident({ avis }) {
     commentaire: avis.commentaire || "",
     updateBy,
   });
-  console.log(avis);
 
-  const handleShowModal = (titre, contenu, typeTraitement) => {
+  const handleShowEditModal = () => {
+    setShowEditModal(true);
+  };
+
+  const handleHideEditModal = () => {
+    setShowEditModal(false);
+  };
+
+  const handleShowModal = (titre, contenu, typeTraitement, size) => {
     setTitre(titre);
     setContenu(contenu);
     setTypeTraitement(typeTraitement);
+    setSize(size);
     setShowModal(true);
   };
   const handleHideModal = () => setShowModal(false);
@@ -231,13 +240,11 @@ function MenuDetailsIncident({ avis }) {
     <Row>
       <Card
         style={{
-          display: "flex",
           flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
           color: "#148C8A",
           border: "2px solid #148C8A",
         }}
+        className="d-flex justify-content-between align-items-center"
       >
         <FaBars />
         <p style={{ marginBottom: "0", textAlign: "center", flexGrow: 1 }}>
@@ -494,17 +501,7 @@ function MenuDetailsIncident({ avis }) {
                     textAlign: "center",
                   }}
                   onClick={() =>
-                    handleShowModal(
-                      "Edition de l'avis",
-                      <>
-                        <EditIncident
-                          avis={avis}
-                          formData={formData}
-                          handleEditChange={handleEditChange}
-                        />
-                      </>,
-                      "Edition"
-                    )
+                    handleShowEditModal()
                   }
                 >
                   Edition de l'avis
@@ -655,7 +652,7 @@ function MenuDetailsIncident({ avis }) {
         show={showModal}
         onHide={handleHideModal}
         dialogClassName="custom-modal"
-        size="xl"
+        size={size}
         style={{ width: "100%", textAlign: "" }}
       >
         <Modal.Header closeButton>
@@ -690,30 +687,48 @@ function MenuDetailsIncident({ avis }) {
             </Button>
           )}
           {typeTraitement === "Diffusion" && (
-            <Button variant="primary">
-              Diffuser
-            </Button>
+            <Button variant="primary">Diffuser</Button>
           )}
           {typeTraitement === "Relance" && (
-            <Button variant="primary">
-              Relancer
-            </Button>
+            <Button variant="primary">Relancer</Button>
           )}
           {typeTraitement === "Etat d'avancement" && (
-            <Button variant="primary">
-              Relancer
-            </Button>
+            <Button variant="primary">Relancer</Button>
           )}
           {typeTraitement === "Demande validation" && (
-            <Button variant="primary">
-              Relancer
-            </Button>
+            <Button variant="primary">Relancer</Button>
           )}
           {typeTraitement === "Edition" && (
             <Button variant="primary" onClick={handleEditSubmit}>
               Modifier
             </Button>
           )}
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={showEditModal}
+        onHide={handleHideEditModal}
+        dialogClassName="custom-modal"
+        size="xl"
+        style={{ width: "100%", textAlign: "" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ textAlign: "center" }}>Edition de l'avis</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditIncident
+            avis={avis}
+            formData={formData}
+            handleEditChange={handleEditChange}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleHideEditModal}>
+            Fermer
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Modifier
+          </Button>
         </Modal.Footer>
       </Modal>
     </Row>
