@@ -25,6 +25,7 @@ function GestionIncident() {
   const token = getTokenFromLocalStorage();
   const user = getTokenDecode().sub;
   const [notOpenAvis, setNotOpenAvis] = useState([]);
+  const [AllAvis, setAllAvis] = useState([]);
   const [openAvis, setOpenAvis] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -35,8 +36,10 @@ function GestionIncident() {
   const [overlayTarget, setOverlayTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageNotOpen, setCurrentPageNotOpen] = useState(1);
+  const [currentPageAll, setCurrentPageAll] = useState(1);
   const [itemsPerPageOpen, setItemsPerPageOpen] = useState(10);
   const [itemsPerPageNotOpen, setItemsPerPageNotOpen] = useState(10);
+  const [itemsPerPageAll, setItemsPerPageAll] = useState(10);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -63,12 +66,16 @@ function GestionIncident() {
   
   const [dataUrlEnCours, setDataUrlEnCours] = useState("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/encours");
   const [dataUrlNotOpen, setDataUrlNotOpen] = useState("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule");
+  const [dataUrlAll, setDataUrlAll] = useState("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents");
 
   const handleItemsChangeOpen = (event) => {
     setItemsPerPageOpen(Number(event.target.value));
   };
   const handleItemsChangeNotOpen = (event) => {
     setItemsPerPageNotOpen(Number(event.target.value));
+  };
+  const handleItemsChangeAll = (event) => {
+    setItemsPerPageAll(Number(event.target.value));
   };
 
   const handleReOpen = (avis) => {
@@ -78,6 +85,7 @@ function GestionIncident() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingNotOpen, setIsLoadingNotOpen] = useState(true);
+  const [isLoadingAll, setIsLoadingAll] = useState(true);
 
   const handleMouseEnter = (event, item) => {
     if(event.target.closest("td")?.classList.contains("text-center")) return;
@@ -90,14 +98,14 @@ function GestionIncident() {
   };
 
   const handleSearchSubmit = (url, histor) => {
-    setDataUrlNotOpen(url);
+    setDataUrlAll(url);
     console.log(`Data URL: ${url}`);
     setShowModal(false);
     setHisto(histor);
   };
   const reinitHisto = () => {
     setHisto("Aucune recherche récente");
-    setDataUrlEnCours("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/enCours");
+    setDataUrlAll("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents");
     setDataUrlNotOpen("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/clos/ferme/annule");
     setShowModal(false);
   };
@@ -220,44 +228,32 @@ function GestionIncident() {
       localStorage.setItem("alertType", "danger");
     }
   };
-
+  const fetchData = async (url, setter, setIsLoading, setError, token) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(url, config);
+      setter(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      setError(`Erreur: ${error.message}`);
+    }
+  };
+  
   useEffect(() => {
-    const fetchData = async (url, setter) => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(url, config);
-        setter(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-
-    fetchData(dataUrlEnCours, setOpenAvis);
+    fetchData(dataUrlEnCours, setOpenAvis, setIsLoading, setError, token);
   }, [dataUrlEnCours, token]);
+  
+  useEffect(() => {
+    fetchData(dataUrlNotOpen, setNotOpenAvis, setIsLoadingNotOpen, setError, token);
+  }, [dataUrlNotOpen, token]);
 
   useEffect(() => {
-    const fetchData = async (url, setter) => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(url, config);
-        setter(response.data);
-        setIsLoadingNotOpen(false);
-      } catch (error) {
-        setError(`Erreur: ${error.message}`);
-      }
-    };
-
-    fetchData(dataUrlNotOpen, setNotOpenAvis);
-  }, [dataUrlNotOpen, token]);
+    fetchData(dataUrlAll, setAllAvis, setIsLoadingAll, setError, token);
+  }, [dataUrlAll, token]);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -284,9 +280,19 @@ function GestionIncident() {
     indexOfLastItemNotOpen
   );
   const totalPagesNotOpen = Math.ceil(notOpenAvis.length / itemsPerPageNotOpen);
-
   const handlePageChangeNotOpen = (pageNumber) =>
     setCurrentPageNotOpen(pageNumber);
+
+  
+  const indexOfLastItemAll = currentPageAll * itemsPerPageAll;
+  const indexOfFirstItemAll = indexOfLastItemAll - itemsPerPageAll;
+  const currentItemsAll = AllAvis.slice(
+    indexOfFirstItemAll,
+    indexOfLastItemAll
+  );
+  const totalPagesAll = Math.ceil(AllAvis.length / itemsPerPageAll);
+  const handlePageChangeAll = (pageNumber) =>
+    setCurrentPageAll(pageNumber);
 
   return (
     <div>
@@ -300,22 +306,20 @@ function GestionIncident() {
           font-size: 12px; 
           font-family: Arial, sans-serif; 
         }
-
-        .table, .content {
-          margin-bottom: 10px; 
-        }
         
         .table th, .table td {
           padding: 8px;
         }
 
         .table-hover tbody tr:hover {
-          background-color: #f1f1f1; /* Surlignage léger sur le hover */
+          background-color: #f1f1f1; 
         }
 
         .pagination {
           margin-top: 10px;
+          
         }
+        
 
        
         .modal-content {
@@ -334,6 +338,7 @@ function GestionIncident() {
           color: white !important;
           background-color: #009999 !important;
         }
+          
 
       `}
       </style>
@@ -803,28 +808,32 @@ function GestionIncident() {
         </Col>
       </Tab>
       <Tab eventKey="search"title={
-        <>
-       <img height="30" width="30"  src={search} alt="" onClick={handleShow} /><br />
-        Recherche avancée
-      </>}
+       <div onClick={handleShow} style={{ cursor: 'pointer' }}>
+       <img height="30" width="30" src={search} alt="" /><br />
+       Recherche avancée
+     </div>}
      >
-       <Row sm={7}>
-        <Col sm={12} className="content" >
-            <div className="d-flex justify-content-between">
-              <div className="d-flex justify-content-between">
-                <Button className="Button" variant="secondary">Exporter Reporting incident</Button>
-                &nbsp;
-                <Button className="Button" variant="secondary">
-                  Exporter Plan d'action incident
-                </Button>
-              </div>
-             
-            </div>
-                  
-        </Col>
-          </Row>
+    <Row sm={7}>
+  <div className="d-flex justify-content-end">
+    {histo === "Aucune recherche récente" ? (
+      <>
+      </>
+    ) : (
+      <>
+        <Button className="Button" variant="secondary">
+          Exporter Reporting incident
+        </Button>
+        &nbsp;
+        <Button className="Button" variant="secondary">
+          Exporter Plan d'action incident
+        </Button>
+      </>
+    )}
+  </div>
+</Row>
+
       <Row className="mt-3">
-          <Title text={`Liste des avis fermés, clotûrés ou annulés (${notOpenAvis.length})`}/>
+          <Title text={`Tous les avis (${AllAvis.length})`}/>
           </Row>
           <Row sm={12}>
             <Col sm={12} className="content">
@@ -840,7 +849,7 @@ function GestionIncident() {
                   <RechercheAvis onSearch={handleSearchSubmit} />
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button className="Button" variant="danger" onClick={handleClose}>
+                  <Button className="Button" variant="danger"  onClick={handleClose}>
                     Fermer
                   </Button>
                 </Modal.Footer>
@@ -852,8 +861,8 @@ function GestionIncident() {
                   <select
                     id="items"
                     name="items"
-                    value={itemsPerPageNotOpen}
-                    onChange={handleItemsChangeNotOpen}
+                    value={itemsPerPageAll}
+                    onChange={handleItemsChangeAll}
                   >
                     <option value="10">10</option>
                     <option value="25">25</option>
@@ -928,7 +937,7 @@ function GestionIncident() {
                 </div>
               </div>
            
-          {isLoadingNotOpen ? (
+          {isLoadingAll ? (
             <div className="d-flex justify-content-center align-item-center mt-2">
               Chargement des données...
               <div
@@ -948,7 +957,7 @@ function GestionIncident() {
                 </tr>
               </thead>
               <tbody>
-                {currentItemsNotOpen.map((item) => (
+                {currentItemsAll.map((item) => (
                   <tr
                     key={item.id}
                     onMouseEnter={(e) => handleMouseEnter(e, item)}
@@ -1023,31 +1032,31 @@ function GestionIncident() {
           )}
           <div>
             <div>
-              {notOpenAvis.length === 0 ? (
+              {AllAvis.length === 0 ? (
                 <span>Aucun élément à afficher</span>
-              ) : indexOfFirstItemNotOpen === 0 ? (
+              ) : indexOfFirstItemAll === 0 ? (
                 <span>
-                  Affichage de l'élément 1 à {itemsPerPageNotOpen} sur{" "}
-                  {notOpenAvis.length} éléments
+                  Affichage de l'élément 1 à {itemsPerPageAll} sur{" "}
+                  {AllAvis.length} éléments
                 </span>
-              ) : indexOfLastItemNotOpen >= notOpenAvis.length ? (
+              ) : indexOfLastItemAll >= AllAvis.length ? (
                 <span>
-                  Affichage de l'élément {indexOfFirstItemNotOpen + 1} à{" "}
-                  {notOpenAvis.length} sur {notOpenAvis.length} éléments
+                  Affichage de l'élément {indexOfFirstItemAll + 1} à{" "}
+                  {AllAvis.length} sur {AllAvis.length} éléments
                 </span>
               ) : (
                 <span>
-                  Affichage de l'élément {indexOfFirstItemNotOpen + 1} à{" "}
-                  {indexOfLastItemNotOpen} sur {notOpenAvis.length} éléments
+                  Affichage de l'élément {indexOfFirstItemAll + 1} à{" "}
+                  {indexOfLastItemAll} sur {AllAvis.length} éléments
                 </span>
               )}
             </div>
             <div>
               <Pagination className="d-flex justify-content-center mt-4">
-                {currentPageNotOpen > 1 && (
+                {currentPageAll > 1 && (
                   <Pagination.Prev
                     onClick={() =>
-                      handlePageChangeNotOpen(currentPageNotOpen - 1)
+                      handlePageChangeAll(currentPageAll - 1)
                     }
                   >
                     Précédent
@@ -1055,75 +1064,75 @@ function GestionIncident() {
                 )}
 
                 <Pagination.Item
-                  active={currentPageNotOpen === 1}
-                  onClick={() => handlePageChangeNotOpen(1)}
+                  active={currentPageAll === 1}
+                  onClick={() => handlePageChangeAll(1)}
                 >
                   1
                 </Pagination.Item>
 
-                {currentPageNotOpen > 4 && <Pagination.Ellipsis />}
+                {currentPageAll > 4 && <Pagination.Ellipsis />}
 
-                {currentPageNotOpen > 3 && (
+                {currentPageAll > 3 && (
                   <Pagination.Item
                     onClick={() =>
-                      handlePageChangeNotOpen(currentPageNotOpen - 2)
+                      handlePageChangeAll(currentPageAll - 2)
                     }
                   >
-                    {currentPageNotOpen - 2}
+                    {currentPageAll - 2}
                   </Pagination.Item>
                 )}
-                {currentPageNotOpen > 2 && (
+                {currentPageAll > 2 && (
                   <Pagination.Item
                     onClick={() =>
-                      handlePageChangeNotOpen(currentPageNotOpen - 1)
+                      handlePageChangeAll(currentPageAll - 1)
                     }
                   >
-                    {currentPageNotOpen - 1}
+                    {currentPageAll - 1}
                   </Pagination.Item>
                 )}
 
-                {currentPageNotOpen !== 1 &&
-                  currentPageNotOpen !== totalPagesNotOpen && (
+                {currentPageAll !== 1 &&
+                  currentPageAll !== totalPagesAll && (
                     <Pagination.Item active>
-                      {currentPageNotOpen}
+                      {currentPageAll}
                     </Pagination.Item>
                   )}
 
-                {currentPageNotOpen < totalPagesNotOpen - 1 && (
+                {currentPageAll < totalPagesAll - 1 && (
                   <Pagination.Item
                     onClick={() =>
-                      handlePageChangeNotOpen(currentPageNotOpen + 1)
+                      handlePageChangeAll(currentPageAll + 1)
                     }
                   >
-                    {currentPageNotOpen + 1}
+                    {currentPageAll + 1}
                   </Pagination.Item>
                 )}
-                {currentPageNotOpen < totalPagesNotOpen - 2 && (
+                {currentPageAll < totalPagesAll - 2 && (
                   <Pagination.Item
                     onClick={() =>
-                      handlePageChangeNotOpen(currentPageNotOpen + 2)
+                      handlePageChangeAll(currentPageAll + 2)
                     }
                   >
-                    {currentPageNotOpen + 2}
+                    {currentPageAll + 2}
                   </Pagination.Item>
                 )}
 
-                {currentPageNotOpen < totalPagesNotOpen - 3 && (
+                {currentPageAll < totalPagesAll - 3 && (
                   <Pagination.Ellipsis />
                 )}
 
-                {totalPagesNotOpen > 1 && (
+                {totalPagesAll > 1 && (
                   <Pagination.Item
-                    active={currentPageNotOpen === totalPagesNotOpen}
-                    onClick={() => handlePageChangeNotOpen(totalPagesNotOpen)}
+                    active={currentPageAll === totalPagesAll}
+                    onClick={() => handlePageChangeAll(totalPagesAll)}
                   >
-                    {totalPagesNotOpen}
+                    {totalPagesAll}
                   </Pagination.Item>
                 )}
-                {currentPageNotOpen < totalPagesNotOpen && (
+                {currentPageAll < totalPagesAll && (
                   <Pagination.Next
                     onClick={() =>
-                      handlePageChangeNotOpen(currentPageNotOpen + 1)
+                      handlePageChangeAll(currentPageAll + 1)
                     }
                   >
                     Suivant

@@ -6,11 +6,9 @@ import "./title.css";
 function Title({ text }) {
   return (
     <Card className="titre">
-      <p>
-        <FaBars style={{marginTop:' 5px'}}  />
+    
           {text}
-        <FaArrowCircleDown style={{marginTop:'5px'}} />
-      </p>
+      
     </Card>
   );
 }
