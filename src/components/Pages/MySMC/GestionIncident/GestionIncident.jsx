@@ -56,9 +56,6 @@ function GestionIncident() {
   const [totalElementsOpen, setTotalElementsOpen] = useState(0);
   const [totalElementsNotOpen, setTotalElementsNotOpen] = useState(0);
   const [etat, setEtat] = useState("");
-  const navigate = useNavigate();
-  const token = getTokenFromLocalStorage();
-  const user = getTokenDecode().sub;
   const [searchParams, setSearchParams] = useState(null);
   const [searchParamsNotOpen, setSearchParamsNotOpen] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -68,6 +65,7 @@ function GestionIncident() {
   const [currentPageNotOpen, setCurrentPageNotOpen] = useState(1);
   const [itemsPerPageNotOpen, setItemsPerPageNotOpen] = useState(10);
   const [itemsPerPageAll, setItemsPerPageAll] = useState(10);
+  const [currentPageAll, setCurrentPageAll] = useState(1);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -1466,37 +1464,36 @@ function GestionIncident() {
                         </Pagination.Item>
                       )}
 
-                      {currentPageNotOpen < totalPagesNotOpen - 3 && (
-                        <Pagination.Ellipsis />
-                      )}
+                {currentPageNotOpen < totalPagesNotOpen - 3 && (
+                  <Pagination.Ellipsis />
+                )}
 
-                      {totalPagesNotOpen > 1 && (
-                        <Pagination.Item
-                          active={currentPageNotOpen === totalPagesNotOpen}
-                          onClick={() =>
-                            handlePageChangeNotOpen(totalPagesNotOpen)
-                          }
-                        >
-                          {totalPagesNotOpen}
-                        </Pagination.Item>
-                      )}
-                      {currentPageNotOpen < totalPagesNotOpen && (
-                        <Pagination.Next
-                          onClick={() =>
-                            handlePageChangeNotOpen(currentPageNotOpen + 1)
-                          }
-                        >
-                          Suivant
-                        </Pagination.Next>
-                      )}
-                    </Pagination>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </Tab>
-        </Tabs>
-
+                {totalPagesNotOpen > 1 && (
+                  <Pagination.Item
+                    active={currentPageNotOpen === totalPagesNotOpen}
+                    onClick={() => handlePageChangeNotOpen(totalPagesNotOpen)}
+                  >
+                    {totalPagesNotOpen}
+                  </Pagination.Item>
+                )}
+                {currentPageNotOpen < totalPagesNotOpen && (
+                  <Pagination.Next
+                    onClick={() =>
+                      handlePageChangeNotOpen(currentPageNotOpen + 1)
+                    }
+                  >
+                    Suivant
+                  </Pagination.Next>
+                )}
+              </Pagination>
+            </div>
+          </div>
+          </Col>
+          </Row>
+      </Tab>
+    </Tabs>
+        
+       
         <Modal
           show={showModal}
           onHide={handleHideModal}
