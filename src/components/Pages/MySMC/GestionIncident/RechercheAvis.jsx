@@ -191,8 +191,8 @@ function RechercheAvis({ onSearch }) {
                 <Button
                   type="submit"
                   style={{
-                    backgroundColor: "#C9302C",
-                    borderColor: "#C9302C",
+                    backgroundColor: "#009999",
+                    borderColor: "#009999",
                     width: "100%",
                   }}
                 >

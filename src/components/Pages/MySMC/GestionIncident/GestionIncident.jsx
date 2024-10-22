@@ -35,9 +35,12 @@ import { abelaURL } from "../../../../config/global.constant.js";
 
 function GestionIncident() {
   useAuth();
+  const navigate = useNavigate();
+  const token = getTokenFromLocalStorage();
+  const user = getTokenDecode().sub;
+  const [notOpenAvis, setNotOpenAvis] = useState([]);
   const [avis, setAvis] = useState([]);
   const [openAvis, setOpenAvis] = useState([]);
-  const [notOpenAvis, setNotOpenAvis] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingOpen, setIsLoadingOpen] = useState(true);
   const [isLoadingNotOpen, setIsLoadingNotOpen] = useState(true);
@@ -60,9 +63,6 @@ function GestionIncident() {
   const [totalElements, setTotalElements] = useState(0);
   const [totalElementsOpen, setTotalElementsOpen] = useState(0);
   const [totalElementsNotOpen, setTotalElementsNotOpen] = useState(0);
-  const navigate = useNavigate();
-  const token = getTokenFromLocalStorage();
-  const user = getTokenDecode().sub;
   const [searchParams, setSearchParams] = useState(null);
   const [searchParamsOpen, setSearchParamsOpen] = useState(null);
   const [searchParamsNotOpen, setSearchParamsNotOpen] = useState(null);
@@ -291,7 +291,7 @@ function GestionIncident() {
       };
 
       const newIncident = {
-        objet: formData.objet, 
+        objet: formData.objet,
         dateDetection: formData.dateDetection,
         dateDebut: formData.dateDebut,
         impact: formData.impact,
@@ -309,7 +309,7 @@ function GestionIncident() {
         listeDiffusion: { id: formData.listeDiffusion?.id },
         user: user,
       };
-      
+
       console.log(newIncident);
 
       const response = await axios.post(
@@ -470,9 +470,11 @@ function GestionIncident() {
   const indexOfLastItemNotOpen = currentPageNotOpen * itemsPerPageNotOpen;
   const indexOfFirstItemNotOpen = indexOfLastItemNotOpen - itemsPerPageNotOpen;
 
+
   return (
     <div>
-      <style>{`
+      <style>
+        {`
         body {
           font-size: 12px; 
           font-family: Arial, sans-serif; 
@@ -482,22 +484,20 @@ function GestionIncident() {
           font-size: 12px; 
           font-family: Arial, sans-serif; 
         }
-
-        .table, .content {
-          margin-bottom: 10px; 
-        }
         
         .table th, .table td {
           padding: 8px;
         }
 
         .table-hover tbody tr:hover {
-          background-color: #f1f1f1; /* Surlignage léger sur le hover */
+          background-color: #f1f1f1; 
         }
 
         .pagination {
           margin-top: 10px;
+          
         }
+        
 
        
         .modal-content {
@@ -516,8 +516,10 @@ function GestionIncident() {
           color: white !important;
           background-color: #009999 !important;
         }
+          
 
-      `}</style>
+      `}
+      </style>
       <MenuMysmc />
       <Container className="body">
         <div className="container mt-3">
@@ -1569,19 +1571,25 @@ function GestionIncident() {
                         </Pagination.Item>
                       )}
 
-                      {currentPage < totalPages - 3 && <Pagination.Ellipsis />}
+                      {currentPageNotOpen < totalPagesNotOpen - 3 && (
+                        <Pagination.Ellipsis />
+                      )}
 
-                      {totalPages > 1 && (
+                      {totalPagesNotOpen > 1 && (
                         <Pagination.Item
-                          active={currentPage === totalPages}
-                          onClick={() => handlePageChange(totalPages)}
+                          active={currentPageNotOpen === totalPagesNotOpen}
+                          onClick={() =>
+                            handlePageChangeNotOpen(totalPagesNotOpen)
+                          }
                         >
-                          {totalPages}
+                          {totalPagesNotOpen}
                         </Pagination.Item>
                       )}
-                      {currentPage < totalPages && (
+                      {currentPageNotOpen < totalPagesNotOpen && (
                         <Pagination.Next
-                          onClick={() => handlePageChange(currentPage + 1)}
+                          onClick={() =>
+                            handlePageChangeNotOpen(currentPageNotOpen + 1)
+                          }
                         >
                           Suivant
                         </Pagination.Next>
