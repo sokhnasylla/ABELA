@@ -6,36 +6,25 @@ import axios from "axios";
 import Title from "../../../Card/Title/Title";
 import "./ajoutavis.css";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
+import makeAnimated from "react-select/animated";
+import Select from "react-select";
+import { abelaURL } from "../../../../config/global.constant";
 
-function EditIncident({ avis, formData, handleEditChange }) {
+function EditIncident({
+  avis,
+  formData,
+  handleEditChange,
+  handleServiceChange,
+}) {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
-  const [serviceImpact, setServiceImpacte] = useState([]);
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [serviceImpacte, setServiceImpacte] = useState([]);
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
   const [serviceSup, setServiceSup] = useState([]);
-
-  const handleServiceChange = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions); // Get all selected options
-    const selectedValues = selectedOptions.map((option) => option.value); // Map them to an array of values (IDs)
-
-    const selectedServiceObjects = selectedValues
-      .map((selectedValue) =>
-        serviceImpact.find((service) => service.id === parseInt(selectedValue))
-      ) // Find corresponding service objects
-      .filter(Boolean); // Ensure no undefined services
-
-    setSelectedServices(selectedServiceObjects); // Update selected services
-  };
-
-  const handleRemoveService = (serviceId) => {
-    setSelectedServices(
-      selectedServices.filter((service) => service.id !== serviceId)
-    );
-  };
+  const animatedComponents = makeAnimated();
 
   useEffect(() => {
     const fetchData = async (url, setter) => {
@@ -52,42 +41,13 @@ function EditIncident({ avis, formData, handleEditChange }) {
       }
     };
 
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents",
-      setTypesAvis
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list",
-      setServiceImpacte
-    );
-
-    // if (avis.applicationSis && avis.applicationSis.length > 0) {
-    //   const selectedServiceObjects = avis.applicationSis
-    //     .map((service) => {
-    //       return serviceImpact.find((s) => s.id === service.id);
-    //     })
-    //     .filter(Boolean); // S'assurer qu'on ne récupère que des services valides
-
-    //   setSelectedServices(selectedServiceObjects); // Mettre à jour les services sélectionnés
-    // }
-
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations",
-      setListValidation
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions",
-      setListDiffusion
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis",
-      setTypeCause
-    );
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/services",
-      setServiceSup
-    );
-  }, [avis, token, serviceImpact]);
+    fetchData(`${abelaURL}/typeavisincidents`, setTypesAvis);
+    fetchData(`${abelaURL}/applicationSI/list`, setServiceImpacte);
+    fetchData(`${abelaURL}/listValidations`, setListValidation);
+    fetchData(`${abelaURL}/listDiffusions`, setListDiffusion);
+    fetchData(`${abelaURL}/typeCauseAvis`, setTypeCause);
+    fetchData(`${abelaURL}/services`, setServiceSup);
+  }, [avis, token, serviceImpacte]);
 
   const formatDateForInput = (dateString) => {
     if (!dateString) return "";
@@ -153,7 +113,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <select
                 name="nature"
                 id="nature"
-                className="form-control"
+                className="form-select"
                 value={formData.nature}
                 onChange={handleEditChange}
               >
@@ -169,13 +129,11 @@ function EditIncident({ avis, formData, handleEditChange }) {
               </label>
               <select
                 name="typeAvisIncident.id"
-                className="form-control"
+                className="form-select"
                 value={formData.typeAvisIncident?.id}
                 onChange={handleEditChange}
+                placeholder={avis.typeAvisIncident?.nom}
               >
-                <option value={avis.typeAvisIncident?.id}>
-                  {avis.typeAvisIncident.nom}
-                </option>
                 {typesAvis.map((type) => (
                   <option key={type.id} value={type.id}>
                     {type.nom}
@@ -184,52 +142,40 @@ function EditIncident({ avis, formData, handleEditChange }) {
               </select>
             </div>
             <div className="mb-3 form-group">
-              {/* <div> */}
               <label htmlFor="applicationSis">
                 Services impactés <strong className="text-danger">*</strong> :
               </label>
-              <select
-                name="applicationSis"
-                className="form-control"
-                multiple
-                value={formData.applicationSis}
+              <Select
+                isMulti
+                name="serviceImpacte"
+                options={serviceImpacte.map((service) => ({
+                  value: service.id,
+                  label: service.nom,
+                }))}
+                components={animatedComponents}
+                value={
+                  formData.applicationSis
+                    ? formData.applicationSis.map((service) => ({
+                        value: service.id,
+                        label: service.nom,
+                      }))
+                    : []
+                }
                 onChange={handleServiceChange}
-              >
-                <option value="">Sélectionnez le service</option>
-                {serviceImpact.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.nom}
-                  </option>
-                ))}
-              </select>
+                placeholder="Sélectionnez le(s) service(s)"
+              />
             </div>
-            {/* <div className="mt-2 selected-services">
-                {selectedServices.map((service) => (
-                  <span key={service.id} className="badge bg-primary me-2">
-                    {service.nom}{" "}
-                    <button
-                      type="button"
-                      className="btn-close btn-close-white"
-                      aria-label="Close"
-                      onClick={() => handleRemoveService(service.id)}
-                    ></button>
-                  </span>
-                ))}
-              </div>
-            </div> */}
             <div className="mb-3 form-group">
               <label htmlFor="listeValidation.id">
                 Liste Validation <strong className="text-danger">*</strong> :
               </label>
               <select
                 name="listeValidation.id"
-                className="form-control"
+                className="form-select"
                 value={formData.listValidation?.id}
                 onChange={handleEditChange}
+                placeholder={avis.listeValidation?.nom}
               >
-                <option value={avis.listeValidation?.id}>
-                  {avis.listeValidation?.nom}
-                </option>
                 {listValidation.map((validation) => (
                   <option key={validation.id} value={validation.id}>
                     {validation.nom}
@@ -243,9 +189,10 @@ function EditIncident({ avis, formData, handleEditChange }) {
               </label>
               <select
                 name="listeDiffusion.id"
-                className="form-control"
+                className="form-select"
                 value={formData.listDiffusion?.id}
                 onChange={handleEditChange}
+                placeholder={avis.listeDiffusion?.nom}
               >
                 <option value={avis.listeDiffusion?.id}>
                   {avis.listeDiffusion?.nom}
@@ -287,10 +234,9 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <label htmlFor="autoDateFP">
                 Calcul Date FP <strong className="text-danger">*</strong> :
               </label>
-              {/* if autoDateFP is true, then the value is "Oui" */}
               <select
                 name="autoDateFP"
-                className="form-control"
+                className="form-select"
                 value={formData.autoDateFP}
                 onChange={handleEditChange}
               >
@@ -308,7 +254,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 name="dateFinPrevisionnelle"
                 id="dateFinPrevisionnelle"
                 className="form-control"
-                value={formData.dateFinPrevisionnelle}
+                value={formatDateForInput(formData.dateFinPrevisionnelle)}
                 onChange={handleEditChange}
               />
             </div>
@@ -319,7 +265,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 name="dateFermeture"
                 id="dateFermeture"
                 className="form-control"
-                value={formData.dateFermeture}
+                value={formatDateForInput(formData.dateFermeture)}
                 onChange={handleEditChange}
               />
             </div>
@@ -379,7 +325,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
               </label>
               <select
                 name="causeRetardNotification"
-                className="form-control"
+                className="form-select"
                 value={formData.causeRetardNotification}
                 onChange={handleEditChange}
               >
@@ -394,7 +340,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
               </label>
               <select
                 name="typeCauseIncident.id"
-                className="form-control"
+                className="form-select"
                 value={formData.typeCauseIncident?.id}
                 onChange={handleEditChange}
               >
@@ -416,6 +362,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
                 id="causeProbable"
                 className="form-control"
                 name="causeProbable"
+                rows={4}
                 value={formData.causes}
                 onChange={handleEditChange}
                 placeholder="(*) Demander systématiquement aux TMC(s) les causes probables
@@ -450,7 +397,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <label htmlFor="entite">Entité Responsable :</label>
               <select
                 name="entite"
-                className="form-control"
+                className="form-select"
                 value={formData.entite?.id || ""}
                 onChange={handleEditChange}
               >
@@ -466,7 +413,7 @@ function EditIncident({ avis, formData, handleEditChange }) {
               <label htmlFor="tcm">TMC qui a relevé :</label>
               <select
                 name="tmc"
-                className="form-control"
+                className="form-select"
                 value={formData.tmc?.id || ""}
                 onChange={handleEditChange}
               >

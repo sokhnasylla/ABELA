@@ -4,7 +4,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { TextField } from "@mui/material";
 import { abelaURL } from "../../../../config/global.constant";
 
-function RechercheAvis({ onSearch }) {
+function RechercheAvisFerme({ onSearch }) {
   const [error, setError] = useState("");
   const [numeroAvis, setNumeroAvis] = useState("");
   const [application, setApplication] = useState("");
@@ -54,21 +54,21 @@ function RechercheAvis({ onSearch }) {
 
     try {
       if (numeroAvis) {
-        newUrl = `${abelaURL}/avisIncident/searchedAvisByNumber?numAvis=${numeroAvis}`;
+        newUrl = `${abelaURL}/avisIncident/searchedAvisByNumberNotOpen?numAvis=${numeroAvis}`;
         newHisto = `Résultat de la dernière recherche, Numéro Avis : ${numeroAvis}`;
         errorMessage = "Aucun avis trouvé pour le numéro spécifié";
       } else if (application && dateDebut && dateFin) {
-        newUrl = `${abelaURL}/avisIncidents/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
+        newUrl = `${abelaURL}/avisIncidents/notOpen/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
         newHisto = `Résultat de la dernière recherche, Application : ${application} | Date Début : ${formatDate(
           dateDebut
         )} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = `Aucun avis trouvé pour l'application ${application} sur la période spécifiées`;
       } else if (application) {
-        newUrl = `${abelaURL}/avisIncident/searchedAvisByAppName?nom=${application}`;
+        newUrl = `${abelaURL}/avisIncident/searchedAvisByAppName/notOpen?nom=${application}`;
         newHisto = `Résultat de la dernière recherche, Application : ${application}`;
         errorMessage = "Aucun avis trouvé pour l'application spécifiée";
       } else if (dateDebut && dateFin) {
-        newUrl = `${abelaURL}/avisIncidents/searchedAvis?dateDebut=${dateDebut}&dateFin=${dateFin}`;
+        newUrl = `${abelaURL}/avisIncidents/searchedAvisNotOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
         newHisto = `Résultat de la dernière recherche, Date Début : ${formatDate(
           dateDebut
         )} | Date Fin : ${formatDate(dateFin)}`;
@@ -179,8 +179,6 @@ function RechercheAvis({ onSearch }) {
                     onChange={(e) => setEtat(e.target.value)}
                   >
                     <option value="">Sélectionner un état</option>
-                    <option value="ENCOURS">Ouvert</option>
-                    <option value="REOPEN">Réouvert</option>
                     <option value="FERME">Fermé</option>
                     <option value="CLOTURE">Clôturé</option>
                     <option value="ANNULE">Annulé</option>
@@ -210,4 +208,4 @@ function RechercheAvis({ onSearch }) {
   );
 }
 
-export default RechercheAvis;
+export default RechercheAvisFerme;

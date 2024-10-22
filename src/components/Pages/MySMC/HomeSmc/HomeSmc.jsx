@@ -10,11 +10,13 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import { Modal } from "react-bootstrap";
+import { Modal, Alert } from "react-bootstrap";
 import "./homesmc.css";
 import useAuth from "../../Auth/useAuth";
 import axios from "axios";
 import { getTokenDecode } from "../../Auth/authUtils";
+import { abelaURL } from "../../../../config/global.constant";
+import { set } from "date-fns";
 
 const submenu = [
   { text: "Informations", icon: TfiBlackboard },
@@ -24,7 +26,10 @@ const submenu = [
 
 function HomeSmc() {
   useAuth();
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
   const [informations, setInformations] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
   const [modalInfo, setModalInfo] = useState(false);
   const [etat, setEtat] = useState([]);
   const [error, setError] = useState(null);
@@ -36,6 +41,28 @@ function HomeSmc() {
     message: "",
     etat: "",
   });
+
+  useEffect(() => {
+    const message = localStorage.getItem("alertMessage");
+    const type = localStorage.getItem("alertType");
+
+    if (message && type) {
+      setAlertMessage(message);
+      setAlertType(type);
+      setShowAlert(true);
+
+      localStorage.removeItem("alertMessage");
+      localStorage.removeItem("alertType");
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 5000);
+
+      return () => {
+        clearTimeout();
+      };
+    }
+  }, []);
 
   const handleOpenModal = () => {
     setModalInfo(true);
@@ -60,10 +87,7 @@ function HomeSmc() {
       }
     };
 
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/infos/etat",
-      setEtat
-    );
+    fetchData(`${abelaURL}/avisIncidents/infos/etat`, setEtat);
   }, [token]);
 
   useEffect(() => {
@@ -81,10 +105,7 @@ function HomeSmc() {
       }
     };
 
-    fetchData(
-      "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/infos",
-      setInformations
-    );
+    fetchData(`${abelaURL}/avisIncidents/infos`, setInformations);
   }, [token]);
 
   // Format date to yyyy-mm-dd hh:mm:ss
@@ -127,220 +148,247 @@ function HomeSmc() {
       console.log(formData);
 
       const response = await axios.post(
-        "http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/infos",
+        `${abelaURL}/avisIncidents/infos`,
         formData,
         config
       );
       console.log(response.data);
-      handleCloseModal();
+
+      if (response.status !== 200) {
+        throw new Error("Erreur lors de l'enregistrement");
+      }
+
+      setModalInfo(false);
+      localStorage.setItem(
+        "alertMessage",
+        "Information enregistrée avec succès"
+      );
+      localStorage.setItem("alertType", "success");
+      window.location.reload();
     } catch (error) {
-      localStorage.setItem("error", error.message);
+      localStorage.setItem("alertMessage", "Erreur lors de l'enregistrement");
+      localStorage.setItem("alertType", "danger");
+      window.location.reload();
       setError(`Erreur: ${error.message}`);
     }
   };
 
   return (
     <div id="homsmc">
-      <Row>
-        <Col>
-          <fieldset>
-            <legend
-              style={{
-                fontSize: "21px",
-                color: "#333",
-                borderBottom: "1px solid #e5e5e5",
-                fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
-              }}
-            >
-              {/* <span style={{ float: "left", marginRight: "10px" }}>
+      <Container className="body">
+        <Row>
+          <Col>
+            <fieldset>
+              <legend
+                style={{
+                  fontSize: "21px",
+                  color: "#333",
+                  borderBottom: "1px solid #e5e5e5",
+                  fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
+                }}
+              >
+                {/* <span style={{ float: "left", marginRight: "10px" }}>
                 <img src={menupng} />
               </span>{" "} */}
-              Rubrique des informations utiles
-            </legend>
-          </fieldset>
-          <br />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <MenuLeft submenu={submenu} />
-        </Col>
-        <Col xs={10}>
-          <Container
-            className="blockinf"
-            style={{ borderBottom: "1px solid #e5e5e5" }}
-          >
-            <Button
-              style={{
-                backgroundColor: "#5cb85c",
-                border: "#449D44",
-                fontSize: "14px",
-                fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
-                marginTop: "8px",
-                display: "flex",
-                alignItems: "center",
-              }}
-              onClick={handleOpenModal}
+                Rubrique des informations utiles
+              </legend>
+            </fieldset>
+            <br />
+          </Col>
+        </Row>
+        <div className="container mt-3">
+          {showAlert && (
+            <Alert
+              variant={alertType}
+              onClose={() => setShowAlert(false)}
+              dismissible
             >
-              <FaPlusCircle /> &nbsp; Partager une information
-            </Button>
-            <Modal
-              show={modalInfo}
-              onHide={handleCloseModal}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
+              {alertMessage}
+            </Alert>
+          )}
+        </div>
+        <Row>
+          <Col>
+            <MenuLeft submenu={submenu} />
+          </Col>
+          <Col xs={10}>
+            <Container
+              className="blockinf"
+              style={{ borderBottom: "1px solid #e5e5e5" }}
             >
-              <Modal.Header closeButton>
-                <Modal.Title>Partager une information</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <form action="">
-                  <div className="form-group">
-                    <label htmlFor="titre">Titre</label>
-                    <input
-                      name="titre"
-                      variant="outlined"
-                      size="small"
-                      className="form-control"
-                      placeholder="minimum 3 caratéres"
-                      required
-                      value={formData.titre}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group mt-3">
-                    <label htmlFor="type">Type</label>
-                    <select
-                      name="type"
-                      onChange={handleChange}
-                      className="form-control"
-                      value={formData.type}
-                      size="small"
-                      required
-                    >
-                      <option value="">Choisir le type</option>
-                      <option value="ATP">ATP</option>
-                      <option value="Supervision">Supervision</option>
-                      <option value="Maintenance">Maintenance</option>
-                      <option value="Nouveautés">Nouveautés</option>
-                    </select>
-                  </div>
-                  <div className="form-group mt-3">
-                    <label htmlFor="message">Message</label>
-                    <input
-                      name="message"
-                      variant="outlined"
-                      size="small"
-                      className="form-control"
-                      placeholder="minimum 3 caratéres"
-                      required
-                      value={formData.message}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group mt-3">
-                    <label htmlFor="etat">Criticité</label>
-                    <select
-                      name="etat"
-                      onChange={handleChange}
-                      className="form-control"
-                      value={formData.etat}
-                      size="small"
-                      required
-                    >
-                      <option value="">Choisir la criticité</option>
-                      {etat.map((etat) => (
-                        <option key={etat} value={etat}>
-                          {etat}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </form>
-                {error && (
-                  <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
-                )}
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="danger" onClick={handleCloseModal}>
-                  Annuler
-                </Button>
-                <Button variant="success" onClick={handleSubmit}>
-                  {" "}
-                  Enregistrer
-                </Button>
-              </Modal.Footer>
-            </Modal>
-            <hr />
-            <Timeline
-              sx={{
-                [`& .${timelineItemClasses.root}:before`]: {
-                  flex: 0,
-                  padding: 0,
-                },
-                height: "350px",
-                overflowY: "auto",
-                position: "relative",
-              }}
-            >
-              {informations.map((info) => (
-                <TimelineItem>
-                  <TimelineSeparator>
-                    <TimelineDot variant="outlined" color="primary" />
-                    <TimelineConnector />
-                  </TimelineSeparator>
-                  <TimelineContent
-                    sx={{ fontSize: "14px", fontFamily: "inherit" }}
-                  >
-                    <div key={info.id}>
-                      <b>{info.titre}</b>
-                      &nbsp;
-                      {info.etat === "Faible" ? (
-                        <span
-                          style={{
-                            backgroundColor: "#148C8A",
-                            color: "white",
-                            borderRadius: "5px",
-                            fontSize: "14px",
-                            padding: "2px",
-                          }}
-                        >
-                          Criticité : {info.etat}
-                        </span>
-                      ) : info.etat === "Moyen" ? (
-                        <span
-                          style={{
-                            backgroundColor: "#FFA500",
-                            color: "white",
-                            borderRadius: "5px",
-                            fontSize: "14px",
-                            padding: "2px",
-                          }}
-                        >
-                          Criticité : {info.etat}
-                        </span>
-                      ) : (
-                        <span
-                          style={{
-                            backgroundColor: "#C9302C",
-                            color: "white",
-                            borderRadius: "5px",
-                            fontSize: "14px",
-                            padding: "2px",
-                          }}
-                        >
-                          Criticité : {info.etat}
-                        </span>
-                      )}
-                      <h6 style={{ color: "#ea7714", fontSize: "12px" }}>
-                        {formatDate(info.datePublication)}, {info.user}
-                      </h6>
-                      <i> {info.message}</i>
+              <Button
+                style={{
+                  backgroundColor: "#5cb85c",
+                  border: "#449D44",
+                  fontSize: "14px",
+                  fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
+                  marginTop: "8px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={handleOpenModal}
+              >
+                <FaPlusCircle /> &nbsp; Partager une information
+              </Button>
+              <Modal
+                show={modalInfo}
+                onHide={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Partager une information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <form action="">
+                    <div className="form-group">
+                      <label htmlFor="titre">Titre</label>
+                      <input
+                        name="titre"
+                        variant="outlined"
+                        size="small"
+                        className="form-control"
+                        placeholder="minimum 3 caratéres"
+                        required
+                        value={formData.titre}
+                        onChange={handleChange}
+                      />
                     </div>
-                  </TimelineContent>
-                </TimelineItem>
-              ))}
-              {/* <TimelineItem>
+                    <div className="form-group mt-3">
+                      <label htmlFor="type">Type</label>
+                      <select
+                        name="type"
+                        onChange={handleChange}
+                        className="form-select"
+                        value={formData.type}
+                        size="small"
+                        required
+                      >
+                        <option value="">Choisir le type</option>
+                        <option value="ATP">ATP</option>
+                        <option value="Supervision">Supervision</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Nouveautés">Nouveautés</option>
+                      </select>
+                    </div>
+                    <div className="form-group mt-3">
+                      <label htmlFor="message">Message</label>
+                      <input
+                        name="message"
+                        variant="outlined"
+                        size="small"
+                        className="form-control"
+                        placeholder="minimum 3 caratéres"
+                        required
+                        value={formData.message}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group mt-3">
+                      <label htmlFor="etat">Criticité</label>
+                      <select
+                        name="etat"
+                        onChange={handleChange}
+                        className="form-select"
+                        value={formData.etat}
+                        size="small"
+                        required
+                      >
+                        <option value="">Choisir la criticité</option>
+                        {etat.map((etat) => (
+                          <option key={etat} value={etat}>
+                            {etat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </form>
+                  {error && (
+                    <div style={{ color: "red", marginTop: "10px" }}>
+                      {error}
+                    </div>
+                  )}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="danger" onClick={handleCloseModal}>
+                    Annuler
+                  </Button>
+                  <Button variant="success" onClick={handleSubmit}>
+                    {" "}
+                    Enregistrer
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+              <hr />
+              <Timeline
+                sx={{
+                  [`& .${timelineItemClasses.root}:before`]: {
+                    flex: 0,
+                    padding: 0,
+                  },
+                  height: "350px",
+                  overflowY: "auto",
+                  position: "relative",
+                }}
+              >
+                {informations.map((info) => (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot variant="outlined" color="primary" />
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent
+                      sx={{ fontSize: "14px", fontFamily: "inherit" }}
+                    >
+                      <div key={info.id}>
+                        <b>{info.titre}</b>
+                        &nbsp;
+                        {info.etat === "FAIBLE" ? (
+                          <span
+                            style={{
+                              backgroundColor: "#148C8A",
+                              color: "white",
+                              borderRadius: "5px",
+                              fontSize: "14px",
+                              padding: "2px",
+                            }}
+                          >
+                            Criticité : {info.etat}
+                          </span>
+                        ) : info.etat === "MOYENNE" ? (
+                          <span
+                            style={{
+                              backgroundColor: "#FFA500",
+                              color: "white",
+                              borderRadius: "5px",
+                              fontSize: "14px",
+                              padding: "2px",
+                            }}
+                          >
+                            Criticité : {info.etat}
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              backgroundColor: "#C9302C",
+                              color: "white",
+                              borderRadius: "5px",
+                              fontSize: "14px",
+                              padding: "2px",
+                            }}
+                          >
+                            Criticité : {info.etat}
+                          </span>
+                        )}
+                        <h6 style={{ color: "#ea7714", fontSize: "12px" }}>
+                          {formatDate(info.datePublication)}, {info.user}
+                        </h6>
+                        <i> {info.message}</i>
+                      </div>
+                    </TimelineContent>
+                  </TimelineItem>
+                ))}
+                {/* <TimelineItem>
                 <TimelineSeparator>
                   <TimelineDot variant="outlined" color="primary" />
                   <TimelineConnector />
@@ -627,10 +675,11 @@ function HomeSmc() {
                   </i>
                 </TimelineContent>
               </TimelineItem> */}
-            </Timeline>
-          </Container>
-        </Col>
-      </Row>
+              </Timeline>
+            </Container>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }

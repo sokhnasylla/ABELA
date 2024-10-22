@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../../Card/Title/Title";
 import periode from "../../../../assets/periode.png";
-import { Container, Row, Col, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Modal,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap"; // Add OverlayTrigger and Tooltip
 import { InputLabel, TextField, Grid } from "@mui/material";
 import {
   BarChart,
@@ -16,6 +24,7 @@ import "./StatistiqueIncident.css";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import RechercheStatistiques from "./RechercheStatistiques";
+import { abelaURL } from "../../../../config/global.constant";
 
 // Composant CustomTooltip
 const CustomTooltip = ({ active, payload, label }) => {
@@ -57,7 +66,7 @@ function StatistiqueIncident() {
   const [dateDebut, setDateDebut] = useState(start);
   const [dateFin, setDateFin] = useState(end);
   const [dataUrl, setDataUrl] = useState(
-    `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`
+    `${abelaURL}/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`
   );
 
   const handleStatsSubmit = (url, histo) => {
@@ -86,7 +95,7 @@ function StatistiqueIncident() {
     setDateDebut(start);
     setDateFin(end);
     setDataUrl(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`
+      `${abelaURL}/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`
     );
     setShowStatModal(false);
     setHisto(period);
@@ -133,57 +142,46 @@ function StatistiqueIncident() {
 
   return (
     <div className="dashboard">
-      <Title text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`} />
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip>
-            Sélectionnez une période pour afficher les statistiques d'incidents
-          </Tooltip>
-        }
-      >
-        
-          <img height="40" width= "40" src={periode} style={{ cursor: 'pointer' }} alt="" onClick={handleStatShow}/>
-      </OverlayTrigger>
-
-      <Modal
-        show={showStatModal}
-        onHide={handleStatClose}
-        dialogClassName="custom-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Statistiques</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <RechercheStatistiques onSearch={handleStatsSubmit} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleStatClose}>
-            Fermer
-          </Button>
-        </Modal.Footer>
-      </Modal>
-        &nbsp;
-      {dataUrl !==
-        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` && (
+      <Title
+        text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
+      />
+      <div className="mt-4 d-flex align-items-center mb-4">
         <OverlayTrigger
           placement="top"
           overlay={
             <Tooltip>
-              Réinitialiser la période pour afficher les statistiques par défaut
+              Sélectionnez une période pour afficher les statistiques
+              d'incidents
             </Tooltip>
           }
         >
-          <Button
-            variant="danger"
-            onClick={reinitHisto}
-            className="mt-5 ml-5 mb-2"
-          >
-            Default
-          </Button>
+          <img
+            height="40"
+            width="40"
+            src={periode}
+            style={{ cursor: "pointer" }}
+            alt=""
+            onClick={handleStatShow}
+          />
         </OverlayTrigger>
-      )}
-
+        &nbsp;
+        {dataUrl !==
+          `${abelaURL}/avisIncident/statistique/search?dateDebut=${start}&dateFin=${end}` && (
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip>
+                Réinitialiser la période pour afficher les statistiques par
+                défaut
+              </Tooltip>
+            }
+          >
+            <Button variant="danger" onClick={reinitHisto}>
+              &times;
+            </Button>
+          </OverlayTrigger>
+        )}
+      </div>
       <Row className="mb-4">
         <Col
           xs={12}
@@ -202,10 +200,14 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#a94442" }}>
-              {tauxNotificationAvis !== null ? `${tauxNotificationAvis.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "15px", fontWeight: "bold", color: "#a94442" }}
+            >
+              {tauxNotificationAvis !== null
+                ? `${tauxNotificationAvis.toFixed(2)} %`
+                : "0 %"}
             </div>
-            <div >Notification Avis</div>
+            <div>Notification Avis</div>
           </Grid>
         </Col>
 
@@ -226,10 +228,14 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#31708f" }}>
-              {tauxDetectionAvis !== null ? `${tauxDetectionAvis.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "15px", fontWeight: "bold", color: "#31708f" }}
+            >
+              {tauxDetectionAvis !== null
+                ? `${tauxDetectionAvis.toFixed(2)} %`
+                : "0 %"}
             </div>
-            <div >Détection Avis</div>
+            <div>Détection Avis</div>
           </Grid>
         </Col>
 
@@ -250,10 +256,14 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#8a6d3b" }}>
-              {tauxTraitement4H !== null ? `${tauxTraitement4H.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "15px", fontWeight: "bold", color: "#8a6d3b" }}
+            >
+              {tauxTraitement4H !== null
+                ? `${tauxTraitement4H.toFixed(2)} %`
+                : "0 %"}
             </div>
-            <div >Traitement  4H</div>
+            <div>Traitement 4H</div>
           </Grid>
         </Col>
 
@@ -274,16 +284,22 @@ function StatistiqueIncident() {
               padding: "10px",
             }}
           >
-            <div style={{ fontSize: "15px", fontWeight: "bold", color: "#3c763d" }}>
-              {tauxTraitement24H !== null ? `${tauxTraitement24H.toFixed(2)} %` : "0 %"}
+            <div
+              style={{ fontSize: "15px", fontWeight: "bold", color: "#3c763d" }}
+            >
+              {tauxTraitement24H !== null
+                ? `${tauxTraitement24H.toFixed(2)} %`
+                : "0 %"}
             </div>
-            <div >Traitement  24H</div>
+            <div>Traitement 24H</div>
           </Grid>
         </Col>
       </Row>
-      
-      <ResponsiveContainer   width="100%" height={400}>
-        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart
+          data={data}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
@@ -291,6 +307,23 @@ function StatistiqueIncident() {
           <Bar dataKey="value" fill="#FFA500" />
         </BarChart>
       </ResponsiveContainer>
+      <Modal
+        show={showStatModal}
+        onHide={handleStatClose}
+        dialogClassName="custom-modal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Statistiques</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <RechercheStatistiques onSearch={handleStatsSubmit} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleStatClose}>
+            Fermer
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

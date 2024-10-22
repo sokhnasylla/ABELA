@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { InputLabel, TextField } from "@mui/material";
+import { abelaURL } from "../../../../config/global.constant";
 
 function RechercheStatistiques({ onSearch }) {
   const [error, setError] = useState(""); // State for error messages
@@ -39,7 +40,7 @@ function RechercheStatistiques({ onSearch }) {
 
     try {
       if (dateDebut && dateFin) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`;
+        newUrl = `${abelaURL}/avisIncident/statistique/search?dateDebut=${dateDebut}&dateFin=${dateFin}`;
         newHisto = `Début : ${dateDebut} |  Fin : ${dateFin}`;
         errorMessage = "Aucune donnée disponible pour la période spécifiée";
       } else {

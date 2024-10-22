@@ -21,6 +21,7 @@ import Role from './components/Pages/Dashboard/Role/Role';
 import Layout from './components/layout';
 import LayoutAdmin from './components/layout-admin';
 import DetailsIncident from './components/Pages/MySMC/GestionIncident/DetailsIncident';
+import AjoutPA from './components/Pages/MySMC/GestionIncident/AjoutPA';
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="/network" element={<Layout><Network /></Layout>} />
             <Route path="/mysmc/gestionprobleme" element={<Layout><GestionProbleme/></Layout>} />
             {<Route path="/mysmc/gestionincident" element={<Layout><GestionIncident /></Layout>} />}
+            <Route path="/mysmc/gestionincident/ajoutPA/:id" element={<Layout><AjoutPA /></Layout>} />
             {/* <Route path="/gestionincident/ajoutavis" element={<Layout><AjoutAvis /></Layout>} />
             <Route path="/gestionincident/rechercheavis" element={<Layout><RechercheAvis /></Layout>} />
             <Route path="/gestionincident/statistique" element={<Layout><StatistiqueIncident /></Layout>} />

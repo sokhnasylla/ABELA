@@ -16,6 +16,7 @@ import {
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import EditIncident from "./EditIncident";
 import axios from "axios";
+import { abelaURL } from "../../../../config/global.constant";
 
 function MenuDetailsIncident({ avis }) {
   const [contenu, setContenu] = useState("");
@@ -78,7 +79,7 @@ function MenuDetailsIncident({ avis }) {
       try {
         console.log(avis);
         const response = await fetch(
-          `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/closed`,
+          `${abelaURL}/avisIncident/${avis.id}/closed`,
           {
             method: "PUT",
             headers: {
@@ -114,16 +115,13 @@ function MenuDetailsIncident({ avis }) {
 
   const handleSuppressionAvis = async (id) => {
     try {
-      const response = await fetch(
-        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${abelaURL}/avisIncident/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) throw new Error("Erreur lors de la suppression");
 
@@ -153,7 +151,7 @@ function MenuDetailsIncident({ avis }) {
   const handleValiderSubmit = async (id) => {
     try {
       const response = await fetch(
-        // `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${id}/validated`,
+        // `${abelaURL}/avisIncident/${id}/validated`,
         {
           method: "PUT",
           headers: {
@@ -207,6 +205,17 @@ function MenuDetailsIncident({ avis }) {
     }
   };
 
+  const handleServiceChange = (selectedOptions) => {
+    const selectedServices = selectedOptions.map((option) => ({
+      id: option.value,
+      nom: option.label,
+    }));
+    setFormData((prevState) => ({
+      ...prevState,
+      applicationSis: selectedServices,
+    }));
+  };
+
   const handleEditSubmit = async () => {
     try {
       const config = {
@@ -217,7 +226,7 @@ function MenuDetailsIncident({ avis }) {
       };
       console.log(formData);
       const response = await axios.put(
-        `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
+        `${abelaURL}/avisIncident/${avis.id}`,
         formData,
         config
       );
@@ -500,9 +509,7 @@ function MenuDetailsIncident({ avis }) {
                     flexGrow: 1,
                     textAlign: "center",
                   }}
-                  onClick={() =>
-                    handleShowEditModal()
-                  }
+                  onClick={() => handleShowEditModal()}
                 >
                   Edition de l'avis
                 </button>
@@ -713,13 +720,16 @@ function MenuDetailsIncident({ avis }) {
         style={{ width: "100%", textAlign: "" }}
       >
         <Modal.Header closeButton>
-          <Modal.Title style={{ textAlign: "center" }}>Edition de l'avis</Modal.Title>
+          <Modal.Title style={{ textAlign: "center" }}>
+            Edition de l'avis
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <EditIncident
             avis={avis}
             formData={formData}
             handleEditChange={handleEditChange}
+            handleServiceChange={handleServiceChange}
           />
         </Modal.Body>
         <Modal.Footer>

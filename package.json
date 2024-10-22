@@ -31,6 +31,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.22.3",
     "react-scripts": "^5.0.1",
+    "react-select": "^5.8.1",
     "recharts": "^2.10.3",
     "sweetalert2": "^11.6.13",
     "use-places-autocomplete": "^4.0.1",

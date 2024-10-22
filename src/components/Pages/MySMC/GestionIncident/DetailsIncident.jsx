@@ -21,13 +21,14 @@ import Title from "../../../Card/Title/Title";
 import MenuMysmc from "../Menu/MenuMysmc";
 import MenuDetailsIncident from "./MenuDetails";
 import "./detail.css";
+import { abelaURL } from "../../../../config/global.constant";
 
 function DetailsIncident() {
+  const avis = JSON.parse(localStorage.getItem("avis"));
   const [incident, setIncident] = useState(null);
   const [historique, setHistorique] = useState([]);
   const token = getTokenFromLocalStorage();
   const location = useLocation();
-  const avis = location.state?.avis;
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -55,10 +56,7 @@ function DetailsIncident() {
         console.error("Erreur:", error);
       }
     };
-    fetchIncident(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}`,
-      setIncident
-    );
+    fetchIncident(`${abelaURL}/avisIncident/${avis.id}`, setIncident);
   }, [token, avis.id]);
 
   const fetchHistorique = async (url, setter) => {
@@ -80,7 +78,7 @@ function DetailsIncident() {
 
   useEffect(() => {
     fetchHistorique(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique?page=${currentPage}&limit=${itemsPerPage}`,
+      `${abelaURL}/avisIncident/${avis.id}/historique?pageNumber=${currentPage}&pageSize=${itemsPerPage}`,
       setHistorique
     );
   }, [token, avis.id, currentPage]);
@@ -110,7 +108,7 @@ function DetailsIncident() {
 
   const handlePageChange = (pageNumber) => {
     fetchHistorique(
-      `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/${avis.id}/historique?page=${pageNumber}&limit=${itemsPerPage}`,
+      `${abelaURL}/avisIncident/${avis.id}/historique?pageNumber=${pageNumber}&pageSize=${itemsPerPage}`,
       setHistorique
     );
     setCurrentPage(pageNumber);

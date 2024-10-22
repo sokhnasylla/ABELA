@@ -1,11 +1,13 @@
-.form{
+.form {
     width: 50%;
 }
+
 .custom-table {
     margin: 0;
     table-layout: fixed;
-   
-    border: 1px solid #ddd; /* Ajoute une bordure à la table */
+
+    border: 1px solid #ddd;
+    /* Ajoute une bordure à la table */
 }
 
 .custom-table td,
@@ -24,7 +26,7 @@
     /*border-collapse: collapse;
      box-sizing: border-box; */
     max-width: 100%;
-    
+
 }
 
 #text {
@@ -32,40 +34,45 @@
     color: white;
     text-align: center;
 }
+
 .align-right {
     display: flex;
     justify-content: flex-end;
-   
+
 }
+
 .align-right {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
 }
 
-.align-right > * {
-    margin-right: 8px; 
+.align-right>* {
+    margin-right: 8px;
     font-size: 14px;
 }
-#demo-simple-select-label{
+
+#demo-simple-select-label {
     font-family: fantasy;
-    font-size:14px;
-    font-weight:700;
-    color:#000;
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
     margin-bottom: 3px;
 }
- #bouton{   
-    border:#449D44;
-    font-size:14px;
-    font-Family:Helvetica Neue,Helvetica,Arial,sans-serif;
-    color:white;
-} 
 
-#title{
-   margin-top: 1.5%;
+#bouton {
+    border: #449D44;
+    font-size: 14px;
+    font-Family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: white;
 }
-#search{
+
+#title {
+    margin-top: 1.5%;
+}
+
+#search {
     position: relative;
     color: white;
     width: 45px;
@@ -75,12 +82,14 @@
     border-radius: 3px;
     top: 20px;
 }
+
 alert-info {
     color: #31708f;
-    background-color:#D9EDF7;
-    border:#D9EDF7;
-    
+    background-color: #D9EDF7;
+    border: #D9EDF7;
+
 }
+
 .alert {
     padding: 15px;
     margin-bottom: 20px;
@@ -99,7 +108,8 @@ h5 {
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.grid{
+
+.grid {
     width: 220px;
     display: flex;
     padding: 10px 15px;
@@ -108,7 +118,51 @@ h5 {
     border-top-right-radius: 3px;
     border-color: #ebccd1;
 }
+
 .active-status {
     background-color: green;
-  }
-  
+}
+
+/* ajoutavis.css */
+
+/* Increase the font size of all form labels */
+.form-group label {
+    font-size: 1rem;
+    /* Adjust the size as needed */
+    font-weight: bold;
+    color: #333;
+    /* Optional: change the label color */
+}
+
+/* Additional styling for required labels */
+.form-group label .text-danger {
+    color: red;
+}
+
+/* Optional: Add spacing between the label and the input field */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Optional: Customize form control appearance */
+.form-control,
+.form-select {
+    font-size: 1rem;
+    padding: 0.75rem;
+}
+
+/* Table and headings */
+.custom-table th,
+.custom-table td {
+    font-size: 1rem;
+}
+
+#ajoutavis th#text {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* Optional: General container padding */
+.body {
+    padding: 2rem;
+}

@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, } from "react-bootstrap";
+import { Container, Row, Col, Table } from "react-bootstrap";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import "../../../Pages/MySMC/Menu/menumysmc.css";
 import axios from "axios";
 import Title from "../../../Card/Title/Title";
 import { getTokenFromLocalStorage } from "../../Auth/authUtils";
+import { abelaURL } from "../../../../config/global.constant";
+import "./ajoutavis.css";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
-function AddIncident({ formData, handleChange }) {
+function AddIncident({ formData, handleChange, handleServiceChange }) {
   const token = getTokenFromLocalStorage();
   const [error, setError] = useState("");
   const [typesAvis, setTypesAvis] = useState([]);
-  const [serviceImpacte, setServiceImpacte] = useState([]);
   const [listValidation, setListValidation] = useState([]);
   const [listDiffusion, setListDiffusion] = useState([]);
   const [typeCause, setTypeCause] = useState([]);
-  
+  const [serviceImpacte, setServiceImpacte] = useState([]);
+
+  const animatedComponents = makeAnimated();
+
   useEffect(() => {
     const fetchData = async (url, setter) => {
       try {
@@ -30,11 +36,11 @@ function AddIncident({ formData, handleChange }) {
       }
     };
 
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeavisincidents", setTypesAvis);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/applicationSI/list", setServiceImpacte);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listValidations", setListValidation);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/listDiffusions", setListDiffusion);
-    fetchData("http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/typeCauseAvis", setTypeCause);
+    fetchData(`${abelaURL}/typeavisincidents`, setTypesAvis);
+    fetchData(`${abelaURL}/applicationSI/list`, setServiceImpacte);
+    fetchData(`${abelaURL}/listValidations`, setListValidation);
+    fetchData(`${abelaURL}/listDiffusions`, setListDiffusion);
+    fetchData(`${abelaURL}/typeCauseAvis`, setTypeCause);
   }, [token]);
 
   return (
@@ -71,217 +77,230 @@ function AddIncident({ formData, handleChange }) {
             </Table>
           </Col>
         </Row>
-          <Row>
-            <Col sm={6}>
-              <Title text="Correspondance avis" />
-              <div className="mb-3 form-group">
-                <label htmlFor="objet">Objet <strong className="text-danger">*</strong> :</label>
-                <input
-                  type="text"
-                  name="objet"
-                  id="objet"
-                  autoFocus
-                  className="form-control"
-                  value={formData.objet}
-                  onChange={handleChange}
-                />
-              </div>
+        <Row>
+          <Col sm={6}>
+            <Title text="Correspondance avis" />
+            <div className="mb-3 form-group">
+              <label htmlFor="objet">
+                Objet <strong className="text-danger">*</strong> :
+              </label>
+              <input
+                type="text"
+                name="objet"
+                id="objet"
+                autoFocus
+                className="form-control"
+                value={formData.objet}
+                onChange={handleChange}
+              />
+            </div>
 
-              <div className="mb-3 form-group">
-                <label htmlFor="nature">Nature <strong className="text-danger">*</strong> :</label>
-                <select
-                  name="nature"
-                  id="nature"
-                  className="form-control"
-                  value={formData.nature}
-                  onChange={handleChange}
-                >
-                  <option value="">Sélectionnez la nature</option>
-                  <option value="SI">SI</option>
-                  <option value="DATA">DATA</option>
-                  <option value="CONTENU">CONTENU</option>
-                </select>
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="typeAvisIncident.id">Type avis <strong className="text-danger">*</strong> :</label>
-                <select
-                  name="typeAvisIncident.id"
-                  className="form-control"
-                  value={formData.typeAvisIncident?.id}
-                  onChange={handleChange}
-                >
-                  <option value="">Sélectionnez le type</option>
-                  {typesAvis.map((type) => (
-                    <option key={type.id} value={type.id}>
-                      {type.nom}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="serviceImpacte">Services impactés <strong className="text-danger">*</strong> :</label>
-                <select
-                  name="serviceImpacte"
-                  className="form-control"
-                  value={formData.serviceImpacte}
-                  onChange={handleChange}
-                >
-                  <option value="">Sélectionnez le service</option>
-                  {serviceImpacte.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.nom}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="listeValidation.id">Validation <strong className="text-danger">*</strong> :</label>
-                <select
-                  name="listeValidation.id"
-                  className="form-control"
-                  value={formData.listeValidation?.id}
-                  onChange={handleChange}
-                >
-                  <option value="">Sélectionnez la validation</option>
-                  {listValidation.map((validation) => (
-                    <option key={validation.id} value={validation.id}>
-                      {validation.nom}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="listeDiffusion.id">Diffusion <strong className="text-danger">*</strong> :</label>
-                <select
-                  name="listeDiffusion.id"
-                  className="form-control"
-                  value={formData.listeDiffusion?.id}
-                  onChange={handleChange}
-                >
-                  <option value="">Sélectionnez la diffusion</option>
-                  {listDiffusion.map((diff) => (
-                    <option key={diff.id} value={diff.id}>
-                      {diff.nom}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="dateDebut">Date de début :</label>
-                <input
-                  type="datetime-local"
-                  name="dateDebut"
-                  id="dateDebut"
-                  className="form-control"
-                  value={formData.dateDebut}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="dateDetection">Date de détection :</label>
-                <input
-                  type="datetime-local"
-                  name="dateDetection"
-                  id="dateDetection"
-                  className="form-control"
-                  value={formData.dateDetection}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="numTicketEZV">Ticket EZV :</label>
-                <input
-                  type="text"
-                  name="numTicketEZV"
-                  id="numTicketEZV"
-                  className="form-control"
-                  value={formData.numTicketEZV}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="numTicketOceane">Ticket Océane :</label>
-                <input
-                  type="text"
-                  name="numTicketOceane"
-                  id="numTicketOceane"
-                  className="form-control"
-                  value={formData.numTicketOceane}
-                  onChange={handleChange}
-                />
-              </div>
-            </Col>
+            <div className="mb-3 form-group">
+              <label htmlFor="nature">
+                Nature <strong className="text-danger">*</strong> :
+              </label>
+              <select
+                name="nature"
+                id="nature"
+                className="form-select"
+                value={formData.nature}
+                onChange={handleChange}
+              >
+                <option value="">Sélectionnez la nature</option>
+                <option value="SI">SI</option>
+                <option value="DATA">DATA</option>
+                <option value="CONTENU">CONTENU</option>
+              </select>
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="typeAvisIncident.id">
+                Type avis <strong className="text-danger">*</strong> :
+              </label>
+              <select
+                name="typeAvisIncident.id"
+                className="form-select"
+                value={formData.typeAvisIncident?.id}
+                onChange={handleChange}
+              >
+                <option value="">Sélectionnez le type</option>
+                {typesAvis.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="serviceImpacte">
+                Services impactés <strong className="text-danger">*</strong> :
+              </label>
+              <Select
+                isMulti
+                name="serviceImpacte"
+                options={serviceImpacte.map((service) => ({
+                  value: service.id,
+                  label: service.nom,
+                }))}
+                components={animatedComponents}
+                value={formData.serviceImpacte}
+                onChange={handleServiceChange}
+                placeholder="Sélectionnez le(s) service(s)"
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="listeValidation.id">
+                Validation <strong className="text-danger">*</strong> :
+              </label>
+              <select
+                name="listeValidation.id"
+                className="form-select"
+                value={formData.listeValidation?.id}
+                onChange={handleChange}
+              >
+                <option value="">Sélectionnez la validation</option>
+                {listValidation.map((validation) => (
+                  <option key={validation.id} value={validation.id}>
+                    {validation.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="listeDiffusion.id">
+                Diffusion <strong className="text-danger">*</strong> :
+              </label>
+              <select
+                name="listeDiffusion.id"
+                className="form-select"
+                value={formData.listeDiffusion?.id}
+                onChange={handleChange}
+              >
+                <option value="">Sélectionnez la diffusion</option>
+                {listDiffusion.map((diff) => (
+                  <option key={diff.id} value={diff.id}>
+                    {diff.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="dateDebut">Date de début :</label>
+              <input
+                type="datetime-local"
+                name="dateDebut"
+                id="dateDebut"
+                className="form-control"
+                value={formData.dateDebut}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="dateDetection">Date de détection :</label>
+              <input
+                type="datetime-local"
+                name="dateDetection"
+                id="dateDetection"
+                className="form-control"
+                value={formData.dateDetection}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="numTicketEZV">Ticket EZV :</label>
+              <input
+                type="text"
+                name="numTicketEZV"
+                id="numTicketEZV"
+                className="form-control"
+                value={formData.numTicketEZV}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="numTicketOceane">Ticket Océane :</label>
+              <input
+                type="text"
+                name="numTicketOceane"
+                id="numTicketOceane"
+                className="form-control"
+                value={formData.numTicketOceane}
+                onChange={handleChange}
+              />
+            </div>
+          </Col>
 
-            <Col sm={6}>
-              <Title text="Causes et impacts" />
-              <div className="form-group">
-                <label htmlFor="impact">Impacts <strong className="text-danger">*</strong> :</label>
-                <textarea
-                  id="impact"
-                  className="form-control"
-                  name="impact"
-                  value={formData.impact}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-3 form-group">
-                <label htmlFor="causeRetardid">Cause du retard :</label>
-              
-                  
-                <select
-                  name="causeRetardid"
-                  className="form-control"
-                  value={formData.causeRetard?.id}
-                  onChange={handleChange}
-                >
-                  <option value="">Sélectionnez la cause</option>            
-                  <option value="SI">Retard détection</option>
-                  <option value="DATA">Non supervisé</option>
-                </select>
-              </div> 
-              <div className="mb-3 form-group">
-                <label htmlFor="typeCauseIncident.id">
-                  Origine Cause <strong className="text-danger">*</strong> :
-                </label>
-                <select
-                  name="typeCauseIncident.id"
-                  className="form-control"
-                  value={formData.typeCauseIncident?.id}
-                  onChange={handleChange}
-                >
-
-                  {typeCause.map((cause) => (
-                    <option key={cause.id} value={cause.id}>
-                      {cause.intitule}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label htmlFor="causeProbable">Cause probable <strong className="text-danger">*</strong> :</label>
-                <textarea
-                  id="causeProbable"
-                  className="form-control"
-                  name="causeProbable"
-                  value={formData.causes}
-                  onChange={handleChange}
-                  placeholder="(*) Demander systématiquement aux TMC(s) les causes probables
+          <Col sm={6}>
+            <Title text="Causes et impacts" />
+            <div className="form-group">
+              <label htmlFor="impact">
+                Impacts <strong className="text-danger">*</strong> :
+              </label>
+              <textarea
+                id="impact"
+                className="form-control"
+                name="impact"
+                value={formData.impact}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="causeRetardid">Cause du retard :</label>
+              <select
+                name="causeRetardid"
+                className="form-select"
+                value={formData.causeRetard?.id}
+                onChange={handleChange}
+              >
+                <option value="">Sélectionnez la cause</option>
+                <option value="SI">Retard détection</option>
+                <option value="DATA">Non supervisé</option>
+              </select>
+            </div>
+            <div className="mb-3 form-group">
+              <label htmlFor="typeCauseIncident.id">
+                Origine Cause <strong className="text-danger">*</strong> :
+              </label>
+              <select
+                name="typeCauseIncident.id"
+                className="form-select"
+                value={formData.typeCauseIncident?.id}
+                onChange={handleChange}
+              >
+                {typeCause.map((cause) => (
+                  <option key={cause.id} value={cause.id}>
+                    {cause.intitule}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="causeProbable">
+                Cause probable <strong className="text-danger">*</strong> :
+              </label>
+              <textarea
+                id="causeProbable"
+                className="form-control"
+                name="causeProbable"
+                rows={4}
+                value={formData.causes}
+                onChange={handleChange}
+                placeholder="(*) Demander systématiquement aux TMC(s) les causes probables
                       (*) Eviter les expressions « Investigations en Cours » ; « causes inconnues » et préférer mettre « constat : xxxxxxxx »"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="observations">Observations :</label>
-                <textarea
-                  id="observations"
-                  className="form-control"
-                  name="observations"
-                  value={formData.observations}
-                  onChange={handleChange}
-                  placeholder="Renseigner les observations"
-                />
-              </div>
-            </Col>
-          </Row>
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="observations">Observations :</label>
+              <textarea
+                id="observations"
+                className="form-control"
+                name="observations"
+                value={formData.observations}
+                onChange={handleChange}
+                placeholder="Renseigner les observations"
+              />
+            </div>
+          </Col>
+        </Row>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </Container>
     </div>

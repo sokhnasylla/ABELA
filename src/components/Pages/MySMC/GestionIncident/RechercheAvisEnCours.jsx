@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { TextField } from "@mui/material";
+import { abelaURL } from "../../../../config/global.constant";
 
 function RechercheAvisEnCours({ onSearch }) {
   const [error, setError] = useState("");
@@ -53,27 +54,27 @@ function RechercheAvisEnCours({ onSearch }) {
 
     try {
       if (numeroAvis) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByNumberOpen?numAvis=${numeroAvis}`;
+        newUrl = `${abelaURL}/avisIncident/searchedAvisByNumberOpen?numAvis=${numeroAvis}`;
         newHisto = `Résultat de la dernière recherche, Numéro Avis : ${numeroAvis}`;
         errorMessage = "Aucun avis trouvé pour le numéro spécifié";
       } else if (application && dateDebut && dateFin) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/open/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
+        newUrl = `${abelaURL}/avisIncidents/open/searchedAvisByPeriodAndApp?name=${application}&date_debut=${dateDebut}&date_fin=${dateFin}`;
         newHisto = `Résultat de la dernière recherche, Application : ${application.toUpperCase()} | Date Début : ${formatDate(
           dateDebut
         )} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = `Aucun avis trouvé pour l'application ${application} sur la période spécifiées`;
       } else if (application) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncident/searchedAvisByAppName/open?nom=${application}`;
+        newUrl = `${abelaURL}/avisIncident/searchedAvisByAppName/open?nom=${application}`;
         newHisto = `Résultat de la dernière recherche, Application : ${application.toUpperCase()}`;
         errorMessage = "Aucun avis trouvé pour l'application spécifiée";
       } else if (dateDebut && dateFin) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
+        newUrl = `${abelaURL}/avisIncidents/searchedAvisOpen?dateDebut=${dateDebut}&dateFin=${dateFin}`;
         newHisto = `Résultat de la dernière recherche, Date Début : ${formatDate(
           dateDebut
         )} | Date Fin : ${formatDate(dateFin)}`;
         errorMessage = "Aucun avis trouvé pour la période spécifiée";
       } else if (etat) {
-        newUrl = `http://localhost:8082/abela-mysmc/api/v1/gestionIncidents/avisIncidents/searchedAvisByState?etat=${etat}`;
+        newUrl = `${abelaURL}/avisIncidents/searchedAvisByState?etat=${etat}`;
         newHisto = `Résultat de la dernière recherche, Etat : ${etat.toUpperCase()}`;
         errorMessage = "Aucun avis trouvé pour l'état spécifié";
       } else {
