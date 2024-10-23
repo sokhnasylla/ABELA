@@ -36,7 +36,6 @@ function App() {
             <Route path="/" element={<Layout><Home /></Layout>} />
             <Route path="/support" element={<Layout><Support /></Layout>} />
             <Route path="/support/reco_hlr_in" element={<Layout><RecoHlrIn /></Layout>} />
-            <Route path="/mysmc" element={<Layout><Mysmc /></Layout>} />
             <Route path="/monprofil" element={<Layout><MonProfil /></Layout>} />
             <Route path="/admin" element={<LayoutAdmin><Dashboard /></LayoutAdmin> } />
             <Route path="/admin/user" element={<LayoutAdmin><User /></LayoutAdmin>} />
@@ -45,16 +44,17 @@ function App() {
             <Route path="/maxit" element={<Layout><Maxit /></Layout>} />
             <Route path="/kaabu" element={<Layout><Kaabu /></Layout>} />
             <Route path="/network" element={<Layout><Network /></Layout>} />
+            <Route path="/mysmc" element={<Layout><Mysmc /></Layout>} />
             <Route path="/mysmc/gestionprobleme" element={<Layout><GestionProbleme/></Layout>} />
-            {<Route path="/mysmc/gestionincident" element={<Layout><GestionIncident /></Layout>} />}
+            <Route path="/mysmc/gestionincident" element={<Layout><GestionIncident /></Layout>} />
             <Route path="/mysmc/gestionincident/ajoutPA/:id" element={<Layout><AjoutPA /></Layout>} />
+            <Route path="/mysmc/gestionincident/details/:id" element={<Layout><DetailsIncident /></Layout>} />
             {/* <Route path="/gestionincident/ajoutavis" element={<Layout><AjoutAvis /></Layout>} />
             <Route path="/gestionincident/rechercheavis" element={<Layout><RechercheAvis /></Layout>} />
             <Route path="/gestionincident/statistique" element={<Layout><StatistiqueIncident /></Layout>} />
             <Route path="/mysmc/gestionprobleme/rechercherprobleme" element={<Layout><RechercheProbleme /></Layout>} />
             <Route path="/mysmc/gestionprobleme/scannerprobleme" element={<Layout><ScannerProbleme /></Layout>} /> */}
             {/* <Route path="/mysmc/gestionprobleme/details/:id" element={<Layout><DetailsProbleme /></Layout>} /> */}
-            <Route path="/mysmc/gestionincident/details/:id" element={<Layout><DetailsIncident /></Layout>} />
             {/* <Route path="/mysmc/etatsupervision" element={<Layout><EtatSupervision /></Layout>} /> */}
             {/* <Route path="/etatsupervision/alarmesok" element={<Layout><AlarmeOk /></Layout>} />
             <Route path="/etatsupervision/vr04service" element={<Layout><VR04Service /></Layout>} />

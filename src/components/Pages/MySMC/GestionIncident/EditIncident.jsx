@@ -124,10 +124,11 @@ function EditIncident({
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="typeAvisIncident.id">
+              <label htmlFor="typeAvisIncident">
                 Type avis <strong className="text-danger">*</strong> :
               </label>
               <select
+                id="typeAvisIncident"
                 name="typeAvisIncident.id"
                 className="form-select"
                 value={formData.typeAvisIncident?.id}
@@ -147,6 +148,7 @@ function EditIncident({
               </label>
               <Select
                 isMulti
+                id="applicationSis"
                 name="serviceImpacte"
                 options={serviceImpacte.map((service) => ({
                   value: service.id,
@@ -166,10 +168,11 @@ function EditIncident({
               />
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="listeValidation.id">
+              <label htmlFor="listeValidation">
                 Liste Validation <strong className="text-danger">*</strong> :
               </label>
               <select
+                id="listeValidation"
                 name="listeValidation.id"
                 className="form-select"
                 value={formData.listValidation?.id}
@@ -184,10 +187,11 @@ function EditIncident({
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="listeDiffusion.id">
+              <label htmlFor="listeDiffusion">
                 Liste Diffusion <strong className="text-danger">*</strong> :
               </label>
               <select
+                id="listeDiffusion"
                 name="listeDiffusion.id"
                 className="form-select"
                 value={formData.listDiffusion?.id}
@@ -235,6 +239,7 @@ function EditIncident({
                 Calcul Date FP <strong className="text-danger">*</strong> :
               </label>
               <select
+                id="autoDateFP"
                 name="autoDateFP"
                 className="form-select"
                 value={formData.autoDateFP}
@@ -324,6 +329,7 @@ function EditIncident({
                 Cause Retard Notification :
               </label>
               <select
+                id="causeRetardNotification"
                 name="causeRetardNotification"
                 className="form-select"
                 value={formData.causeRetardNotification}
@@ -335,10 +341,11 @@ function EditIncident({
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="typeCauseIncident.id">
+              <label htmlFor="typeCauseIncident">
                 Origine cause <strong className="text-danger">*</strong> :
               </label>
               <select
+                id="typeCauseIncident"
                 name="typeCauseIncident.id"
                 className="form-select"
                 value={formData.typeCauseIncident?.id}
@@ -396,6 +403,7 @@ function EditIncident({
             <div className="mb-3 form-group">
               <label htmlFor="entite">Entité Responsable :</label>
               <select
+                id="entite"
                 name="entite"
                 className="form-select"
                 value={formData.entite?.id || ""}
@@ -412,6 +420,7 @@ function EditIncident({
             <div className="mb-3 form-group">
               <label htmlFor="tcm">TMC qui a relevé :</label>
               <select
+                id="tmc"
                 name="tmc"
                 className="form-select"
                 value={formData.tmc?.id || ""}

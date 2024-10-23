@@ -116,7 +116,7 @@ function RechercheAvis({ onSearch }) {
                     onChange={(e) => setNumeroAvis(e.target.value)}
                   />
                 </div>
-                <div className="mb-3" style={{ flex: "1 1 200px" }}>
+                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
                   <label htmlFor="application" sx={{ marginLeft: "6%" }}>
                     Application :
                   </label>
@@ -184,6 +184,7 @@ function RechercheAvis({ onSearch }) {
                     <option value="FERME">Fermé</option>
                     <option value="CLOTURE">Clôturé</option>
                     <option value="ANNULE">Annulé</option>
+                    <option value="SUPPRIME">Supprimé</option>
                   </select>
                 </div>
               </div>
@@ -191,8 +192,8 @@ function RechercheAvis({ onSearch }) {
                 <Button
                   type="submit"
                   style={{
-                    backgroundColor: "#009999",
-                    borderColor: "#009999",
+                    backgroundColor: "#C9302C",
+                    borderColor: "#C9302C",
                     width: "100%",
                   }}
                 >

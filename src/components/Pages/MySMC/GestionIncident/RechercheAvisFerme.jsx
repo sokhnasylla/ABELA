@@ -116,7 +116,7 @@ function RechercheAvisFerme({ onSearch }) {
                     onChange={(e) => setNumeroAvis(e.target.value)}
                   />
                 </div>
-                <div className="mb-3" style={{ flex: "1 1 200px" }}>
+                <div className="mb-3 form-group" style={{ flex: "1 1 200px" }}>
                   <label htmlFor="application" sx={{ marginLeft: "6%" }}>
                     Application :
                   </label>

@@ -17,8 +17,9 @@ import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import EditIncident from "./EditIncident";
 import axios from "axios";
 import { abelaURL } from "../../../../config/global.constant";
+import { useNavigate } from "react-router-dom";
 
-function MenuDetailsIncident({ avis }) {
+function MenuDetailsIncident({ avis, isPA }) {
   const [contenu, setContenu] = useState("");
   const [titre, setTitre] = useState("");
   const [typeTraitement, setTypeTraitement] = useState("");
@@ -49,6 +50,7 @@ function MenuDetailsIncident({ avis }) {
     commentaire: avis.commentaire || "",
     updateBy,
   });
+  const navigate = useNavigate();
 
   const handleShowEditModal = () => {
     setShowEditModal(true);
@@ -245,6 +247,11 @@ function MenuDetailsIncident({ avis }) {
     }
   };
 
+  const backToDetails = (avis) => {
+    localStorage.setItem("avis", JSON.stringify(avis));
+    navigate(`/mysmc/gestionincident/details/${avis.id}`);
+  };
+
   return (
     <Row>
       <Card
@@ -261,6 +268,49 @@ function MenuDetailsIncident({ avis }) {
         </p>
         <FaArrowCircleDown />
       </Card>
+
+      {isPA && (
+        <Nav className="flex-column justify-content-between navigation">
+          <Card
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              height: "40px",
+              backgroundColor: "#d9534f",
+            }}
+          >
+            <Nav.Link
+              className="text-white"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: "0 10px",
+              }}
+            >
+              <FaList />
+
+              <button
+                className="btn"
+                style={{
+                  backgroundColor: "#d9534f",
+                  color: "#fff",
+                  flexGrow: 1,
+                  textAlign: "center",
+                }}
+                onClick={() => backToDetails(avis)}
+              >
+                Gestion de l'avis
+              </button>
+
+              <FaInfoCircle />
+            </Nav.Link>
+          </Card>
+        </Nav>
+      )}
 
       {(avis.etat === "ENCOURS" || avis.etat === "REOPEN") && (
         <>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Title from "../../../Card/Title/Title";
 import periode from "../../../../assets/periode.png";
 import {
-  Container,
   Row,
   Col,
   Button,
@@ -10,7 +9,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap"; // Add OverlayTrigger and Tooltip
-import { InputLabel, TextField, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import {
   BarChart,
   Bar,

@@ -20,10 +20,9 @@ import { getTokenFromLocalStorage } from "../../Auth/authUtils";
 import Title from "../../../Card/Title/Title";
 import MenuMysmc from "../Menu/MenuMysmc";
 import MenuDetailsIncident from "./MenuDetails";
-import "./detail.css";
 import { abelaURL } from "../../../../config/global.constant";
 
-function DetailsIncident() {
+function DetailsIncident({ isPA }) {
   const avis = JSON.parse(localStorage.getItem("avis"));
   const [incident, setIncident] = useState(null);
   const [historique, setHistorique] = useState([]);
@@ -155,7 +154,7 @@ function DetailsIncident() {
                 </Card>
               </Col>
               <Col sm={7}>
-                <Title text="Prévisalusation de l'avis" />
+                <Title text="Prévisualisation de l'avis" />
                 <div className="mt-2">
                   {!incident.numTicketEZV && (
                     <div className="alert alert-danger blink-alert">
@@ -595,6 +594,7 @@ function DetailsIncident() {
               setAlertMessage={setAlertMessage}
               setAlertType={setAlertType}
               setShowAlert={setShowAlert}
+              isPA={isPA}
             />
           </Col>
         </Row>

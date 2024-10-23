@@ -65,23 +65,25 @@ function RechercheStatistiques({ onSearch }) {
               onSubmit={handleSearch}
               style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
             >
-              <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                <InputLabel sx={{ marginLeft: "6%" }}>Date début</InputLabel>
+              <div className="form-group mb-3" style={{ flex: "1 1 200px" }}>
+                <label htmlFor="dateDebut">Date début</label>
                 &nbsp;
                 <TextField
                   id="dateDebut"
                   variant="outlined"
+                  className="form-control"
                   size="small"
                   type="date"
                   sx={{ width: "100%" }}
                 />
               </div>
-              <div className="mb-3" style={{ flex: "1 1 200px" }}>
-                <InputLabel sx={{ marginLeft: "6%" }}>Date Fin</InputLabel>
+              <div className="form-group mb-3" style={{ flex: "1 1 200px" }}>
+                <label htmlFor="dateFin">Date Fin</label>
                 &nbsp;
                 <TextField
                   id="dateFin"
                   variant="outlined"
+                  className="form-control"
                   size="small"
                   type="date"
                   sx={{ width: "100%" }}

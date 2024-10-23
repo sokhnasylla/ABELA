@@ -30,7 +30,7 @@ import search from "../../../..//assets/search.png";
 import statis from "../../../../assets/statis.png";
 import StatistiqueIncident from "./StatistiqueIncident";
 import { useNavigate } from "react-router-dom";
-import { FaCog, FaPlus, FaSearch, FaSync, FaThumbsUp } from "react-icons/fa";
+import { FaCog, FaSearch, FaSync, FaThumbsUp } from "react-icons/fa";
 import { abelaURL } from "../../../../config/global.constant.js";
 
 function GestionIncident() {
@@ -333,6 +333,7 @@ function GestionIncident() {
         "Erreur lors de la création de l'avis"
       );
       localStorage.setItem("alertType", "danger");
+      setError(`Erreur: Erreur lors de la création de l'avis`);
     }
   };
 
@@ -470,7 +471,6 @@ function GestionIncident() {
   const indexOfLastItemNotOpen = currentPageNotOpen * itemsPerPageNotOpen;
   const indexOfFirstItemNotOpen = indexOfLastItemNotOpen - itemsPerPageNotOpen;
 
-
   return (
     <div>
       <style>
@@ -583,10 +583,10 @@ function GestionIncident() {
               <Col sm={12} className="content">
                 <div className="mt-2 d-flex justify-content-between align-items-center">
                   <div>
-                    <label htmlFor="items">Afficher </label> &nbsp;
+                    <label htmlFor="itemsOpen">Afficher </label> &nbsp;
                     <select
-                      id="items"
-                      name="items"
+                      id="itemsOpen"
+                      name="itemsOpen"
                       value={itemsPerPageOpen}
                       onChange={handleItemsChangeOpen}
                     >
@@ -596,7 +596,8 @@ function GestionIncident() {
                       <option value="40">40</option>
                     </select>
                     &nbsp;
-                    <label>éléments</label>
+                    <label htmlFor="itemsOpen">éléments</label>
+
                   </div>
 
                   <div className="d-flex align-items-center">
@@ -905,10 +906,10 @@ function GestionIncident() {
                 <div className="mt-2 d-flex justify-content-between align-items-center">
                   <div>
                     {/* Un label affichant "Nombre d'items" suivi d'un select qui permet de choisir le nombre d'items */}
-                    <label htmlFor="items">Afficher </label> &nbsp;
+                    <label htmlFor="itemsNotOpen">Afficher </label> &nbsp;
                     <select
-                      id="items"
-                      name="items"
+                      id="itemsNotOpen"
+                      name="itemsNotOpen"
                       value={itemsPerPageNotOpen}
                       onChange={handleItemsChangeNotOpen}
                     >
@@ -918,7 +919,8 @@ function GestionIncident() {
                       <option value="100">100</option>
                     </select>
                     &nbsp;
-                    <label>éléments</label>
+                    <label htmlFor="itemsNotOpen">éléments</label>
+
                   </div>
 
                   <div className="d-flex align-items-center">
@@ -1255,7 +1257,7 @@ function GestionIncident() {
               </>
             }
           >
-            <Row sm={7}>
+            <Row>
               <Col sm={12} className="content">
                 <div className="d-flex justify-content-between">
                   <div className="d-flex justify-content-between">
@@ -1270,7 +1272,7 @@ function GestionIncident() {
                 </div>
               </Col>
             </Row>
-            <Row className="mt-3">
+            <Row>
               {etat === "FERME" ? (
                 <Title text={`Liste des avis fermés (${totalElements})`} />
               ) : etat === "CLOTURE" ? (
@@ -1287,7 +1289,7 @@ function GestionIncident() {
                 <Title text={`Liste des avis incidents (${totalElements})`} />
               )}
             </Row>
-            <Row sm={12}>
+            <Row>
               <Col sm={12} className="content">
                 <div className="mt-2 d-flex justify-content-between align-items-center">
                   <div>
@@ -1305,7 +1307,8 @@ function GestionIncident() {
                       <option value="100">100</option>
                     </select>
                     &nbsp;
-                    <label>éléments</label>
+                    <label htmlFor="items">éléments</label>
+
                   </div>
 
                   <div className="d-flex align-items-center">
@@ -1320,7 +1323,7 @@ function GestionIncident() {
                       <button
                         onClick={() =>
                           handleShowModal(
-                            "Recherche d'avis fermés, clôturés ou annulés",
+                            "Recherche d'avis",
                             <RechercheAvis onSearch={handleSearchSubmit} />,
                             "Recherche",
                             "md"
@@ -1457,7 +1460,7 @@ function GestionIncident() {
                                             ?
                                           </p>,
                                           "Reouverture",
-                                          "lg",
+                                          "md",
                                           item
                                         )
                                       }
@@ -1571,25 +1574,21 @@ function GestionIncident() {
                         </Pagination.Item>
                       )}
 
-                      {currentPageNotOpen < totalPagesNotOpen - 3 && (
+                      {currentPageNotOpen < totalPages - 3 && (
                         <Pagination.Ellipsis />
                       )}
 
-                      {totalPagesNotOpen > 1 && (
+                      {totalPages > 1 && (
                         <Pagination.Item
-                          active={currentPageNotOpen === totalPagesNotOpen}
-                          onClick={() =>
-                            handlePageChangeNotOpen(totalPagesNotOpen)
-                          }
+                          active={currentPage === totalPages}
+                          onClick={() => handlePageChange(totalPages)}
                         >
-                          {totalPagesNotOpen}
+                          {totalPages}
                         </Pagination.Item>
                       )}
-                      {currentPageNotOpen < totalPagesNotOpen && (
+                      {currentPage < totalPages && (
                         <Pagination.Next
-                          onClick={() =>
-                            handlePageChangeNotOpen(currentPageNotOpen + 1)
-                          }
+                          onClick={() => handlePageChange(currentPage + 1)}
                         >
                           Suivant
                         </Pagination.Next>
@@ -1615,24 +1614,26 @@ function GestionIncident() {
           <Modal.Body>
             <p>{content}</p>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="danger" onClick={handleHideModal}>
-              Fermer
-            </Button>
-            {operationType === "Reouverture" && (
-              <Button
-                variant="primary"
-                onClick={() => reouvertureAvis(selectedAvis.id)}
-              >
-                Reouvrir
+          {operationType !== "Recherche" && (
+            <Modal.Footer>
+              <Button variant="danger" onClick={handleHideModal}>
+                Fermer
               </Button>
-            )}
-            {operationType === "AjouterPA" && (
-              <Button variant="primary" onClick={() => ajoutPa(selectedAvis)}>
-                Ajouter P.A
-              </Button>
-            )}
-          </Modal.Footer>
+              {operationType === "Reouverture" && (
+                <Button
+                  variant="primary"
+                  onClick={() => reouvertureAvis(selectedAvis.id)}
+                >
+                  Reouvrir
+                </Button>
+              )}
+              {operationType === "AjouterPA" && (
+                <Button variant="primary" onClick={() => ajoutPa(selectedAvis)}>
+                  Ajouter P.A
+                </Button>
+              )}
+            </Modal.Footer>
+          )}
         </Modal>
         <Modal
           show={showAddModal}
@@ -1652,6 +1653,11 @@ function GestionIncident() {
               handleChange={handleChange}
               handleServiceChange={handleServiceChange}
             />
+            {error && (
+              <Alert variant="danger" style={{ marginTop: "10px" }}>
+                {error}
+              </Alert>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={handleHideAddModal}>

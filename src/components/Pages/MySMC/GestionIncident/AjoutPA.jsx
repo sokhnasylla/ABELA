@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import MenuMysmc from "../Menu/MenuMysmc";
 import DetailsIncident from "./DetailsIncident";
 import { useLocation } from "react-router-dom";
-import { Row, Container, Col, Button, Alert, Modal } from "react-bootstrap";
+import {
+  Row,
+  Container,
+  Col,
+  Button,
+  Alert,
+  Modal,
+  Pagination,
+} from "react-bootstrap";
 import { FaList, FaMinus, FaPlus } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import { abelaURL } from "../../../../config/global.constant";
@@ -15,6 +23,8 @@ function AjoutPA() {
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const [alertMessage, setAlertMessage] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -183,13 +193,16 @@ function AjoutPA() {
 
   const handleCloturerAvis = async () => {
     try {
-      const response = await fetch(`${abelaURL}/avisIncident/${avis.id}/cloture`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${abelaURL}/avisIncident/${avis.id}/cloture`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) throw new Error("Erreur lors de la cloture");
 
@@ -216,6 +229,17 @@ function AjoutPA() {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchData(
+      `${abelaURL}/planactionincident/avis/${avis.id}?pageNumber=${page}&pageSize=${itemsPerPage}`,
+      setPlanAction
+    );
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
   return (
     <div>
       <MenuMysmc />
@@ -238,7 +262,6 @@ function AjoutPA() {
                 {!viewMode ? (
                   <div>
                     <Button
-                      variant="success"
                       onClick={() =>
                         handleShowModal(
                           "Confirmation de l'opération en cours",
@@ -247,6 +270,12 @@ function AjoutPA() {
                           "md"
                         )
                       }
+                      style={{
+                        backgroundColor: "#5cb85c",
+                        color: "#fff",
+                        flexGrow: 1,
+                        textAlign: "center",
+                      }}
                       className="d-flex align-items-center"
                     >
                       <FaList /> &nbsp; Switcher en mode view
@@ -255,7 +284,12 @@ function AjoutPA() {
                 ) : (
                   <div className="d-flex">
                     <Button
-                      variant="success"
+                      style={{
+                        backgroundColor: "#5cb85c",
+                        color: "#fff",
+                        flexGrow: 1,
+                        textAlign: "center",
+                      }}
                       onClick={() =>
                         handleShowModal(
                           "Confirmation de l'opération en cours",
@@ -286,17 +320,18 @@ function AjoutPA() {
                   </div>
                 )}
                 {!viewMode && (
-                <div>
-                  {rows.length > 1 && (
-                    <Button variant="danger" onClick={deleteRow}>
-                      <FaMinus />
+                  <div>
+                    {rows.length > 1 && (
+                      <Button variant="danger" onClick={deleteRow}>
+                        <FaMinus />
+                      </Button>
+                    )}
+                    &nbsp;
+                    <Button variant="primary" onClick={addRow}>
+                      <FaPlus />
                     </Button>
-                  )}
-                  &nbsp;
-                  <Button variant="primary" onClick={addRow}>
-                    <FaPlus />
-                  </Button>
-                </div>)}
+                  </div>
+                )}
               </div>
             </Row>
             <Row>
@@ -318,6 +353,7 @@ function AjoutPA() {
                             <td>
                               <div className="form-group">
                                 <select
+                                  id={`type-${index}`}
                                   className="form-select"
                                   style={{ cursor: "pointer" }}
                                   value={row.type}
@@ -336,6 +372,7 @@ function AjoutPA() {
                               </div>
                               <div className="form-group mt-3">
                                 <input
+                                  id={`ticketSuper-${index}`}
                                   type="text"
                                   placeholder="Indiquer Ticket Super"
                                   className="form-control"
@@ -351,6 +388,7 @@ function AjoutPA() {
                               </div>
                               <div className="form-group mt-3">
                                 <input
+                                  id={`porteur-${index}`}
                                   type="text"
                                   placeholder="Indiquer Porteur P.A"
                                   className="form-control"
@@ -368,6 +406,7 @@ function AjoutPA() {
                             <td>
                               <div className="form-group">
                                 <textarea
+                                  id={`intitule-${index}`}
                                   rows={6}
                                   placeholder="Plan d'action"
                                   className="form-control"
@@ -385,6 +424,7 @@ function AjoutPA() {
                             <td>
                               <div className="form-group">
                                 <textarea
+                                  id={`commentaire-${index}`}
                                   rows={6}
                                   placeholder="Commentaire"
                                   className="form-control"
@@ -402,6 +442,7 @@ function AjoutPA() {
                             <td>
                               <div className="form-group">
                                 <input
+                                  id={`delai-${index}`}
                                   type="date"
                                   className="form-control"
                                   value={row.delai}
@@ -432,34 +473,139 @@ function AjoutPA() {
                     </div>
                   </form>
                 ) : (
-                  <table className="table table-bordered">
-                    <thead>
-                      <th>Type</th>
-                      <th>Intitule</th>
-                      <th>Commentaire</th>
-                      <th>Etat</th>
-                      <th>Porteur</th>
-                      <th>Delai</th>
-                      <th>Date Cloture</th>
-                      <th>Action</th>
-                    </thead>
-                    <tbody>
-                      {planAction.map((item) => (
-                        <tr key={item.id}>
-                          <td>{item.type}</td>
-                          <td>{item.intitule}</td>
-                          <td>{item.commentaire}</td>
-                          <td>{item.etat}</td>
-                          <td>{item.porteur}</td>
-                          <td>{item.delai}</td>
-                          <td>{item.dateCloture}</td>
-                          <td>
-                            <Button variant="primary">Editer</Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <div>
+                    <table className="table table-bordered">
+                      <thead>
+                        <th>Type</th>
+                        <th>Intitule</th>
+                        <th>Commentaire</th>
+                        <th>Etat</th>
+                        <th>Porteur</th>
+                        <th>Delai</th>
+                        <th>Date Cloture</th>
+                        <th>Action</th>
+                      </thead>
+                      <tbody>
+                        {planAction.map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.type}</td>
+                            <td>{item.intitule}</td>
+                            <td>{item.commentaire}</td>
+                            <td>{item.etat}</td>
+                            <td>{item.porteur}</td>
+                            <td>{item.delai}</td>
+                            <td>{item.dateCloture}</td>
+                            <td>
+                              <Button variant="primary" onClick={() => handleShowModal(
+                                "Confirmation de l'opération en cours",
+                                "",
+                                "Edition",
+                                "lg",
+                              )}>
+                                Editer
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <div>
+                      {totalElements === 0 ? (
+                        <span>Aucun élément à afficher</span>
+                      ) : indexOfFirstItem === 0 ? (
+                        <span>
+                          Affichage de l'élément 1 à {itemsPerPage} sur{" "}
+                          {totalElements} éléments
+                        </span>
+                      ) : indexOfLastItem >= totalElements ? (
+                        <span>
+                          Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                          {totalElements} sur {totalElements} éléments
+                        </span>
+                      ) : (
+                        <span>
+                          Affichage de l'élément {indexOfFirstItem + 1} à{" "}
+                          {indexOfLastItem} sur {totalElements} éléments
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <Pagination className="d-flex justify-content-center mt-4">
+                        {currentPage > 1 && (
+                          <Pagination.Prev
+                            onClick={() => handlePageChange(currentPage - 1)}
+                          >
+                            Précédent
+                          </Pagination.Prev>
+                        )}
+
+                        <Pagination.Item
+                          active={currentPage === 1}
+                          onClick={() => handlePageChange(1)}
+                        >
+                          1
+                        </Pagination.Item>
+
+                        {currentPage > 4 && <Pagination.Ellipsis />}
+
+                        {currentPage > 3 && (
+                          <Pagination.Item
+                            onClick={() => handlePageChange(currentPage - 2)}
+                          >
+                            {currentPage - 2}
+                          </Pagination.Item>
+                        )}
+                        {currentPage > 2 && (
+                          <Pagination.Item
+                            onClick={() => handlePageChange(currentPage - 1)}
+                          >
+                            {currentPage - 1}
+                          </Pagination.Item>
+                        )}
+
+                        {currentPage !== 1 && currentPage !== totalPages && (
+                          <Pagination.Item active>
+                            {currentPage}
+                          </Pagination.Item>
+                        )}
+
+                        {currentPage < totalPages - 1 && (
+                          <Pagination.Item
+                            onClick={() => handlePageChange(currentPage + 1)}
+                          >
+                            {currentPage + 1}
+                          </Pagination.Item>
+                        )}
+                        {currentPage < totalPages - 2 && (
+                          <Pagination.Item
+                            onClick={() => handlePageChange(currentPage + 2)}
+                          >
+                            {currentPage + 2}
+                          </Pagination.Item>
+                        )}
+
+                        {currentPage < totalPages - 3 && (
+                          <Pagination.Ellipsis />
+                        )}
+
+                        {totalPages > 1 && (
+                          <Pagination.Item
+                            active={currentPage === totalPages}
+                            onClick={() => handlePageChange(totalPages)}
+                          >
+                            {totalPages}
+                          </Pagination.Item>
+                        )}
+                        {currentPage < totalPages && (
+                          <Pagination.Next
+                            onClick={() => handlePageChange(currentPage + 1)}
+                          >
+                            Suivant
+                          </Pagination.Next>
+                        )}
+                      </Pagination>
+                    </div>
+                  </div>
                 )}
               </div>
             </Row>
@@ -467,7 +613,7 @@ function AjoutPA() {
         </Col>
       </Container>
       <Row>
-        <DetailsIncident avis={avis} />
+        <DetailsIncident isPA={true} />
       </Row>
       <Modal
         show={showModal}
@@ -490,14 +636,16 @@ function AjoutPA() {
             <Button variant="primary" onClick={switchView}>
               Oui
             </Button>
-          )  : 
-            operationType === "SwitchEdition" ? (
-              <Button variant="primary" onClick={switchEdition}>
-                Oui
-              </Button>
-            
-          ): operationType === "Cloture" ? (
+          ) : operationType === "SwitchEdition" ? (
+            <Button variant="primary" onClick={switchEdition}>
+              Oui
+            </Button>
+          ) : operationType === "Cloture" ? (
             <Button variant="primary" onClick={handleCloturerAvis}>
+              Oui
+            </Button>
+          ) : operationType === "Edition" ? (
+            <Button variant="primary" onClick={switchEdition}>
               Oui
             </Button>
           ) : null}
