@@ -140,7 +140,7 @@ function StatistiqueIncident() {
   ];
 
   return (
-    <div className="dashboard">
+    <div>
       <Title
         text={`Gestion des avis d'incidents - Indicateurs de la période : ${histo}`}
       />

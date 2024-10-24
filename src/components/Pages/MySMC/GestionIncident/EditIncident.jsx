@@ -98,9 +98,9 @@ function EditIncident({
                 Objet <strong className="text-danger">*</strong> :
               </label>
               <input
-                type="text"
-                name="objet"
                 id="objet"
+                name="objet"
+                type="text"
                 className="form-control"
                 value={formData.objet}
                 onChange={handleEditChange}
@@ -111,8 +111,8 @@ function EditIncident({
                 Nature <strong className="text-danger">*</strong> :
               </label>
               <select
-                name="nature"
                 id="nature"
+                name="nature"
                 className="form-select"
                 value={formData.nature}
                 onChange={handleEditChange}
@@ -149,7 +149,7 @@ function EditIncident({
               <Select
                 isMulti
                 id="applicationSis"
-                name="serviceImpacte"
+                name="applicationSis"
                 options={serviceImpacte.map((service) => ({
                   value: service.id,
                   label: service.nom,
@@ -213,9 +213,9 @@ function EditIncident({
                 Date de début <strong className="text-danger">*</strong> :
               </label>
               <input
-                type="datetime-local"
-                name="dateDebut"
                 id="dateDebut"
+                name="dateDebut"
+                type="datetime-local"
                 className="form-control"
                 value={formatDateForInput(formData.dateDebut)}
                 onChange={handleEditChange}
@@ -226,9 +226,9 @@ function EditIncident({
                 Date de détection <strong className="text-danger">*</strong> :
               </label>
               <input
-                type="datetime-local"
-                name="dateDetection"
                 id="dateDetection"
+                name="dateDetection"
+                type="datetime-local"
                 className="form-control"
                 value={formatDateForInput(formData.dateDetection)}
                 onChange={handleEditChange}
@@ -255,9 +255,9 @@ function EditIncident({
                 Date Fin Previsionnelle :
               </label>
               <input
-                type="datetime-local"
-                name="dateFinPrevisionnelle"
                 id="dateFinPrevisionnelle"
+                name="dateFinPrevisionnelle"
+                type="datetime-local"
                 className="form-control"
                 value={formatDateForInput(formData.dateFinPrevisionnelle)}
                 onChange={handleEditChange}
@@ -266,9 +266,9 @@ function EditIncident({
             <div className="mb-3 form-group">
               <label htmlFor="dateFermeture">Date Fermeture :</label>
               <input
-                type="datetime-local"
-                name="dateFermeture"
                 id="dateFermeture"
+                name="dateFermeture"
+                type="datetime-local"
                 className="form-control"
                 value={formatDateForInput(formData.dateFermeture)}
                 onChange={handleEditChange}
@@ -277,9 +277,9 @@ function EditIncident({
             <div className="mb-3 form-group">
               <label htmlFor="numTicketEZV">Ticket EZV :</label>
               <input
-                type="text"
-                name="numTicketEZV"
                 id="numTicketEZV"
+                name="numTicketEZV"
+                type="text"
                 className="form-control"
                 value={formData.numTicketEZV}
                 onChange={handleEditChange}
@@ -288,9 +288,9 @@ function EditIncident({
             <div className="mb-3 form-group">
               <label htmlFor="numTicketOceane">Ticket Océane :</label>
               <input
-                type="text"
-                name="numTicketOceane"
                 id="numTicketOceane"
+                name="numTicketOceane"
+                type="text"
                 className="form-control"
                 value={formData.numTicketOceane}
                 onChange={handleEditChange}
@@ -300,8 +300,8 @@ function EditIncident({
               <label htmlFor="commentaire">Commentaires :</label>
               <textarea
                 id="commentaire"
-                className="form-control"
                 name="commentaire"
+                className="form-control"
                 placeholder="Indiquer le message en cas d'annulation ou de renvoi de l'avis"
                 value={formData.commentaire}
                 onChange={handleEditChange}
@@ -317,8 +317,8 @@ function EditIncident({
               </label>
               <textarea
                 id="impact"
-                className="form-control"
                 name="impact"
+                className="form-control"
                 value={formData.impact}
                 // value={formData.impact}
                 onChange={handleEditChange}
@@ -367,8 +367,8 @@ function EditIncident({
               </label>
               <textarea
                 id="causeProbable"
-                className="form-control"
                 name="causeProbable"
+                className="form-control"
                 rows={4}
                 value={formData.causes}
                 onChange={handleEditChange}
@@ -382,8 +382,8 @@ function EditIncident({
               </label>
               <textarea
                 id="observations"
-                className="form-control"
                 name="observations"
+                className="form-control"
                 value={formData.observations}
                 onChange={handleEditChange}
                 placeholder="Renseigner les observations"
@@ -393,8 +393,8 @@ function EditIncident({
               <label htmlFor="troubleshooting">Actions de relève :</label>
               <textarea
                 id="troubleshooting"
-                className="form-control"
                 name="troubleshooting"
+                className="form-control"
                 value={formData.troubleshooting}
                 onChange={handleEditChange}
                 placeholder="Decrire les actions de relève"
@@ -418,7 +418,7 @@ function EditIncident({
               </select>
             </div>
             <div className="mb-3 form-group">
-              <label htmlFor="tcm">TMC qui a relevé :</label>
+              <label htmlFor="tmc">TMC qui a relevé :</label>
               <select
                 id="tmc"
                 name="tmc"

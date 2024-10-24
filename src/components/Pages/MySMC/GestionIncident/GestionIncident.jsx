@@ -13,7 +13,6 @@ import {
   Tab,
 } from "react-bootstrap";
 import MenuMysmc from "../Menu/MenuMysmc";
-import "./StatistiqueIncident.css";
 import Title from "../../../Card/Title/Title";
 import React, { useEffect, useState } from "react";
 import useAuth from "../../Auth/useAuth";
@@ -106,6 +105,7 @@ function GestionIncident() {
       `${abelaURL}/avisIncidents?pageNumber=1&pageSize=${event.target.value}`,
       setAvis
     );
+    setCurrentPage(1);
     setItemsPerPage(Number(event.target.value));
   };
 
@@ -123,6 +123,7 @@ function GestionIncident() {
       `${abelaURL}/avisIncidents/clos/ferme/annule?pageNumber=1&pageSize=${event.target.value}`,
       setNotOpenAvis
     );
+    setCurrentPageNotOpen(1);
     setItemsPerPageNotOpen(Number(event.target.value));
   };
 
@@ -1257,10 +1258,9 @@ function GestionIncident() {
               </>
             }
           >
-            <Row>
-              <Col sm={12} className="content">
-                <div className="d-flex justify-content-between">
-                  <div className="d-flex justify-content-between">
+            <Row style={{ height: "65px" }}>
+              <Col sm={4} className="content">
+                  <div className="d-flex justify-content-center">
                     <Button className="Button" variant="secondary">
                       Exporter Reporting incident
                     </Button>
@@ -1269,7 +1269,6 @@ function GestionIncident() {
                       Exporter Plan d'action incident
                     </Button>
                   </div>
-                </div>
               </Col>
             </Row>
             <Row>
@@ -1291,7 +1290,7 @@ function GestionIncident() {
             </Row>
             <Row>
               <Col sm={12} className="content">
-                <div className="mt-2 d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-between align-items-center">
                   <div>
                     {/* Un label affichant "Nombre d'items" suivi d'un select qui permet de choisir le nombre d'items */}
                     <label htmlFor="items">Afficher </label> &nbsp;

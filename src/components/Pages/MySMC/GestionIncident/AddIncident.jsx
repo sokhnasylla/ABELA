@@ -99,8 +99,8 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
               </label>
               <input
                 id="objet"
-                type="text"
                 name="objet"
+                type="text"
                 autoFocus
                 className="form-control"
                 value={formData.objet}
@@ -131,7 +131,7 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
               </label>
               <select
                 id="typeAvisIncident"
-                name="typeAvisIncident.id"
+                name="typeAvisIncident"
                 className="form-select"
                 value={formData.typeAvisIncident?.id}
                 onChange={handleChange}
@@ -168,7 +168,7 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
               </label>
               <select
                 id="listeValidation"
-                name="listeValidation.id"
+                name="listeValidation"
                 className="form-select"
                 value={formData.listeValidation?.id}
                 onChange={handleChange}
@@ -187,7 +187,7 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
               </label>
               <select
                 id="listeDiffusion"
-                name="listeDiffusion.id"
+                name="listeDiffusion"
                 className="form-select"
                 value={formData.listeDiffusion?.id}
                 onChange={handleChange}
@@ -215,8 +215,8 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
               <label htmlFor="dateDetection">Date de détection :</label>
               <input
                 id="dateDetection"
-                type="datetime-local"
                 name="dateDetection"
+                type="datetime-local"
                 className="form-control"
                 value={formData.dateDetection}
                 onChange={handleChange}
@@ -225,9 +225,9 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
             <div className="mb-3 form-group">
               <label htmlFor="numTicketEZV">Ticket EZV :</label>
               <input
-                type="text"
-                name="numTicketEZV"
                 id="numTicketEZV"
+                name="numTicketEZV"
+                type="text"
                 className="form-control"
                 value={formData.numTicketEZV}
                 onChange={handleChange}
@@ -236,9 +236,9 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
             <div className="mb-3 form-group">
               <label htmlFor="numTicketOceane">Ticket Océane :</label>
               <input
-                type="text"
-                name="numTicketOceane"
                 id="numTicketOceane"
+                name="numTicketOceane"
+                type="text"
                 className="form-control"
                 value={formData.numTicketOceane}
                 onChange={handleChange}
@@ -254,8 +254,8 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
               </label>
               <textarea
                 id="impact"
-                className="form-control"
                 name="impact"
+                className="form-control"
                 value={formData.impact}
                 onChange={handleChange}
               />
@@ -280,7 +280,7 @@ function AddIncident({ formData, handleChange, handleServiceChange }) {
               </label>
               <select
                 id="typeCauseIncident"
-                name="typeCauseIncident.id"
+                name="typeCauseIncident"
                 className="form-select"
                 value={formData.typeCauseIncident?.id}
                 onChange={handleChange}
