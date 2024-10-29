@@ -50,6 +50,11 @@ function MenuDetailsIncident({ avis, isPA }) {
     commentaire: avis.commentaire || "",
     updateBy,
   });
+  const [mail, setMail] = useState({
+    to: "",
+    subject: "",
+    message: "",
+  });
   const navigate = useNavigate();
 
   const handleShowEditModal = () => {
@@ -150,10 +155,10 @@ function MenuDetailsIncident({ avis, isPA }) {
     }
   };
 
-  const handleValiderSubmit = async (id) => {
+  const handleValiderSubmit = async () => {
     try {
       const response = await fetch(
-        // `${abelaURL}/avisIncident/${id}/validated`,
+        `${abelaURL}/avisIncident/${avis.id}/validate`,
         {
           method: "PUT",
           headers: {
@@ -218,6 +223,52 @@ function MenuDetailsIncident({ avis, isPA }) {
     }));
   };
 
+  const handleDemandeValidation = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const mailSend = {
+        to: "mamadousadaw@gmail.com",
+        subject: "Demande de validation",
+        body: `Bonjour, \n\nNous vous informons que nous avons besoin de votre validation pour l'avis d'incident n°${avis.id}.\nRendez-vous sur le lien suivant pour valider l'avis : <a href="http://localhost:3000/mysmc/gestionincident/details/${avis.id}">Lien</a>\n\nCordialement, \n\nL'équipe SMC
+        `,
+      };
+
+      console.log(mailSend);
+
+      const response = await axios.post(
+        `http://localhost:8888/api/mail/send?avisId=${avis.id}`,
+        {
+          to: mailSend.to,
+          subject: mailSend.subject,
+          body: mailSend.body,
+        }
+      );
+
+      console.log(response);
+
+      if (response.status === 200) {
+        console.log("Demande de validation envoyée avec succès");
+        setShowModal(false);
+        localStorage.setItem(
+          "alertMessage",
+          "Demande de validation envoyée avec succès"
+        );
+        localStorage.setItem("alertType", "success");
+        window.location.reload();
+      } else {
+        console.error("Erreur lors de la demande de validation");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête", error);
+    }
+  };
+
   const handleEditSubmit = async () => {
     try {
       const config = {
@@ -247,9 +298,46 @@ function MenuDetailsIncident({ avis, isPA }) {
     }
   };
 
+  const handleAnnulation = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+      console.log(formData);
+      const response = await axios.put(
+        `${abelaURL}/avisIncident/${avis.id}/canceled`,
+        config
+      );
+
+      if (response.status === 200) {
+        console.log("Avis annulé avec succès");
+        setShowModal(false);
+        localStorage.setItem("alertMessage", "Avis annulé avec succès");
+        localStorage.setItem("alertType", "success");
+        window.location.reload();
+      } else {
+        console.error("Erreur lors de l'annulation de l'avis");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête", error);
+    }
+  };
+
+  const backToList = () => {
+    navigate(`/mysmc/gestionincident`);
+  };
+
   const backToDetails = (avis) => {
     localStorage.setItem("avis", JSON.stringify(avis));
     navigate(`/mysmc/gestionincident/details/${avis.id}`);
+  };
+
+  const gestionPA = (avis) => {
+    localStorage.setItem("avis", JSON.stringify(avis));
+    navigate(`/mysmc/gestionincident/ajoutPA/${avis.id}`);
   };
 
   return (
@@ -348,7 +436,7 @@ function MenuDetailsIncident({ avis, isPA }) {
                   onClick={() =>
                     handleShowModal(
                       "Demande validation avis",
-                      "",
+                      "Voulez-vous vraiment demander la validation de cet avis ?",
                       "Demande validation"
                     )
                   }
@@ -392,7 +480,11 @@ function MenuDetailsIncident({ avis, isPA }) {
                     textAlign: "center",
                   }}
                   onClick={() =>
-                    handleShowModal("Validation de l'avis", "", "Validation")
+                    handleShowModal(
+                      "Validation de l'avis",
+                      "Vous êtes sur le point de valider l'avis. Avez -vous reçu le retour des TMCs?",
+                      "Validation"
+                    )
                   }
                 >
                   Validation de l'avis
@@ -675,11 +767,101 @@ function MenuDetailsIncident({ avis, isPA }) {
             alignItems: "center",
             justifyContent: "space-between",
             height: "40px",
+            backgroundColor: "#d9534f",
           }}
         >
           <Nav.Link
             className="text-white"
-            href="/mysmc/gestionincident"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              padding: "0 10px",
+            }}
+          >
+            <FaTimes />
+            <button
+              className="btn"
+              style={{
+                backgroundColor: "#d9534f",
+                color: "#fff",
+                flexGrow: 1,
+                textAlign: "center",
+              }}
+              onClick={() =>
+                handleShowModal(
+                  "Anuulation de l'avis",
+                  <>
+                    Vous êtes vous êtes sur le point d'annuler l'avis avec l'id{" "}
+                    <strong className="text-danger">{avis.id}</strong>.
+                    Êtes-vous sûr de bien vouloir effectuer cette opération?{" "}
+                  </>,
+                  "Annulation"
+                )
+              }
+            >
+              Annulation de l'avis
+            </button>
+            <FaInfoCircle />
+          </Nav.Link>
+        </Card>
+      </Nav>
+
+      {!isPA &&
+        (avis.etat === "Etat_avancement" || avis.etat === "CLOTURE") && (
+          <Nav className="flex-column justify-content-between navigation">
+            <Card
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                height: "40px",
+                backgroundColor: "#d9534f",
+              }}
+            >
+              <Nav.Link
+                className="text-white"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                  padding: "0 10px",
+                }}
+              >
+                <FaList />
+                <button
+                  className="btn"
+                  style={{
+                    backgroundColor: "#d9534f",
+                    color: "#fff",
+                    flexGrow: 1,
+                    textAlign: "center",
+                  }}
+                  onClick={() => gestionPA(avis)}
+                >
+                  Gestion P.A
+                </button>
+                <FaInfoCircle />
+              </Nav.Link>
+            </Card>
+          </Nav>
+        )}
+
+      <Nav className="flex-column justify-content-between navigation">
+        <Card
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: "40px",
+          }}
+        >
+          <Nav.Link
+            className="text-white"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -697,6 +879,7 @@ function MenuDetailsIncident({ avis, isPA }) {
                 flexGrow: 1,
                 textAlign: "center",
               }}
+              onClick={() => backToList()}
             >
               Retour à la liste avis
             </button>
@@ -720,7 +903,7 @@ function MenuDetailsIncident({ avis, isPA }) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleHideModal}>
-            Fermer
+            Non
           </Button>
           {typeTraitement === "Fermeture" && (
             <Button
@@ -740,7 +923,7 @@ function MenuDetailsIncident({ avis, isPA }) {
           )}
           {typeTraitement === "Validation" && (
             <Button variant="primary" onClick={handleValiderSubmit}>
-              Valider
+              Oui
             </Button>
           )}
           {typeTraitement === "Diffusion" && (
@@ -753,11 +936,13 @@ function MenuDetailsIncident({ avis, isPA }) {
             <Button variant="primary">Relancer</Button>
           )}
           {typeTraitement === "Demande validation" && (
-            <Button variant="primary">Relancer</Button>
+            <Button variant="primary" onClick={handleDemandeValidation}>
+              Demande Validation
+            </Button>
           )}
-          {typeTraitement === "Edition" && (
-            <Button variant="primary" onClick={handleEditSubmit}>
-              Modifier
+          {typeTraitement === "Annulation" && (
+            <Button variant="primary" onClick={handleAnnulation}>
+              Annuler
             </Button>
           )}
         </Modal.Footer>

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { TextField } from "@mui/material";
 import { abelaURL } from "../../../../config/global.constant";
+import { set } from "date-fns";
+import axios from "axios";
 
 function RechercheAvis({ onSearch }) {
   const [error, setError] = useState("");
@@ -11,8 +13,8 @@ function RechercheAvis({ onSearch }) {
   const [dateDebut, setDateDebut] = useState("");
   const [dateFin, setDateFin] = useState("");
   const [etat, setEtat] = useState("");
-
-  // Helper function to handle API requests
+  const [state, setState] = useState([]);
+  const token = localStorage.getItem("token");
   const fetchData = async (url, errorMessage) => {
     try {
       const response = await fetch(url);
@@ -24,6 +26,24 @@ function RechercheAvis({ onSearch }) {
       throw new Error(err.message || "Erreur réseau");
     }
   };
+
+  useEffect(() => {
+    const fetchEtat = async (url, setter) => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(url, config);
+        setter(response.data);
+      } catch (error) {
+        setError(`Erreur: ${error.message}`);
+      }
+    };
+
+    fetchEtat(`${abelaURL}/avisIncidents/etat`, setState);
+  }, []);
 
   // Handle form submission
   const handleSearch = async (event) => {
@@ -179,12 +199,11 @@ function RechercheAvis({ onSearch }) {
                     onChange={(e) => setEtat(e.target.value)}
                   >
                     <option value="">Sélectionner un état</option>
-                    <option value="ENCOURS">Ouvert</option>
-                    <option value="REOPEN">Réouvert</option>
-                    <option value="FERME">Fermé</option>
-                    <option value="CLOTURE">Clôturé</option>
-                    <option value="ANNULE">Annulé</option>
-                    <option value="SUPPRIME">Supprimé</option>
+                    {state.map((etat) => (
+                          <option key={etat} value={etat}>
+                            {etat}
+                          </option>
+                        ))}
                   </select>
                 </div>
               </div>

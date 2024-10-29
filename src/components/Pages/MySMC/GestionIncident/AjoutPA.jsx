@@ -11,7 +11,7 @@ import {
   Modal,
   Pagination,
 } from "react-bootstrap";
-import { FaList, FaMinus, FaPlus } from "react-icons/fa";
+import { FaList, FaMinus, FaPlus, FaThumbsUp } from "react-icons/fa";
 import { getTokenDecode, getTokenFromLocalStorage } from "../../Auth/authUtils";
 import { abelaURL } from "../../../../config/global.constant";
 import axios from "axios";
@@ -239,6 +239,11 @@ function AjoutPA() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const formatDate = (date) => {
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString();
+  };
 
   return (
     <div>
@@ -491,19 +496,16 @@ function AjoutPA() {
                             <td>{item.type}</td>
                             <td>{item.intitule}</td>
                             <td>{item.commentaire}</td>
-                            <td>{item.etat}</td>
-                            <td>{item.porteur}</td>
-                            <td>{item.delai}</td>
-                            <td>{item.dateCloture}</td>
                             <td>
-                              <Button variant="primary" onClick={() => handleShowModal(
-                                "Confirmation de l'opération en cours",
-                                "",
-                                "Edition",
-                                "lg",
-                              )}>
-                                Editer
-                              </Button>
+                              {item.etat === "CLOTURE" ? "Cloturé" : item.etat}
+                            </td>
+                            <td>{item.porteur}</td>
+                            <td>{formatDate(item.delai)}</td>
+                            <td>{formatDate(item.dateCloture)}</td>
+                            <td className="d-flex justify-content-center align-items-center">
+                              {item.etat === "CLOTURE" && (
+                                <FaThumbsUp color="green" size={25} />
+                              )}
                             </td>
                           </tr>
                         ))}

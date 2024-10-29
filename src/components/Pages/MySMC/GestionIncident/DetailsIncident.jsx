@@ -38,7 +38,7 @@ function DetailsIncident({ isPA }) {
 
   useEffect(() => {
     console.log(avis);
-  }, [avis]);
+  }, [0]);
 
   useEffect(() => {
     const fetchIncident = async (url, setter) => {
@@ -120,18 +120,18 @@ function DetailsIncident({ isPA }) {
   return (
     <div>
       <MenuMysmc />
-      <div className="container mt-3">
-        {showAlert && (
-          <Alert
-            variant={alertType}
-            onClose={() => setShowAlert(false)}
-            dismissible
-          >
-            {alertMessage}
-          </Alert>
-        )}
-      </div>
       <Container className="body" style={{ fontSize: "14px" }}>
+        <div className="container mt-3">
+          {showAlert && (
+            <Alert
+              variant={alertType}
+              onClose={() => setShowAlert(false)}
+              dismissible
+            >
+              {alertMessage}
+            </Alert>
+          )}
+        </div>
         <Row>
           <Col md={9} sm={9}>
             <Row>
